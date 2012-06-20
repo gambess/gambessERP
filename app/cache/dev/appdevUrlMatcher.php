@@ -159,13 +159,13 @@ class appdevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
         }
 
         // _update
-        if ($pathinfo === '/update') {
-            return array (  '_controller' => 'Costo\\SystemBundle\\Controller\\CuentaController::updateAction',  '_route' => '_update',);
+        if (0 === strpos($pathinfo, '/update') && preg_match('#^/update/(?P<id>[^/]+?)$#s', $pathinfo, $matches)) {
+            return array_merge($this->mergeDefaults($matches, array (  '_controller' => 'Costo\\SystemBundle\\Controller\\CuentaController::updateAction',)), array('_route' => '_update'));
         }
 
         // _delete
-        if ($pathinfo === '/delete') {
-            return array (  '_controller' => 'Costo\\SystemBundle\\Controller\\CuentaController::deleteAction',  '_route' => '_delete',);
+        if (0 === strpos($pathinfo, '/delete') && preg_match('#^/delete/(?P<id>[^/]+?)$#s', $pathinfo, $matches)) {
+            return array_merge($this->mergeDefaults($matches, array (  '_controller' => 'Costo\\SystemBundle\\Controller\\CuentaController::deleteAction',)), array('_route' => '_delete'));
         }
 
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();

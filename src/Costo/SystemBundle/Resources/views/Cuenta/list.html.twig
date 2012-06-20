@@ -24,8 +24,8 @@
             <td>{{ cuenta.nombreCuenta }}</td>
             <td>{{ cuenta.ValorCuenta }}</td>
             <td>{{ cuenta.TipoCuenta }}</td>
-            <td>actualizar</td>
-            <td>borrar</td>
+            <td><a href="{{ path('_update', {'id': cuenta.IdCuenta})}}">Actualizar</a> | </td>
+            <td><a href="{{ path('_delete', {'id': cuenta.IdCuenta})}}">Borrar</a> | </td>
             <td>Gestionar Gastos</td>
 <tr>
     {%endfor %}

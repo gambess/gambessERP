@@ -11,9 +11,9 @@ _create:
     defaults: { _controller: CostoSystemBundle:Cuenta:create }
 
 _update:
-    pattern:  /update
+    pattern:  /update/{id}
     defaults: { _controller: CostoSystemBundle:Cuenta:update }
 
 _delete:
-    pattern:  /delete
+    pattern:  /delete/{id}
     defaults: { _controller: CostoSystemBundle:Cuenta:delete }

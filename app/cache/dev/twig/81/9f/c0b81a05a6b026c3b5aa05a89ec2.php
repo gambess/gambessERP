@@ -85,7 +85,7 @@ class __TwigTemplate_819fc0b81a05a6b026c3b5aa05a89ec2 extends Twig_Template
             </div>
             <a class=\"symfony-button-green\" href=\"";
         // line 29
-        echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("_delete"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("_demo"), "html", null, true);
         echo "\">Gestionar Cuentas de Gastos</a>
         </div>
     </div>
