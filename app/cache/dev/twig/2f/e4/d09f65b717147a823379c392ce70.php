@@ -34,7 +34,7 @@ class __TwigTemplate_2fe4d09f65b717147a823379c392ce70 extends Twig_Template
 
 <form action=\"";
         // line 8
-        echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("_list"), "html", null, true);
+        echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("_create"), "html", null, true);
         echo "\" method=\"post\" ";
         echo $this->env->getExtension('form')->renderEnctype($this->getContext($context, "form"));
         echo ">

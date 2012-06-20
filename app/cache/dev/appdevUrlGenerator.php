@@ -178,11 +178,11 @@ class appdevUrlGenerator extends Symfony\Component\Routing\Generator\UrlGenerato
 
     private function get_updateRouteInfo()
     {
-        return array(array (), array (  '_controller' => 'Costo\\SystemBundle\\Controller\\CuentaController::updateAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/update',  ),));
+        return array(array (  0 => 'id',), array (  '_controller' => 'Costo\\SystemBundle\\Controller\\CuentaController::updateAction',), array (), array (  0 =>   array (    0 => 'variable',    1 => '/',    2 => '[^/]+?',    3 => 'id',  ),  1 =>   array (    0 => 'text',    1 => '/update',  ),));
     }
 
     private function get_deleteRouteInfo()
     {
-        return array(array (), array (  '_controller' => 'Costo\\SystemBundle\\Controller\\CuentaController::deleteAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/delete',  ),));
+        return array(array (  0 => 'id',), array (  '_controller' => 'Costo\\SystemBundle\\Controller\\CuentaController::deleteAction',), array (), array (  0 =>   array (    0 => 'variable',    1 => '/',    2 => '[^/]+?',    3 => 'id',  ),  1 =>   array (    0 => 'text',    1 => '/delete',  ),));
     }
 }

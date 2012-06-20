@@ -71,8 +71,14 @@ class __TwigTemplate_d7ee2475e9756a450269616e258ac03f extends Twig_Template
                 // line 26
                 echo twig_escape_filter($this->env, $this->getAttribute($this->getContext($context, "cuenta"), "TipoCuenta"), "html", null, true);
                 echo "</td>
-            <td>actualizar</td>
-            <td>borrar</td>
+            <td><a href=\"";
+                // line 27
+                echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("_update", array("id" => $this->getAttribute($this->getContext($context, "cuenta"), "IdCuenta"))), "html", null, true);
+                echo "\">Actualizar</a> | </td>
+            <td><a href=\"";
+                // line 28
+                echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("_delete", array("id" => $this->getAttribute($this->getContext($context, "cuenta"), "IdCuenta"))), "html", null, true);
+                echo "\">Borrar</a> | </td>
             <td>Gestionar Gastos</td>
 <tr>
     ";
@@ -99,6 +105,6 @@ class __TwigTemplate_d7ee2475e9756a450269616e258ac03f extends Twig_Template
 
     public function getDebugInfo()
     {
-        return array (  82 => 32,  70 => 26,  66 => 25,  62 => 24,  59 => 23,  55 => 22,  47 => 17,  34 => 6,  32 => 5,  29 => 4,  26 => 3,);
+        return array (  88 => 32,  78 => 28,  74 => 27,  70 => 26,  66 => 25,  62 => 24,  59 => 23,  55 => 22,  47 => 17,  34 => 6,  32 => 5,  29 => 4,  26 => 3,);
     }
 }
