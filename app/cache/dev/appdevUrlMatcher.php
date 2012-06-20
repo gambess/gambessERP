@@ -159,8 +159,8 @@ class appdevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
         }
 
         // _update
-        if (0 === strpos($pathinfo, '/update') && preg_match('#^/update/(?P<id>[^/]+?)$#s', $pathinfo, $matches)) {
-            return array_merge($this->mergeDefaults($matches, array (  '_controller' => 'Costo\\SystemBundle\\Controller\\CuentaController::updateAction',)), array('_route' => '_update'));
+        if (0 === strpos($pathinfo, '/update') && preg_match('#^/update(?:/(?P<id>[^/]+?))?$#s', $pathinfo, $matches)) {
+            return array_merge($this->mergeDefaults($matches, array (  '_controller' => 'Costo\\SystemBundle\\Controller\\CuentaController::updateAction',  'id' => NULL,)), array('_route' => '_update'));
         }
 
         // _delete

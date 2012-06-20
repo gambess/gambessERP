@@ -3,8 +3,8 @@
 {% block content %}
     <h1>Actualizar cuenta</h1>
 
-<form action="{{ path('_update') }}" method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
+<form action="{{ path('_update', {'id': cuenta.IdCuenta}) }}" method="post" {{ form_enctype(edit_form) }}>
+    {{ form_widget(edit_form) }}
 
     <input type="submit" />
 </form>

@@ -12,7 +12,7 @@ _create:
 
 _update:
     pattern:  /update/{id}
-    defaults: { _controller: CostoSystemBundle:Cuenta:update }
+    defaults: { _controller: CostoSystemBundle:Cuenta:update, id: null }
 
 _delete:
     pattern:  /delete/{id}
