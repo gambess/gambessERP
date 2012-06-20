@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database name="testing" namespace="Costo\SystemBundle\Model" defaultIdMethod="native">
+  <table name="cuenta" phpName="Cuenta" idMethod="native" >
+    <column name="id_cuenta" phpName="IdCuenta" type="INTEGER" size="20" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="nombre_cuenta" phpName="NombreCuenta" type="VARCHAR" size="150" required="true"/>
+    <column name="valor_cuenta" phpName="ValorCuenta" type="FLOAT" size="7" scale="2" required="true"/>
+    <column name="tipo_cuenta" phpName="TipoCuenta" type="VARCHAR" size="100" required="true"/>
+    <column name="fecha_creacion_cuenta" phpName="FechaCreacionCuenta" type="TIMESTAMP" required="true"/>
+    <column name="user_crea_cuenta" phpName="UserCreaCuenta" type="VARCHAR" size="20" required="true"/>
+    <column name="activa_cuenta" phpName="ActivaCuenta" type="BOOLEAN" size="1" required="true"/>
+  </table>
+</database>

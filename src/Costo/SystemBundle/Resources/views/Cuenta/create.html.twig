@@ -1,0 +1,17 @@
+{% extends 'CostoSystemBundle::layout.html.twig' %}
+
+{% block content %}
+    <h1>Crear una Nueva Cuenta Contable</h1>
+
+
+
+<form action="{{ path('_list') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+
+    <input type="submit" />
+</form>
+
+
+{% endblock %}
+
+

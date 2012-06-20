@@ -1,0 +1,62 @@
+<?php
+
+namespace Costo\SystemBundle\Model\map;
+
+use \RelationMap;
+use \TableMap;
+
+
+/**
+ * This class defines the structure of the 'cuenta' table.
+ *
+ *
+ *
+ * This map class is used by Propel to do runtime db structure discovery.
+ * For example, the createSelectSql() method checks the type of a given column used in an
+ * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
+ * (i.e. if it's a text column type).
+ *
+ * @package    propel.generator.src.Costo.SystemBundle.Model.map
+ */
+class CuentaTableMap extends TableMap
+{
+
+    /**
+     * The (dot-path) name of this class
+     */
+    const CLASS_NAME = 'src.Costo.SystemBundle.Model.map.CuentaTableMap';
+
+    /**
+     * Initialize the table attributes, columns and validators
+     * Relations are not initialized by this method since they are lazy loaded
+     *
+     * @return void
+     * @throws PropelException
+     */
+    public function initialize()
+    {
+        // attributes
+        $this->setName('cuenta');
+        $this->setPhpName('Cuenta');
+        $this->setClassname('Costo\\SystemBundle\\Model\\Cuenta');
+        $this->setPackage('src.Costo.SystemBundle.Model');
+        $this->setUseIdGenerator(true);
+        // columns
+        $this->addPrimaryKey('ID_CUENTA', 'IdCuenta', 'INTEGER', true, 20, null);
+        $this->addColumn('NOMBRE_CUENTA', 'NombreCuenta', 'VARCHAR', true, 150, null);
+        $this->addColumn('VALOR_CUENTA', 'ValorCuenta', 'FLOAT', true, 7, null);
+        $this->addColumn('TIPO_CUENTA', 'TipoCuenta', 'VARCHAR', true, 100, null);
+        $this->addColumn('FECHA_CREACION_CUENTA', 'FechaCreacionCuenta', 'TIMESTAMP', true, null, null);
+        $this->addColumn('USER_CREA_CUENTA', 'UserCreaCuenta', 'VARCHAR', true, 20, null);
+        $this->addColumn('ACTIVA_CUENTA', 'ActivaCuenta', 'BOOLEAN', true, 1, null);
+        // validators
+    } // initialize()
+
+    /**
+     * Build the RelationMap objects for this table relationships
+     */
+    public function buildRelations()
+    {
+    } // buildRelations()
+
+} // CuentaTableMap

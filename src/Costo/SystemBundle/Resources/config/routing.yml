@@ -1,0 +1,19 @@
+CostoSystemBundle_homepage:
+    pattern:  /costo
+    defaults: { _controller: CostoSystemBundle:Cuenta:index }
+
+_list:
+    pattern:  /list/{id}
+    defaults: { _controller: CostoSystemBundle:Cuenta:list , id: null }
+
+_create:
+    pattern:  /create
+    defaults: { _controller: CostoSystemBundle:Cuenta:create }
+
+_update:
+    pattern:  /update
+    defaults: { _controller: CostoSystemBundle:Cuenta:update }
+
+_delete:
+    pattern:  /delete
+    defaults: { _controller: CostoSystemBundle:Cuenta:delete }

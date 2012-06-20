@@ -1,0 +1,37 @@
+{% extends 'CostoSystemBundle::layout.html.twig' %}
+
+{% block content %}
+    <h1>Borrar Cuentas Existentes</h1>
+{% if cuentas is defined %}
+<table id="tcuentas" class="ui-widget ui-widget-content" summary="Listado de Cuentas">
+<thead>
+ 	<tr class="ui-widget-header ">
+            <th scope="col" class="rounded-company">Nombre de la Cuenta</th>
+            <th scope="col" class="rounded-q1">Valor de la Cuenta</th>
+            <th scope="col" class="rounded-q2">Tipo de la Cuenta</th>
+            <th class="rounded-q4" colspan="3" ><center>Acciones</center></th>
+        </tr>
+</thead>
+<tfoot>
+    	<tr>
+        	<td colspan="5" class="rounded-foot-left" align="center"><em>Existen {{ cuentas | length }} Cuentas</em></td>
+        	<td class="rounded-foot-right">&nbsp;</td>
+        </tr>
+</tfoot>
+<tbody>
+    {% for cuenta in cuentas %}
+<tr>
+            <td>{{ cuenta.nombreCuenta }}</td>
+            <td>{{ cuenta.ValorCuenta }}</td>
+            <td>{{ cuenta.TipoCuenta }}</td>
+            <td>actualizar</td>
+            <td>borrar</td>
+            <td>Gestionar Gastos</td>
+<tr>
+    {%endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}
+
+
