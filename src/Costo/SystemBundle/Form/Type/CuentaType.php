@@ -25,7 +25,7 @@ class CuentaType extends AbstractType {
     }
 
     public function getName() {
-        return 'cuenta';
+        return 'costo_systembundle_cuentatype';
     }
 
 }

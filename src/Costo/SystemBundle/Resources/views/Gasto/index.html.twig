@@ -1,0 +1,46 @@
+{% extends 'CostoSystemBundle::layout.html.twig' %}
+
+{% block content %}
+{% block title %}Listado de Gastos{% endblock %}
+
+
+<h1>{{ block('title') }}</h1>
+
+<table class="records_list estrecha">
+    <thead>
+        <tr>
+            <th>Nombre del Gasto</th>
+            <th>Costo del Gasto</th>
+            <th>Fecha de Emision del Gasto</th>
+            <th>Fecha de pago del Gasto</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for gasto in gastos %}
+        <tr>
+            <td>{{ gasto.NombreGasto }}</td>
+            <td>{{ gasto.CostoGasto }}</td>
+            <td>{{ gasto.FechaEmisionGasto }}</td>
+            <td>{{ gasto.FechaPagoGasto }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('backend_ciudad_edit', { 'id': gasto.IdGasto }) }}">Modificar</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a class="boton" href="{{ path('backend_ciudad_new') }}">
+            Añadir una nueva ciudad
+        </a>
+    </li>
+</ul>
+
+{% endblock %}

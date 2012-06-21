@@ -21,5 +21,25 @@ CREATE TABLE `cuenta`
     PRIMARY KEY (`id_cuenta`)
 ) ENGINE=InnoDB;
 
+-- ---------------------------------------------------------------------
+-- gasto
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `gasto`;
+
+CREATE TABLE `gasto`
+(
+    `id_gasto` INTEGER(20) NOT NULL AUTO_INCREMENT,
+    `fk_cuenta` INTEGER(20),
+    `nombre_gasto` VARCHAR(100),
+    `costo_gasto` FLOAT(7,2) DEFAULT 0.00 NOT NULL,
+    `fecha_creacion_gasto` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `fecha_emision_gasto` DATETIME,
+    `fecha_pago_gasto` DATETIME,
+    `activa_gasto` TINYINT(1) DEFAULT 1 NOT NULL,
+    PRIMARY KEY (`id_gasto`),
+    INDEX `fk_cuenta` (`fk_cuenta`)
+) ENGINE=InnoDB;
+
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;

@@ -9,4 +9,17 @@
     <column name="user_crea_cuenta" phpName="UserCreaCuenta" type="VARCHAR" size="20" required="true"/>
     <column name="activa_cuenta" phpName="ActivaCuenta" type="BOOLEAN" size="1" required="true"/>
   </table>
+  <table name="gasto" phpName="Gasto" idMethod="native">
+    <column name="id_gasto" phpName="IdGasto" type="INTEGER" size="20" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="fk_cuenta" phpName="FkCuenta" type="INTEGER" size="20" required="false"/>
+    <column name="nombre_gasto" phpName="NombreGasto" type="VARCHAR" size="100" required="false"/>
+    <column name="costo_gasto" phpName="CostoGasto" type="FLOAT" size="7" scale="2" required="true" defaultValue="0.00"/>
+    <column name="fecha_creacion_gasto" phpName="FechaCreacionGasto" type="TIMESTAMP" required="true" defaultExpr="CURRENT_TIMESTAMP"/>
+    <column name="fecha_emision_gasto" phpName="FechaEmisionGasto" type="TIMESTAMP" required="false"/>
+    <column name="fecha_pago_gasto" phpName="FechaPagoGasto" type="TIMESTAMP" required="false"/>
+    <column name="activa_gasto" phpName="ActivaGasto" type="BOOLEAN" size="1" required="true" defaultValue="true"/>
+    <index name="fk_cuenta">
+      <index-column name="fk_cuenta"/>
+    </index>
+  </table>
 </database>
