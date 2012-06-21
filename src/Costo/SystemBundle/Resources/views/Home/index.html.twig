@@ -1,0 +1,33 @@
+{% extends 'CostoSystemBundle::layout.html.twig' %}
+
+{% block title %}Gestión Costos{% endblock %}
+
+{% block content_header '' %}
+
+{% block content %}
+    <h1>Bienvenido al Sistema de Gestion de Costos</h1>
+
+    <div class="symfony-blocks-welcome">
+        <div class="block-quick-tour">
+            <div class="illustration">
+                <img src="{{ asset('bundles/acmedemo/images/welcome-quick-tour.gif') }}" alt="Ajuste de Ventas" />
+            </div>
+            <a class="symfony-button-green" href="http://symfony.com/doc/2.0/quick_tour/index.html">Gestión ajuste de Ventas</a>
+        </div>
+        {% if app.environment == 'dev' %}
+            <div class="block-configure">
+                <div class="illustration">
+                    <img src="{{ asset('bundles/acmedemo/images/welcome-configure.gif') }}" alt="Cuentas" />
+                </div>
+                <a class="symfony-button-green" href="{{ path('index_cuenta') }}">Gestión de Cuentas</a>
+            </div>
+        {% endif %}
+        <div class="block-demo">
+            <div class="illustration">
+                <img src="{{ asset('bundles/acmedemo/images/welcome-demo.gif') }}" alt="Gastos" />
+            </div>
+            <a class="symfony-button-green" href="{{ path('index_gasto') }}">Gestión de Gastos</a>
+        </div>
+    </div>
+{% endblock %}
+
