@@ -21,8 +21,15 @@
         <tr>
             <td>{{ gasto.NombreGasto }}</td>
             <td>{{ gasto.CostoGasto }}</td>
-            <td>{{ gasto.FechaEmisionGasto }}</td>
-            <td>{{ gasto.FechaPagoGasto }}</td>
+            <td>{% if gasto.FechaEmisionGasto %}
+                {{ gasto.FechaEmisionGasto |date("m/d/Y")  }}
+                {% endif %}
+            </td>
+            <td>
+                {% if gasto.FechaPagoGasto %}
+                    {{ gasto.FechaPagoGasto|date("m/d/Y")  }}
+                {% endif %}
+            </td>
             <td>
                 <ul>
                     <li>

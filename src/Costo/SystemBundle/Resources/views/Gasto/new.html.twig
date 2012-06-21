@@ -1,15 +1,14 @@
-{% extends '::backend.html.twig' %}
+{% extends 'CostoSystemBundle::layout.html.twig' %}
 
-{% block id 'ciudad' %}
-{% block title %}Añadir una nueva ciudad{% endblock %}
+{% block content %}
+{% block title %}Añadir un Nuevo Gasto{% endblock %}
 
-{% block article %}
 <h1>{{ block('title') }}</h1>
 
 <form action="{{ path('backend_ciudad_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
     <p>
-        <button class="boton" type="submit">Añadir ciudad</button>
+        <button class="boton" type="submit">Añadir Gasto</button>
     </p>
 </form>
 

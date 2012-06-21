@@ -23,18 +23,16 @@ class GastoController extends Controller {
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $gasto = GastoQuery::create()->findPk($id);
 
-        $entity = $em->getRepository('CiudadBundle:Ciudad')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado la ciudad solicitada');
+        if (!$gasto) {
+            throw $this->createNotFoundException('No se ha encontrado el gasto solicitado');
         }
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('BackendBundle:Ciudad:show.html.twig', array(
-            'entity'      => $entity,
+        return $this->render('CostoSystemBundle:Gasto:show.html.twig', array(
+            'gasto'      => $gasto,
             'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -45,11 +43,11 @@ class GastoController extends Controller {
      */
     public function newAction()
     {
-        $entity = new Ciudad();
-        $form   = $this->createForm(new CiudadType(), $entity);
+        $gasto = new Gasto();
+        $form   = $this->createForm(new GastoType(), $gasto);
 
-        return $this->render('BackendBundle:Ciudad:new.html.twig', array(
-            'entity' => $entity,
+        return $this->render('CostoSystemBundle:Gasto:new.html.twig', array(
+            'gasto' => $gasto,
             'form'   => $form->createView()
         ));
     }
@@ -66,13 +64,13 @@ class GastoController extends Controller {
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            
-            return $this->redirect($this->generateUrl('backend_ciudad_show', array('id' => $entity->getId())));
+            $gasto->save();
+            return $this->redirect($this->generateUrl('backend_ciudad_show', array('id' => $gasto->getIdGasto())));
 
         }
 
-        return $this->render('BackendBundle:Gasto:create.html.twig', array(
-            'entity' => $entity,
+        return $this->render('CostoSystemBundle:Gasto:create.html.twig', array(
+            'gasto' => $gasto,
             'form'   => $form->createView()
         ));
     }
@@ -83,19 +81,17 @@ class GastoController extends Controller {
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+       $gasto = GastoQuery::create()->findPk($id);
 
-        $entity = $em->getRepository('CiudadBundle:Ciudad')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado la ciudad solicitada');
+        if (!$gasto) {
+            throw $this->createNotFoundException('No se ha encontrado el gasto solicitado');
         }
 
-        $editForm = $this->createForm(new CiudadType(), $entity);
+        $editForm = $this->createForm(new GastoType(), $gasto);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('BackendBundle:Ciudad:edit.html.twig', array(
-            'entity'      => $entity,
+        return $this->render('CostoSystemBundle:Gasto:edit.html.twig', array(
+            'gasto'      => $gasto,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
@@ -107,15 +103,13 @@ class GastoController extends Controller {
      */
     public function updateAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+         $gasto = GastoQuery::create()->findPk($id);
 
-        $entity = $em->getRepository('CiudadBundle:Ciudad')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado la ciudad solicitada');
+        if (!$gasto) {
+            throw $this->createNotFoundException('No se ha encontrado el gasto solicitado');
         }
 
-        $editForm   = $this->createForm(new CiudadType(), $entity);
+        $editForm = $this->createForm(new GastoType(), $gasto);
         $deleteForm = $this->createDeleteForm($id);
 
         $request = $this->getRequest();
@@ -123,14 +117,13 @@ class GastoController extends Controller {
         $editForm->bindRequest($request);
 
         if ($editForm->isValid()) {
-            $em->persist($entity);
-            $em->flush();
+            $gasto->save();
 
             return $this->redirect($this->generateUrl('backend_ciudad_edit', array('id' => $id)));
         }
 
-        return $this->render('BackendBundle:Ciudad:edit.html.twig', array(
-            'entity'      => $entity,
+        return $this->render('CostoSystemBundle:Gasto:edit.html.twig', array(
+            'gasto'      => $gasto,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
@@ -148,15 +141,13 @@ class GastoController extends Controller {
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CiudadBundle:Ciudad')->find($id);
+            $gasto = GastoQuery::create()->findPk($id);
 
-            if (!$entity) {
-                throw $this->createNotFoundException('No se ha encontrado la ciudad solicitada');
+            if (!$gasto) {
+            throw $this->createNotFoundException('No se ha encontrado el gasto solicitado');
             }
 
-            $em->remove($entity);
-            $em->flush();
+            $gasto->delete();
         }
 
         return $this->redirect($this->generateUrl('backend_ciudad'));

@@ -1,24 +1,23 @@
-{% extends '::backend.html.twig' %}
+{% extends 'CostoSystemBundle::layout.html.twig' %}
 
-{% block id 'ciudad' %}
-{% block title %}Datos de la ciudad {{ entity }}{% endblock %}
+{% block content %}
+{% block title %}Datos del Gasto {{ gasto.NombreGasto }}{% endblock %}
 
-{% block article %}
 <h1>{{ block('title') }}</h1>
 
 <table class="record_properties">
     <tbody>
         <tr>
-            <th>Id</th>
-            <td>{{ entity.id }}</td>
+            <th>Codigo</th>
+            <td>{{ gasto.IdGasto }}</td>
         </tr>
         <tr>
-            <th>Nombre</th>
-            <td>{{ entity.nombre }}</td>
+            <th>Nombre del Gasto</th>
+            <td>{{ gasto.NombreGasto }}</td>
         </tr>
         <tr>
-            <th>Slug</th>
-            <td>{{ entity.slug }}</td>
+            <th>Costo</th>
+            <td>{{ gasto.CostoGasto }}</td>
         </tr>
     </tbody>
 </table>
@@ -30,12 +29,12 @@
         </a>
     </li>
     <li>
-        <a href="{{ path('backend_ciudad_edit', { 'id': entity.id }) }}">
+        <a href="{{ path('backend_ciudad_edit', { 'id': gasto.IdGasto }) }}">
             Modificar ciudad
         </a>
     </li>
     <li>
-        <form action="{{ path('backend_ciudad_delete', { 'id': entity.id }) }}" method="post">
+        <form action="{{ path('backend_ciudad_delete', { 'id': gasto.IdGasto }) }}" method="post">
             {{ form_widget(delete_form) }}
             <button type="submit">Borrar ciudad</button>
         </form>
