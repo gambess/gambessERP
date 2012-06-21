@@ -5,7 +5,7 @@
 
 <h1>{{ block('title') }}</h1>
 
-<form action="{{ path('backend_ciudad_update', { 'id':gasto.IdGasto }) }}" method="post" {{ form_enctype(edit_form) }}>
+<form action="{{ path('update_gasto', { 'id':gasto.IdGasto }) }}" method="post" {{ form_enctype(edit_form) }}>
     {{ form_widget(edit_form) }}
     <p>
         <button class="boton" type="submit">Guardar cambios</button>
@@ -14,14 +14,14 @@
 
 <ul class="record_actions">
     <li>
-        <a href="{{ path('backend_ciudad') }}">
+        <a href="{{ path('index_gasto') }}">
             Volver al listado
         </a>
     </li>
     <li>
-        <form action="{{ path('backend_ciudad_delete', { 'id': gasto.IdGasto }) }}" method="post">
+        <form action="{{ path('delete_gasto', { 'id': gasto.IdGasto }) }}" method="post">
             {{ form_widget(delete_form) }}
-            <button type="submit">Borrar ciudad</button>
+            <button type="submit">Borrar Gasto</button>
         </form>
     </li>
 </ul>

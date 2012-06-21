@@ -18,6 +18,6 @@ _delete:
     pattern:  /delete/{id}
     defaults: { _controller: CostoSystemBundle:Cuenta:delete }
 
-CostoGasto:
+_gasto:
     resource: "@CostoSystemBundle/Resources/config/routing/gasto.yml"
     prefix:   /gasto

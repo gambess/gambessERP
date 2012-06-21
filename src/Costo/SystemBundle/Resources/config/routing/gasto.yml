@@ -1,32 +1,32 @@
 # Rutas para gestionar todas las acciones de las entidades de tipo Ciudad
 # Generado automáticamente por el comando generate:doctrine:crud
-backend_ciudad:
+index_gasto:
     pattern:  /
     defaults: { _controller: "CostoSystemBundle:Gasto:index" }
 
-backend_ciudad_show:
+show_gasto:
     pattern:  /{id}/show
     defaults: { _controller: "CostoSystemBundle:Gasto:show" }
 
-backend_ciudad_new:
+new_gasto:
     pattern:  /new
     defaults: { _controller: "CostoSystemBundle:Gasto:new" }
 
-backend_ciudad_create:
+create_gasto:
     pattern:  /create
     defaults: { _controller: "CostoSystemBundle:Gasto:create" }
     requirements: { _method: post }
 
-backend_ciudad_edit:
+edit_gasto:
     pattern:  /{id}/edit
     defaults: { _controller: "CostoSystemBundle:Gasto:edit" }
 
-backend_ciudad_update:
+update_gasto:
     pattern:  /{id}/update
     defaults: { _controller: "CostoSystemBundle:Gasto:update" }
     requirements: { _method: post }
 
-backend_ciudad_delete:
+delete_gasto:
     pattern:  /{id}/delete
     defaults: { _controller: "CostoSystemBundle:Gasto:delete" }
     requirements: { _method: post }

@@ -17,6 +17,7 @@
         </tr>
     </thead>
     <tbody>
+
     {% for gasto in gastos %}
         <tr>
             <td>{{ gasto.NombreGasto }}</td>
@@ -33,7 +34,7 @@
             <td>
                 <ul>
                     <li>
-                        <a href="{{ path('backend_ciudad_edit', { 'id': gasto.IdGasto }) }}">Modificar</a>
+                        <a href="{{ path('edit_gasto', { 'id': gasto.IdGasto }) }}">Modificar</a>
                     </li>
                 </ul>
             </td>
@@ -44,8 +45,8 @@
 
 <ul>
     <li>
-        <a class="boton" href="{{ path('backend_ciudad_new') }}">
-            Añadir una nueva ciudad
+        <a class="boton" href="{{ path('new_gasto') }}">
+            Añadir un nuevo Gasto
         </a>
     </li>
 </ul>

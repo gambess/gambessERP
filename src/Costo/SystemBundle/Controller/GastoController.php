@@ -65,7 +65,7 @@ class GastoController extends Controller {
 
         if ($form->isValid()) {
             $gasto->save();
-            return $this->redirect($this->generateUrl('backend_ciudad_show', array('id' => $gasto->getIdGasto())));
+            return $this->redirect($this->generateUrl('show_gasto', array('id' => $gasto->getIdGasto())));
 
         }
 
@@ -119,7 +119,7 @@ class GastoController extends Controller {
         if ($editForm->isValid()) {
             $gasto->save();
 
-            return $this->redirect($this->generateUrl('backend_ciudad_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('edit_gasto', array('id' => $id)));
         }
 
         return $this->render('CostoSystemBundle:Gasto:edit.html.twig', array(
@@ -150,7 +150,7 @@ class GastoController extends Controller {
             $gasto->delete();
         }
 
-        return $this->redirect($this->generateUrl('backend_ciudad'));
+        return $this->redirect($this->generateUrl('index_gasto'));
     }
 
     private function createDeleteForm($id)

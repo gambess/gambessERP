@@ -5,7 +5,7 @@
 
 <h1>{{ block('title') }}</h1>
 
-<form action="{{ path('backend_ciudad_create') }}" method="post" {{ form_enctype(form) }}>
+<form action="{{ path('create_gasto') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
     <p>
         <button class="boton" type="submit">Añadir Gasto</button>
@@ -14,7 +14,7 @@
 
 <ul class="record_actions">
     <li>
-        <a href="{{ path('backend_ciudad') }}">
+        <a href="{{ path('index_gasto') }}">
             Volver al listado
         </a>
     </li>

@@ -24,19 +24,19 @@
 
 <ul class="record_actions">
     <li>
-        <a href="{{ path('backend_ciudad') }}">
+        <a href="{{ path('index_gasto') }}">
             Volver al listado
         </a>
     </li>
     <li>
-        <a href="{{ path('backend_ciudad_edit', { 'id': gasto.IdGasto }) }}">
-            Modificar ciudad
+        <a href="{{ path('edit_gasto', { 'id': gasto.IdGasto }) }}">
+            Modificar Gasto
         </a>
     </li>
     <li>
-        <form action="{{ path('backend_ciudad_delete', { 'id': gasto.IdGasto }) }}" method="post">
+        <form action="{{ path('delete_gasto', { 'id': gasto.IdGasto }) }}" method="post">
             {{ form_widget(delete_form) }}
-            <button type="submit">Borrar ciudad</button>
+            <button type="submit">Borrar gasto</button>
         </form>
     </li>
 </ul>
