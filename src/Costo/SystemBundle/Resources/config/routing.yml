@@ -1,23 +1,12 @@
-CostoSystemBundle_homepage:
-    pattern:  /costo
+_homepage:
+    pattern:  /
     defaults: { _controller: CostoSystemBundle:Cuenta:index }
 
-_list:
-    pattern:  /list/{id}
-    defaults: { _controller: CostoSystemBundle:Cuenta:list , id: null }
-
-_create:
-    pattern:  /create
-    defaults: { _controller: CostoSystemBundle:Cuenta:create }
-
-_update:
-    pattern:  /update/{id}
-    defaults: { _controller: CostoSystemBundle:Cuenta:update, id: null }
-
-_delete:
-    pattern:  /delete/{id}
-    defaults: { _controller: CostoSystemBundle:Cuenta:delete }
 
 _gasto:
     resource: "@CostoSystemBundle/Resources/config/routing/gasto.yml"
     prefix:   /gasto
+
+_cuenta:
+    resource: "@CostoSystemBundle/Resources/config/routing/cuenta.yml"
+    prefix:   /cuenta

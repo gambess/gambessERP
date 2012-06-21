@@ -10,7 +10,7 @@
     <body>
         <div id="symfony-wrapper">
             <div id="symfony-header">
-                <a href="{{ path('_list') }}">
+                <a href="{{ path('_homepage') }}">
                     <img src="{{ asset('bundles/costosystem/images/logo_small.png') }}" alt="Poncab">
                 </a>
                 <form id="symfony-search" method="GET" action="http://symfony.com/search">
@@ -24,7 +24,7 @@
             {% block content_header %}
                 <ul id="menu">
                     {% block content_header_more %}
-                        <li><a href="{{ path('_create') }}">Home</a></li>
+                        <li><a href="{{ path('_homepage') }}">Home</a></li>
                     {% endblock %}
                 </ul>
 

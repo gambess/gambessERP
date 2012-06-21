@@ -1,0 +1,44 @@
+{% extends 'CostoSystemBundle::layout.html.twig' %}
+
+{% block title %}Datos de la Cuenta {{ cuenta.NombreCuenta }}{% endblock %}
+{% block content %}
+
+
+<h1>{{ block('title') }}</h1>
+
+<table class="record_properties">
+    <tbody>
+        <tr>
+            <th>Codigo</th>
+            <td>{{ cuenta.IdCuenta }}</td>
+        </tr>
+        <tr>
+            <th>Nombre de la Cuenta</th>
+            <td>{{ cuenta.NombreCuenta }}</td>
+        </tr>
+        <tr>
+            <th>Total</th>
+            <td>{{ cuenta.ValorCuenta }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('index_cuenta') }}">
+            Volver al listado
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('edit_cuenta', { 'id': cuenta.IdCuenta }) }}">
+            Modificar Cuenta
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('delete_cuenta', { 'id': cuenta.IdCuenta }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Borrar Cuenta</button>
+        </form>
+    </li>
+</ul>
+{% endblock %}
