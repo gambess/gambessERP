@@ -1,0 +1,51 @@
+<h1>AjusteVenta list</h1>
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Fk_venta</th>
+            <th>Fecha_venta</th>
+            <th>Tipo_venta</th>
+            <th>Total_venta</th>
+            <th>Total_venta_formal</th>
+            <th>Total_venta_informal</th>
+            <th>Total_iva_venta_formal</th>
+            <th>Detalle_venta</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('ajusteventa_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.fkventa }}</td>
+            <td>{% if entity.fechaventa %}{{ entity.fechaventa|date('Y-m-d H:i:s') }}{% endif %}</td>
+            <td>{{ entity.tipoventa }}</td>
+            <td>{{ entity.totalventa }}</td>
+            <td>{{ entity.totalventaformal }}</td>
+            <td>{{ entity.totalventainformal }}</td>
+            <td>{{ entity.totalivaventaformal }}</td>
+            <td>{{ entity.detalleventa }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('ajusteventa_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('ajusteventa_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('ajusteventa_new') }}">
+            Create a new entry
+        </a>
+    </li>
+</ul>
