@@ -16,6 +16,8 @@ use \PropelDateTime;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
+use Costo\SystemBundle\Model\Cuenta;
+use Costo\SystemBundle\Model\CuentaQuery;
 use Costo\SystemBundle\Model\Gasto;
 use Costo\SystemBundle\Model\GastoPeer;
 use Costo\SystemBundle\Model\GastoQuery;
@@ -99,6 +101,17 @@ abstract class BaseGasto extends BaseObject
      * @var        boolean
      */
     protected $activa_gasto;
+
+    /**
+     * The value for the numero_doc_gasto field.
+     * @var        string
+     */
+    protected $numero_doc_gasto;
+
+    /**
+     * @var        Cuenta
+     */
+    protected $aCuenta;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -306,6 +319,17 @@ abstract class BaseGasto extends BaseObject
     }
 
     /**
+     * Get the [numero_doc_gasto] column value.
+     * 
+     * @return   string
+     */
+    public function getNumeroDocGasto()
+    {
+
+        return $this->numero_doc_gasto;
+    }
+
+    /**
      * Set the value of [id_gasto] column.
      * 
      * @param      int $v new value
@@ -341,6 +365,10 @@ abstract class BaseGasto extends BaseObject
         if ($this->fk_cuenta !== $v) {
             $this->fk_cuenta = $v;
             $this->modifiedColumns[] = GastoPeer::FK_CUENTA;
+        }
+
+        if ($this->aCuenta !== null && $this->aCuenta->getIdCuenta() !== $v) {
+            $this->aCuenta = null;
         }
 
 
@@ -488,6 +516,27 @@ abstract class BaseGasto extends BaseObject
     } // setActivaGasto()
 
     /**
+     * Set the value of [numero_doc_gasto] column.
+     * 
+     * @param      string $v new value
+     * @return   Gasto The current object (for fluent API support)
+     */
+    public function setNumeroDocGasto($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->numero_doc_gasto !== $v) {
+            $this->numero_doc_gasto = $v;
+            $this->modifiedColumns[] = GastoPeer::NUMERO_DOC_GASTO;
+        }
+
+
+        return $this;
+    } // setNumeroDocGasto()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -535,6 +584,7 @@ abstract class BaseGasto extends BaseObject
             $this->fecha_emision_gasto = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
             $this->fecha_pago_gasto = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
             $this->activa_gasto = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
+            $this->numero_doc_gasto = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -543,7 +593,7 @@ abstract class BaseGasto extends BaseObject
                 $this->ensureConsistency();
             }
 
-            return $startcol + 8; // 8 = GastoPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 9; // 9 = GastoPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Gasto object", $e);
@@ -566,6 +616,9 @@ abstract class BaseGasto extends BaseObject
     public function ensureConsistency()
     {
 
+        if ($this->aCuenta !== null && $this->fk_cuenta !== $this->aCuenta->getIdCuenta()) {
+            $this->aCuenta = null;
+        }
     } // ensureConsistency
 
     /**
@@ -605,6 +658,7 @@ abstract class BaseGasto extends BaseObject
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aCuenta = null;
         } // if (deep)
     }
 
@@ -718,6 +772,18 @@ abstract class BaseGasto extends BaseObject
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their coresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aCuenta !== null) {
+                if ($this->aCuenta->isModified() || $this->aCuenta->isNew()) {
+                    $affectedRows += $this->aCuenta->save($con);
+                }
+                $this->setCuenta($this->aCuenta);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -779,6 +845,9 @@ abstract class BaseGasto extends BaseObject
         if ($this->isColumnModified(GastoPeer::ACTIVA_GASTO)) {
             $modifiedColumns[':p' . $index++]  = '`ACTIVA_GASTO`';
         }
+        if ($this->isColumnModified(GastoPeer::NUMERO_DOC_GASTO)) {
+            $modifiedColumns[':p' . $index++]  = '`NUMERO_DOC_GASTO`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `gasto` (%s) VALUES (%s)',
@@ -813,6 +882,9 @@ abstract class BaseGasto extends BaseObject
                         break;
                     case '`ACTIVA_GASTO`':
 						$stmt->bindValue($identifier, (int) $this->activa_gasto, PDO::PARAM_INT);
+                        break;
+                    case '`NUMERO_DOC_GASTO`':
+						$stmt->bindValue($identifier, $this->numero_doc_gasto, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -908,6 +980,18 @@ abstract class BaseGasto extends BaseObject
             $failureMap = array();
 
 
+            // We call the validate method on the following object(s) if they
+            // were passed to this object by their coresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aCuenta !== null) {
+                if (!$this->aCuenta->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aCuenta->getValidationFailures());
+                }
+            }
+
+
             if (($retval = GastoPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
@@ -972,6 +1056,9 @@ abstract class BaseGasto extends BaseObject
             case 7:
                 return $this->getActivaGasto();
                 break;
+            case 8:
+                return $this->getNumeroDocGasto();
+                break;
             default:
                 return null;
                 break;
@@ -989,10 +1076,11 @@ abstract class BaseGasto extends BaseObject
      *                    Defaults to BasePeer::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
+    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
         if (isset($alreadyDumpedObjects['Gasto'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
@@ -1008,7 +1096,13 @@ abstract class BaseGasto extends BaseObject
             $keys[5] => $this->getFechaEmisionGasto(),
             $keys[6] => $this->getFechaPagoGasto(),
             $keys[7] => $this->getActivaGasto(),
+            $keys[8] => $this->getNumeroDocGasto(),
         );
+        if ($includeForeignObjects) {
+            if (null !== $this->aCuenta) {
+                $result['Cuenta'] = $this->aCuenta->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+        }
 
         return $result;
     }
@@ -1066,6 +1160,9 @@ abstract class BaseGasto extends BaseObject
             case 7:
                 $this->setActivaGasto($value);
                 break;
+            case 8:
+                $this->setNumeroDocGasto($value);
+                break;
         } // switch()
     }
 
@@ -1098,6 +1195,7 @@ abstract class BaseGasto extends BaseObject
         if (array_key_exists($keys[5], $arr)) $this->setFechaEmisionGasto($arr[$keys[5]]);
         if (array_key_exists($keys[6], $arr)) $this->setFechaPagoGasto($arr[$keys[6]]);
         if (array_key_exists($keys[7], $arr)) $this->setActivaGasto($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setNumeroDocGasto($arr[$keys[8]]);
     }
 
     /**
@@ -1117,6 +1215,7 @@ abstract class BaseGasto extends BaseObject
         if ($this->isColumnModified(GastoPeer::FECHA_EMISION_GASTO)) $criteria->add(GastoPeer::FECHA_EMISION_GASTO, $this->fecha_emision_gasto);
         if ($this->isColumnModified(GastoPeer::FECHA_PAGO_GASTO)) $criteria->add(GastoPeer::FECHA_PAGO_GASTO, $this->fecha_pago_gasto);
         if ($this->isColumnModified(GastoPeer::ACTIVA_GASTO)) $criteria->add(GastoPeer::ACTIVA_GASTO, $this->activa_gasto);
+        if ($this->isColumnModified(GastoPeer::NUMERO_DOC_GASTO)) $criteria->add(GastoPeer::NUMERO_DOC_GASTO, $this->numero_doc_gasto);
 
         return $criteria;
     }
@@ -1187,6 +1286,19 @@ abstract class BaseGasto extends BaseObject
         $copyObj->setFechaEmisionGasto($this->getFechaEmisionGasto());
         $copyObj->setFechaPagoGasto($this->getFechaPagoGasto());
         $copyObj->setActivaGasto($this->getActivaGasto());
+        $copyObj->setNumeroDocGasto($this->getNumeroDocGasto());
+
+        if ($deepCopy && !$this->startCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+            // store object hash to prevent cycle
+            $this->startCopy = true;
+
+            //unflag object copy
+            $this->startCopy = false;
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setIdGasto(NULL); // this is a auto-increment column, so set to default value
@@ -1234,6 +1346,57 @@ abstract class BaseGasto extends BaseObject
     }
 
     /**
+     * Declares an association between this object and a Cuenta object.
+     *
+     * @param                  Cuenta $v
+     * @return                 Gasto The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setCuenta(Cuenta $v = null)
+    {
+        if ($v === null) {
+            $this->setFkCuenta(NULL);
+        } else {
+            $this->setFkCuenta($v->getIdCuenta());
+        }
+
+        $this->aCuenta = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Cuenta object, it will not be re-added.
+        if ($v !== null) {
+            $v->addGasto($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Cuenta object
+     *
+     * @param      PropelPDO $con Optional Connection object.
+     * @return                 Cuenta The associated Cuenta object.
+     * @throws PropelException
+     */
+    public function getCuenta(PropelPDO $con = null)
+    {
+        if ($this->aCuenta === null && ($this->fk_cuenta !== null)) {
+            $this->aCuenta = CuentaQuery::create()->findPk($this->fk_cuenta, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aCuenta->addGastos($this);
+             */
+        }
+
+        return $this->aCuenta;
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
@@ -1246,6 +1409,7 @@ abstract class BaseGasto extends BaseObject
         $this->fecha_emision_gasto = null;
         $this->fecha_pago_gasto = null;
         $this->activa_gasto = null;
+        $this->numero_doc_gasto = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->clearAllReferences();
@@ -1269,6 +1433,7 @@ abstract class BaseGasto extends BaseObject
         if ($deep) {
         } // if ($deep)
 
+        $this->aCuenta = null;
     }
 
     /**

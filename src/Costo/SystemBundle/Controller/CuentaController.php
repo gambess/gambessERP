@@ -9,7 +9,7 @@ use Costo\SystemBundle\Form\Type\CuentaType;
 
 /**
  * @author Raziel Valle <razielvalle@gambess.com>
- * Controlador de Cuentas, Metods CRUD+
+ * Controlador de Cuentas, Metods CRUD + List + Search ++
  * Este controlador controla las acciones request de la pagina web
  */
 class CuentaController extends Controller {
@@ -130,7 +130,7 @@ class CuentaController extends Controller {
          $cuenta = CuentaQuery::create()->findPk($id);
 
         if (!$cuenta) {
-            throw $this->createNotFoundException('No se ha encontrado el cuenta solicitado');
+            throw $this->createNotFoundException('No se ha encontrado la cuenta solicitada');
         }
 
         $editForm = $this->createForm(new CuentaType(), $cuenta);
@@ -171,7 +171,7 @@ class CuentaController extends Controller {
             $cuenta = CuentaQuery::create()->findPk($id);
 
             if (!$cuenta) {
-            throw $this->createNotFoundException('No se ha encontrado el cuenta solicitado');
+            throw $this->createNotFoundException('No se ha encontrado la cuenta solicitada');
             }
 
             $cuenta->delete();

@@ -9,6 +9,7 @@ use \PDOStatement;
 use \Propel;
 use \PropelException;
 use \PropelPDO;
+use Costo\SystemBundle\Model\CuentaPeer;
 use Costo\SystemBundle\Model\Gasto;
 use Costo\SystemBundle\Model\GastoPeer;
 use Costo\SystemBundle\Model\map\GastoTableMap;
@@ -35,13 +36,13 @@ abstract class BaseGastoPeer {
     const TM_CLASS = 'GastoTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 8;
+    const NUM_COLUMNS = 9;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 8;
+    const NUM_HYDRATE_COLUMNS = 9;
 
     /** the column name for the ID_GASTO field */
     const ID_GASTO = 'gasto.ID_GASTO';
@@ -67,6 +68,9 @@ abstract class BaseGastoPeer {
     /** the column name for the ACTIVA_GASTO field */
     const ACTIVA_GASTO = 'gasto.ACTIVA_GASTO';
 
+    /** the column name for the NUMERO_DOC_GASTO field */
+    const NUMERO_DOC_GASTO = 'gasto.NUMERO_DOC_GASTO';
+
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
@@ -86,12 +90,12 @@ abstract class BaseGastoPeer {
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('IdGasto', 'FkCuenta', 'NombreGasto', 'CostoGasto', 'FechaCreacionGasto', 'FechaEmisionGasto', 'FechaPagoGasto', 'ActivaGasto', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idGasto', 'fkCuenta', 'nombreGasto', 'costoGasto', 'fechaCreacionGasto', 'fechaEmisionGasto', 'fechaPagoGasto', 'activaGasto', ),
-        BasePeer::TYPE_COLNAME => array (self::ID_GASTO, self::FK_CUENTA, self::NOMBRE_GASTO, self::COSTO_GASTO, self::FECHA_CREACION_GASTO, self::FECHA_EMISION_GASTO, self::FECHA_PAGO_GASTO, self::ACTIVA_GASTO, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID_GASTO', 'FK_CUENTA', 'NOMBRE_GASTO', 'COSTO_GASTO', 'FECHA_CREACION_GASTO', 'FECHA_EMISION_GASTO', 'FECHA_PAGO_GASTO', 'ACTIVA_GASTO', ),
-        BasePeer::TYPE_FIELDNAME => array ('id_gasto', 'fk_cuenta', 'nombre_gasto', 'costo_gasto', 'fecha_creacion_gasto', 'fecha_emision_gasto', 'fecha_pago_gasto', 'activa_gasto', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+        BasePeer::TYPE_PHPNAME => array ('IdGasto', 'FkCuenta', 'NombreGasto', 'CostoGasto', 'FechaCreacionGasto', 'FechaEmisionGasto', 'FechaPagoGasto', 'ActivaGasto', 'NumeroDocGasto', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idGasto', 'fkCuenta', 'nombreGasto', 'costoGasto', 'fechaCreacionGasto', 'fechaEmisionGasto', 'fechaPagoGasto', 'activaGasto', 'numeroDocGasto', ),
+        BasePeer::TYPE_COLNAME => array (self::ID_GASTO, self::FK_CUENTA, self::NOMBRE_GASTO, self::COSTO_GASTO, self::FECHA_CREACION_GASTO, self::FECHA_EMISION_GASTO, self::FECHA_PAGO_GASTO, self::ACTIVA_GASTO, self::NUMERO_DOC_GASTO, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID_GASTO', 'FK_CUENTA', 'NOMBRE_GASTO', 'COSTO_GASTO', 'FECHA_CREACION_GASTO', 'FECHA_EMISION_GASTO', 'FECHA_PAGO_GASTO', 'ACTIVA_GASTO', 'NUMERO_DOC_GASTO', ),
+        BasePeer::TYPE_FIELDNAME => array ('id_gasto', 'fk_cuenta', 'nombre_gasto', 'costo_gasto', 'fecha_creacion_gasto', 'fecha_emision_gasto', 'fecha_pago_gasto', 'activa_gasto', 'numero_doc_gasto', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -101,12 +105,12 @@ abstract class BaseGastoPeer {
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('IdGasto' => 0, 'FkCuenta' => 1, 'NombreGasto' => 2, 'CostoGasto' => 3, 'FechaCreacionGasto' => 4, 'FechaEmisionGasto' => 5, 'FechaPagoGasto' => 6, 'ActivaGasto' => 7, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idGasto' => 0, 'fkCuenta' => 1, 'nombreGasto' => 2, 'costoGasto' => 3, 'fechaCreacionGasto' => 4, 'fechaEmisionGasto' => 5, 'fechaPagoGasto' => 6, 'activaGasto' => 7, ),
-        BasePeer::TYPE_COLNAME => array (self::ID_GASTO => 0, self::FK_CUENTA => 1, self::NOMBRE_GASTO => 2, self::COSTO_GASTO => 3, self::FECHA_CREACION_GASTO => 4, self::FECHA_EMISION_GASTO => 5, self::FECHA_PAGO_GASTO => 6, self::ACTIVA_GASTO => 7, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID_GASTO' => 0, 'FK_CUENTA' => 1, 'NOMBRE_GASTO' => 2, 'COSTO_GASTO' => 3, 'FECHA_CREACION_GASTO' => 4, 'FECHA_EMISION_GASTO' => 5, 'FECHA_PAGO_GASTO' => 6, 'ACTIVA_GASTO' => 7, ),
-        BasePeer::TYPE_FIELDNAME => array ('id_gasto' => 0, 'fk_cuenta' => 1, 'nombre_gasto' => 2, 'costo_gasto' => 3, 'fecha_creacion_gasto' => 4, 'fecha_emision_gasto' => 5, 'fecha_pago_gasto' => 6, 'activa_gasto' => 7, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+        BasePeer::TYPE_PHPNAME => array ('IdGasto' => 0, 'FkCuenta' => 1, 'NombreGasto' => 2, 'CostoGasto' => 3, 'FechaCreacionGasto' => 4, 'FechaEmisionGasto' => 5, 'FechaPagoGasto' => 6, 'ActivaGasto' => 7, 'NumeroDocGasto' => 8, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idGasto' => 0, 'fkCuenta' => 1, 'nombreGasto' => 2, 'costoGasto' => 3, 'fechaCreacionGasto' => 4, 'fechaEmisionGasto' => 5, 'fechaPagoGasto' => 6, 'activaGasto' => 7, 'numeroDocGasto' => 8, ),
+        BasePeer::TYPE_COLNAME => array (self::ID_GASTO => 0, self::FK_CUENTA => 1, self::NOMBRE_GASTO => 2, self::COSTO_GASTO => 3, self::FECHA_CREACION_GASTO => 4, self::FECHA_EMISION_GASTO => 5, self::FECHA_PAGO_GASTO => 6, self::ACTIVA_GASTO => 7, self::NUMERO_DOC_GASTO => 8, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID_GASTO' => 0, 'FK_CUENTA' => 1, 'NOMBRE_GASTO' => 2, 'COSTO_GASTO' => 3, 'FECHA_CREACION_GASTO' => 4, 'FECHA_EMISION_GASTO' => 5, 'FECHA_PAGO_GASTO' => 6, 'ACTIVA_GASTO' => 7, 'NUMERO_DOC_GASTO' => 8, ),
+        BasePeer::TYPE_FIELDNAME => array ('id_gasto' => 0, 'fk_cuenta' => 1, 'nombre_gasto' => 2, 'costo_gasto' => 3, 'fecha_creacion_gasto' => 4, 'fecha_emision_gasto' => 5, 'fecha_pago_gasto' => 6, 'activa_gasto' => 7, 'numero_doc_gasto' => 8, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -188,6 +192,7 @@ abstract class BaseGastoPeer {
             $criteria->addSelectColumn(GastoPeer::FECHA_EMISION_GASTO);
             $criteria->addSelectColumn(GastoPeer::FECHA_PAGO_GASTO);
             $criteria->addSelectColumn(GastoPeer::ACTIVA_GASTO);
+            $criteria->addSelectColumn(GastoPeer::NUMERO_DOC_GASTO);
         } else {
             $criteria->addSelectColumn($alias . '.ID_GASTO');
             $criteria->addSelectColumn($alias . '.FK_CUENTA');
@@ -197,6 +202,7 @@ abstract class BaseGastoPeer {
             $criteria->addSelectColumn($alias . '.FECHA_EMISION_GASTO');
             $criteria->addSelectColumn($alias . '.FECHA_PAGO_GASTO');
             $criteria->addSelectColumn($alias . '.ACTIVA_GASTO');
+            $criteria->addSelectColumn($alias . '.NUMERO_DOC_GASTO');
         }
     }
 
@@ -490,6 +496,244 @@ abstract class BaseGastoPeer {
         }
 
         return array($obj, $col);
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Cuenta table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinCuenta(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(GastoPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            GastoPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(self::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(GastoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(GastoPeer::FK_CUENTA, CuentaPeer::ID_CUENTA, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Selects a collection of Gasto objects pre-filled with their Cuenta objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Gasto objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinCuenta(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(self::DATABASE_NAME);
+        }
+
+        GastoPeer::addSelectColumns($criteria);
+        $startcol = GastoPeer::NUM_HYDRATE_COLUMNS;
+        CuentaPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(GastoPeer::FK_CUENTA, CuentaPeer::ID_CUENTA, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = GastoPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = GastoPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = GastoPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                GastoPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = CuentaPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = CuentaPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = CuentaPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    CuentaPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (Gasto) to $obj2 (Cuenta)
+                $obj2->addGasto($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining all related tables
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAll(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(GastoPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            GastoPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(self::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(GastoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(GastoPeer::FK_CUENTA, CuentaPeer::ID_CUENTA, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+    /**
+     * Selects a collection of Gasto objects pre-filled with all related objects.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Gasto objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAll(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(self::DATABASE_NAME);
+        }
+
+        GastoPeer::addSelectColumns($criteria);
+        $startcol2 = GastoPeer::NUM_HYDRATE_COLUMNS;
+
+        CuentaPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + CuentaPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(GastoPeer::FK_CUENTA, CuentaPeer::ID_CUENTA, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = GastoPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = GastoPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = GastoPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                GastoPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+            // Add objects for joined Cuenta rows
+
+            $key2 = CuentaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+            if ($key2 !== null) {
+                $obj2 = CuentaPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = CuentaPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    CuentaPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 loaded
+
+                // Add the $obj1 (Gasto) to the collection in $obj2 (Cuenta)
+                $obj2->addGasto($obj1);
+            } // if joined row not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
     }
 
     /**

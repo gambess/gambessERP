@@ -1,0 +1,16 @@
+<h1>Creación nueva Venta</h1>
+
+<form action="{{ path('create_venta') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Crear Venta</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('index_venta') }}">
+            Volver al listado
+        </a>
+    </li>
+</ul>

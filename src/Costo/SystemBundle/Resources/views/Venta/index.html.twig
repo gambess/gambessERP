@@ -1,0 +1,51 @@
+<h1>Listado de Ventas</h1>
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Fk_venta</th>
+            <th>Fecha_venta</th>
+            <th>Tipo_venta</th>
+            <th>Total_venta</th>
+            <th>Total_venta_formal</th>
+            <th>Total_venta_informal</th>
+            <th>Total_iva_venta</th>
+            <th>Detalle_venta</th>
+            <th>acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for venta in ventas %}
+        <tr>
+            <td><a href="{{ path('show_venta', { 'id': venta.IdVenta }) }}">{{ venta.IdVenta }}</a></td>
+            <td>{{ venta.FkVenta }}</td>
+            <td>{% if venta.FechaVenta %}{{ venta.FechaVenta|date('Y-m-d H:i:s') }}{% endif %}</td>
+            <td>{{ venta.TipoVenta }}</td>
+            <td>{{ venta.TotalVenta }}</td>
+            <td>{{ venta.TotalVentaFormal }}</td>
+            <td>{{ venta.TotalVentaInformal }}</td>
+            <td>{{ venta.TotalIvaVenta }}</td>
+            <td>{{ venta.DetalleVenta }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('show_venta', { 'id': venta.IdVenta }) }}">Mostrar</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('edit_venta', { 'id': venta.IdVenta }) }}">Editar</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('new_venta') }}">
+            Crear Ajuste Venta
+        </a>
+    </li>
+</ul>

@@ -43,12 +43,12 @@ class CuentaTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('ID_CUENTA', 'IdCuenta', 'INTEGER', true, 20, null);
-        $this->addColumn('NOMBRE_CUENTA', 'NombreCuenta', 'VARCHAR', true, 150, null);
-        $this->addColumn('VALOR_CUENTA', 'ValorCuenta', 'FLOAT', true, 7, null);
-        $this->addColumn('TIPO_CUENTA', 'TipoCuenta', 'VARCHAR', true, 100, null);
-        $this->addColumn('FECHA_CREACION_CUENTA', 'FechaCreacionCuenta', 'TIMESTAMP', true, null, null);
-        $this->addColumn('USER_CREA_CUENTA', 'UserCreaCuenta', 'VARCHAR', true, 20, null);
-        $this->addColumn('ACTIVA_CUENTA', 'ActivaCuenta', 'BOOLEAN', true, 1, null);
+        $this->addColumn('NOMBRE_CUENTA', 'NombreCuenta', 'VARCHAR', false, 150, null);
+        $this->addColumn('VALOR_CUENTA', 'ValorCuenta', 'FLOAT', true, 7, 0);
+        $this->addColumn('TIPO_CUENTA', 'TipoCuenta', 'CHAR', false, null, 'FORMAL');
+        $this->addColumn('FECHA_CREACION_CUENTA', 'FechaCreacionCuenta', 'TIMESTAMP', true, null, 'CURRENT_TIMESTAMP');
+        $this->addColumn('USER_CREA_CUENTA', 'UserCreaCuenta', 'VARCHAR', false, 20, null);
+        $this->addColumn('ACTIVA_CUENTA', 'ActivaCuenta', 'BOOLEAN', true, 1, true);
         // validators
     } // initialize()
 
@@ -57,6 +57,7 @@ class CuentaTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Gasto', 'Costo\\SystemBundle\\Model\\Gasto', RelationMap::ONE_TO_MANY, array('id_cuenta' => 'fk_cuenta', ), null, null, 'Gastos');
     } // buildRelations()
 
 } // CuentaTableMap

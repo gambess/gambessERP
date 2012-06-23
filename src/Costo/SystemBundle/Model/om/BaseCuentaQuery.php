@@ -8,12 +8,14 @@ use \ModelCriteria;
 use \ModelJoin;
 use \PDO;
 use \Propel;
+use \PropelCollection;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
 use Costo\SystemBundle\Model\Cuenta;
 use Costo\SystemBundle\Model\CuentaPeer;
 use Costo\SystemBundle\Model\CuentaQuery;
+use Costo\SystemBundle\Model\Gasto;
 
 /**
  * Base class that represents a query for the 'cuenta' table.
@@ -39,6 +41,10 @@ use Costo\SystemBundle\Model\CuentaQuery;
  * @method     CuentaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     CuentaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method     CuentaQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ *
+ * @method     CuentaQuery leftJoinGasto($relationAlias = null) Adds a LEFT JOIN clause to the query using the Gasto relation
+ * @method     CuentaQuery rightJoinGasto($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Gasto relation
+ * @method     CuentaQuery innerJoinGasto($relationAlias = null) Adds a INNER JOIN clause to the query using the Gasto relation
  *
  * @method     Cuenta findOne(PropelPDO $con = null) Return the first Cuenta matching the query
  * @method     Cuenta findOneOrCreate(PropelPDO $con = null) Return the first Cuenta matching the query, or a new Cuenta object populated from the query conditions when no match is found
@@ -460,6 +466,80 @@ abstract class BaseCuentaQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CuentaPeer::ACTIVA_CUENTA, $activaCuenta, $comparison);
+    }
+
+    /**
+     * Filter the query by a related Gasto object
+     *
+     * @param   Gasto|PropelObjectCollection $gasto  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   CuentaQuery The current query, for fluid interface
+     * @throws   PropelException - if the provided filter is invalid.
+     */
+    public function filterByGasto($gasto, $comparison = null)
+    {
+        if ($gasto instanceof Gasto) {
+            return $this
+                ->addUsingAlias(CuentaPeer::ID_CUENTA, $gasto->getFkCuenta(), $comparison);
+        } elseif ($gasto instanceof PropelObjectCollection) {
+            return $this
+                ->useGastoQuery()
+                ->filterByPrimaryKeys($gasto->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByGasto() only accepts arguments of type Gasto or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Gasto relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return CuentaQuery The current query, for fluid interface
+     */
+    public function joinGasto($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Gasto');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Gasto');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Gasto relation Gasto object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \Costo\SystemBundle\Model\GastoQuery A secondary query class using the current class as primary query
+     */
+    public function useGastoQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinGasto($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Gasto', '\Costo\SystemBundle\Model\GastoQuery');
     }
 
     /**

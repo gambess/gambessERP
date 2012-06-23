@@ -43,13 +43,14 @@ class GastoTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('ID_GASTO', 'IdGasto', 'INTEGER', true, 20, null);
-        $this->addColumn('FK_CUENTA', 'FkCuenta', 'INTEGER', false, 20, null);
+        $this->addForeignKey('FK_CUENTA', 'FkCuenta', 'INTEGER', 'cuenta', 'ID_CUENTA', false, 20, null);
         $this->addColumn('NOMBRE_GASTO', 'NombreGasto', 'VARCHAR', false, 100, null);
         $this->addColumn('COSTO_GASTO', 'CostoGasto', 'FLOAT', true, 7, 0);
         $this->addColumn('FECHA_CREACION_GASTO', 'FechaCreacionGasto', 'TIMESTAMP', true, null, 'CURRENT_TIMESTAMP');
         $this->addColumn('FECHA_EMISION_GASTO', 'FechaEmisionGasto', 'TIMESTAMP', false, null, null);
         $this->addColumn('FECHA_PAGO_GASTO', 'FechaPagoGasto', 'TIMESTAMP', false, null, null);
         $this->addColumn('ACTIVA_GASTO', 'ActivaGasto', 'BOOLEAN', true, 1, true);
+        $this->addColumn('NUMERO_DOC_GASTO', 'NumeroDocGasto', 'VARCHAR', false, 100, null);
         // validators
     } // initialize()
 
@@ -58,6 +59,7 @@ class GastoTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Cuenta', 'Costo\\SystemBundle\\Model\\Cuenta', RelationMap::MANY_TO_ONE, array('fk_cuenta' => 'id_cuenta', ), null, null);
     } // buildRelations()
 
 } // GastoTableMap

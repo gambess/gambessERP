@@ -1,0 +1,32 @@
+# Rutas para gestionar todas las acciones de las entidades de tipo Ciudad
+# Generado automáticamente por el comando generate:doctrine:crud
+index_venta:
+    pattern:  /
+    defaults: { _controller: "CostoSystemBundle:Venta:index" }
+
+show_venta:
+    pattern:  /{id}/show
+    defaults: { _controller: "CostoSystemBundle:Venta:show" }
+
+new_venta:
+    pattern:  /new
+    defaults: { _controller: "CostoSystemBundle:Venta:new" }
+
+create_venta:
+    pattern:  /create
+    defaults: { _controller: "CostoSystemBundle:Venta:create" }
+    requirements: { _method: post }
+
+edit_venta:
+    pattern:  /{id}/edit
+    defaults: { _controller: "CostoSystemBundle:Venta:edit" }
+
+update_venta:
+    pattern:  /{id}/update
+    defaults: { _controller: "CostoSystemBundle:Venta:update" }
+    requirements: { _method: post }
+
+delete_venta:
+    pattern:  /{id}/delete
+    defaults: { _controller: "CostoSystemBundle:Venta:delete" }
+    requirements: { _method: post }

@@ -8,9 +8,11 @@ use \ModelCriteria;
 use \ModelJoin;
 use \PDO;
 use \Propel;
+use \PropelCollection;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
+use Costo\SystemBundle\Model\Cuenta;
 use Costo\SystemBundle\Model\Gasto;
 use Costo\SystemBundle\Model\GastoPeer;
 use Costo\SystemBundle\Model\GastoQuery;
@@ -28,6 +30,7 @@ use Costo\SystemBundle\Model\GastoQuery;
  * @method     GastoQuery orderByFechaEmisionGasto($order = Criteria::ASC) Order by the fecha_emision_gasto column
  * @method     GastoQuery orderByFechaPagoGasto($order = Criteria::ASC) Order by the fecha_pago_gasto column
  * @method     GastoQuery orderByActivaGasto($order = Criteria::ASC) Order by the activa_gasto column
+ * @method     GastoQuery orderByNumeroDocGasto($order = Criteria::ASC) Order by the numero_doc_gasto column
  *
  * @method     GastoQuery groupByIdGasto() Group by the id_gasto column
  * @method     GastoQuery groupByFkCuenta() Group by the fk_cuenta column
@@ -37,10 +40,15 @@ use Costo\SystemBundle\Model\GastoQuery;
  * @method     GastoQuery groupByFechaEmisionGasto() Group by the fecha_emision_gasto column
  * @method     GastoQuery groupByFechaPagoGasto() Group by the fecha_pago_gasto column
  * @method     GastoQuery groupByActivaGasto() Group by the activa_gasto column
+ * @method     GastoQuery groupByNumeroDocGasto() Group by the numero_doc_gasto column
  *
  * @method     GastoQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     GastoQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method     GastoQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ *
+ * @method     GastoQuery leftJoinCuenta($relationAlias = null) Adds a LEFT JOIN clause to the query using the Cuenta relation
+ * @method     GastoQuery rightJoinCuenta($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Cuenta relation
+ * @method     GastoQuery innerJoinCuenta($relationAlias = null) Adds a INNER JOIN clause to the query using the Cuenta relation
  *
  * @method     Gasto findOne(PropelPDO $con = null) Return the first Gasto matching the query
  * @method     Gasto findOneOrCreate(PropelPDO $con = null) Return the first Gasto matching the query, or a new Gasto object populated from the query conditions when no match is found
@@ -53,6 +61,7 @@ use Costo\SystemBundle\Model\GastoQuery;
  * @method     Gasto findOneByFechaEmisionGasto(string $fecha_emision_gasto) Return the first Gasto filtered by the fecha_emision_gasto column
  * @method     Gasto findOneByFechaPagoGasto(string $fecha_pago_gasto) Return the first Gasto filtered by the fecha_pago_gasto column
  * @method     Gasto findOneByActivaGasto(boolean $activa_gasto) Return the first Gasto filtered by the activa_gasto column
+ * @method     Gasto findOneByNumeroDocGasto(string $numero_doc_gasto) Return the first Gasto filtered by the numero_doc_gasto column
  *
  * @method     array findByIdGasto(int $id_gasto) Return Gasto objects filtered by the id_gasto column
  * @method     array findByFkCuenta(int $fk_cuenta) Return Gasto objects filtered by the fk_cuenta column
@@ -62,6 +71,7 @@ use Costo\SystemBundle\Model\GastoQuery;
  * @method     array findByFechaEmisionGasto(string $fecha_emision_gasto) Return Gasto objects filtered by the fecha_emision_gasto column
  * @method     array findByFechaPagoGasto(string $fecha_pago_gasto) Return Gasto objects filtered by the fecha_pago_gasto column
  * @method     array findByActivaGasto(boolean $activa_gasto) Return Gasto objects filtered by the activa_gasto column
+ * @method     array findByNumeroDocGasto(string $numero_doc_gasto) Return Gasto objects filtered by the numero_doc_gasto column
  *
  * @package    propel.generator.src.Costo.SystemBundle.Model.om
  */
@@ -152,7 +162,7 @@ abstract class BaseGastoQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `ID_GASTO`, `FK_CUENTA`, `NOMBRE_GASTO`, `COSTO_GASTO`, `FECHA_CREACION_GASTO`, `FECHA_EMISION_GASTO`, `FECHA_PAGO_GASTO`, `ACTIVA_GASTO` FROM `gasto` WHERE `ID_GASTO` = :p0';
+        $sql = 'SELECT `ID_GASTO`, `FK_CUENTA`, `NOMBRE_GASTO`, `COSTO_GASTO`, `FECHA_CREACION_GASTO`, `FECHA_EMISION_GASTO`, `FECHA_PAGO_GASTO`, `ACTIVA_GASTO`, `NUMERO_DOC_GASTO` FROM `gasto` WHERE `ID_GASTO` = :p0';
         try {
             $stmt = $con->prepare($sql);
 			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -277,6 +287,8 @@ abstract class BaseGastoQuery extends ModelCriteria
      * $query->filterByFkCuenta(array(12, 34)); // WHERE fk_cuenta IN (12, 34)
      * $query->filterByFkCuenta(array('min' => 12)); // WHERE fk_cuenta > 12
      * </code>
+     *
+     * @see       filterByCuenta()
      *
      * @param     mixed $fkCuenta The value to use as filter.
      *              Use scalar values for equality.
@@ -533,6 +545,111 @@ abstract class BaseGastoQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(GastoPeer::ACTIVA_GASTO, $activaGasto, $comparison);
+    }
+
+    /**
+     * Filter the query on the numero_doc_gasto column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNumeroDocGasto('fooValue');   // WHERE numero_doc_gasto = 'fooValue'
+     * $query->filterByNumeroDocGasto('%fooValue%'); // WHERE numero_doc_gasto LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $numeroDocGasto The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return GastoQuery The current query, for fluid interface
+     */
+    public function filterByNumeroDocGasto($numeroDocGasto = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($numeroDocGasto)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $numeroDocGasto)) {
+                $numeroDocGasto = str_replace('*', '%', $numeroDocGasto);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(GastoPeer::NUMERO_DOC_GASTO, $numeroDocGasto, $comparison);
+    }
+
+    /**
+     * Filter the query by a related Cuenta object
+     *
+     * @param   Cuenta|PropelObjectCollection $cuenta The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   GastoQuery The current query, for fluid interface
+     * @throws   PropelException - if the provided filter is invalid.
+     */
+    public function filterByCuenta($cuenta, $comparison = null)
+    {
+        if ($cuenta instanceof Cuenta) {
+            return $this
+                ->addUsingAlias(GastoPeer::FK_CUENTA, $cuenta->getIdCuenta(), $comparison);
+        } elseif ($cuenta instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(GastoPeer::FK_CUENTA, $cuenta->toKeyValue('PrimaryKey', 'IdCuenta'), $comparison);
+        } else {
+            throw new PropelException('filterByCuenta() only accepts arguments of type Cuenta or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Cuenta relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return GastoQuery The current query, for fluid interface
+     */
+    public function joinCuenta($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Cuenta');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Cuenta');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Cuenta relation Cuenta object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \Costo\SystemBundle\Model\CuentaQuery A secondary query class using the current class as primary query
+     */
+    public function useCuentaQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinCuenta($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Cuenta', '\Costo\SystemBundle\Model\CuentaQuery');
     }
 
     /**

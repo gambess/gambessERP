@@ -16,32 +16,30 @@ use \PropelDateTime;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
-use Costo\SystemBundle\Model\Cuenta;
-use Costo\SystemBundle\Model\CuentaPeer;
-use Costo\SystemBundle\Model\CuentaQuery;
-use Costo\SystemBundle\Model\Gasto;
-use Costo\SystemBundle\Model\GastoQuery;
+use Costo\SystemBundle\Model\Venta;
+use Costo\SystemBundle\Model\VentaPeer;
+use Costo\SystemBundle\Model\VentaQuery;
 
 /**
- * Base class that represents a row from the 'cuenta' table.
+ * Base class that represents a row from the 'ajuste_venta' table.
  *
  * 
  *
  * @package    propel.generator.src.Costo.SystemBundle.Model.om
  */
-abstract class BaseCuenta extends BaseObject 
+abstract class BaseVenta extends BaseObject 
 {
 
     /**
      * Peer class name
      */
-    const PEER = 'Costo\\SystemBundle\\Model\\CuentaPeer';
+    const PEER = 'Costo\\SystemBundle\\Model\\VentaPeer';
 
     /**
      * The Peer class.
      * Instance provides a convenient way of calling static methods on a class
      * that calling code may not be able to identify.
-     * @var        CuentaPeer
+     * @var        VentaPeer
      */
     protected static $peer;
 
@@ -52,55 +50,65 @@ abstract class BaseCuenta extends BaseObject
     protected $startCopy = false;
 
     /**
-     * The value for the id_cuenta field.
+     * The value for the id_ajuste_venta field.
      * @var        int
      */
-    protected $id_cuenta;
+    protected $id_ajuste_venta;
 
     /**
-     * The value for the nombre_cuenta field.
-     * @var        string
-     */
-    protected $nombre_cuenta;
-
-    /**
-     * The value for the valor_cuenta field.
+     * The value for the fk_venta field.
      * Note: this column has a database default value of: 0
-     * @var        double
+     * @var        int
      */
-    protected $valor_cuenta;
+    protected $fk_venta;
 
     /**
-     * The value for the tipo_cuenta field.
-     * Note: this column has a database default value of: 'FORMAL'
-     * @var        string
-     */
-    protected $tipo_cuenta;
-
-    /**
-     * The value for the fecha_creacion_cuenta field.
+     * The value for the fecha_venta field.
      * Note: this column has a database default value of: (expression) CURRENT_TIMESTAMP
      * @var        string
      */
-    protected $fecha_creacion_cuenta;
+    protected $fecha_venta;
 
     /**
-     * The value for the user_crea_cuenta field.
+     * The value for the tipo_venta field.
+     * Note: this column has a database default value of: 'FORMAL'
      * @var        string
      */
-    protected $user_crea_cuenta;
+    protected $tipo_venta;
 
     /**
-     * The value for the activa_cuenta field.
-     * Note: this column has a database default value of: true
-     * @var        boolean
+     * The value for the total_venta field.
+     * Note: this column has a database default value of: 0
+     * @var        double
      */
-    protected $activa_cuenta;
+    protected $total_venta;
 
     /**
-     * @var        PropelObjectCollection|Gasto[] Collection to store aggregation of Gasto objects.
+     * The value for the total_venta_formal field.
+     * Note: this column has a database default value of: 0
+     * @var        double
      */
-    protected $collGastos;
+    protected $total_venta_formal;
+
+    /**
+     * The value for the total_venta_informal field.
+     * Note: this column has a database default value of: 0
+     * @var        double
+     */
+    protected $total_venta_informal;
+
+    /**
+     * The value for the total_iva_venta field.
+     * Note: this column has a database default value of: 0
+     * @var        double
+     */
+    protected $total_iva_venta;
+
+    /**
+     * The value for the detalle_venta field.
+     * @var        string
+     */
+    protected $detalle_venta;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -117,12 +125,6 @@ abstract class BaseCuenta extends BaseObject
     protected $alreadyInValidation = false;
 
     /**
-     * An array of objects scheduled for deletion.
-     * @var		PropelObjectCollection
-     */
-    protected $gastosScheduledForDeletion = null;
-
-    /**
      * Applies default values to this object.
      * This method should be called from the object's constructor (or
      * equivalent initialization method).
@@ -130,13 +132,16 @@ abstract class BaseCuenta extends BaseObject
      */
     public function applyDefaultValues()
     {
-        $this->valor_cuenta = 0;
-        $this->tipo_cuenta = 'FORMAL';
-        $this->activa_cuenta = true;
+        $this->fk_venta = 0;
+        $this->tipo_venta = 'FORMAL';
+        $this->total_venta = 0;
+        $this->total_venta_formal = 0;
+        $this->total_venta_informal = 0;
+        $this->total_iva_venta = 0;
     }
 
     /**
-     * Initializes internal state of BaseCuenta object.
+     * Initializes internal state of BaseVenta object.
      * @see        applyDefaults()
      */
     public function __construct()
@@ -146,51 +151,29 @@ abstract class BaseCuenta extends BaseObject
     }
 
     /**
-     * Get the [id_cuenta] column value.
+     * Get the [id_ajuste_venta] column value.
      * 
      * @return   int
      */
-    public function getIdCuenta()
+    public function getIdVenta()
     {
 
-        return $this->id_cuenta;
+        return $this->id_ajuste_venta;
     }
 
     /**
-     * Get the [nombre_cuenta] column value.
+     * Get the [fk_venta] column value.
      * 
-     * @return   string
+     * @return   int
      */
-    public function getNombreCuenta()
+    public function getFkVenta()
     {
 
-        return $this->nombre_cuenta;
+        return $this->fk_venta;
     }
 
     /**
-     * Get the [valor_cuenta] column value.
-     * 
-     * @return   double
-     */
-    public function getValorCuenta()
-    {
-
-        return $this->valor_cuenta;
-    }
-
-    /**
-     * Get the [tipo_cuenta] column value.
-     * 
-     * @return   string
-     */
-    public function getTipoCuenta()
-    {
-
-        return $this->tipo_cuenta;
-    }
-
-    /**
-     * Get the [optionally formatted] temporal [fecha_creacion_cuenta] column value.
+     * Get the [optionally formatted] temporal [fecha_venta] column value.
      * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
@@ -198,22 +181,22 @@ abstract class BaseCuenta extends BaseObject
      * @return mixed Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getFechaCreacionCuenta($format = NULL)
+    public function getFechaVenta($format = NULL)
     {
-        if ($this->fecha_creacion_cuenta === null) {
+        if ($this->fecha_venta === null) {
             return null;
         }
 
 
-        if ($this->fecha_creacion_cuenta === '0000-00-00 00:00:00') {
+        if ($this->fecha_venta === '0000-00-00 00:00:00') {
             // while technically this is not a default value of NULL,
             // this seems to be closest in meaning.
             return null;
         } else {
             try {
-                $dt = new DateTime($this->fecha_creacion_cuenta);
+                $dt = new DateTime($this->fecha_venta);
             } catch (Exception $x) {
-                throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->fecha_creacion_cuenta, true), $x);
+                throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->fecha_venta, true), $x);
             }
         }
 
@@ -228,183 +211,261 @@ abstract class BaseCuenta extends BaseObject
     }
 
     /**
-     * Get the [user_crea_cuenta] column value.
+     * Get the [tipo_venta] column value.
      * 
      * @return   string
      */
-    public function getUserCreaCuenta()
+    public function getTipoVenta()
     {
 
-        return $this->user_crea_cuenta;
+        return $this->tipo_venta;
     }
 
     /**
-     * Get the [activa_cuenta] column value.
+     * Get the [total_venta] column value.
      * 
-     * @return   boolean
+     * @return   double
      */
-    public function getActivaCuenta()
+    public function getTotalVenta()
     {
 
-        return $this->activa_cuenta;
+        return $this->total_venta;
     }
 
     /**
-     * Set the value of [id_cuenta] column.
+     * Get the [total_venta_formal] column value.
+     * 
+     * @return   double
+     */
+    public function getTotalVentaFormal()
+    {
+
+        return $this->total_venta_formal;
+    }
+
+    /**
+     * Get the [total_venta_informal] column value.
+     * 
+     * @return   double
+     */
+    public function getTotalVentaInformal()
+    {
+
+        return $this->total_venta_informal;
+    }
+
+    /**
+     * Get the [total_iva_venta] column value.
+     * 
+     * @return   double
+     */
+    public function getTotalIvaVenta()
+    {
+
+        return $this->total_iva_venta;
+    }
+
+    /**
+     * Get the [detalle_venta] column value.
+     * 
+     * @return   string
+     */
+    public function getDetalleVenta()
+    {
+
+        return $this->detalle_venta;
+    }
+
+    /**
+     * Set the value of [id_ajuste_venta] column.
      * 
      * @param      int $v new value
-     * @return   Cuenta The current object (for fluent API support)
+     * @return   Venta The current object (for fluent API support)
      */
-    public function setIdCuenta($v)
+    public function setIdVenta($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->id_cuenta !== $v) {
-            $this->id_cuenta = $v;
-            $this->modifiedColumns[] = CuentaPeer::ID_CUENTA;
+        if ($this->id_ajuste_venta !== $v) {
+            $this->id_ajuste_venta = $v;
+            $this->modifiedColumns[] = VentaPeer::ID_AJUSTE_VENTA;
         }
 
 
         return $this;
-    } // setIdCuenta()
+    } // setIdVenta()
 
     /**
-     * Set the value of [nombre_cuenta] column.
+     * Set the value of [fk_venta] column.
      * 
-     * @param      string $v new value
-     * @return   Cuenta The current object (for fluent API support)
+     * @param      int $v new value
+     * @return   Venta The current object (for fluent API support)
      */
-    public function setNombreCuenta($v)
+    public function setFkVenta($v)
     {
         if ($v !== null) {
-            $v = (string) $v;
+            $v = (int) $v;
         }
 
-        if ($this->nombre_cuenta !== $v) {
-            $this->nombre_cuenta = $v;
-            $this->modifiedColumns[] = CuentaPeer::NOMBRE_CUENTA;
-        }
-
-
-        return $this;
-    } // setNombreCuenta()
-
-    /**
-     * Set the value of [valor_cuenta] column.
-     * 
-     * @param      double $v new value
-     * @return   Cuenta The current object (for fluent API support)
-     */
-    public function setValorCuenta($v)
-    {
-        if ($v !== null) {
-            $v = (double) $v;
-        }
-
-        if ($this->valor_cuenta !== $v) {
-            $this->valor_cuenta = $v;
-            $this->modifiedColumns[] = CuentaPeer::VALOR_CUENTA;
+        if ($this->fk_venta !== $v) {
+            $this->fk_venta = $v;
+            $this->modifiedColumns[] = VentaPeer::FK_VENTA;
         }
 
 
         return $this;
-    } // setValorCuenta()
+    } // setFkVenta()
 
     /**
-     * Set the value of [tipo_cuenta] column.
-     * 
-     * @param      string $v new value
-     * @return   Cuenta The current object (for fluent API support)
-     */
-    public function setTipoCuenta($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->tipo_cuenta !== $v) {
-            $this->tipo_cuenta = $v;
-            $this->modifiedColumns[] = CuentaPeer::TIPO_CUENTA;
-        }
-
-
-        return $this;
-    } // setTipoCuenta()
-
-    /**
-     * Sets the value of [fecha_creacion_cuenta] column to a normalized version of the date/time value specified.
+     * Sets the value of [fecha_venta] column to a normalized version of the date/time value specified.
      * 
      * @param      mixed $v string, integer (timestamp), or DateTime value.
      *               Empty strings are treated as NULL.
-     * @return   Cuenta The current object (for fluent API support)
+     * @return   Venta The current object (for fluent API support)
      */
-    public function setFechaCreacionCuenta($v)
+    public function setFechaVenta($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->fecha_creacion_cuenta !== null || $dt !== null) {
-            $currentDateAsString = ($this->fecha_creacion_cuenta !== null && $tmpDt = new DateTime($this->fecha_creacion_cuenta)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+        if ($this->fecha_venta !== null || $dt !== null) {
+            $currentDateAsString = ($this->fecha_venta !== null && $tmpDt = new DateTime($this->fecha_venta)) ? $tmpDt->format('Y-m-d H:i:s') : null;
             $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
             if ($currentDateAsString !== $newDateAsString) {
-                $this->fecha_creacion_cuenta = $newDateAsString;
-                $this->modifiedColumns[] = CuentaPeer::FECHA_CREACION_CUENTA;
+                $this->fecha_venta = $newDateAsString;
+                $this->modifiedColumns[] = VentaPeer::FECHA_VENTA;
             }
         } // if either are not null
 
 
         return $this;
-    } // setFechaCreacionCuenta()
+    } // setFechaVenta()
 
     /**
-     * Set the value of [user_crea_cuenta] column.
+     * Set the value of [tipo_venta] column.
      * 
      * @param      string $v new value
-     * @return   Cuenta The current object (for fluent API support)
+     * @return   Venta The current object (for fluent API support)
      */
-    public function setUserCreaCuenta($v)
+    public function setTipoVenta($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->user_crea_cuenta !== $v) {
-            $this->user_crea_cuenta = $v;
-            $this->modifiedColumns[] = CuentaPeer::USER_CREA_CUENTA;
+        if ($this->tipo_venta !== $v) {
+            $this->tipo_venta = $v;
+            $this->modifiedColumns[] = VentaPeer::TIPO_VENTA;
         }
 
 
         return $this;
-    } // setUserCreaCuenta()
+    } // setTipoVenta()
 
     /**
-     * Sets the value of the [activa_cuenta] column.
-     * Non-boolean arguments are converted using the following rules:
-     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * Set the value of [total_venta] column.
      * 
-     * @param      boolean|integer|string $v The new value
-     * @return   Cuenta The current object (for fluent API support)
+     * @param      double $v new value
+     * @return   Venta The current object (for fluent API support)
      */
-    public function setActivaCuenta($v)
+    public function setTotalVenta($v)
     {
         if ($v !== null) {
-            if (is_string($v)) {
-                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-            } else {
-                $v = (boolean) $v;
-            }
+            $v = (double) $v;
         }
 
-        if ($this->activa_cuenta !== $v) {
-            $this->activa_cuenta = $v;
-            $this->modifiedColumns[] = CuentaPeer::ACTIVA_CUENTA;
+        if ($this->total_venta !== $v) {
+            $this->total_venta = $v;
+            $this->modifiedColumns[] = VentaPeer::TOTAL_VENTA;
         }
 
 
         return $this;
-    } // setActivaCuenta()
+    } // setTotalVenta()
+
+    /**
+     * Set the value of [total_venta_formal] column.
+     * 
+     * @param      double $v new value
+     * @return   Venta The current object (for fluent API support)
+     */
+    public function setTotalVentaFormal($v)
+    {
+        if ($v !== null) {
+            $v = (double) $v;
+        }
+
+        if ($this->total_venta_formal !== $v) {
+            $this->total_venta_formal = $v;
+            $this->modifiedColumns[] = VentaPeer::TOTAL_VENTA_FORMAL;
+        }
+
+
+        return $this;
+    } // setTotalVentaFormal()
+
+    /**
+     * Set the value of [total_venta_informal] column.
+     * 
+     * @param      double $v new value
+     * @return   Venta The current object (for fluent API support)
+     */
+    public function setTotalVentaInformal($v)
+    {
+        if ($v !== null) {
+            $v = (double) $v;
+        }
+
+        if ($this->total_venta_informal !== $v) {
+            $this->total_venta_informal = $v;
+            $this->modifiedColumns[] = VentaPeer::TOTAL_VENTA_INFORMAL;
+        }
+
+
+        return $this;
+    } // setTotalVentaInformal()
+
+    /**
+     * Set the value of [total_iva_venta] column.
+     * 
+     * @param      double $v new value
+     * @return   Venta The current object (for fluent API support)
+     */
+    public function setTotalIvaVenta($v)
+    {
+        if ($v !== null) {
+            $v = (double) $v;
+        }
+
+        if ($this->total_iva_venta !== $v) {
+            $this->total_iva_venta = $v;
+            $this->modifiedColumns[] = VentaPeer::TOTAL_IVA_VENTA;
+        }
+
+
+        return $this;
+    } // setTotalIvaVenta()
+
+    /**
+     * Set the value of [detalle_venta] column.
+     * 
+     * @param      string $v new value
+     * @return   Venta The current object (for fluent API support)
+     */
+    public function setDetalleVenta($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->detalle_venta !== $v) {
+            $this->detalle_venta = $v;
+            $this->modifiedColumns[] = VentaPeer::DETALLE_VENTA;
+        }
+
+
+        return $this;
+    } // setDetalleVenta()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -416,15 +477,27 @@ abstract class BaseCuenta extends BaseObject
      */
     public function hasOnlyDefaultValues()
     {
-            if ($this->valor_cuenta !== 0) {
+            if ($this->fk_venta !== 0) {
                 return false;
             }
 
-            if ($this->tipo_cuenta !== 'FORMAL') {
+            if ($this->tipo_venta !== 'FORMAL') {
                 return false;
             }
 
-            if ($this->activa_cuenta !== true) {
+            if ($this->total_venta !== 0) {
+                return false;
+            }
+
+            if ($this->total_venta_formal !== 0) {
+                return false;
+            }
+
+            if ($this->total_venta_informal !== 0) {
+                return false;
+            }
+
+            if ($this->total_iva_venta !== 0) {
                 return false;
             }
 
@@ -450,13 +523,15 @@ abstract class BaseCuenta extends BaseObject
     {
         try {
 
-            $this->id_cuenta = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->nombre_cuenta = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->valor_cuenta = ($row[$startcol + 2] !== null) ? (double) $row[$startcol + 2] : null;
-            $this->tipo_cuenta = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->fecha_creacion_cuenta = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-            $this->user_crea_cuenta = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-            $this->activa_cuenta = ($row[$startcol + 6] !== null) ? (boolean) $row[$startcol + 6] : null;
+            $this->id_ajuste_venta = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
+            $this->fk_venta = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+            $this->fecha_venta = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->tipo_venta = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->total_venta = ($row[$startcol + 4] !== null) ? (double) $row[$startcol + 4] : null;
+            $this->total_venta_formal = ($row[$startcol + 5] !== null) ? (double) $row[$startcol + 5] : null;
+            $this->total_venta_informal = ($row[$startcol + 6] !== null) ? (double) $row[$startcol + 6] : null;
+            $this->total_iva_venta = ($row[$startcol + 7] !== null) ? (double) $row[$startcol + 7] : null;
+            $this->detalle_venta = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -465,10 +540,10 @@ abstract class BaseCuenta extends BaseObject
                 $this->ensureConsistency();
             }
 
-            return $startcol + 7; // 7 = CuentaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 9; // 9 = VentaPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException("Error populating Cuenta object", $e);
+            throw new PropelException("Error populating Venta object", $e);
         }
     }
 
@@ -511,13 +586,13 @@ abstract class BaseCuenta extends BaseObject
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(CuentaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(VentaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $stmt = CuentaPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
+        $stmt = VentaPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
         $row = $stmt->fetch(PDO::FETCH_NUM);
         $stmt->closeCursor();
         if (!$row) {
@@ -526,8 +601,6 @@ abstract class BaseCuenta extends BaseObject
         $this->hydrate($row, 0, true); // rehydrate
 
         if ($deep) {  // also de-associate any related objects?
-
-            $this->collGastos = null;
 
         } // if (deep)
     }
@@ -549,12 +622,12 @@ abstract class BaseCuenta extends BaseObject
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(CuentaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(VentaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
         try {
-            $deleteQuery = CuentaQuery::create()
+            $deleteQuery = VentaQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -592,7 +665,7 @@ abstract class BaseCuenta extends BaseObject
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(CuentaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(VentaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
@@ -612,7 +685,7 @@ abstract class BaseCuenta extends BaseObject
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                CuentaPeer::addInstanceToPool($this);
+                VentaPeer::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -653,24 +726,6 @@ abstract class BaseCuenta extends BaseObject
                 $this->resetModified();
             }
 
-            if ($this->gastosScheduledForDeletion !== null) {
-                if (!$this->gastosScheduledForDeletion->isEmpty()) {
-                    foreach ($this->gastosScheduledForDeletion as $gasto) {
-                        // need to save related object because we set the relation to null
-                        $gasto->save($con);
-                    }
-                    $this->gastosScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collGastos !== null) {
-                foreach ($this->collGastos as $referrerFK) {
-                    if (!$referrerFK->isDeleted()) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
             $this->alreadyInSave = false;
 
         }
@@ -691,36 +746,42 @@ abstract class BaseCuenta extends BaseObject
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[] = CuentaPeer::ID_CUENTA;
-        if (null !== $this->id_cuenta) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . CuentaPeer::ID_CUENTA . ')');
+        $this->modifiedColumns[] = VentaPeer::ID_AJUSTE_VENTA;
+        if (null !== $this->id_ajuste_venta) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . VentaPeer::ID_AJUSTE_VENTA . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(CuentaPeer::ID_CUENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`ID_CUENTA`';
+        if ($this->isColumnModified(VentaPeer::ID_AJUSTE_VENTA)) {
+            $modifiedColumns[':p' . $index++]  = '`ID_AJUSTE_VENTA`';
         }
-        if ($this->isColumnModified(CuentaPeer::NOMBRE_CUENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`NOMBRE_CUENTA`';
+        if ($this->isColumnModified(VentaPeer::FK_VENTA)) {
+            $modifiedColumns[':p' . $index++]  = '`FK_VENTA`';
         }
-        if ($this->isColumnModified(CuentaPeer::VALOR_CUENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`VALOR_CUENTA`';
+        if ($this->isColumnModified(VentaPeer::FECHA_VENTA)) {
+            $modifiedColumns[':p' . $index++]  = '`FECHA_VENTA`';
         }
-        if ($this->isColumnModified(CuentaPeer::TIPO_CUENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`TIPO_CUENTA`';
+        if ($this->isColumnModified(VentaPeer::TIPO_VENTA)) {
+            $modifiedColumns[':p' . $index++]  = '`TIPO_VENTA`';
         }
-        if ($this->isColumnModified(CuentaPeer::FECHA_CREACION_CUENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`FECHA_CREACION_CUENTA`';
+        if ($this->isColumnModified(VentaPeer::TOTAL_VENTA)) {
+            $modifiedColumns[':p' . $index++]  = '`TOTAL_VENTA`';
         }
-        if ($this->isColumnModified(CuentaPeer::USER_CREA_CUENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`USER_CREA_CUENTA`';
+        if ($this->isColumnModified(VentaPeer::TOTAL_VENTA_FORMAL)) {
+            $modifiedColumns[':p' . $index++]  = '`TOTAL_VENTA_FORMAL`';
         }
-        if ($this->isColumnModified(CuentaPeer::ACTIVA_CUENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`ACTIVA_CUENTA`';
+        if ($this->isColumnModified(VentaPeer::TOTAL_VENTA_INFORMAL)) {
+            $modifiedColumns[':p' . $index++]  = '`TOTAL_VENTA_INFORMAL`';
+        }
+        if ($this->isColumnModified(VentaPeer::TOTAL_IVA_VENTA)) {
+            $modifiedColumns[':p' . $index++]  = '`TOTAL_IVA_VENTA`';
+        }
+        if ($this->isColumnModified(VentaPeer::DETALLE_VENTA)) {
+            $modifiedColumns[':p' . $index++]  = '`DETALLE_VENTA`';
         }
 
         $sql = sprintf(
-            'INSERT INTO `cuenta` (%s) VALUES (%s)',
+            'INSERT INTO `ajuste_venta` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -729,26 +790,32 @@ abstract class BaseCuenta extends BaseObject
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`ID_CUENTA`':
-						$stmt->bindValue($identifier, $this->id_cuenta, PDO::PARAM_INT);
+                    case '`ID_AJUSTE_VENTA`':
+						$stmt->bindValue($identifier, $this->id_ajuste_venta, PDO::PARAM_INT);
                         break;
-                    case '`NOMBRE_CUENTA`':
-						$stmt->bindValue($identifier, $this->nombre_cuenta, PDO::PARAM_STR);
+                    case '`FK_VENTA`':
+						$stmt->bindValue($identifier, $this->fk_venta, PDO::PARAM_INT);
                         break;
-                    case '`VALOR_CUENTA`':
-						$stmt->bindValue($identifier, $this->valor_cuenta, PDO::PARAM_STR);
+                    case '`FECHA_VENTA`':
+						$stmt->bindValue($identifier, $this->fecha_venta, PDO::PARAM_STR);
                         break;
-                    case '`TIPO_CUENTA`':
-						$stmt->bindValue($identifier, $this->tipo_cuenta, PDO::PARAM_STR);
+                    case '`TIPO_VENTA`':
+						$stmt->bindValue($identifier, $this->tipo_venta, PDO::PARAM_STR);
                         break;
-                    case '`FECHA_CREACION_CUENTA`':
-						$stmt->bindValue($identifier, $this->fecha_creacion_cuenta, PDO::PARAM_STR);
+                    case '`TOTAL_VENTA`':
+						$stmt->bindValue($identifier, $this->total_venta, PDO::PARAM_STR);
                         break;
-                    case '`USER_CREA_CUENTA`':
-						$stmt->bindValue($identifier, $this->user_crea_cuenta, PDO::PARAM_STR);
+                    case '`TOTAL_VENTA_FORMAL`':
+						$stmt->bindValue($identifier, $this->total_venta_formal, PDO::PARAM_STR);
                         break;
-                    case '`ACTIVA_CUENTA`':
-						$stmt->bindValue($identifier, (int) $this->activa_cuenta, PDO::PARAM_INT);
+                    case '`TOTAL_VENTA_INFORMAL`':
+						$stmt->bindValue($identifier, $this->total_venta_informal, PDO::PARAM_STR);
+                        break;
+                    case '`TOTAL_IVA_VENTA`':
+						$stmt->bindValue($identifier, $this->total_iva_venta, PDO::PARAM_STR);
+                        break;
+                    case '`DETALLE_VENTA`':
+						$stmt->bindValue($identifier, $this->detalle_venta, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -763,7 +830,7 @@ abstract class BaseCuenta extends BaseObject
         } catch (Exception $e) {
             throw new PropelException('Unable to get autoincrement id.', $e);
         }
-        $this->setIdCuenta($pk);
+        $this->setIdVenta($pk);
 
         $this->setNew(false);
     }
@@ -844,18 +911,10 @@ abstract class BaseCuenta extends BaseObject
             $failureMap = array();
 
 
-            if (($retval = CuentaPeer::doValidate($this, $columns)) !== true) {
+            if (($retval = VentaPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
 
-
-                if ($this->collGastos !== null) {
-                    foreach ($this->collGastos as $referrerFK) {
-                        if (!$referrerFK->validate($columns)) {
-                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
-                        }
-                    }
-                }
 
 
             $this->alreadyInValidation = false;
@@ -876,7 +935,7 @@ abstract class BaseCuenta extends BaseObject
      */
     public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = CuentaPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = VentaPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -893,25 +952,31 @@ abstract class BaseCuenta extends BaseObject
     {
         switch ($pos) {
             case 0:
-                return $this->getIdCuenta();
+                return $this->getIdVenta();
                 break;
             case 1:
-                return $this->getNombreCuenta();
+                return $this->getFkVenta();
                 break;
             case 2:
-                return $this->getValorCuenta();
+                return $this->getFechaVenta();
                 break;
             case 3:
-                return $this->getTipoCuenta();
+                return $this->getTipoVenta();
                 break;
             case 4:
-                return $this->getFechaCreacionCuenta();
+                return $this->getTotalVenta();
                 break;
             case 5:
-                return $this->getUserCreaCuenta();
+                return $this->getTotalVentaFormal();
                 break;
             case 6:
-                return $this->getActivaCuenta();
+                return $this->getTotalVentaInformal();
+                break;
+            case 7:
+                return $this->getTotalIvaVenta();
+                break;
+            case 8:
+                return $this->getDetalleVenta();
                 break;
             default:
                 return null;
@@ -930,31 +995,27 @@ abstract class BaseCuenta extends BaseObject
      *                    Defaults to BasePeer::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
-     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
+    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
     {
-        if (isset($alreadyDumpedObjects['Cuenta'][$this->getPrimaryKey()])) {
+        if (isset($alreadyDumpedObjects['Venta'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Cuenta'][$this->getPrimaryKey()] = true;
-        $keys = CuentaPeer::getFieldNames($keyType);
+        $alreadyDumpedObjects['Venta'][$this->getPrimaryKey()] = true;
+        $keys = VentaPeer::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getIdCuenta(),
-            $keys[1] => $this->getNombreCuenta(),
-            $keys[2] => $this->getValorCuenta(),
-            $keys[3] => $this->getTipoCuenta(),
-            $keys[4] => $this->getFechaCreacionCuenta(),
-            $keys[5] => $this->getUserCreaCuenta(),
-            $keys[6] => $this->getActivaCuenta(),
+            $keys[0] => $this->getIdVenta(),
+            $keys[1] => $this->getFkVenta(),
+            $keys[2] => $this->getFechaVenta(),
+            $keys[3] => $this->getTipoVenta(),
+            $keys[4] => $this->getTotalVenta(),
+            $keys[5] => $this->getTotalVentaFormal(),
+            $keys[6] => $this->getTotalVentaInformal(),
+            $keys[7] => $this->getTotalIvaVenta(),
+            $keys[8] => $this->getDetalleVenta(),
         );
-        if ($includeForeignObjects) {
-            if (null !== $this->collGastos) {
-                $result['Gastos'] = $this->collGastos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
-            }
-        }
 
         return $result;
     }
@@ -972,7 +1033,7 @@ abstract class BaseCuenta extends BaseObject
      */
     public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = CuentaPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = VentaPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 
         $this->setByPosition($pos, $value);
     }
@@ -989,25 +1050,31 @@ abstract class BaseCuenta extends BaseObject
     {
         switch ($pos) {
             case 0:
-                $this->setIdCuenta($value);
+                $this->setIdVenta($value);
                 break;
             case 1:
-                $this->setNombreCuenta($value);
+                $this->setFkVenta($value);
                 break;
             case 2:
-                $this->setValorCuenta($value);
+                $this->setFechaVenta($value);
                 break;
             case 3:
-                $this->setTipoCuenta($value);
+                $this->setTipoVenta($value);
                 break;
             case 4:
-                $this->setFechaCreacionCuenta($value);
+                $this->setTotalVenta($value);
                 break;
             case 5:
-                $this->setUserCreaCuenta($value);
+                $this->setTotalVentaFormal($value);
                 break;
             case 6:
-                $this->setActivaCuenta($value);
+                $this->setTotalVentaInformal($value);
+                break;
+            case 7:
+                $this->setTotalIvaVenta($value);
+                break;
+            case 8:
+                $this->setDetalleVenta($value);
                 break;
         } // switch()
     }
@@ -1031,15 +1098,17 @@ abstract class BaseCuenta extends BaseObject
      */
     public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
     {
-        $keys = CuentaPeer::getFieldNames($keyType);
+        $keys = VentaPeer::getFieldNames($keyType);
 
-        if (array_key_exists($keys[0], $arr)) $this->setIdCuenta($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setNombreCuenta($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setValorCuenta($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setTipoCuenta($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setFechaCreacionCuenta($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setUserCreaCuenta($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setActivaCuenta($arr[$keys[6]]);
+        if (array_key_exists($keys[0], $arr)) $this->setIdVenta($arr[$keys[0]]);
+        if (array_key_exists($keys[1], $arr)) $this->setFkVenta($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setFechaVenta($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setTipoVenta($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setTotalVenta($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setTotalVentaFormal($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setTotalVentaInformal($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setTotalIvaVenta($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setDetalleVenta($arr[$keys[8]]);
     }
 
     /**
@@ -1049,15 +1118,17 @@ abstract class BaseCuenta extends BaseObject
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(CuentaPeer::DATABASE_NAME);
+        $criteria = new Criteria(VentaPeer::DATABASE_NAME);
 
-        if ($this->isColumnModified(CuentaPeer::ID_CUENTA)) $criteria->add(CuentaPeer::ID_CUENTA, $this->id_cuenta);
-        if ($this->isColumnModified(CuentaPeer::NOMBRE_CUENTA)) $criteria->add(CuentaPeer::NOMBRE_CUENTA, $this->nombre_cuenta);
-        if ($this->isColumnModified(CuentaPeer::VALOR_CUENTA)) $criteria->add(CuentaPeer::VALOR_CUENTA, $this->valor_cuenta);
-        if ($this->isColumnModified(CuentaPeer::TIPO_CUENTA)) $criteria->add(CuentaPeer::TIPO_CUENTA, $this->tipo_cuenta);
-        if ($this->isColumnModified(CuentaPeer::FECHA_CREACION_CUENTA)) $criteria->add(CuentaPeer::FECHA_CREACION_CUENTA, $this->fecha_creacion_cuenta);
-        if ($this->isColumnModified(CuentaPeer::USER_CREA_CUENTA)) $criteria->add(CuentaPeer::USER_CREA_CUENTA, $this->user_crea_cuenta);
-        if ($this->isColumnModified(CuentaPeer::ACTIVA_CUENTA)) $criteria->add(CuentaPeer::ACTIVA_CUENTA, $this->activa_cuenta);
+        if ($this->isColumnModified(VentaPeer::ID_AJUSTE_VENTA)) $criteria->add(VentaPeer::ID_AJUSTE_VENTA, $this->id_ajuste_venta);
+        if ($this->isColumnModified(VentaPeer::FK_VENTA)) $criteria->add(VentaPeer::FK_VENTA, $this->fk_venta);
+        if ($this->isColumnModified(VentaPeer::FECHA_VENTA)) $criteria->add(VentaPeer::FECHA_VENTA, $this->fecha_venta);
+        if ($this->isColumnModified(VentaPeer::TIPO_VENTA)) $criteria->add(VentaPeer::TIPO_VENTA, $this->tipo_venta);
+        if ($this->isColumnModified(VentaPeer::TOTAL_VENTA)) $criteria->add(VentaPeer::TOTAL_VENTA, $this->total_venta);
+        if ($this->isColumnModified(VentaPeer::TOTAL_VENTA_FORMAL)) $criteria->add(VentaPeer::TOTAL_VENTA_FORMAL, $this->total_venta_formal);
+        if ($this->isColumnModified(VentaPeer::TOTAL_VENTA_INFORMAL)) $criteria->add(VentaPeer::TOTAL_VENTA_INFORMAL, $this->total_venta_informal);
+        if ($this->isColumnModified(VentaPeer::TOTAL_IVA_VENTA)) $criteria->add(VentaPeer::TOTAL_IVA_VENTA, $this->total_iva_venta);
+        if ($this->isColumnModified(VentaPeer::DETALLE_VENTA)) $criteria->add(VentaPeer::DETALLE_VENTA, $this->detalle_venta);
 
         return $criteria;
     }
@@ -1072,8 +1143,8 @@ abstract class BaseCuenta extends BaseObject
      */
     public function buildPkeyCriteria()
     {
-        $criteria = new Criteria(CuentaPeer::DATABASE_NAME);
-        $criteria->add(CuentaPeer::ID_CUENTA, $this->id_cuenta);
+        $criteria = new Criteria(VentaPeer::DATABASE_NAME);
+        $criteria->add(VentaPeer::ID_AJUSTE_VENTA, $this->id_ajuste_venta);
 
         return $criteria;
     }
@@ -1084,18 +1155,18 @@ abstract class BaseCuenta extends BaseObject
      */
     public function getPrimaryKey()
     {
-        return $this->getIdCuenta();
+        return $this->getIdVenta();
     }
 
     /**
-     * Generic method to set the primary key (id_cuenta column).
+     * Generic method to set the primary key (id_ajuste_venta column).
      *
      * @param       int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
     {
-        $this->setIdCuenta($key);
+        $this->setIdVenta($key);
     }
 
     /**
@@ -1105,7 +1176,7 @@ abstract class BaseCuenta extends BaseObject
     public function isPrimaryKeyNull()
     {
 
-        return null === $this->getIdCuenta();
+        return null === $this->getIdVenta();
     }
 
     /**
@@ -1114,40 +1185,24 @@ abstract class BaseCuenta extends BaseObject
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of Cuenta (or compatible) type.
+     * @param      object $copyObj An object of Venta (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setNombreCuenta($this->getNombreCuenta());
-        $copyObj->setValorCuenta($this->getValorCuenta());
-        $copyObj->setTipoCuenta($this->getTipoCuenta());
-        $copyObj->setFechaCreacionCuenta($this->getFechaCreacionCuenta());
-        $copyObj->setUserCreaCuenta($this->getUserCreaCuenta());
-        $copyObj->setActivaCuenta($this->getActivaCuenta());
-
-        if ($deepCopy && !$this->startCopy) {
-            // important: temporarily setNew(false) because this affects the behavior of
-            // the getter/setter methods for fkey referrer objects.
-            $copyObj->setNew(false);
-            // store object hash to prevent cycle
-            $this->startCopy = true;
-
-            foreach ($this->getGastos() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addGasto($relObj->copy($deepCopy));
-                }
-            }
-
-            //unflag object copy
-            $this->startCopy = false;
-        } // if ($deepCopy)
-
+        $copyObj->setFkVenta($this->getFkVenta());
+        $copyObj->setFechaVenta($this->getFechaVenta());
+        $copyObj->setTipoVenta($this->getTipoVenta());
+        $copyObj->setTotalVenta($this->getTotalVenta());
+        $copyObj->setTotalVentaFormal($this->getTotalVentaFormal());
+        $copyObj->setTotalVentaInformal($this->getTotalVentaInformal());
+        $copyObj->setTotalIvaVenta($this->getTotalIvaVenta());
+        $copyObj->setDetalleVenta($this->getDetalleVenta());
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setIdCuenta(NULL); // this is a auto-increment column, so set to default value
+            $copyObj->setIdVenta(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1160,7 +1215,7 @@ abstract class BaseCuenta extends BaseObject
      * objects.
      *
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return                 Cuenta Clone of current object.
+     * @return                 Venta Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1180,198 +1235,15 @@ abstract class BaseCuenta extends BaseObject
      * same instance for all member of this class. The method could therefore
      * be static, but this would prevent one from overriding the behavior.
      *
-     * @return   CuentaPeer
+     * @return   VentaPeer
      */
     public function getPeer()
     {
         if (self::$peer === null) {
-            self::$peer = new CuentaPeer();
+            self::$peer = new VentaPeer();
         }
 
         return self::$peer;
-    }
-
-
-    /**
-     * Initializes a collection based on the name of a relation.
-     * Avoids crafting an 'init[$relationName]s' method name
-     * that wouldn't work when StandardEnglishPluralizer is used.
-     *
-     * @param      string $relationName The name of the relation to initialize
-     * @return void
-     */
-    public function initRelation($relationName)
-    {
-        if ('Gasto' == $relationName) {
-            $this->initGastos();
-        }
-    }
-
-    /**
-     * Clears out the collGastos collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return void
-     * @see        addGastos()
-     */
-    public function clearGastos()
-    {
-        $this->collGastos = null; // important to set this to NULL since that means it is uninitialized
-    }
-
-    /**
-     * Initializes the collGastos collection.
-     *
-     * By default this just sets the collGastos collection to an empty array (like clearcollGastos());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initGastos($overrideExisting = true)
-    {
-        if (null !== $this->collGastos && !$overrideExisting) {
-            return;
-        }
-        $this->collGastos = new PropelObjectCollection();
-        $this->collGastos->setModel('Gasto');
-    }
-
-    /**
-     * Gets an array of Gasto objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this Cuenta is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      PropelPDO $con optional connection object
-     * @return PropelObjectCollection|Gasto[] List of Gasto objects
-     * @throws PropelException
-     */
-    public function getGastos($criteria = null, PropelPDO $con = null)
-    {
-        if (null === $this->collGastos || null !== $criteria) {
-            if ($this->isNew() && null === $this->collGastos) {
-                // return empty collection
-                $this->initGastos();
-            } else {
-                $collGastos = GastoQuery::create(null, $criteria)
-                    ->filterByCuenta($this)
-                    ->find($con);
-                if (null !== $criteria) {
-                    return $collGastos;
-                }
-                $this->collGastos = $collGastos;
-            }
-        }
-
-        return $this->collGastos;
-    }
-
-    /**
-     * Sets a collection of Gasto objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param      PropelCollection $gastos A Propel collection.
-     * @param      PropelPDO $con Optional connection object
-     */
-    public function setGastos(PropelCollection $gastos, PropelPDO $con = null)
-    {
-        $this->gastosScheduledForDeletion = $this->getGastos(new Criteria(), $con)->diff($gastos);
-
-        foreach ($this->gastosScheduledForDeletion as $gastoRemoved) {
-            $gastoRemoved->setCuenta(null);
-        }
-
-        $this->collGastos = null;
-        foreach ($gastos as $gasto) {
-            $this->addGasto($gasto);
-        }
-
-        $this->collGastos = $gastos;
-    }
-
-    /**
-     * Returns the number of related Gasto objects.
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      PropelPDO $con
-     * @return int             Count of related Gasto objects.
-     * @throws PropelException
-     */
-    public function countGastos(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
-    {
-        if (null === $this->collGastos || null !== $criteria) {
-            if ($this->isNew() && null === $this->collGastos) {
-                return 0;
-            } else {
-                $query = GastoQuery::create(null, $criteria);
-                if ($distinct) {
-                    $query->distinct();
-                }
-
-                return $query
-                    ->filterByCuenta($this)
-                    ->count($con);
-            }
-        } else {
-            return count($this->collGastos);
-        }
-    }
-
-    /**
-     * Method called to associate a Gasto object to this object
-     * through the Gasto foreign key attribute.
-     *
-     * @param    Gasto $l Gasto
-     * @return   Cuenta The current object (for fluent API support)
-     */
-    public function addGasto(Gasto $l)
-    {
-        if ($this->collGastos === null) {
-            $this->initGastos();
-        }
-        if (!$this->collGastos->contains($l)) { // only add it if the **same** object is not already associated
-            $this->doAddGasto($l);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param	Gasto $gasto The gasto object to add.
-     */
-    protected function doAddGasto($gasto)
-    {
-        $this->collGastos[]= $gasto;
-        $gasto->setCuenta($this);
-    }
-
-    /**
-     * @param	Gasto $gasto The gasto object to remove.
-     */
-    public function removeGasto($gasto)
-    {
-        if ($this->getGastos()->contains($gasto)) {
-            $this->collGastos->remove($this->collGastos->search($gasto));
-            if (null === $this->gastosScheduledForDeletion) {
-                $this->gastosScheduledForDeletion = clone $this->collGastos;
-                $this->gastosScheduledForDeletion->clear();
-            }
-            $this->gastosScheduledForDeletion[]= $gasto;
-            $gasto->setCuenta(null);
-        }
     }
 
     /**
@@ -1379,13 +1251,15 @@ abstract class BaseCuenta extends BaseObject
      */
     public function clear()
     {
-        $this->id_cuenta = null;
-        $this->nombre_cuenta = null;
-        $this->valor_cuenta = null;
-        $this->tipo_cuenta = null;
-        $this->fecha_creacion_cuenta = null;
-        $this->user_crea_cuenta = null;
-        $this->activa_cuenta = null;
+        $this->id_ajuste_venta = null;
+        $this->fk_venta = null;
+        $this->fecha_venta = null;
+        $this->tipo_venta = null;
+        $this->total_venta = null;
+        $this->total_venta_formal = null;
+        $this->total_venta_informal = null;
+        $this->total_iva_venta = null;
+        $this->detalle_venta = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->clearAllReferences();
@@ -1407,17 +1281,8 @@ abstract class BaseCuenta extends BaseObject
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
-            if ($this->collGastos) {
-                foreach ($this->collGastos as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
         } // if ($deep)
 
-        if ($this->collGastos instanceof PropelCollection) {
-            $this->collGastos->clearIterator();
-        }
-        $this->collGastos = null;
     }
 
     /**
@@ -1427,7 +1292,7 @@ abstract class BaseCuenta extends BaseObject
      */
     public function __toString()
     {
-        return (string) $this->exportTo(CuentaPeer::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(VentaPeer::DEFAULT_STRING_FORMAT);
     }
 
-} // BaseCuenta
+} // BaseVenta

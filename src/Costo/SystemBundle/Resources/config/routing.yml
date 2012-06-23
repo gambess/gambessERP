@@ -2,11 +2,6 @@ _homepage:
     pattern:  /
     defaults: { _controller: "CostoSystemBundle:Home:index" }
 
-_venta:
-    resource: "@CostoSystemBundle/Controller/AjusteVentaController.php"
-    type:     annotation
-    prefix:   /
-
 _gasto:
     resource: "@CostoSystemBundle/Resources/config/routing/gasto.yml"
     prefix:   /gasto
@@ -14,3 +9,7 @@ _gasto:
 _cuenta:
     resource: "@CostoSystemBundle/Resources/config/routing/cuenta.yml"
     prefix:   /cuenta
+
+_venta:
+    resource: "@CostoSystemBundle/Resources/config/routing/venta.yml"
+    prefix:   /venta
