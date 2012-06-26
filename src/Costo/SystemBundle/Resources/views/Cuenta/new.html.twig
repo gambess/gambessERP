@@ -1,22 +1,17 @@
 {% extends 'CostoSystemBundle::layout.html.twig' %}
-
 {% block title %}Añadir un Nuevo Gasto{% endblock %}
-
 {% block content %}
-
-
 <h1>{{ block('title') }}</h1>
 
 <form action="{{ path('create_cuenta') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
     <p>
-        <button class="boton" type="submit">Añadir Cuenta</button>
+        <button class="symfony-button-green" type="submit">Añadir Cuenta</button>
     </p>
 </form>
-
 <ul class="record_actions">
     <li>
-        <a href="{{ path('index_cuenta') }}">
+        <a class="symfony-button-green" href="{{ path('index_cuenta') }}">
             Volver al listado
         </a>
     </li>

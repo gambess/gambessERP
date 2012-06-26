@@ -1,5 +1,7 @@
-<h1>Listado de Ventas</h1>
-
+{% extends 'CostoSystemBundle::layout.html.twig' %}
+{% block title %}Listado de Ventas {% endblock %}
+{% block content %}
+<h1>{{ block('title') }}</h1>
 <table class="records_list">
     <thead>
         <tr>
@@ -18,7 +20,7 @@
     <tbody>
     {% for venta in ventas %}
         <tr>
-            <td><a href="{{ path('show_venta', { 'id': venta.IdVenta }) }}">{{ venta.IdVenta }}</a></td>
+            <td><a class="symfony-button-green" href="{{ path('show_venta', { 'id': venta.IdVenta }) }}">{{ venta.IdVenta }}</a></td>
             <td>{{ venta.FkVenta }}</td>
             <td>{% if venta.FechaVenta %}{{ venta.FechaVenta|date('Y-m-d H:i:s') }}{% endif %}</td>
             <td>{{ venta.TipoVenta }}</td>
@@ -30,10 +32,10 @@
             <td>
                 <ul>
                     <li>
-                        <a href="{{ path('show_venta', { 'id': venta.IdVenta }) }}">Mostrar</a>
+                        <a class="symfony-button-green" href="{{ path('show_venta', { 'id': venta.IdVenta }) }}">Mostrar</a>
                     </li>
                     <li>
-                        <a href="{{ path('edit_venta', { 'id': venta.IdVenta }) }}">Editar</a>
+                        <a class="symfony-button-green" href="{{ path('edit_venta', { 'id': venta.IdVenta }) }}">Editar</a>
                     </li>
                 </ul>
             </td>
@@ -44,8 +46,10 @@
 
 <ul>
     <li>
-        <a href="{{ path('new_venta') }}">
+        <a class="symfony-button-green" href="{{ path('new_venta') }}">
             Crear Ajuste Venta
         </a>
     </li>
-</ul>
+</ul
+
+{% endblock %}
