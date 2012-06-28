@@ -1,40 +1,33 @@
 {% extends 'CostoSystemBundle::layout.html.twig' %}
-{% block title %}Listado de Ventas {% endblock %}
+{% block title %}Listado de Ventas{% endblock %}
 {% block content %}
-<h1>{{ block('title') }}</h1>
-<table class="records_list">
+<h1><center>{{ block('title') }}</center></h1>
+<table align="center">
     <thead>
         <tr>
-            <th>Id</th>
-            <th>Fk_venta</th>
-            <th>Fecha_venta</th>
-            <th>Tipo_venta</th>
-            <th>Total_venta</th>
-            <th>Total_venta_formal</th>
-            <th>Total_venta_informal</th>
-            <th>Total_iva_venta</th>
-            <th>Detalle_venta</th>
-            <th>acciones</th>
+            <th>Fecha Venta</th>
+            <th>Total Venta (F)</th>
+            <th>Total Iva</th>
+            <th colspan="2"><center>Acciones</center></th>
         </tr>
     </thead>
     <tbody>
     {% for venta in ventas %}
         <tr>
-            <td><a class="symfony-button-green" href="{{ path('show_venta', { 'id': venta.IdVenta }) }}">{{ venta.IdVenta }}</a></td>
-            <td>{{ venta.FkVenta }}</td>
-            <td>{% if venta.FechaVenta %}{{ venta.FechaVenta|date('Y-m-d H:i:s') }}{% endif %}</td>
-            <td>{{ venta.TipoVenta }}</td>
-            <td>{{ venta.TotalVenta }}</td>
+            <td>{% if venta.FechaVenta %}{{ venta.FechaVenta|date('Y-m-d') }}{% endif %}</td>
             <td>{{ venta.TotalVentaFormal }}</td>
-            <td>{{ venta.TotalVentaInformal }}</td>
             <td>{{ venta.TotalIvaVenta }}</td>
-            <td>{{ venta.DetalleVenta }}</td>
             <td>
                 <ul>
                     <li>
                         <a class="symfony-button-green" href="{{ path('show_venta', { 'id': venta.IdVenta }) }}">Mostrar</a>
                     </li>
-                    <li>
+                 
+                </ul>
+            </td>
+            <td>
+                <ul>
+                       <li>
                         <a class="symfony-button-green" href="{{ path('edit_venta', { 'id': venta.IdVenta }) }}">Editar</a>
                     </li>
                 </ul>
@@ -43,13 +36,10 @@
     {% endfor %}
     </tbody>
 </table>
-
-<ul>
-    <li>
+<br />
+<p align="center">
         <a class="symfony-button-green" href="{{ path('new_venta') }}">
-            Crear Ajuste Venta
+            Crear Nueva
         </a>
-    </li>
-</ul
-
+</p>
 {% endblock %}
