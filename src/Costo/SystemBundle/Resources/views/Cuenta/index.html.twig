@@ -1,49 +1,45 @@
 {% extends 'CostoSystemBundle::layout.html.twig' %}
 {% block title %}Listado de Cuentas{% endblock %}
-
 {% block content %}
-
-<h1>{{ block('title') }}</h1>
-
-<table class="records_list estrecha">
+<h1><center>{{ block('title') }}</center> </h1>
+<table align="center">
     <thead>
         <tr>
-            <th scope="col" class="rounded-company">Nombre de la Cuenta</th>
-            <th scope="col" class="rounded-q1">Valor de la Cuenta</th>
-            <th scope="col" class="rounded-q2">Tipo de la Cuenta</th>
-            <th scope="col" class="rounded-q4">Acciones</th>
+            <th style="width:40%"><center>Cuentas</center></th>
+            <th style="width:15%"><center>Valor</center></th>
+            <th style="width:15%"><center>Tipo</center></th>
+            <th colspan="2"><center>Gestionar</center></th>
         </tr>
     </thead>
     <tfoot>
     	<tr>
-        	<td colspan="4" class="rounded-foot-left" align="center"><em>Existen {{ cuentas | length }} Cuentas</em></td>
-        	<td class="rounded-foot-right">&nbsp;</td>
+        	<td colspan="5" align="center"><em>Existen {{ cuentas | length }} Cuentas</em></td>
         </tr>
     </tfoot>
-    <tbody>
 
     {% for cuenta in cuentas %}
+    {% if loop.index % 2  ==  0 %}
+        <tr class="par">
+    {% else %}
         <tr>
-            <td>{{ cuenta.nombreCuenta }}</td>
+    {% endif %}
+            <td >{{ cuenta.nombreCuenta }}</td>
             <td>{{ cuenta.ValorCuenta }}</td>
             <td>{{ cuenta.TipoCuenta }}</td>
             <td>
-                <ul>
-                    <li>
-                        <a class="symfony-button-green" href="{{ path('edit_cuenta', { 'id': cuenta.IdCuenta }) }}">Modificar</a>
-                    </li>
-                </ul>
+               <a class="symfony-button-green" href="{{ path('edit_cuenta', { 'id': cuenta.IdCuenta }) }}">Cuenta</a>
+            </td>
+            <td>
+               <a class="symfony-button-green" href="{{ path('index_gasto', { 'id': cuenta.IdCuenta }) }}">Gastos</a>
             </td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
-<ul>
-    <li>
+<br />
+<p align="center">
         <a class="symfony-button-green" href="{{ path('new_cuenta') }}">
             Añadir una nueva Cuenta
         </a>
-    </li>
-</ul>
-
+</p>
 {% endblock %}

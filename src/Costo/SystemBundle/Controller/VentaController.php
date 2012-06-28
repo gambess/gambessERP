@@ -87,7 +87,7 @@ class VentaController extends Controller {
 
         }
 
-        return $this->render('CostoSystemBundle:Venta:create.html.twig', array(
+        return $this->render('CostoSystemBundle:Venta:new.html.twig', array(
             'venta' => $venta,
             'form'   => $form->createView()
         ));

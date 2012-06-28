@@ -69,7 +69,7 @@ class GastoController extends Controller {
 
         }
 
-        return $this->render('CostoSystemBundle:Gasto:create.html.twig', array(
+        return $this->render('CostoSystemBundle:Gasto:new.html.twig', array(
             'gasto' => $gasto,
             'form'   => $form->createView()
         ));

@@ -1,8 +1,8 @@
 {% extends 'CostoSystemBundle::layout.html.twig' %}
 {% block title %}Listado de Gastos{% endblock %}
 {% block content %}
-<h1>{{ block('title') }}</h1>
-<table class="records_list estrecha">
+<h1><center>{{ block('title') }}</center></h1>
+<table align="center">
     <thead>
         <tr>
             <th>Nombre del Gasto</th>
@@ -37,13 +37,10 @@
     {% endfor %}
     </tbody>
 </table>
-
-<ul>
-    <li>
+<br />
+<p align="center">
         <a class="symfony-button-green" href="{{ path('new_gasto') }}">
-            Añadir un nuevo Gasto
+            Crear Nuevo
         </a>
-    </li>
-</ul>
-
+</p>
 {% endblock %}

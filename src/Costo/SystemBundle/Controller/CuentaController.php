@@ -87,7 +87,7 @@ class CuentaController extends Controller {
 
         }
 
-        return $this->render('CostoSystemBundle:Cuenta:create.html.twig', array(
+        return $this->render('CostoSystemBundle:Cuenta:new.html.twig', array(
             'cuenta' => $cuenta,
             'form'   => $form->createView()
         ));
@@ -96,7 +96,7 @@ class CuentaController extends Controller {
     /**
      * Muestra el formulario de edicion de una cuenta
      * Necesita el id de la cuenta a editar
-     * @method GET route: "/create" name="create_cuenta"
+     * @method GET route: "/{id}/edit" name="edit_cuenta"
      * @param int $id
      * @return mixed, renderiza el formulario de edicion o un error en caso de no encontrar la cuenta
      */

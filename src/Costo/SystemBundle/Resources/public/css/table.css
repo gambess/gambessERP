@@ -1,0 +1,7 @@
+/* tutorial */
+table,th,td
+{
+    border: 1px solid greenyellow;
+    border-collapse:collapse;
+    border-spacing:0;
+}

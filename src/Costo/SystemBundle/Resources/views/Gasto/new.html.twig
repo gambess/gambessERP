@@ -1,5 +1,5 @@
 {% extends 'CostoSystemBundle::layout.html.twig' %}
-{% block title %}Añadir un Nuevo Gasto{% endblock %}
+{% block title %}<center>Añadir un Nuevo Gasto</center>{% endblock %}
 {% block content %}
 <h1>{{ block('title') }}</h1>
 <form action="{{ path('create_gasto') }}" method="post" {{ form_enctype(form) }}>
