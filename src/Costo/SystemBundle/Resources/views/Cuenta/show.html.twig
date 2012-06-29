@@ -1,40 +1,35 @@
 {% extends 'CostoSystemBundle::layout.html.twig' %}
-{% block title %}Datos de la Cuenta {{ cuenta.NombreCuenta }}{% endblock %}
+{% block title %}Detalle de Cuenta{% endblock %}
 {% block content %}
-<h1>{{ block('title') }}</h1>
-<table class="record_properties" class="ui-widget ui-widget-content">
+<h1><center>{{ block('title') }}</center></h1>
+<div style="float:left"><a class="symfony-button-green" href="{{ path('index_cuenta') }}">
+            Ir al Listado de Cuentas
+        </a></div>
+<table align="center">
     <tbody>
         <tr>
-            <th class="ui-widget-header ">Codigo</th>
+            <th>Código</th>
             <td>{{ cuenta.IdCuenta }}</td>
         </tr>
         <tr>
-            <th class="ui-widget-header ">Nombre de la Cuenta</th>
+            <th>Cuenta</th>
             <td>{{ cuenta.NombreCuenta }}</td>
         </tr>
         <tr>
-            <th class="ui-widget-header ">Total</th>
+            <th>Total</th>
             <td>{{ cuenta.ValorCuenta }}</td>
         </tr>
     </tbody>
 </table>
-
-<ul class="record_actions">
-    <li>
-        <a class="symfony-button-green" href="{{ path('index_cuenta') }}">
-            Volver al listado
-        </a>
-    </li>
-    <li>
+<form action="{{ path('delete_cuenta', { 'id': cuenta.IdCuenta }) }}" method="post">
+<h1><center>Acciones</center></h1>
+    {{ form_widget(delete_form) }}
+    <p align="center">
+        
         <a class="symfony-button-green" href="{{ path('edit_cuenta', { 'id': cuenta.IdCuenta }) }}">
             Modificar Cuenta
         </a>
-    </li>
-    <li>
-        <form action="{{ path('delete_cuenta', { 'id': cuenta.IdCuenta }) }}" method="post">
-            {{ form_widget(delete_form) }}
-            <button class="symfony-button-green" type="submit">Borrar Cuenta</button>
-        </form>
-    </li>
-</ul>
+    <button class="symfony-button-green" type="submit">Borrar Cuenta</button>
+    </p>
+</form>
 {% endblock %}

@@ -16,13 +16,12 @@
         	<td colspan="5" align="center"><em>Existen {{ cuentas | length }} Cuentas</em></td>
         </tr>
     </tfoot>
-
     {% for cuenta in cuentas %}
-    {% if loop.index % 2  ==  0 %}
-        <tr class="par">
-    {% else %}
-        <tr>
-    {% endif %}
+        {% if loop.index % 2  ==  0 %}
+            <tr class="par">
+        {% else %}
+            <tr>
+        {% endif %}
             <td >{{ cuenta.nombreCuenta }}</td>
             <td>{{ cuenta.ValorCuenta }}</td>
             <td>{{ cuenta.TipoCuenta }}</td>
@@ -30,7 +29,7 @@
                <a class="symfony-button-green" href="{{ path('show_cuenta', { 'id': cuenta.IdCuenta }) }}">Cuenta</a>
             </td>
             <td>
-               <a class="symfony-button-green" href="{{ path('index_gasto', { 'id': cuenta.IdCuenta }) }}">Gastos</a>
+               <a class="symfony-button-green" href="{{ path('cuenta_gastos', { 'id': cuenta.IdCuenta }) }}">Gastos</a>
             </td>
         </tr>
     {% endfor %}
@@ -39,7 +38,7 @@
 <br />
 <p align="center">
         <a class="symfony-button-green" href="{{ path('new_cuenta') }}">
-            Crear Nueva
+            Agregar Nueva
         </a>
 </p>
 {% endblock %}

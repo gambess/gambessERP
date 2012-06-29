@@ -2,15 +2,15 @@
 # Generado automáticamente por el comando generate:doctrine:crud
 index_gasto:
     pattern:  /
-    defaults: { _controller: "CostoSystemBundle:Gasto:index" }
-
+    defaults: { _controller: CostoSystemBundle:Gasto:index }
+    
 show_gasto:
     pattern:  /{id}/show
     defaults: { _controller: "CostoSystemBundle:Gasto:show" }
 
 new_gasto:
     pattern:  /new
-    defaults: { _controller: "CostoSystemBundle:Gasto:new" }
+    defaults: { _controller: CostoSystemBundle:Gasto:new }
 
 create_gasto:
     pattern:  /create
@@ -30,3 +30,9 @@ delete_gasto:
     pattern:  /{id}/delete
     defaults: { _controller: "CostoSystemBundle:Gasto:delete" }
     requirements: { _method: post }
+
+cuenta_gastos:
+    pattern:  /{id}/list
+    defaults: { _controller: CostoSystemBundle:Gasto:index }
+    requirements:
+      id: \d+

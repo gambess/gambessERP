@@ -1,19 +1,50 @@
 {% extends 'CostoSystemBundle::layout.html.twig' %}
-{% block title %}Añadir un Nuevo Gasto{% endblock %}
+{% block title %}Agregar Cuenta{% endblock %}
 {% block content %}
-<h1>{{ block('title') }}</h1>
-
+<h1><center>{{ block('title') }}</center></h1>
+<div style="float:left">
+        <a class="symfony-button-green" href="{{ path('index_cuenta') }}">
+            Ir al Listado de Cuentas
+        </a>
+</div>
 <form action="{{ path('create_cuenta') }}" method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
+<h1><center>Formulario para Agregar Cuenta</center></h1>
+    <div class="symfony-form-row">
+        {{ form_label (form.nombre_cuenta) }}
+            <div class="symfony-form-field">
+                {{ form_widget (form.nombre_cuenta) }}
+                    <div class="symfony-form-errors">
+                        {{ form_errors (form.nombre_cuenta) }}
+                    </div>
+            </div>
+    </div>
+    </p>
     <p>
-        <button class="symfony-button-green" type="submit">Añadir Cuenta</button>
+    <div class="symfony-form-row">
+        {{ form_label (form.valor_cuenta) }}
+            <div class="symfony-form-field">
+                {{ form_widget (form.valor_cuenta) }}
+                    <div class="symfony-form-errors">
+                        {{ form_errors (form.valor_cuenta) }}
+                    </div>
+            </div>
+    </div>
+    </p>
+    <p>
+    <div class="symfony-form-row">
+        {{ form_label (form.tipo_cuenta) }}
+            <div class="symfony-form-field">
+                {{ form_widget (form.tipo_cuenta) }}
+                    <div class="symfony-form-errors">
+                        {{ form_errors (form.tipo_cuenta) }}
+                    </div>
+            </div>
+    </div>
+    </p>
+        {{form_rest(form)}}
+<br />
+    <p align="right">
+        <button class="symfony-button-green" type="submit">Grabar</button>
     </p>
 </form>
-<ul class="record_actions">
-    <li>
-        <a class="symfony-button-green" href="{{ path('index_cuenta') }}">
-            Volver al listado
-        </a>
-    </li>
-</ul>
 {% endblock %}

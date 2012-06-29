@@ -1,19 +1,74 @@
 {% extends 'CostoSystemBundle::layout.html.twig' %}
-{% block title %}<center>Añadir un Nuevo Gasto</center>{% endblock %}
+{% block title %}Agregar Gasto{% endblock %}
 {% block content %}
-<h1>{{ block('title') }}</h1>
+<h1><center>{{ block('title') }}</center></h1>
+<div style="float:left">
+        <a class="symfony-button-green" href="{{ path('index_gasto') }}">
+            Ir al Listado de Gastos
+        </a>
+</div>
 <form action="{{ path('create_gasto') }}" method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
+<h1><center>Formulario para Agregar Gasto</center></h1>
     <p>
-        <button class="symfony-button-green" type="submit">Añadir Gasto</button>
+    <div class="symfony-form-row">
+        {{ form_label (form.cuenta) }}
+            <div class="symfony-form-field">
+                {{ form_widget (form.cuenta) }}
+                    <div class="symfony-form-errors">
+                        {{ form_errors (form.cuenta) }}
+                    </div>
+            </div>
+    </div>
+    </p>
+    <p>
+    <div class="symfony-form-row">
+        {{ form_label (form.nombre_gasto) }}
+            <div class="symfony-form-field">
+                {{ form_widget (form.nombre_gasto) }}
+                    <div class="symfony-form-errors">
+                        {{ form_errors (form.nombre_gasto) }}
+                    </div>
+            </div>
+    </div>
+    </p>
+    <p>
+    <div class="symfony-form-row">
+        {{ form_label (form.costo_gasto) }}
+            <div class="symfony-form-field">
+                {{ form_widget (form.costo_gasto) }}
+                    <div class="symfony-form-errors">
+                        {{ form_errors (form.costo_gasto) }}
+                    </div>
+            </div>
+    </div>
+    </p>
+    <p>
+    <div class="symfony-form-row">
+        {{ form_label (form.fecha_emision_gasto) }}
+            <div class="symfony-form-field">
+                {{ form_widget (form.fecha_emision_gasto) }}
+                    <div class="symfony-form-errors">
+                        {{ form_errors (form.fecha_emision_gasto) }}
+                    </div>
+            </div>
+    </div>
+    </p>
+    <p>
+    <div class="symfony-form-row">
+        {{ form_label (form.fecha_pago_gasto) }}
+            <div class="symfony-form-field">
+                {{ form_widget (form.fecha_pago_gasto) }}
+                    <div class="symfony-form-errors">
+                        {{ form_errors (form.fecha_pago_gasto) }}
+                    </div>
+            </div>
+    </div>
+    </p>
+        {{form_rest(form)}}
+<br />
+    <p align="right">
+        <button class="symfony-button-green" type="submit">Grabar</button>
     </p>
 </form>
 
-<ul class="record_actions">
-    <li>
-        <a class="symfony-button-green" href="{{ path('index_gasto') }}">
-            Volver al listado
-        </a>
-    </li>
-</ul>
 {% endblock %}

@@ -9,9 +9,21 @@ use Costo\SystemBundle\Form\Type\GastoType;
 
 class GastoController extends Controller {
 
-    public function indexAction()
+    /**
+     * Lanza la pagina de inicio
+     * Si necesita parametro y muestra un listado de las cuentas existentes en base de datos por id de cuenta
+     * @method GET route: "/" name="index_gasto"
+     * @param int $id
+     * @return Response view 
+     */
+    public function indexAction($id = 0)
     {
-        $gastos = GastoQuery::create()->orderByFechaCreacionGasto('DESC')->find();
+        $gastos = GastoQuery::create()
+                    ->_if($id != 0)
+                        ->filterByFkCuenta($id)
+                    ->_endif()
+                    ->orderByFechaCreacionGasto('DESC')
+                ->find();
         return $this->render('CostoSystemBundle:Gasto:index.html.twig', array(
             'gastos' => $gastos
         ));
@@ -37,15 +49,17 @@ class GastoController extends Controller {
         ));
     }
 
-    /**
-     * Displays a form to create a new Ciudad entity.
-     *
+   /**
+     * Lanza el formulario de Creación
+     * No necesita parametros
+     * @method GET route: "/" name="new_gasto"
+     * @param int $id
+     * @return Response view
      */
     public function newAction()
     {
         $gasto = new Gasto();
         $form   = $this->createForm(new GastoType(), $gasto);
-
         return $this->render('CostoSystemBundle:Gasto:new.html.twig', array(
             'gasto' => $gasto,
             'form'   => $form->createView()

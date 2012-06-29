@@ -5,10 +5,10 @@
 <table align="center">
     <thead>
         <tr>
-            <th>Nombre del Gasto</th>
-            <th>Costo del Gasto</th>
-            <th>Fecha de Emision del Gasto</th>
-            <th>Fecha de pago del Gasto</th>
+            <th>Gasto</th>
+            <th>Costo</th>
+            <th>F. Emisión</th>
+            <th>F. Pago</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -18,20 +18,16 @@
             <td>{{ gasto.NombreGasto }}</td>
             <td>{{ gasto.CostoGasto }}</td>
             <td>{% if gasto.FechaEmisionGasto %}
-                {{ gasto.FechaEmisionGasto |date("m/d/Y")  }}
+                {{ gasto.FechaEmisionGasto |date("d/m/Y")  }}
                 {% endif %}
             </td>
             <td>
                 {% if gasto.FechaPagoGasto %}
-                    {{ gasto.FechaPagoGasto|date("m/d/Y")  }}
+                    {{ gasto.FechaPagoGasto|date("d/m/Y")  }}
                 {% endif %}
             </td>
             <td>
-                <ul>
-                    <li>
-                        <a class="symfony-button-green" href="{{ path('edit_gasto', { 'id': gasto.IdGasto }) }}">Modificar</a>
-                    </li>
-                </ul>
+                    <a class="symfony-button-green" href="{{ path('edit_gasto', { 'id': gasto.IdGasto }) }}">Modificar</a>
             </td>
         </tr>
     {% endfor %}
@@ -39,8 +35,11 @@
 </table>
 <br />
 <p align="center">
+        <a class="symfony-button-green" href="{{ path('index_cuenta') }}">
+            Ir al Listado de Cuentas
+        </a>
         <a class="symfony-button-green" href="{{ path('new_gasto') }}">
-            Crear Nuevo
+            Agregar Nuevo
         </a>
 </p>
 {% endblock %}
