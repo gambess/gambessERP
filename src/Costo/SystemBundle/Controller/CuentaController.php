@@ -143,7 +143,7 @@ class CuentaController extends Controller {
         if ($editForm->isValid()) {
             $cuenta->save();
 
-            return $this->redirect($this->generateUrl('edit_cuenta', array('id' => $id)));
+            return $this->redirect($this->generateUrl('show_cuenta', array('id' => $id)));
         }
 
         return $this->render('CostoSystemBundle:Cuenta:edit.html.twig', array(

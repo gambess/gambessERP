@@ -27,7 +27,7 @@
             <td>{{ cuenta.ValorCuenta }}</td>
             <td>{{ cuenta.TipoCuenta }}</td>
             <td>
-               <a class="symfony-button-green" href="{{ path('edit_cuenta', { 'id': cuenta.IdCuenta }) }}">Cuenta</a>
+               <a class="symfony-button-green" href="{{ path('show_cuenta', { 'id': cuenta.IdCuenta }) }}">Cuenta</a>
             </td>
             <td>
                <a class="symfony-button-green" href="{{ path('index_gasto', { 'id': cuenta.IdCuenta }) }}">Gastos</a>

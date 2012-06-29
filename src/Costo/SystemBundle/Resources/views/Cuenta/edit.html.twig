@@ -2,24 +2,56 @@
 {% block title %}Modificar Cuenta{% endblock %}
 {% block content %}
 <h1><center>{{ block('title') }}</center></h1>
+<div style="float:left">
+<a class="symfony-button-green" href="{{ path('index_cuenta') }}">
+                Listado de Cuentas
+</a>
+</div>
 <form action="{{ path('update_cuenta', { 'id':cuenta.IdCuenta }) }}" method="post" {{ form_enctype(edit_form) }}>
-    {{ form_widget(edit_form) }}
+   <h1><center>Formulario de Modificación</center></h1>
     <p>
-        <button class="symfony-button-green" type="submit">Guardar cambios</button>
+    <div class="symfony-form-row">
+        {{ form_label (edit_form.nombre_cuenta) }}
+            <div class="symfony-form-field">
+                {{ form_widget (edit_form.nombre_cuenta) }}
+                    <div class="symfony-form-errors">
+                        {{ form_errors (edit_form.nombre_cuenta) }}
+                    </div>
+            </div>
+    </div>
+    </p>
+    <p>
+    <div class="symfony-form-row">
+        {{ form_label (edit_form.valor_cuenta) }}
+            <div class="symfony-form-field">
+                {{ form_widget (edit_form.valor_cuenta) }}
+                    <div class="symfony-form-errors">
+                        {{ form_errors (edit_form.valor_cuenta) }}
+                    </div>
+            </div>
+    </div>
+    </p>
+    <p>
+    <div class="symfony-form-row">
+        {{ form_label (edit_form.tipo_cuenta) }}
+            <div class="symfony-form-field">
+                {{ form_widget (edit_form.tipo_cuenta) }}
+                    <div class="symfony-form-errors">
+                        {{ form_errors (edit_form.tipo_cuenta) }}
+                    </div>
+            </div>
+    </div>
+    </p>
+        {{form_rest(edit_form)}}
+    <p align="right">
+        <button class="symfony-button-green" type="submit">Grabar</button>
     </p>
 </form>
-
-<ul class="record_actions">
-    <li>
-        <a class="symfony-button-green" href="{{ path('index_cuenta') }}">
-            Volver al listado
-        </a>
-    </li>
-    <li>
         <form action="{{ path('delete_cuenta', { 'id': cuenta.Idcuenta }) }}" method="post">
+        <h1><center>Borrar</center></h1>
             {{ form_widget(delete_form) }}
-            <button class="symfony-button-green" type="submit">Borrar Cuenta</button>
+            <center>
+                <button align="center" class="symfony-button-green" type="submit">Borrar Cuenta</button>
+            </center>
         </form>
-    </li>
-</ul>
 {% endblock %}
