@@ -31,7 +31,7 @@ class GastoType extends AbstractType {
     }
 
     public function getName() {
-        return 'costo_systembundle_gastotype';
+        return 'gasto';
     }
 
 }

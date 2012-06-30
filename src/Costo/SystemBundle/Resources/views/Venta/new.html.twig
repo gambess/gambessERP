@@ -1,20 +1,95 @@
 {% extends 'CostoSystemBundle::layout.html.twig' %}
-{% block title %}Listado de Ventas {% endblock %}
+{% block title %}Agregar Venta{% endblock %}
 {% block content %}
-<h1>Creación nueva Venta</h1>
-
+<h1><center>{{ block('title') }}</center></h1>
+<div style="float:left">
+        <a class="symfony-button-green" href="{{ path('index_venta') }}">
+            Ir al Listado de Ventas
+        </a>
+</div>
 <form action="{{ path('create_venta') }}" method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
+<h1><center>Formulario para Agregar Venta</center></h1>
     <p>
-        <button class="symfony-button-green" type="submit">Crear Venta</button>
+    <div class="symfony-form-row">
+        {{ form_label (form.fecha_venta) }}
+            <div class="symfony-form-field">
+                {{ form_widget (form.fecha_venta) }}
+                    <div class="symfony-form-errors">
+                        {{ form_errors (form.fecha_venta) }}
+                    </div>
+            </div>
+    </div>
+    </p>
+    <p>
+    <div class="symfony-form-row">
+        {{ form_label (form.tipo_venta) }}
+            <div class="symfony-form-field">
+                {{ form_widget (form.tipo_venta) }}
+                    <div class="symfony-form-errors">
+                        {{ form_errors (form.tipo_venta) }}
+                    </div>
+            </div>
+    </div>
+    </p>
+    <p>
+    <div class="symfony-form-row">
+        {{ form_label (form.total_venta) }}
+            <div class="symfony-form-field">
+                {{ form_widget (form.total_venta) }}
+                    <div class="symfony-form-errors">
+                        {{ form_errors (form.total_venta) }}
+                    </div>
+            </div>
+    </div>
+    </p>
+    <p>
+    <div class="symfony-form-row">
+        {{ form_label (form.total_venta_formal) }}
+            <div class="symfony-form-field">
+                {{ form_widget (form.total_venta_formal) }}
+                    <div class="symfony-form-errors">
+                        {{ form_errors (form.total_venta_formal) }}
+                    </div>
+            </div>
+    </div>
+    </p>
+    <p>
+    <div class="symfony-form-row">
+        {{ form_label (form.total_venta_informal) }}
+            <div class="symfony-form-field">
+                {{ form_widget (form.total_venta_informal) }}
+                    <div class="symfony-form-errors">
+                        {{ form_errors (form.total_venta_informal) }}
+                    </div>
+            </div>
+    </div>
+    </p>
+<p>
+    <div class="symfony-form-row">
+        {{ form_label (form.total_iva_venta) }}
+            <div class="symfony-form-field">
+                {{ form_widget (form.total_iva_venta) }}
+                    <div class="symfony-form-errors">
+                        {{ form_errors (form.total_iva_venta) }}
+                    </div>
+            </div>
+    </div>
+    </p>
+    <p>
+    <div class="symfony-form-row">
+        {{ form_label (form.detalle_venta) }}
+            <div class="symfony-form-field">
+                {{ form_widget (form.detalle_venta) }}
+                    <div class="symfony-form-errors">
+                        {{ form_errors (form.detalle_venta) }}
+                    </div>
+            </div>
+    </div>
+    </p>
+        {{form_rest(form)}}
+<br />
+    <p align="right">
+        <button class="symfony-button-green" type="submit">Grabar</button>
     </p>
 </form>
-
-<ul class="record_actions">
-    <li>
-        <a class="symfony-button-green" href="{{ path('index_venta') }}">
-            Volver al listado
-        </a>
-    </li>
-</ul>
 {% endblock %}

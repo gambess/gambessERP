@@ -1,10 +1,9 @@
 {% extends 'CostoSystemBundle::layout.html.twig' %}
-{% block title %}Datos de la Venta {% endblock %}
+{% block title %}Detalle Venta {% endblock %}
 
 {% block content %}
-<h1>{{ block('title') }}</h1>
-
-<table class="record_properties">
+<h1><center>{{ block('title') }}</center></h1>
+<table align="center">
     <tbody>
         <tr>
             <th>Id</th>
@@ -45,21 +44,21 @@
     </tbody>
 </table>
 
-<ul class="record_actions">
-    <li>
-        <a class="symfony-button-green"  href="{{ path('index_venta') }}">
-            Volver al Listado
-        </a>
-    </li>
-    <li>
-        <a class="symfony-button-green"  href="{{ path('edit_venta', { 'id': venta.IdVenta }) }}">
-            Editar
-        </a>
+   
     </li>
     <li>
         <form action="{{ path('delete_venta', { 'id': venta.IdVenta }) }}" method="post">
+        <h1><center>Acciones</center></h1>
             {{ form_widget(delete_form) }}
+        <p align="center">
+        <a class="symfony-button-green"  href="{{ path('index_venta') }}">
+            Ir al Listado de Ventas
+        </a>
+        <a class="symfony-button-green"  href="{{ path('edit_venta', { 'id': venta.IdVenta }) }}">
+            Modificar
+        </a>
             <button class="symfony-button-green"  type="submit">Borrar</button>
+        </p>
         </form>
     </li>
 </ul>
