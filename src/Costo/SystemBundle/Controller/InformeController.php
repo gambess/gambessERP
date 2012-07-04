@@ -4,7 +4,6 @@ namespace Costo\SystemBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-
 /**
  * @author Raziel Valle <razielvalle@gambess.com>
  * Controlador de HomePage, Metods CRUD+
@@ -18,10 +17,30 @@ class InformeController extends Controller {
      * @method GET route: "/" name="_homepage"
      * @return Response view
      */
-    public function indexAction()
-    {
-        if(!$action);
-        return $this->render('CostoSystemBundle:Home:index.html.twig');
+    public function indexAction() {
+        return $this->render('CostoSystemBundle:Informe:index.html.twig');
+    }
+
+    public function reportAction() {
+
+        $form = $this->createFormBuilder(null, array())
+                        ->add('min_date', 'date', array(
+                            'input' => 'string',
+                            'widget' => 'single_text',
+                            'format' => 'dd-mm-yyyy',
+                        ))
+                        ->add('max_date', 'date', array(
+                            'input' => 'string',
+                            'widget' => 'single_text',
+                            'format' => 'dd-mm-yyyy',
+                                )
+                        )
+                        ->getForm()
+        ;
+
+        return $this->render("CostoSystemBundle:Informe:report.html.twig", array(
+            'form' => $form->createView(),
+        ));
     }
 
 }

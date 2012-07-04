@@ -65,6 +65,12 @@ form p:hover label{
 form p:hover label:after{
 	content:" �";
 }
+
+div.form-search-item > input textarea
+{
+    width: 83px;
+}
+
 input[type=text],
 input[type=password]{
 	background: rgba(255, 255, 255, 0.9);

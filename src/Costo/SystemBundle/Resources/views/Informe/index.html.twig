@@ -1,28 +1,36 @@
 {% extends 'CostoSystemBundle::layout.html.twig' %}
-{% block title %}Gestión Costos{% endblock %}
+{% block content_header %}
+{% javascripts
+            '@CostoSystemBundle/Resources/public/js/ui/i18n/*'
+         %}
+        <script type="text/javascript" src="{{ asset( asset_url) }}"></script>
+{% endjavascripts %}
+<script type="text/javascript">
+			$(function(){
+                                $.datepicker.setDefaults( $.datepicker.regional[ "es" ] );
+				// Datepicker
+				$('#datepicker').datepicker({
+                                    minDate: -30, maxDate: 0
+				});
+                                // Datepicker
+				$('#datepicker2').datepicker({
+                                    minDate: -30, maxDate: 0
+				});
+			});
+		</script>
+{% endblock %}
+{% block title %}Generar Reporte de Costos por Periódo{% endblock %}
 {% block content %}
-    <h1>Gestion de Costos por Periódo</h1>
-    <div class="symfony-blocks-welcome">
-        <div class="block-quick-tour">
-            <div class="illustration">
-                <img src="{{ asset('bundles/acmedemo/images/welcome-quick-tour.gif') }}" alt="Ajuste de Ventas" />
-            </div>
-            <a class="symfony-button-green" href="http://symfony.com/doc/2.0/quick_tour/index.html">Gestión ajuste de Ventas</a>
-        </div>
-        {% if app.environment == 'dev' %}
-            <div class="block-configure">
-                <div class="illustration">
-                    <img src="{{ asset('bundles/acmedemo/images/welcome-configure.gif') }}" alt="Cuentas" />
-                </div>
-                <a class="symfony-button-green" href="{{ path('index_cuenta') }}">Gestión de Cuentas</a>
-            </div>
-        {% endif %}
-        <div class="block-demo">
-            <div class="illustration">
-                <img src="{{ asset('bundles/acmedemo/images/welcome-demo.gif') }}" alt="Gastos" />
-            </div>
-            <a class="symfony-button-green" href="{{ path('index_gasto') }}">Gestión de Gastos</a>
-        </div>
-    </div>
+    <h1><center>{{ block('title') }}</center></h1>
+<form align="center" action="{{ path('_report', { 'begin': null, 'end': null }) }}" method="post">
+            <h1><center>Generar Reporte</center></h1>
+        <p>Seleccione Periodo:
+        <p align="center">
+        Desde  <input style="width: 83px;" id="datepicker" type="text"> hasta <input style="width: 83px;" id="datepicker2" type="text"></p>
+        </p>
+        <p align="right">
+        <button class="symfony-button-green" type="submit">Generar</button>
+        </p>
+        </form>
 {% endblock %}
 

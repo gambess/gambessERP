@@ -1,0 +1,21 @@
+{% extends 'CostoSystemBundle::layout.html.twig' %}
+{% block title %}Listado de Gastos{% endblock %}
+{% block content %}
+<h1><center>{{ block('title') }}</center></h1>
+<table align="center">
+    <thead>
+        <tr>
+            <th>Gasto</th>
+            <th>Costo</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for gasto in gastos %}
+        <tr>
+            <td>{{ gasto.NombreGasto }}</td>
+            <td>{{ gasto.CostoGasto }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

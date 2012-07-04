@@ -13,3 +13,11 @@ _cuenta:
 _venta:
     resource: "@CostoSystemBundle/Resources/config/routing/venta.yml"
     prefix:   /venta
+
+_report:
+    pattern:  /report
+    defaults: { _controller: CostoSystemBundle:Informe:index }
+
+_report_gen:
+    pattern:  /gen
+    defaults: { _controller: CostoSystemBundle:Informe:report }
