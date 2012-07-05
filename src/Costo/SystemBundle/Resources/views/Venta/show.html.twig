@@ -6,39 +6,35 @@
 <table align="center">
     <tbody>
         <tr>
-            <th>Id</th>
+            <th>Código</th>
             <td>{{ venta.IdVenta }}</td>
         </tr>
         <tr>
-            <th>Fk_venta</th>
-            <td>{{ venta.FkVenta }}</td>
+            <th>Fecha</th>
+            <td>{{ venta.FechaVenta|date('d/m/Y') }}</td>
         </tr>
         <tr>
-            <th>Fecha_venta</th>
-            <td>{{ venta.FechaVenta|date('Y-m-d H:i:s') }}</td>
-        </tr>
-        <tr>
-            <th>Tipo_venta</th>
+            <th>Tipo</th>
             <td>{{ venta.TipoVenta }}</td>
         </tr>
         <tr>
-            <th>Total_venta</th>
+            <th>Total</th>
             <td>{{ venta.TotalVenta }}</td>
         </tr>
         <tr>
-            <th>Total_venta_formal</th>
-            <td>{{ venta.TotalVentaFormal }}</td>
+            <th>Total Formal</th>
+            <td>{{ venta.FormalTotalVenta }}</td>
         </tr>
         <tr>
-            <th>Total_venta_informal</th>
-            <td>{{ venta.TotalVentaInformal }}</td>
+            <th>Total Informal</th>
+            <td>{{ venta.InformalTotalVenta }}</td>
         </tr>
         <tr>
-            <th>Total_iva_venta_formal</th>
-            <td>{{ venta.TotalIvaVenta }}</td>
+            <th>Total I.V.A (f)</th>
+            <td>{{ venta.TotalIvaVentaFormal }}</td>
         </tr>
         <tr>
-            <th>Detalle_venta</th>
+            <th>Detalle</th>
             <td>{{ venta.DetalleVenta }}</td>
         </tr>
     </tbody>

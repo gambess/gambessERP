@@ -1,37 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <database name="testing" namespace="Costo\SystemBundle\Model" defaultIdMethod="native">
-  <table name="ajuste_venta" phpName="Venta" idMethod="native">
-    <column name="id_ajuste_venta" phpName="IdVenta" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="fk_venta" phpName="FkVenta" type="INTEGER" size="20" required="true" defaultValue="0"/>
-    <column name="fecha_venta" phpName="FechaVenta" type="TIMESTAMP" required="true" defaultExpr="CURRENT_TIMESTAMP"/>
-    <column name="tipo_venta" phpName="TipoVenta" type="CHAR" sqlType="enum('FORMAL','INFORMAL')" required="true" defaultValue="FORMAL"/>
-    <column name="total_venta" phpName="TotalVenta" type="FLOAT" size="7" scale="2" required="true" defaultValue="0.00"/>
-    <column name="total_venta_formal" phpName="TotalVentaFormal" type="FLOAT" size="7" scale="2" required="true" defaultValue="0.00"/>
-    <column name="total_venta_informal" phpName="TotalVentaInformal" type="FLOAT" size="7" scale="2" required="true" defaultValue="0.00"/>
-    <column name="total_iva_venta" phpName="TotalIvaVenta" type="FLOAT" size="7" scale="2" required="true" defaultValue="0.00"/>
-    <column name="detalle_venta" phpName="DetalleVenta" type="LONGVARCHAR" required="false"/>
-  </table>
+  
   <table name="cuenta" phpName="Cuenta" idMethod="native">
     <column name="id_cuenta" phpName="IdCuenta" type="INTEGER" size="20" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="nombre_cuenta" phpName="NombreCuenta" type="VARCHAR" size="150" required="false"/>
+    <column name="nombre_cuenta" phpName="NombreCuenta" type="VARCHAR" size="150" required="true"/>
     <column name="valor_cuenta" phpName="ValorCuenta" type="FLOAT" size="7" scale="2" required="true" defaultValue="0.00"/>
     <column name="tipo_cuenta" phpName="TipoCuenta" type="CHAR" sqlType="enum('FORMAL','INFORMAL')" required="false" defaultValue="FORMAL"/>
-    <column name="fecha_creacion_cuenta" phpName="FechaCreacionCuenta" type="TIMESTAMP" required="true" defaultExpr="CURRENT_TIMESTAMP"/>
     <column name="user_crea_cuenta" phpName="UserCreaCuenta" type="VARCHAR" size="20" required="false"/>
-    <column name="activa_cuenta" phpName="ActivaCuenta" type="BOOLEAN" size="1" required="true" defaultValue="true"/>
+    <column name="fecha_creacion_cuenta" phpName="FechaCreacionCuenta" type="TIMESTAMP" required="false"/>
+    <column name="fecha_modificacion_cuenta" phpName="FechaModificacionCuenta" type="TIMESTAMP" required="false"/>
+	<behavior name="timestampable">
+		<parameter name="create_column" value="fecha_creacion_cuenta" />
+		<parameter name="update_column" value="fecha_modificacion_cuenta" />
+	</behavior>
+	<behavior name="aggregate_column">
+		<parameter name="name" value="valor_cuenta" />
+		<parameter name="foreign_table" value="gasto" />
+		<parameter name="expression" value="SUM(costo_gasto)" />
+	</behavior>
   </table>
   <table name="gasto" phpName="Gasto" idMethod="native">
     <column name="id_gasto" phpName="IdGasto" type="INTEGER" size="20" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="fk_cuenta" phpName="FkCuenta" type="INTEGER" size="20" required="false"/>
-    <column name="nombre_gasto" phpName="NombreGasto" type="VARCHAR" size="100" required="false"/>
+    <column name="fk_cuenta" phpName="FkCuenta" type="INTEGER" size="20" required="true" defaultValue="0"/>
+    <column name="nombre_gasto" phpName="NombreGasto" type="VARCHAR" size="100" required="true"/>
     <column name="costo_gasto" phpName="CostoGasto" type="FLOAT" size="7" scale="2" required="true" defaultValue="0.00"/>
-    <column name="fecha_creacion_gasto" phpName="FechaCreacionGasto" type="TIMESTAMP" required="true" defaultExpr="CURRENT_TIMESTAMP"/>
-    <column name="fecha_emision_gasto" phpName="FechaEmisionGasto" type="TIMESTAMP" required="false"/>
-    <column name="fecha_pago_gasto" phpName="FechaPagoGasto" type="TIMESTAMP" required="false"/>
-    <column name="activa_gasto" phpName="ActivaGasto" type="BOOLEAN" size="1" required="true" defaultValue="true"/>
-    <column name="numero_doc_gasto" phpName="NumeroDocGasto" type="VARCHAR" size="100" required="false"/>
+    <column name="fecha_emision_gasto" phpName="FechaEmisionGasto" type="DATE" required="false"/>
+    <column name="fecha_pago_gasto" phpName="FechaPagoGasto" type="DATE" required="false"/>
+    <column name="numero_doc_gasto" phpName="NumeroDocGasto" type="LONGVARCHAR" required="false"/>
+    <column name="fecha_creacion_gasto" phpName="FechaCreacionGasto" type="TIMESTAMP" required="false"/>
+    <column name="fecha_modificacion_gasto" phpName="FechaModificacionGasto" type="TIMESTAMP" required="false"/>
     <foreign-key foreignTable="cuenta" name="fk_gasto_cuenta">
       <reference local="fk_cuenta" foreign="id_cuenta"/>
     </foreign-key>
+	<behavior name="timestampable">
+		<parameter name="create_column" value="fecha_creacion_gasto" />
+		<parameter name="update_column" value="fecha_modificacion_gasto" />
+	</behavior>
+</table>
+<table name="venta" phpName="Venta" idMethod="native">
+    <column name="id_venta" phpName="IdVenta" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="fecha_venta" phpName="FechaVenta" type="DATE" required="true"/>
+    <column name="tipo_venta" phpName="TipoVenta" type="CHAR" sqlType="enum('FORMAL','INFORMAL')" required="true" defaultValue="FORMAL"/>
+    <column name="total_venta" phpName="TotalVenta" type="FLOAT" size="7" scale="2" required="true" defaultValue="0.00"/>
+    <column name="formal_total_venta" phpName="FormalTotalVenta" type="FLOAT" size="7" scale="2" required="true" defaultValue="0.00"/>
+    <column name="informal_total_venta" phpName="InformalTotalVenta" type="FLOAT" size="7" scale="2" required="true" defaultValue="0.00"/>
+    <column name="total_iva_venta_formal" phpName="TotalIvaVentaFormal" type="FLOAT" size="7" scale="2" required="true" defaultValue="0.00"/>
+    <column name="detalle_venta" phpName="DetalleVenta" type="LONGVARCHAR" required="false"/>
+    <column name="fecha_creacion_venta" phpName="FechaCreacionVenta" type="TIMESTAMP" required="false"/>
+    <column name="fecha_modificacion_venta" phpName="FechaModificacionVenta" type="TIMESTAMP" required="false"/>
+    <unique name="fecha_venta_UNIQUE">
+      <unique-column name="fecha_venta"/>
+    </unique>
+	<behavior name="timestampable">
+		<parameter name="create_column" value="fecha_creacion_venta" />
+		<parameter name="update_column" value="fecha_modificacion_venta" />
+	</behavior>
   </table>
 </database>

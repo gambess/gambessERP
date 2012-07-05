@@ -12,16 +12,25 @@ class GastoType extends AbstractType {
 
         $builder->add('cuenta', 'model',
                 array(
-                    'label'    => 'Cuenta',
-                    'class'    => 'Costo\SystemBundle\Model\Cuenta',
+                    'label' => 'Cuenta',
+                    'class' => 'Costo\SystemBundle\Model\Cuenta',
                     'property' => 'NombreCuenta',
         ));
-        $builder->add('nombre_gasto', 'text', array('label'  => 'Gasto',));
-        $builder->add('costo_gasto', 'number', array('label'  => 'Costo',));
-        $builder->add('fecha_emision_gasto', 'date', array('label'  => 'F. Emisión','widget' => 'single_text'));
-        $builder->add('fecha_pago_gasto', 'date', array('label'  => 'F. Pago','widget' => 'single_text'));
-   
-        
+        $builder->add('nombre_gasto', 'text', array('label' => 'Gasto',));
+        $builder->add('costo_gasto', 'number', array('label' => 'Costo',));
+        $builder->add('fecha_emision_gasto', 'date', array(
+            'label' => 'F. Emisión',
+            'widget' => 'single_text',
+            'input' => 'datetime',
+            'format' => 'dd/MM/yyyy'
+                )
+        );
+        $builder->add('fecha_pago_gasto', 'date', array(
+            'label' => 'F. Pago',
+            'widget' => 'single_text',
+            'input' => 'datetime',
+            'format' => 'dd/MM/yyyy'
+            ));
     }
 
     public function getDefaultOptions(array $options) {

@@ -175,4 +175,7 @@ class GastoController extends Controller {
 
     }
 
+    public function gastorepAction(){
+
+    }
 }

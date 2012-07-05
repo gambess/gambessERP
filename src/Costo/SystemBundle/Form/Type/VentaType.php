@@ -9,7 +9,13 @@ class VentaType extends AbstractType {
 
     public function buildForm(FormBuilder $builder, array $options) {
         $builder
-                ->add('fecha_venta', 'date', array('label' => 'Fecha Venta', 'widget' => 'single_text'))
+                ->add('fecha_venta', 'date', array(
+                    'label' => 'Fecha Venta',
+                    'widget' => 'single_text',
+                    'input' => 'datetime',
+                    'format' => 'dd/MM/yyyy'
+                        )
+                )
                 ->add('tipo_venta', 'choice', array(
                     'label' => 'Tipo',
                     'choices' => array(
@@ -17,9 +23,9 @@ class VentaType extends AbstractType {
                     'required' => true)
                 )
                 ->add('total_venta', 'number', array('label' => 'Total Venta'))
-                ->add('total_venta_formal', 'number', array('label' => 'V. Formal'))
-                ->add('total_venta_informal', 'number', array('label' => 'V. Informal'))
-                ->add('total_iva_venta', 'number', array('label' => 'I.V.A'))
+                ->add('formal_total_venta', 'number', array('label' => 'V. Formal'))
+                ->add('informal_total_venta', 'number', array('label' => 'V. Informal'))
+                ->add('total_iva_venta_formal', 'number', array('label' => 'I.V.A'))
                 ->add('detalle_venta', 'textarea', array('label' => 'Detalle'))
         ;
     }

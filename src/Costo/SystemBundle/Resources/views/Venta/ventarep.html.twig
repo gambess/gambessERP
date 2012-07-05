@@ -1,0 +1,18 @@
+<div id="Venta_rep">
+<table align="right">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Valor</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for venta in ventas %}
+        <tr>
+            <td>{{ venta.FechaVenta|date('d/m/Y') }}</td>
+            <td>{{ venta.TotalVenta }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>

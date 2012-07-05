@@ -3,6 +3,10 @@
 namespace Costo\SystemBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Costo\SystemBundle\Model\Venta;
+use Costo\SystemBundle\Model\VentaQuery;
+use Costo\SystemBundle\Model\Gasto;
+use Costo\SystemBundle\Model\GastoQuery;
 
 /**
  * @author Raziel Valle <razielvalle@gambess.com>
@@ -18,25 +22,24 @@ class InformeController extends Controller {
      * @return Response view
      */
     public function indexAction() {
-              
+
 //        if ($form->isValid()) {
 //            return $this->redirect($this->generateUrl('_report', array('date_max' => 'NOw', 'date_min'=> 'NOW')));
-
 //        }
         $form = $this->createFormBuilder(null, array())
                         ->add('min_date', 'date', array(
                             'input' => 'string',
                             'widget' => 'single_text',
-                            'format' => 'dd-mm-yyyy',
+                            'format' => 'dd/MM/yyyy',
                         ))
                         ->add('max_date', 'date', array(
                             'input' => 'string',
                             'widget' => 'single_text',
-                            'format' => 'dd-mm-yyyy',
+                            'format' => 'dd/MM/yyyy',
                                 )
                         )
                         ->getForm()
-                ;
+        ;
         return $this->render('CostoSystemBundle:Informe:index.html.twig', array(
             'form' => $form->createView(),
         ));
@@ -44,40 +47,46 @@ class InformeController extends Controller {
 
     public function reportAction() {
 
-          $request = $this->getRequest();
-          echo $request->getMethod();
-          if('POST' === $request->getMethod()){
-          echo "<pre>";
-          \print_r($request);
-          \print_r($request->request);
-          \print_r($request->request->all());
-          \print_r(get_class_methods($request->request));
-//                print_r($request->request);
-//                echo $request->request->get('min_date');
-//                echo $request->request->get('max_date');
-//                var_dump($request->parameters['begin_date']);
-//                echo "<br />";
-//                var_dump($request->parameters['end_date']);
-                echo "</pre>";
-          }
-        $form = $this->createFormBuilder(null, array())
-                        ->add('min_date', 'date', array(
-                            'input' => 'string',
-                            'widget' => 'single_text',
-                            'format' => 'dd-mm-yyyy',
-                        ))
-                        ->add('max_date', 'date', array(
-                            'input' => 'string',
-                            'widget' => 'single_text',
-                            'format' => 'dd-mm-yyyy',
-                                )
-                        )
-                        ->getForm()
-        ;
-        $form->bindRequest($request);
-        return $this->render("CostoSystemBundle:Informe:report.html.twig", array(
-            'form' => $form->createView(),
-        ));
+        $dates = array();
+        $request = $this->getRequest();
+
+        if ('POST' === $request->getMethod()) {
+            $dates = $request->request->get('form');
+
+            $form = $this->createFormBuilder(null, array())
+                            ->add('min_date', 'date', array(
+                                'input' => 'string',
+                                'widget' => 'single_text',
+                                'format' => 'dd/MM/yyyy',
+                            ))
+                            ->add('max_date', 'date', array(
+                                'input' => 'string',
+                                'widget' => 'single_text',
+                                'format' => 'dd/MM/yyyy',
+                                    )
+                            )
+                            ->getForm()
+            ;
+            $form->bindRequest($request);
+
+            $timeline = $this->proccessDates($dates);
+            if ($timeline['max'] >= $timeline['min']) {
+                $ventas = VentaQuery::create()->filterByFechaVenta($timeline)->find();
+                $gastos = GastoQuery::create()->filterByFechaPagoGasto($timeline)->find();
+
+            }
+            return $this->render("CostoSystemBundle:Informe:report.html.twig", array(
+                'form' => $form->createView()
+            , 'dates' => $timeline , 'gastos' => $gastos, 'ventas' => $ventas
+            ));
+        }
+    }
+
+    private function proccessDates($dates) {
+        $timelines = array();
+        $timelines['min']= \DateTime::createFromFormat('d/m/Y', $dates['min_date']);
+        $timelines['max']= \DateTime::createFromFormat('d/m/Y', $dates['max_date']);
+        return $timelines;
     }
 
 }

@@ -1,4 +1,24 @@
 {% extends 'CostoSystemBundle::layout.html.twig' %}
+{% block content_header %}
+{% javascripts
+            '@CostoSystemBundle/Resources/public/js/ui/i18n/*'
+         %}
+        <script type="text/javascript" src="{{ asset( asset_url) }}"></script>
+{% endjavascripts %}
+<script type="text/javascript">
+			$(function(){
+                                $.datepicker.setDefaults( $.datepicker.regional[ "es" ] );
+				// Datepicker
+				$('#form_min_date').datepicker({
+                               //     minDate: -30, maxDate: 0
+				});
+                                // Datepicker
+				$('#form_max_date').datepicker({
+                               //     minDate: -30, maxDate: 0
+				});
+			});
+		</script>
+{% endblock %}
 {% block title %}Generar Reporte de Costos por Periódo{% endblock %}
 {% block content %}
 <div id="dialog" title="Generar Reporte">
@@ -12,6 +32,20 @@
         <button class="symfony-button-green" type="submit">Generar</button>
         </p>
 </form>
+</div>
+<br />
+<br />
+<br />
+<div id="report">
+<h1><center>Informe de Costos de las fechas: {{dates.min|date('d/M/Y')}} hasta {{dates.max|date('d-m-y')}}</center></h1>
+{% if gastos|length == 0 and ventas|length == 0 %}
+<p align="center">
+<h3><center>No se encontraron resultados en las fechas seleccionadas</center></h3>
+</p>
+{% else %}
+{% include 'CostoSystemBundle:Gasto:gastorep.html.twig' with { 'gastos' : gastos } %}
+{% include 'CostoSystemBundle:Venta:ventarep.html.twig' with { 'ventas' : ventas } %}
+{% endif %}
 </div>
 {% endblock %}
 

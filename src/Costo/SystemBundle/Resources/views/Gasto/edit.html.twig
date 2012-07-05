@@ -1,5 +1,25 @@
 {% extends 'CostoSystemBundle::layout.html.twig' %}
-{% block title %}<center>Modificar Gasto</center>{% endblock %}
+{% block content_header %}
+{% javascripts
+            '@CostoSystemBundle/Resources/public/js/ui/i18n/*'
+         %}
+        <script type="text/javascript" src="{{ asset( asset_url) }}"></script>
+{% endjavascripts %}
+<script type="text/javascript">
+			$(function(){
+                                $.datepicker.setDefaults( $.datepicker.regional[ "es" ] );
+				// Datepicker
+				$('#gasto_fecha_emision_gasto').datepicker({
+                                        altFormat: "dd/mm/yyyy"
+				});
+                                // Datepicker
+				$('#gasto_fecha_pago_gasto').datepicker({
+                                        altFormat: "dd/mm/yyyy"
+				});
+			});
+		</script>
+{% endblock %}
+{% block title %}Modificar Gasto{% endblock %}
 {% block content %}
 <h1><center>{{ block('title') }}</center></h1>
 <div style="float:left">
