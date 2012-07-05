@@ -1,10 +1,10 @@
 {% extends 'CostoSystemBundle::layout.html.twig' %}
 {% block title %}Generar Reporte de Costos por Periódo{% endblock %}
 {% block content %}
-<div id="dialog" title="Advanced Search">
-<form action="{{ path('_report_gen') }}" method="post" {{ form_enctype(form) }} id="frm">
+<div id="dialog" title="Generar Reporte">
+<form action="{{ path('create_report') }}" method="post" {{ form_enctype(form) }}>
             <h1><center>Generar Reporte</center></h1>
-        <div class="form-search-item">
+        <div class="form-dates-item">
     {{ form_label(form.min_date, 'Fecha Inicio') }} {{ form_widget(form.min_date) }}  Hasta  {{ form_widget(form.max_date) }}
          </div>
         {{ form_rest(form) }}

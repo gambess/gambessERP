@@ -71,7 +71,7 @@ class CuentaController extends Controller {
     /**
      * Guarda una cuenta y redirije o espera validacion del formulario
      * No necesita parametros
-     * @method GET route: "/create" name="create_cuenta"
+     * @method POST route: "/create" name="create_cuenta"
      * @return mixed, Si es valido se muestra el cuenta creado en caso contrario exije validacion
      */
     public function createAction()
@@ -121,7 +121,7 @@ class CuentaController extends Controller {
     /**
      * Actualiza y guarda un cuenta
      * Necesita un parametro el id del cuenta a actualizar
-     * @method GET route: "/{id}/update" name="update_cuenta"
+     * @method PUT route: "/{id}/update" name="update_cuenta"
      * @param int $id
      * @return mixed, muestra un error o el formulario de cuentas en caso de que no sea valido
      */

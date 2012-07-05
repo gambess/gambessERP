@@ -18,8 +18,8 @@ class GastoType extends AbstractType {
         ));
         $builder->add('nombre_gasto', 'text', array('label'  => 'Gasto',));
         $builder->add('costo_gasto', 'number', array('label'  => 'Costo',));
-        $builder->add('fecha_emision_gasto', 'datetime', array('label'  => 'F. Emisión','widget' => 'single_text'));
-        $builder->add('fecha_pago_gasto', 'datetime', array('label'  => 'F. Pago','widget' => 'single_text'));
+        $builder->add('fecha_emision_gasto', 'date', array('label'  => 'F. Emisión','widget' => 'single_text'));
+        $builder->add('fecha_pago_gasto', 'date', array('label'  => 'F. Pago','widget' => 'single_text'));
    
         
     }

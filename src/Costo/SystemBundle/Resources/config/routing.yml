@@ -15,9 +15,5 @@ _venta:
     prefix:   /venta
 
 _report:
-    pattern:  /report
-    defaults: { _controller: CostoSystemBundle:Informe:index }
-
-_report_gen:
-    pattern:  /gen
-    defaults: { _controller: CostoSystemBundle:Informe:report }
+    resource: "@CostoSystemBundle/Resources/config/routing/informe.yml"
+    prefix:   /informe

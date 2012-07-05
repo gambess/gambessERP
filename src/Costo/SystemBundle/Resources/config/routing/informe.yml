@@ -1,0 +1,10 @@
+# Rutas para gestionar todas las acciones de las entidades de tipo Ciudad
+# Generado automáticamente por el comando generate:doctrine:crud
+index_report:
+    pattern:  /
+    defaults: { _controller: CostoSystemBundle:Informe:index }
+
+create_report:
+    pattern:  /create
+    defaults: { _controller: CostoSystemBundle:Informe:report }
+    requirements: { _method: post }

@@ -9,11 +9,11 @@
 			$(function(){
                                 $.datepicker.setDefaults( $.datepicker.regional[ "es" ] );
 				// Datepicker
-				$('#datepicker').datepicker({
+				$('#form_min_date').datepicker({
                                     minDate: -30, maxDate: 0
 				});
                                 // Datepicker
-				$('#datepicker2').datepicker({
+				$('#form_max_date').datepicker({
                                     minDate: -30, maxDate: 0
 				});
 			});
@@ -22,15 +22,17 @@
 {% block title %}Generar Reporte de Costos por Periódo{% endblock %}
 {% block content %}
     <h1><center>{{ block('title') }}</center></h1>
-<form align="center" action="{{ path('_report', { 'begin': null, 'end': null }) }}" method="post">
+<div id="dialog" title="Generar Reporte">
+<form action="{{ path('create_report') }}" method="post" {{ form_enctype(form) }}>
             <h1><center>Generar Reporte</center></h1>
-        <p>Seleccione Periodo:
-        <p align="center">
-        Desde  <input style="width: 83px;" id="datepicker" type="text"> hasta <input style="width: 83px;" id="datepicker2" type="text"></p>
-        </p>
+        <div class="form-search-item">
+    {{ form_label(form.min_date, 'Fecha Inicio') }} {{ form_widget(form.min_date) }}  Hasta  {{ form_widget(form.max_date) }}
+         </div>
+        {{ form_rest(form) }}
         <p align="right">
         <button class="symfony-button-green" type="submit">Generar</button>
         </p>
-        </form>
+</form>
+</div>
 {% endblock %}
 

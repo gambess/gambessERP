@@ -18,11 +18,48 @@ class InformeController extends Controller {
      * @return Response view
      */
     public function indexAction() {
-        return $this->render('CostoSystemBundle:Informe:index.html.twig');
+              
+//        if ($form->isValid()) {
+//            return $this->redirect($this->generateUrl('_report', array('date_max' => 'NOw', 'date_min'=> 'NOW')));
+
+//        }
+        $form = $this->createFormBuilder(null, array())
+                        ->add('min_date', 'date', array(
+                            'input' => 'string',
+                            'widget' => 'single_text',
+                            'format' => 'dd-mm-yyyy',
+                        ))
+                        ->add('max_date', 'date', array(
+                            'input' => 'string',
+                            'widget' => 'single_text',
+                            'format' => 'dd-mm-yyyy',
+                                )
+                        )
+                        ->getForm()
+                ;
+        return $this->render('CostoSystemBundle:Informe:index.html.twig', array(
+            'form' => $form->createView(),
+        ));
     }
 
     public function reportAction() {
 
+          $request = $this->getRequest();
+          echo $request->getMethod();
+          if('POST' === $request->getMethod()){
+          echo "<pre>";
+          \print_r($request);
+          \print_r($request->request);
+          \print_r($request->request->all());
+          \print_r(get_class_methods($request->request));
+//                print_r($request->request);
+//                echo $request->request->get('min_date');
+//                echo $request->request->get('max_date');
+//                var_dump($request->parameters['begin_date']);
+//                echo "<br />";
+//                var_dump($request->parameters['end_date']);
+                echo "</pre>";
+          }
         $form = $this->createFormBuilder(null, array())
                         ->add('min_date', 'date', array(
                             'input' => 'string',
@@ -37,7 +74,7 @@ class InformeController extends Controller {
                         )
                         ->getForm()
         ;
-
+        $form->bindRequest($request);
         return $this->render("CostoSystemBundle:Informe:report.html.twig", array(
             'form' => $form->createView(),
         ));

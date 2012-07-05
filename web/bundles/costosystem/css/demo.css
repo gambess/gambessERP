@@ -291,3 +291,8 @@ ul#menu
     margin-right: 10px;
     display: inline;
 }
+
+#form_min_date, #form_max_date, #gasto_fecha_emision_gasto, #gasto_fecha_pago_gasto, #venta_fecha_venta
+{
+    width: 83px;
+}
