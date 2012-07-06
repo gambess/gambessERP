@@ -70,14 +70,51 @@ class InformeController extends Controller {
             $form->bindRequest($request);
 
             $timeline = $this->proccessDates($dates);
+            $totalventa = 0;
+            $ventayear = 0;
+            $totalgasto = 0;
+            $gastoyear = 0;
             if ($timeline['max'] >= $timeline['min']) {
-                $ventas = VentaQuery::create()->filterByFechaVenta($timeline)->find();
-                $gastos = GastoQuery::create()->filterByFechaPagoGasto($timeline)->find();
+                $ventas = VentaQuery::create()->filterByTipoVenta('FORMAL')->filterByFechaVenta($timeline)->find();
+                $tventas = VentaQuery::create('v')
+                                ->select(array('v.FormalTotalVenta'))
+                                ->filterByTipoVenta('FORMAL')
+                           ->find();
+                foreach ($tventas->getIterator() as $tv)
+                        $ventayear += $tv;
+
+                $gastos = GastoQuery::create()
+                            ->useCuentaQuery('cuenta')
+                                ->filterByTipoCuenta('FORMAL')
+                            ->endUse()
+                        ->filterByFechaPagoGasto($timeline)->find();
+                $tgastos = GastoQuery::create('g')
+                            ->useCuentaQuery('c')
+                                ->filterByTipoCuenta('FORMAL')
+                            ->endUse()
+                            ->select(array('g.CostoGasto'))
+                        ->find();
+                foreach ($tgastos->getIterator() as $tg)
+                        $gastoyear += $tg;
+                foreach ($ventas->getIterator() as $v)
+                        $totalventa += $v->getFormalTotalVenta();
+                $ivaVenta = $totalventa * 0.19;
+                foreach ($gastos->getIterator() as $g)
+                        $totalgasto += $g->getCostoGasto();
+                $ivaGasto = $totalgasto * 0.19;
 
             }
             return $this->render("CostoSystemBundle:Informe:report.html.twig", array(
-                'form' => $form->createView()
-            , 'dates' => $timeline , 'gastos' => $gastos, 'ventas' => $ventas
+                'form' => $form->createView(),
+                'dates' => $timeline ,
+                'gastos' => $gastos,
+                'ventas' => $ventas,
+                'totalgasto' => $totalgasto,
+                'totalventa' => $totalventa,
+                'gastoyear' => $gastoyear,
+                'ivagasto' => $ivaGasto,
+                'ventayear' => $ventayear,
+                'ivaventa' => $ivaVenta
             ));
         }
     }

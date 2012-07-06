@@ -1,11 +1,25 @@
 /* tutorial */
-table,th,td
+/*table,th,td
 {
     font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
     width:67%;
     border-collapse:collapse;
     border: 2px solid #90c100;
     border-spacing:1;
+}*/
+table, th, td
+{
+        background:#f7f7f7;
+	background:-moz-linear-gradient(90deg, #ccc, #fff); /* Firefox */
+	background:-webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc)); /* Webkit */
+	border:1px solid #aaa;
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	-moz-box-shadow:0 0 15px #aaa;
+	-webkit-box-shadow:0 0 15px #aaa;
+	margin:60px auto 0;
+	padding:20px;
+	width:440px;
 }
 th
 {

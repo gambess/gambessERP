@@ -1,0 +1,24 @@
+<div id="head_rep_r">
+<h2>Total por Año</h2>
+<table>
+    <tbody>
+    <tr>
+            <th>Total Año</th>
+            <td>Importe</td>
+        </tr>
+        <tr>
+            <th>Gastos</th>
+            <td>{{gastoyear}}</td>
+        </tr>
+        <tr>
+            <th>Ingresos</th>
+            <td>{{ventayear}}</td>
+        </tr>
+        {% set saldo = "#{ventayear - gastoyear}" %}
+        <tr>
+            <th>Diferencia Anual (Ingresos - Gastos)</th>
+            <td>{{ saldo }}</td>
+        </tr>
+    </tbody>
+</table>
+</div>

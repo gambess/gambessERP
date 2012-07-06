@@ -35,16 +35,16 @@
 </div>
 <br />
 <br />
+<h1><center>Informe de Costos del: {{dates.min|date('d - m - Y')}} hasta {{dates.max|date('d - m - Y')}}</center></h1>
 <br />
-<div id="report">
-<h1><center>Informe de Costos de las fechas: {{dates.min|date('d/M/Y')}} hasta {{dates.max|date('d-m-y')}}</center></h1>
 {% if gastos|length == 0 and ventas|length == 0 %}
-<p align="center">
 <h3><center>No se encontraron resultados en las fechas seleccionadas</center></h3>
-</p>
 {% else %}
-{% include 'CostoSystemBundle:Gasto:gastorep.html.twig' with { 'gastos' : gastos } %}
-{% include 'CostoSystemBundle:Venta:ventarep.html.twig' with { 'ventas' : ventas } %}
+<div id="report">
+{% include 'CostoSystemBundle:Informe:resumenyear.html.twig' with {'ventayear' : ventayear, 'gastoyear' : gastoyear}  %}
+{% include 'CostoSystemBundle:Informe:resumenmonth.html.twig' with {'totalventa' : totalventa, 'totalgasto' : totalgasto} %}
+{% include 'CostoSystemBundle:Gasto:gastorep.html.twig' with { 'gastos' : gastos, 'ivagasto' : ivagasto } %}
+{% include 'CostoSystemBundle:Venta:ventarep.html.twig' with { 'ventas' : ventas, 'ivaventa': ivaventa } %}
 {% endif %}
 </div>
 {% endblock %}

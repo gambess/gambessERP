@@ -165,17 +165,4 @@ class GastoController extends Controller {
                 ->getForm()
         ;
     }
-
-    protected function getCostobydate($dates = array()) {
-
-        foreach ($dates as $month)
-            {
-            $gastos = GastoQuery::create()->findByFechaPagoGasto($month);
-            }
-
-    }
-
-    public function gastorepAction(){
-
-    }
 }

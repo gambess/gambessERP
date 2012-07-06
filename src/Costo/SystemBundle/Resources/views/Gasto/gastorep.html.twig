@@ -1,18 +1,22 @@
 <div id="gasto_rep">
+<h2>Gastos</h2>
 <table align="left">
     <thead>
         <tr>
+            <th>Fecha</th>
             <th>Gasto</th>
-            <th>Costo</th>
+            <th>Cantidad</th>
         </tr>
     </thead>
     <tbody>
     {% for gasto in gastos %}
         <tr>
+            <td>{{ gasto.FechaPagoGasto|date('d/m/y') }}</td>
             <td>{{ gasto.NombreGasto }}</td>
             <td>{{ gasto.CostoGasto }}</td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
+<h2>I.V.A gastos(19%): {{ ivagasto }} </h2>
 </div>

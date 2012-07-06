@@ -1,0 +1,24 @@
+<div id="head_rep_l">
+<h2>Total por Mes</h2>
+<table>
+    <tbody>
+    <tr>
+            <th>Total Mes</th>
+            <td>Importe</td>
+        </tr>
+        <tr>
+            <th>Gastos</th>
+            <td>{{ totalgasto }}</td>
+        </tr>
+        <tr>
+            <th>Ingresos</th>
+            <td>{{ totalventa }}</td>
+        </tr>
+        {% set diferencia = "#{totalventa - totalgasto}" %}
+        <tr>
+            <th>Diferencia Anual (Ingresos - Gastos)</th>
+            <td>{{ diferencia }}</td>
+        </tr>
+    </tbody>
+</table>
+</div>

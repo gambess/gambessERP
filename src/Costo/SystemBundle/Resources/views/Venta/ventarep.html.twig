@@ -1,18 +1,22 @@
-<div id="Venta_rep">
+<div id="venta_rep">
+<h2>Ingresos</h2>
 <table align="right">
     <thead>
         <tr>
             <th>Fecha</th>
-            <th>Valor</th>
+            <th>Ingreso</th>
+            <th>Cantidad</th>
         </tr>
     </thead>
     <tbody>
     {% for venta in ventas %}
         <tr>
-            <td>{{ venta.FechaVenta|date('d/m/Y') }}</td>
-            <td>{{ venta.TotalVenta }}</td>
+            <td>{{ venta.FechaVenta|date('d/m/y') }}</td>
+            <td>Venta Diaria del {{ venta.FechaVenta|date('d - m - Y') }}</td>
+            <td>{{ venta.FormalTotalVenta }}</td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
+<h2>I.V.A ventas(19%): {{ ivaventa }}</h2>
 </div>
