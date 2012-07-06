@@ -34,10 +34,10 @@
         </form>
     </div>
     {% if gastos|length == 0 and ventas|length == 0 %}
-<br /><h1><center>Informe de Costos del: {{dates.min|date('d - m - Y')}} hasta {{dates.max|date('d - m - Y')}}</center></h1>
+<br /><br /><h1><center>Informe de Costos del: {{dates.min|date('d - m - Y')}} hasta {{dates.max|date('d - m - Y')}}</center></h1>
         <h3><center>No se encontraron resultados en las fechas seleccionadas</center></h3>
     {% else %}
-<br /><h1><center>Informe de Costos del: {{dates.min|date('d - m - Y')}} hasta {{dates.max|date('d - m - Y')}}</center></h1>
+<br /><br /><h1><center>Informe de Costos del: {{dates.min|date('d - m - Y')}} hasta {{dates.max|date('d - m - Y')}}</center></h1>
         <div id="ingresos">
             {% include 'CostoSystemBundle:Venta:ventarep.html.twig' with { 'ventas' : ventas, 'ivaventa': ivaventa, 'ventayear' : ventayear, 'gastoyear' : gastoyear } %}
         </div>
