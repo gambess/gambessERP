@@ -1,11 +1,32 @@
-<div id="venta_rep">
-<h2>Ingresos</h2>
 <table align="right">
     <thead>
         <tr>
-            <th>Fecha</th>
-            <th>Ingreso</th>
-            <th>Cantidad</th>
+            <th><h1><center>Total Año</center></h1></th>
+            <th><h1><center>Importe</center></h1></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Gastos</td>
+            <td>{{gastoyear}}</td>
+        </tr>
+        <tr>
+            <td>Ingresos</td>
+            <td>{{ventayear}}</td>
+        </tr>
+        {% set saldo = "#{ventayear - gastoyear}" %}
+        <tr>
+            <td>Diferencia Anual (Ingresos - Gastos)</td>
+            <td>{{ saldo }}</td>
+        </tr>
+    </tbody>
+</table>
+<table align="right">
+    <thead>
+        <tr>
+            <th><h1><center>Fecha</center></h1></th>
+            <th><h1><center>Ingreso</center></h1></th>
+            <th><h1><center>Cantidad</center></h1></th>
         </tr>
     </thead>
     <tbody>
@@ -18,5 +39,4 @@
     {% endfor %}
     </tbody>
 </table>
-<h2>I.V.A ventas(19%): {{ ivaventa }}</h2>
-</div>
+<h3>I.V.A ventas(19%): <bold>{{ ivaventa }}</bold></h3>

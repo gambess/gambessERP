@@ -1,7 +1,42 @@
 /* tutorial */
-table,th,td
+table
 {
-    border: 2px solid greenyellow;
-    border-collapse:collapse;
-    border-spacing:0;
+    background:#f7f7f7;
+    background:-moz-linear-gradient(90deg, #ccc, #fff); /* Firefox */
+    background:-webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc)); /* Webkit */
+    font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+    margin:60px auto 0;
+    padding:15px;
+    width:440px;
+    border:1px solid #aaa;
+    -moz-box-shadow:0 0 15px #aaa;
+    -webkit-box-shadow:0 0 15px #aaa;
+
+}
+td
+{
+    padding:10px;
+/*    border:1px solid #aaa;*/
+    border-right: 1px solid #aaa;
+    border-left: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+}
+th h1, .title
+{
+    margin-bottom: 3px;
+    padding: 1px;
+}
+#ingresos
+{
+    position: relative;
+    float: left;
+    height: 40%;
+    width: 49.5%;
+}
+#gastos
+{
+    position: relative;
+    float: right;
+    height: 40%;
+    width: 49.5%;
 }

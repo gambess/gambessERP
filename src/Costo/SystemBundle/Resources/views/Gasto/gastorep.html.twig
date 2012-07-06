@@ -1,11 +1,33 @@
-<div id="gasto_rep">
-<h2>Gastos</h2>
 <table align="left">
     <thead>
         <tr>
-            <th>Fecha</th>
-            <th>Gasto</th>
-            <th>Cantidad</th>
+            <th><h1><center>Total Mes</center></h1></th>
+            <th><h1><center>Importe</center></h1></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Gastos</td>
+            <td>{{ totalgasto }}</td>
+        </tr>
+        <tr>
+            <td>Ingresos</td>
+            <td>{{ totalventa }}</td>
+        </tr>
+        {% set diferencia = "#{totalventa - totalgasto}" %}
+        <tr>
+            <td>Diferencia Anual (Ingresos - Gastos)</td>
+            <td>{{ diferencia }}</td>
+        </tr>
+    </tbody>
+</table>
+<!--<h1><center>Gastos</center></h1>-->
+<table align="left">
+    <thead>
+        <tr>
+            <th><h1><center>Fecha</center></h1></th>
+            <th><h1><center>Gasto</center></h1></th>
+            <th><h1><center>Cantidad</center></h1></th>
         </tr>
     </thead>
     <tbody>
@@ -18,5 +40,4 @@
     {% endfor %}
     </tbody>
 </table>
-<h2>I.V.A gastos(19%): {{ ivagasto }} </h2>
-</div>
+<h3>I.V.A gastos(19%): {{ ivagasto }}</h3>

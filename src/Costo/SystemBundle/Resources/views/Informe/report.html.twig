@@ -21,31 +21,29 @@
 {% endblock %}
 {% block title %}Generar Reporte de Costos por Periódo{% endblock %}
 {% block content %}
-<div id="dialog" title="Generar Reporte">
-<form action="{{ path('create_report') }}" method="post" {{ form_enctype(form) }}>
-            <h1><center>Generar Reporte</center></h1>
-        <div class="form-dates-item">
-    {{ form_label(form.min_date, 'Fecha Inicio') }} {{ form_widget(form.min_date) }}  Hasta  {{ form_widget(form.max_date) }}
-         </div>
-        {{ form_rest(form) }}
-        <p align="right">
-        <button class="symfony-button-green" type="submit">Generar</button>
-        </p>
-</form>
-</div>
-<br />
-<br />
-<h1><center>Informe de Costos del: {{dates.min|date('d - m - Y')}} hasta {{dates.max|date('d - m - Y')}}</center></h1>
-<br />
-{% if gastos|length == 0 and ventas|length == 0 %}
-<h3><center>No se encontraron resultados en las fechas seleccionadas</center></h3>
-{% else %}
-<div id="report">
-{% include 'CostoSystemBundle:Informe:resumenyear.html.twig' with {'ventayear' : ventayear, 'gastoyear' : gastoyear}  %}
-{% include 'CostoSystemBundle:Informe:resumenmonth.html.twig' with {'totalventa' : totalventa, 'totalgasto' : totalgasto} %}
-{% include 'CostoSystemBundle:Gasto:gastorep.html.twig' with { 'gastos' : gastos, 'ivagasto' : ivagasto } %}
-{% include 'CostoSystemBundle:Venta:ventarep.html.twig' with { 'ventas' : ventas, 'ivaventa': ivaventa } %}
-{% endif %}
-</div>
+    <div>
+        <form action="{{ path('create_report') }}" method="post" {{ form_enctype(form) }}>
+                    <h1><center>Generar Reporte</center></h1>
+                <div class="form-dates-item">
+                    {{ form_label(form.min_date, 'Fecha Inicio') }} {{ form_widget(form.min_date) }}  Hasta  {{ form_widget(form.max_date) }}
+                 </div>
+                {{ form_rest(form) }}
+                <p align="right">
+                <button class="symfony-button-green" type="submit">Generar</button>
+                </p>
+        </form>
+    </div>
+    {% if gastos|length == 0 and ventas|length == 0 %}
+<br /><h1><center>Informe de Costos del: {{dates.min|date('d - m - Y')}} hasta {{dates.max|date('d - m - Y')}}</center></h1>
+        <h3><center>No se encontraron resultados en las fechas seleccionadas</center></h3>
+    {% else %}
+<br /><h1><center>Informe de Costos del: {{dates.min|date('d - m - Y')}} hasta {{dates.max|date('d - m - Y')}}</center></h1>
+        <div id="ingresos">
+            {% include 'CostoSystemBundle:Venta:ventarep.html.twig' with { 'ventas' : ventas, 'ivaventa': ivaventa, 'ventayear' : ventayear, 'gastoyear' : gastoyear } %}
+        </div>
+        <div id="gastos">
+            {% include 'CostoSystemBundle:Gasto:gastorep.html.twig' with { 'gastos' : gastos, 'ivagasto' : ivagasto, 'totalventa' : totalventa, 'totalgasto' : totalgasto } %}
+        </div>
+    {% endif %}
 {% endblock %}
 
