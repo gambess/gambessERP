@@ -17,7 +17,12 @@ class GastoType extends AbstractType {
                     'property' => 'NombreCuenta',
         ));
         $builder->add('nombre_gasto', 'text', array('label' => 'Gasto',));
-        $builder->add('costo_gasto', 'number', array('label' => 'Costo',));
+        $builder->add('costo_gasto', 'money', array(
+            'label' => 'Costo',
+            'currency'=>'USD',
+            'precision' => 0,
+            'grouping' => true,
+            ));
         $builder->add('fecha_emision_gasto', 'date', array(
             'label' => 'F. Emisión',
             'widget' => 'single_text',

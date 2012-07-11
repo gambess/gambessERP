@@ -14,24 +14,20 @@
             <td>{{ venta.FechaVenta|date('d/m/Y') }}</td>
         </tr>
         <tr>
-            <th>Tipo</th>
-            <td>{{ venta.TipoVenta }}</td>
-        </tr>
-        <tr>
             <th>Total</th>
-            <td>{{ venta.TotalVenta }}</td>
+            <td>${{ venta.TotalVenta | number_format(0,',','.')}}</td>
         </tr>
         <tr>
             <th>Total Formal</th>
-            <td>{{ venta.FormalTotalVenta }}</td>
+            <td>${{ venta.FormalTotalVenta | number_format(0,',','.')}}</td>
         </tr>
         <tr>
             <th>Total Informal</th>
-            <td>{{ venta.InformalTotalVenta }}</td>
+            <td>${{ venta.InformalTotalVenta | number_format(0,',','.')}}</td>
         </tr>
         <tr>
             <th>Total I.V.A (f)</th>
-            <td>{{ venta.TotalIvaVentaFormal }}</td>
+            <td>${{ venta.TotalIvaVentaFormal | number_format(0,',','.')}}</td>
         </tr>
         <tr>
             <th>Detalle</th>

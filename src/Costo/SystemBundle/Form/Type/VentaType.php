@@ -16,16 +16,34 @@ class VentaType extends AbstractType {
                     'format' => 'dd/MM/yyyy'
                         )
                 )
-                ->add('tipo_venta', 'choice', array(
-                    'label' => 'Tipo',
-                    'choices' => array(
-                        'FORMAL' => 'Formal', 'INFORMAL' => 'Informal'),
-                    'required' => true)
+                ->add('total_venta', 'money', array(
+                    'label' => 'Total Venta',
+                    'currency' => 'USD',
+                    'precision' => 0,
+                    'grouping' => true
+                        )
                 )
-                ->add('total_venta', 'number', array('label' => 'Total Venta'))
-                ->add('formal_total_venta', 'number', array('label' => 'V. Formal'))
-                ->add('informal_total_venta', 'number', array('label' => 'V. Informal'))
-                ->add('total_iva_venta_formal', 'number', array('label' => 'I.V.A'))
+                ->add('formal_total_venta', 'money', array(
+                    'label' => 'V. Formal',
+                    'currency' => 'USD',
+                    'precision' => 0,
+                    'grouping' => true
+                        )
+                )
+                ->add('informal_total_venta', 'money', array(
+                    'label' => 'V. Informal',
+                    'currency' => 'USD',
+                    'precision' => 0,
+                    'grouping' => true
+                        )
+                )
+                ->add('total_iva_venta_formal', 'money', array(
+                    'label' => 'I.V.A',
+                    'currency' => 'USD',
+                    'precision' => 0,
+                    'grouping' => true
+                        )
+                )
                 ->add('detalle_venta', 'textarea', array('label' => 'Detalle'))
         ;
     }

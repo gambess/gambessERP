@@ -8,16 +8,16 @@
     <tbody>
         <tr>
             <td>Gastos</td>
-            <td>{{gastoyear}}</td>
+            <td>${{gastoyear | number_format(0,',','.')}}</td>
         </tr>
         <tr>
             <td>Ingresos</td>
-            <td>{{ventayear}}</td>
+            <td>${{ventayear | number_format(0,',','.')}}</td>
         </tr>
         {% set saldo = "#{ventayear - gastoyear}" %}
         <tr>
             <td>Diferencia Anual (Ingresos - Gastos)</td>
-            <td>{{ saldo }}</td>
+            <td>${{ saldo | number_format(0,',','.')}}</td>
         </tr>
     </tbody>
 </table>
@@ -34,9 +34,9 @@
         <tr>
             <td>{{ venta.FechaVenta|date('d/m/y') }}</td>
             <td>Venta Diaria del {{ venta.FechaVenta|date('d - m - Y') }}</td>
-            <td>{{ venta.FormalTotalVenta }}</td>
+            <td>${{ venta.FormalTotalVenta | number_format(0,',','.')}}</td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
-<h3>I.V.A ventas(19%): <bold>{{ ivaventa }}</bold></h3>
+<h3>I.V.A ventas(19%): <bold>${{ ivaventa | number_format(2,',','.')}}</bold></h3>

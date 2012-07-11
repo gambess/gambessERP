@@ -23,7 +23,7 @@
             <tr>
         {% endif %}
             <td >{{ cuenta.nombreCuenta }}</td>
-            <td>{{ cuenta.ValorCuenta }}</td>
+            <td>${{ cuenta.ValorCuenta | number_format(0,',','.')}}</td>
             <td>{{ cuenta.TipoCuenta }}</td>
             <td>
                <a class="symfony-button-green" href="{{ path('show_cuenta', { 'id': cuenta.IdCuenta }) }}">Cuenta</a>

@@ -15,8 +15,8 @@
     {% for venta in ventas %}
         <tr>
             <td>{% if venta.FechaVenta %}{{ venta.FechaVenta|date('d/m/Y') }}{% endif %}</td>
-            <td>{{ venta.FormalTotalVenta }}</td>
-            <td>{{ venta.TotalIvaVentaFormal }}</td>
+            <td>${{ venta.FormalTotalVenta | number_format(0,',','.')}}</td>
+            <td>${{ venta.TotalIvaVentaFormal | number_format(2,',','.') }}</td>
             <td>
                 <ul>
                     <li>

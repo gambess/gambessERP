@@ -2,6 +2,9 @@
 {% block title %}Listado de Gastos{% endblock %}
 {% block content %}
 <h1><center>{{ block('title') }}</center></h1>
+{% if gastos|length == 0 %}
+<h3><center>No Existen gastos asociados a la cuenta</center></h3>
+{% else %}
 <table align="center">
     <thead>
         <tr>
@@ -16,7 +19,7 @@
     {% for gasto in gastos %}
         <tr>
             <td>{{ gasto.NombreGasto }}</td>
-            <td>{{ gasto.CostoGasto }}</td>
+            <td>${{ gasto.CostoGasto | number_format(0,',','.')}}</td>
             <td>{% if gasto.FechaEmisionGasto %}
                 {{ gasto.FechaEmisionGasto |date("d/m/Y")  }}
                 {% endif %}
@@ -33,6 +36,7 @@
     {% endfor %}
     </tbody>
 </table>
+{% endif %}
 <br />
 <p align="center">
         <a class="symfony-button-green" href="{{ path('index_cuenta') }}">

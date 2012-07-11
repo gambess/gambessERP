@@ -14,7 +14,7 @@
         </tr>
         <tr>
             <th>Costo</th>
-            <td>{{ gasto.CostoGasto }}</td>
+            <td>${{ gasto.CostoGasto | number_format(0,',','.') }}</td>
         </tr>
     </tbody>
 </table>

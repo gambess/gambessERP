@@ -75,10 +75,9 @@ class InformeController extends Controller {
             $totalgasto = 0;
             $gastoyear = 0;
             if ($timeline['max'] >= $timeline['min']) {
-                $ventas = VentaQuery::create()->filterByTipoVenta('FORMAL')->filterByFechaVenta($timeline)->find();
+                $ventas = VentaQuery::create()->filterByFechaVenta($timeline)->find();
                 $tventas = VentaQuery::create('v')
                                 ->select(array('v.FormalTotalVenta'))
-                                ->filterByTipoVenta('FORMAL')
                            ->find();
                 foreach ($tventas->getIterator() as $tv)
                         $ventayear += $tv;

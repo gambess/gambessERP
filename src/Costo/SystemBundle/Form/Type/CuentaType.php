@@ -10,7 +10,11 @@ class CuentaType extends AbstractType {
     public function buildForm(FormBuilder $builder, array $options) {
 
         $builder->add('nombre_cuenta', 'text', array('label'  => 'Cuenta',));
-        $builder->add('valor_cuenta', 'number', array('label'  => 'Valor',));
+        $builder->add('valor_cuenta', 'money', array(
+            'label'  => 'Valor',
+            'currency'=>'USD',
+            'precision' => 0,
+            'grouping' => true,));
         $builder->add('tipo_cuenta', 'choice',
                 array(
                     'label'  => 'Tipo',

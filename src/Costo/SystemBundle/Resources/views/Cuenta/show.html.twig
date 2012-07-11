@@ -17,7 +17,7 @@
         </tr>
         <tr>
             <th>Total</th>
-            <td>{{ cuenta.ValorCuenta }}</td>
+            <td>${{ cuenta.ValorCuenta | number_format(0,',','.') }}</td>
         </tr>
     </tbody>
 </table>
