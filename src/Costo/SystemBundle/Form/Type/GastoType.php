@@ -19,7 +19,7 @@ class GastoType extends AbstractType {
         $builder->add('nombre_gasto', 'text', array('label' => 'Gasto',));
         $builder->add('costo_gasto', 'money', array(
             'label' => 'Costo',
-            'currency'=>'USD',
+            'currency'=>'CLP',
             'precision' => 0,
             'grouping' => true,
             ));

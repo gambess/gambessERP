@@ -12,7 +12,7 @@ class CuentaType extends AbstractType {
         $builder->add('nombre_cuenta', 'text', array('label'  => 'Cuenta',));
         $builder->add('valor_cuenta', 'money', array(
             'label'  => 'Valor',
-            'currency'=>'USD',
+            'currency'=>'CLP',
             'precision' => 0,
             'grouping' => true,));
         $builder->add('tipo_cuenta', 'choice',
