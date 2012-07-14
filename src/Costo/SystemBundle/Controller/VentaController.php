@@ -20,8 +20,7 @@ class VentaController extends Controller {
      * @method GET route: "/" name="index_venta"
      * @return Response view
      */
-    public function indexAction()
-    {
+    public function indexAction() {
         $ventas = VentaQuery::create()->orderByFechaVenta('DESC')->find();
         return $this->render('CostoSystemBundle:Venta:index.html.twig', array(
             'ventas' => $ventas,
@@ -35,8 +34,7 @@ class VentaController extends Controller {
      * @method GET route: "/{id}/show", name="show_venta"
      * @return Response view
      */
-        public function showAction($id)
-    {
+    public function showAction($id) {
         $venta = VentaQuery::create()->findPk($id);
 
         if (!$venta) {
@@ -46,7 +44,7 @@ class VentaController extends Controller {
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('CostoSystemBundle:Venta:show.html.twig', array(
-            'venta'      => $venta,
+            'venta' => $venta,
             'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -57,14 +55,13 @@ class VentaController extends Controller {
      * @method GET route: "/new" name="new_venta"
      * @return Response view
      */
-    public function newAction()
-    {
+    public function newAction() {
         $venta = new Venta();
-        $form   = $this->createForm(new VentaType(), $venta);
+        $form = $this->createForm(new VentaType(), $venta);
 
         return $this->render('CostoSystemBundle:Venta:new.html.twig', array(
             'venta' => $venta,
-            'form'   => $form->createView()
+            'form' => $form->createView()
         ));
     }
 
@@ -74,22 +71,31 @@ class VentaController extends Controller {
      * @method GET route: "/create" name="create_venta"
      * @return mixed, Si es valido se muestra la venta creada en caso contrario exije validacion
      */
-    public function createAction()
-    {
-        $venta  = new Venta();
+    public function createAction() {
+        $venta = new Venta();
         $request = $this->getRequest();
-        $form    = $this->createForm(new VentaType(), $venta);
+        $form = $this->createForm(new VentaType(), $venta);
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $venta->save();
-            return $this->redirect($this->generateUrl('show_venta', array('id' => $venta->getIdVenta())));
-
+            $venta_in = $form->get('fecha_venta')->getData();
+            $exist = VentaQuery::create()->findOneByFechaVenta($venta_in);
+            if (null === $exist) {
+                $venta->save();
+                return $this->redirect($this->generateUrl('show_venta', array('id' => $venta->getIdVenta())));
+            }
+            if($exist instanceof Venta){
+                echo "La fecha usada ya esta agregada";
+                return $this->render('CostoSystemBundle:Venta:new.html.twig', array(
+                'venta' => $venta,
+                'form' => $form->createView()
+        ));
+            }
         }
 
         return $this->render('CostoSystemBundle:Venta:new.html.twig', array(
             'venta' => $venta,
-            'form'   => $form->createView()
+            'form' => $form->createView()
         ));
     }
 
@@ -100,9 +106,8 @@ class VentaController extends Controller {
      * @param int $id
      * @return mixed, renderiza el formulario de edicion o un error en caso de no encontrar la venta
      */
-    public function editAction($id)
-    {
-       $venta = VentaQuery::create()->findPk($id);
+    public function editAction($id) {
+        $venta = VentaQuery::create()->findPk($id);
 
         if (!$venta) {
             throw $this->createNotFoundException('No se ha encontrado la venta solicitada');
@@ -112,8 +117,8 @@ class VentaController extends Controller {
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('CostoSystemBundle:Venta:edit.html.twig', array(
-            'venta'      => $venta,
-            'edit_form'   => $editForm->createView(),
+            'venta' => $venta,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -125,9 +130,8 @@ class VentaController extends Controller {
      * @param int $id
      * @return mixed, muestra un error o el formulario de ventas en caso de que no sea valido
      */
-    public function updateAction($id)
-    {
-         $venta = VentaQuery::create()->findPk($id);
+    public function updateAction($id) {
+        $venta = VentaQuery::create()->findPk($id);
 
         if (!$venta) {
             throw $this->createNotFoundException('No se ha encontrado la venta solicitada');
@@ -147,8 +151,8 @@ class VentaController extends Controller {
         }
 
         return $this->render('CostoSystemBundle:Venta:edit.html.twig', array(
-            'venta'      => $venta,
-            'edit_form'   => $editForm->createView(),
+            'venta' => $venta,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -160,8 +164,7 @@ class VentaController extends Controller {
      * @param int $id
      * @return mixed
      */
-    public function deleteAction($id)
-    {
+    public function deleteAction($id) {
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
@@ -171,7 +174,7 @@ class VentaController extends Controller {
             $venta = VentaQuery::create()->findPk($id);
 
             if (!$venta) {
-            throw $this->createNotFoundException('No se ha encontrado la venta solicitada');
+                throw $this->createNotFoundException('No se ha encontrado la venta solicitada');
             }
 
             $venta->delete();
@@ -180,11 +183,14 @@ class VentaController extends Controller {
         return $this->redirect($this->generateUrl('index_venta'));
     }
 
-    private function createDeleteForm($id)
-    {
+    public function confirmAction($fecha){
+        return $this->render('CostoSystemBundle:Venta:confirm.html.twig', array('fecha' => $fecha));
+    }
+
+    private function createDeleteForm($id) {
         return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
-            ->getForm()
+                ->add('id', 'hidden')
+                ->getForm()
         ;
     }
 

@@ -20,28 +20,28 @@ class VentaType extends AbstractType {
                     'label' => 'Total Venta',
                     'currency' => 'CLP',
                     'precision' => 0,
-                    'grouping' => true
+//                    'grouping' => true
                         )
                 )
                 ->add('formal_total_venta', 'money', array(
                     'label' => 'V. Formal',
                     'currency' => 'CLP',
                     'precision' => 0,
-                    'grouping' => true
+//                    'grouping' => true
                         )
                 )
                 ->add('informal_total_venta', 'money', array(
                     'label' => 'V. Informal',
                     'currency' => 'CLP',
                     'precision' => 0,
-                    'grouping' => true
+//                    'grouping' => true
                         )
                 )
                 ->add('total_iva_venta_formal', 'money', array(
                     'label' => 'I.V.A',
                     'currency' => 'CLP',
                     'precision' => 0,
-                    'grouping' => true
+//                    'grouping' => true
                         )
                 )
                 ->add('detalle_venta', 'textarea', array('label' => 'Detalle'))
