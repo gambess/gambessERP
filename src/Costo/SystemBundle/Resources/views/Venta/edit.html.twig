@@ -6,6 +6,8 @@
         <script type="text/javascript" src="{{ asset( asset_url) }}"></script>
 {% endjavascripts %}
 <script type="text/javascript">
+    $(document).ready(function() {
+
 			$(function(){
                                 $.datepicker.setDefaults( $.datepicker.regional[ "es" ] );
 				// Datepicker
@@ -13,6 +15,48 @@
                                         altFormat: "dd/mm/yyyy"
 				});
 			});
+
+
+                        $('#venta_formal_total_venta').focusout(function(){
+                            var total = $(this).val();
+                            var iva = $('#venta_total_iva_venta_formal');
+                            if( iva.val() != 0){
+                                $('#venta_total_iva_venta_formal').val(0);
+                            }
+                            var i = parseFloat(Number(total)/1.19)*.19;
+                            $('#venta_total_iva_venta_formal').val(i.toFixed(0));
+                            var venta = $('#venta_total_venta').val();
+                            if(venta != 0){
+                                var v = $('#venta_total_venta');
+                                v.val(0);
+                                var informal = $('#venta_informal_total_venta');
+                                if (informal.val () != 0){
+                                    $('#venta_total_venta').val(Number(informal.val())+Number(total));
+                                }else if (informal.val () == 0){
+                                    $('#venta_total_venta').val(Number(total));
+                                }
+                            }else if (venta == 0){
+                                $('#venta_total_venta').val(Number(venta)+Number(total));
+                            }
+                        });
+
+                        $('#venta_informal_total_venta').focusout(function(){
+                            var venta = $('#venta_total_venta');
+                            var formal = $('#venta_formal_total_venta');
+                            if($(this).val() != 0 && formal.val() !=0)
+                            {
+                                $('#venta_total_venta').val(Number(formal.val())+Number($(this).val()));
+                            }else if($(this).val() == 0 && formal.val() !=0)
+                            {
+                                $('#venta_total_venta').val(Number(formal.val()));
+                            }else if($(this).val() != 0 && formal.val() ==0)
+                            {
+                                $('#venta_total_venta').val(Number($(this).val()));
+                            }else {
+                                $('#venta_total_venta').val(Number(formal.val())+Number($(this).val()));
+                            }
+                        });
+});
 		</script>
 {% endblock %}
 {% block title %}Modificar Venta{% endblock %}
