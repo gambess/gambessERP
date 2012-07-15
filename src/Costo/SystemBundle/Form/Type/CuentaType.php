@@ -14,7 +14,8 @@ class CuentaType extends AbstractType {
             'label'  => 'Valor',
             'currency'=>'CLP',
             'precision' => 0,
-            'grouping' => true,));
+            'read_only' => true,
+            ));
         $builder->add('tipo_cuenta', 'choice',
                 array(
                     'label'  => 'Tipo',

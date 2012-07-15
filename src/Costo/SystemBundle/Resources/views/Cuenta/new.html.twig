@@ -33,9 +33,7 @@
 </script>
 <h1><center>{{ block('title') }}</center></h1>
 <div style="float:left">
-        <a class="symfony-button-green" href="{{ path('index_cuenta') }}">
-            Ir al Listado de Cuentas
-        </a>
+        <a class="symfony-button-green" href="{{ path('index_cuenta') }}">Volver a Cuentas</a>
 </div>
 <form action="{{ path('create_cuenta') }}" method="post" {{ form_enctype(form) }}>
 <h1><center>Formulario para Agregar Cuenta</center></h1>

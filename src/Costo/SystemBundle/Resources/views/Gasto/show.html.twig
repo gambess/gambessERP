@@ -1,7 +1,54 @@
 {% extends 'CostoSystemBundle::layout.html.twig' %}
-{% block title %}Datos del Gasto {{ gasto.NombreGasto }}{% endblock %}
+{% block content_header %}
+<script type="text/javascript">
+    $(document).ready(function() {
+                    $('#deletion_gasto').dialog({
+                    autoOpen: false,
+                    position: 'center',
+                    modal: true,
+                    width: 270,
+                    height: "auto",
+                    buttons: [
+                            {
+                                id: "button-delete-gasto",
+                                text: "Borrar",
+                                click: function(){
+                                        $("form",$(this)).submit();
+                                        return true;
+                                        }
+                            },
+                            {
+                                id: "button-cancel-gasto",
+                                text: "Cancelar",
+                                click: function() {
+                                    $(this).dialog("close");
+                                }
+                            }
+                        ]
+            });
+            // Dialog Link
+            $('#gasto_deletion').click(function(){
+                    $('#deletion_gasto').dialog('open');
+            });
+});
+		</script>
+<ul id="menu">
+                    {% block content_header_more %}
+                        <li><a class="symfony-button-green" href="{{ path('_homepage') }}">Ir a Inicio | Gestión de Costos</a></li>
+                    {% endblock %}
+                </ul>
+                <div style="clear: both"></div>
+{% endblock %}
+{% block title %}Detalles del Gasto{% endblock %}
 {% block content %}
-<h1>{{ block('title') }}</h1>
+<h1><center>{{ block('title') }}</center></h1>
+<div id="deletion_gasto" title="Confirmar para borrar Gasto">
+{% include 'CostoSystemBundle:Gasto:delete.html.twig' with {'gasto': gasto} %}
+</div>
+<div style="float:left">
+<a class="symfony-button-green" href="{{ path('index_cuenta') }}">Volver a Cuentas</a>
+<a class="symfony-button-green"  href="{{ path('index_gasto') }}">Volver a Gastos</a>
+</div>
 <table class="record_properties">
     <tbody>
         <tr>
@@ -18,22 +65,9 @@
         </tr>
     </tbody>
 </table>
-<ul class="record_actions">
-    <li>
-        <a class="symfony-button-green"  href="{{ path('index_gasto') }}">
-            Volver al listado
-        </a>
-    </li>
-    <li>
-        <a class="symfony-button-green"  href="{{ path('edit_gasto', { 'id': gasto.IdGasto }) }}">
-            Modificar Gasto
-        </a>
-    </li>
-    <li>
-        <form action="{{ path('delete_gasto', { 'id': gasto.IdGasto }) }}" method="post">
-            {{ form_widget(delete_form) }}
-            <button class="symfony-button-green"  type="submit">Borrar Gasto</button>
-        </form>
-    </li>
-</ul>
+<br />
+<p align="center">
+        <a class="symfony-button-green"  href="{{ path('edit_gasto', { 'id': gasto.IdGasto }) }}">Modificar Gasto</a>
+        <a id="gasto_deletion" class="symfony-button-green"  href="#">Borrar</a>
+        </p>
 {% endblock %}

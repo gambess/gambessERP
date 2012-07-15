@@ -126,7 +126,7 @@ class GastoController extends Controller {
         if ($editForm->isValid()) {
             $gasto->save();
 
-            return $this->redirect($this->generateUrl('edit_gasto', array('id' => $id)));
+            return $this->redirect($this->generateUrl('show_gasto', array('id' => $id)));
         }
 
         return $this->render('CostoSystemBundle:Gasto:edit.html.twig', array(

@@ -307,3 +307,9 @@ ul#menu
     text-align:       center;
     padding:          26px 20px;
 }
+#delete, #delete_cuenta, #delete_gasto
+{
+     visibility: hidden;
+     width: 1px;
+     height: 1px;
+}

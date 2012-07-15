@@ -2,6 +2,9 @@
 {% block title %}Listado de Gastos{% endblock %}
 {% block content %}
 <h1><center>{{ block('title') }}</center></h1>
+<div style="float:left">
+<a class="symfony-button-green" href="{{ path('index_cuenta') }}">Volver a Cuentas</a>
+</div>
 {% if gastos|length == 0 %}
 <h3><center>No Existen gastos asociados a la cuenta</center></h3>
 {% else %}
@@ -12,7 +15,7 @@
             <th><h1><center>Costo</h1></center></th>
             <th><h1><center>F. Emisión</h1></center></th>
             <th><h1><center>F. Pago</h1></center></th>
-            <th><h1><center>Acciones</h1></center></th>
+            <th colspan="2"><h1><center>Acciones</h1></center></th>
         </tr>
     </thead>
     <tbody>
@@ -30,7 +33,10 @@
                 {% endif %}
             </td>
             <td>
-                    <a class="symfony-button-green" href="{{ path('edit_gasto', { 'id': gasto.IdGasto }) }}">Modificar</a>
+                    <a class="symfony-button-green" href="{{ path('show_gasto', { 'id': gasto.IdGasto }) }}">Detalle Gasto</a>
+            </td>
+            <td>
+                    <a class="symfony-button-green" href="{{ path('edit_gasto', { 'id': gasto.IdGasto }) }}">Modificar Gasto</a>
             </td>
         </tr>
     {% endfor %}
@@ -39,9 +45,6 @@
 {% endif %}
 <br />
 <p align="center">
-        <a class="symfony-button-green" href="{{ path('index_cuenta') }}">
-            Ir al Listado de Cuentas
-        </a>
         <a class="symfony-button-green" href="{{ path('new_gasto') }}">
             Agregar Nuevo
         </a>

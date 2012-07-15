@@ -152,7 +152,7 @@ class VentaController extends Controller {
         if ($editForm->isValid()) {
             $venta->save();
 
-            return $this->redirect($this->generateUrl('edit_venta', array('id' => $id)));
+            return $this->redirect($this->generateUrl('show_venta', array('id' => $id)));
         }
 
         return $this->render('CostoSystemBundle:Venta:edit.html.twig', array(

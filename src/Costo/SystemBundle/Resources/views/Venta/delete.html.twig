@@ -1,0 +1,4 @@
+<center>¿Esta Seguro que desea borrar la venta del día {{ venta.FechaVenta|date('d/m/Y') }}?</center>
+<form id="delete" action="{{ path('delete_venta', { 'id': venta.IdVenta }) }}" method="post">
+            {{ form_widget(delete_form) }}
+</form>

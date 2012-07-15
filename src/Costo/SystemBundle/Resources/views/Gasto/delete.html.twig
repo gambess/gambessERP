@@ -1,0 +1,4 @@
+<center>¿Esta Seguro que desea borrar el gasto {{ gasto.NombreGasto }}?</center>
+<form id="delete_gasto" action="{{ path('delete_gasto', { 'id': gasto.IdGasto }) }}" method="post">
+            {{ form_widget(delete_form) }}
+</form>

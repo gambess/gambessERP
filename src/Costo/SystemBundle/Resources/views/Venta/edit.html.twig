@@ -56,18 +56,50 @@
                                 $('#venta_total_venta').val(Number(formal.val())+Number($(this).val()));
                             }
                         });
+                    $('#deletion_venta').dialog({
+                    autoOpen: false,
+                    position: 'center',
+                    modal: true,
+                    width: 270,
+                    height: 240,
+                    buttons: {
+                                "Borrar": function(){
+                                        $("form",$(this)).submit();
+                                        return true;
+
+                                },
+                                "Cancelar": function(){
+                                        $( this ).dialog( "close" );
+                                }
+                        }
+                    });
+                    // Dialog Link
+                    $('#open_deletion').click(function(){
+                            $('#deletion_venta').dialog('open');
+                    });
+                    $('#submit_edit_venta').click(function(){
+                                    $('#edit_venta_form').submit();
+                                    return true;
+                            });
 });
 		</script>
+<ul id="menu">
+                    {% block content_header_more %}
+                        <li><a class="symfony-button-green" href="{{ path('_homepage') }}">Ir a Inicio | Gestión de Costos</a></li>
+                    {% endblock %}
+                </ul>
+                <div style="clear: both"></div>
 {% endblock %}
 {% block title %}Modificar Venta{% endblock %}
 {% block content %}
 <h1><center>{{ block('title') }}</center></h1>
-<div style="float:left">
-        <a class="symfony-button-green" href="{{ path('index_venta') }}">
-            Ir al Listado de Ventas
-        </a>
+<div id="deletion_venta" title="Confirmar para borrar Venta">
+{% include 'CostoSystemBundle:Venta:delete.html.twig' with {'venta': venta} %}
 </div>
-<form action="{{ path('update_venta', { 'id': venta.IdVenta }) }}" method="post" {{ form_enctype(edit_form) }}>
+<div style="float:left">
+        <a class="symfony-button-green" href="{{ path('index_venta') }}">Volver a Ventas</a>
+</div>
+<form id="edit_venta_form" action="{{ path('update_venta', { 'id': venta.IdVenta }) }}" method="post" {{ form_enctype(edit_form) }}>
     <h1><center>Formulario para Modificar Venta</center></h1>
 <p>
     <div class="symfony-form-row">
@@ -137,15 +169,9 @@
     </p>
         {{form_rest(edit_form)}}
 <br />
-    <p align="right">
-        <button class="symfony-button-green" type="submit">Grabar</button>
-    </p>
-</form>
-<form action="{{ path('delete_venta', { 'id': venta.IdVenta }) }}" method="post">
-       <h1><center>Borrar</center></h1>
-        {{ form_widget(delete_form) }}
-    <p align="center">
-    <button class="symfony-button-green" type="submit">Borrar Venta</button>
-    </p>
+   <p align="right">
+        <a id="open_deletion" class="symfony-button-green"  href="#">Borrar</a>
+        <a id="submit_edit_venta" class="symfony-button-green"  href="#">Grabar</a>
+        </p>
 </form>
 {% endblock %}

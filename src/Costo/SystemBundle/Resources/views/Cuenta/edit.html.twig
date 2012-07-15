@@ -1,13 +1,63 @@
 {% extends 'CostoSystemBundle::layout.html.twig' %}
+{% block content_header %}
+<script type="text/javascript">
+    $(document).ready(function() {
+                    $('#deletion_cuenta').dialog({
+                    autoOpen: false,
+                    position: 'center',
+                    modal: true,
+                    width: 270,
+                    height: "auto",
+                    buttons: [
+                            {
+                                id: "button-delete-gasto",
+                                text: "Borrar",
+                                click: function(){
+                                        $("form",$(this)).submit();
+                                        return true;
+                                        }
+                            },
+                            {
+                                id: "button-cancel-gasto",
+                                text: "Cancelar",
+                                click: function() {
+                                    $(this).dialog("close");
+                                }
+                            }
+                        ]
+            });
+            // Dialog Link
+            $('#cuenta_deletion').click(function(){
+                    $('#deletion_cuenta').dialog('open');
+                    if ($('#contador_gastos').length > 0){
+                        var butn = $('#button-delete-gasto');
+                        butn.button("disable");
+                    }
+            });
+            //Grabar action button
+            $('#submit_edit_cuenta').click(function(){
+                    $('#edit_cuenta_form').submit();
+                    return true;
+            });
+});
+		</script>
+<ul id="menu">
+                    {% block content_header_more %}
+                        <li><a class="symfony-button-green" href="{{ path('_homepage') }}">Ir a Inicio | Gestión de Costos</a></li>
+                    {% endblock %}
+                </ul>
+                <div style="clear: both"></div>
+{% endblock %}
 {% block title %}Modificar Cuenta{% endblock %}
 {% block content %}
 <h1><center>{{ block('title') }}</center></h1>
 <div style="float:left">
-<a class="symfony-button-green" href="{{ path('index_cuenta') }}">
-               Ir al Listado de Cuentas
-</a>
+<a class="symfony-button-green" href="{{ path('index_cuenta') }}">Volver a Cuentas</a>
 </div>
-<form action="{{ path('update_cuenta', { 'id':cuenta.IdCuenta }) }}" method="post" {{ form_enctype(edit_form) }}>
+<div id="deletion_cuenta" title="Confirmar para borrar Cuenta">
+{% include 'CostoSystemBundle:Cuenta:delete.html.twig' with {'cuenta': cuenta} %}
+</div>
+<form id="edit_cuenta_form" action="{{ path('update_cuenta', { 'id':cuenta.IdCuenta }) }}" method="post" {{ form_enctype(edit_form) }}>
    <h1><center>Formulario para Modificar Cuenta</center></h1>
     <p>
     <div class="symfony-form-row">
@@ -44,14 +94,8 @@
     </p>
         {{form_rest(edit_form)}}
     <p align="right">
-        <button class="symfony-button-green" type="submit">Grabar</button>
+        <a id="cuenta_deletion" class="symfony-button-green" href="#">Borrar</a>
+        <a id="submit_edit_cuenta" class="symfony-button-green" href="#">Grabar</a>
     </p>
 </form>
-        <form action="{{ path('delete_cuenta', { 'id': cuenta.Idcuenta }) }}" method="post">
-        <h1><center>Borrar</center></h1>
-            {{ form_widget(delete_form) }}
-            <center>
-                <button align="center" class="symfony-button-green" type="submit">Borrar Cuenta</button>
-            </center>
-        </form>
 {% endblock %}

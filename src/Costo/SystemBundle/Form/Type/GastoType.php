@@ -21,7 +21,6 @@ class GastoType extends AbstractType {
             'label' => 'Costo',
             'currency'=>'CLP',
             'precision' => 0,
-            'grouping' => true,
             ));
         $builder->add('fecha_emision_gasto', 'date', array(
             'label' => 'F. Emisión',

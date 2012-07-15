@@ -2,6 +2,10 @@
 {% block title %}Listado de Ventas{% endblock %}
 {% block content %}
 <h1><center>{{ block('title') }}</center></h1>
+<div style="float:left">
+        <a class="symfony-button-green" href="{{ path('index_cuenta') }}">Volver a Cuentas</a>
+        <a class="symfony-button-green" href="{{ path('index_gasto') }}">Volver a Gastos</a>
+</div>
 <table align="center">
     <thead>
         <tr>
@@ -18,10 +22,10 @@
             <td>${{ venta.FormalTotalVenta | number_format(0,',','.')}}</td>
             <td>${{ venta.TotalIvaVentaFormal | number_format(0,',','.') }}</td>
             <td>
-                        <a class="symfony-button-green" href="{{ path('show_venta', { 'id': venta.IdVenta }) }}">Detalle</a>
+                        <a class="symfony-button-green" href="{{ path('show_venta', { 'id': venta.IdVenta }) }}">Detalle Venta</a>
             </td>
             <td>
-                        <a class="symfony-button-green" href="{{ path('edit_venta', { 'id': venta.IdVenta }) }}">Modificar</a>
+                        <a class="symfony-button-green" href="{{ path('edit_venta', { 'id': venta.IdVenta }) }}">Modificar Venta</a>
             </td>
         </tr>
     {% endfor %}

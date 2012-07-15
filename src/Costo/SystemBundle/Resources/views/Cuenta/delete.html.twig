@@ -1,0 +1,21 @@
+<center>¿Esta Seguro? Borrará la cuenta:<br />{{ cuenta.NombreCuenta }}</center>
+<br />
+{% if cuenta.countGastos > 0 %}
+<div id="contador_gastos">
+<p>Hay
+{% if  cuenta.countGastos == 1 %}
+{{ cuenta.countGastos }} gasto
+{% elseif cuenta.countGastos > 1 %}
+{{ cuenta.countGastos }} gastos
+{% endif %}
+asociados a:<br /><center>{{ cuenta.NombreCuenta }}<center></p>
+<br />
+<p>Dirijase al <a href="{{ path('cuenta_gastos', { 'id': cuenta.IdCuenta }) }}">listado de Gastos</a> y elimínelos o modifique la cuenta a la que pertenecen, también  puede hacer clic en Cancelar</p>
+<br />
+<p>Se deshabilitará el boton Borrar.</p>
+</div>
+<form id="delete_cuenta" action="{{ path('delete_cuenta', { 'id': cuenta.IdCuenta }) }}" method="post">
+            {{ form_widget(delete_form) }}
+</form>
+{% endif %}
+
