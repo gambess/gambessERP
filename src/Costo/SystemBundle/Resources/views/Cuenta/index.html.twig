@@ -26,10 +26,10 @@
             <td>${{ cuenta.ValorCuenta | number_format(0,',','.')}}</td>
             <td>{{ cuenta.TipoCuenta }}</td>
             <td>
-               <a class="symfony-button-green" href="{{ path('show_cuenta', { 'id': cuenta.IdCuenta }) }}">Cuenta</a>
+               <a class="symfony-button-green" href="{{ path('show_cuenta', { 'id': cuenta.IdCuenta }) }}">Detalle Cuenta</a>
             </td>
             <td>
-               <a class="symfony-button-green" href="{{ path('cuenta_gastos', { 'id': cuenta.IdCuenta }) }}">Gastos</a>
+               <a class="symfony-button-green" href="{{ path('cuenta_gastos', { 'id': cuenta.IdCuenta }) }}">Gestión Gastos</a>
             </td>
         </tr>
     {% endfor %}

@@ -29,7 +29,7 @@ class GastoController extends Controller {
     }
 
     /**
-     * Finds and displays a Ciudad entity.
+     * Finds and displays a gasto.
      *
      */
     public function showAction($id) {
@@ -64,7 +64,7 @@ class GastoController extends Controller {
     }
 
     /**
-     * Creates a new Ciudad entity.
+     * Creates a new gasto.
      *
      */
     public function createAction() {
@@ -85,7 +85,7 @@ class GastoController extends Controller {
     }
 
     /**
-     * Displays a form to edit an existing Ciudad entity.
+     * Displays a form to edit an gasto.
      *
      */
     public function editAction($id) {
@@ -106,7 +106,7 @@ class GastoController extends Controller {
     }
 
     /**
-     * Edits an existing Ciudad entity.
+     * Edits an gasto.
      *
      */
     public function updateAction($id) {
@@ -137,7 +137,7 @@ class GastoController extends Controller {
     }
 
     /**
-     * Deletes a Ciudad entity.
+     * Deletes a gasto.
      *
      */
     public function deleteAction($id) {
@@ -158,6 +158,17 @@ class GastoController extends Controller {
 
         return $this->redirect($this->generateUrl('index_gasto'));
     }
+
+    /**
+     * Contar gastos de una cuenta
+     * @param int $id primary key de la cuenta
+     * @return int
+     */
+//    public function countGastos($id)
+//    {
+//        $gasto = GastoQuery::create()->filterByFkCuenta($id)->count();
+//        $r = new \Symfony\Component\HttpFoundation\Response($gasto);
+//    }
 
     private function createDeleteForm($id) {
         return $this->createFormBuilder(array('id' => $id))
