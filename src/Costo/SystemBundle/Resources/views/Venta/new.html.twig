@@ -7,7 +7,6 @@
 {% endjavascripts %}
 <script type="text/javascript">
     $(document).ready(function() {
-
 			$(function(){
                                 $.datepicker.setDefaults( $.datepicker.regional[ "es" ] );
 				// Datepicker
@@ -15,6 +14,21 @@
                                         altFormat: "dd/mm/yyyy"
 				});
 			});
+                        if ($('.error_list').length > 0){
+                            var error = $('.error_list');
+                            $('#venta_fecha_venta').focus(function(){
+                                error.remove();
+                                $('#venta_fecha_venta').val("");
+                            });
+                        }
+                        var Input = $('input[name*="total_venta"]');
+                        Input.focus(function() {
+                        var default_value = $(this).val();
+                            if($(this).val() == default_value) $(this).val("");
+                        }).blur(function(){
+                            if($(this).val().length == 0) $(this).val(0);
+                        });
+
 
 
                         $('#venta_formal_total_venta').focusout(function(){
@@ -37,7 +51,8 @@
                                 }
                             }else if (venta == 0){
                                 $('#venta_total_venta').val(Number(venta)+Number(total));
-                            }
+                            }if(venta === "")
+                                $('#venta_total_venta').val("");
                         });
 
                         $('#venta_informal_total_venta').focusout(function(){
@@ -74,9 +89,19 @@
         {{ form_label (form.fecha_venta) }}
             <div class="symfony-form-field">
                 {{ form_widget (form.fecha_venta) }}
-                    <div class="symfony-form-errors">
-                        {{ form_errors (form.fecha_venta) }}
-                    </div>
+{% if errors != null %}
+                    {% block field_errors %}
+                    {% spaceless %}
+                        {% if errors|length > 0 %}
+                        <ul class="error_list">
+                            {% for error in errors %}
+                                <li>{{ error.messageTemplate|trans(error.messageParameters, 'validators') }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    {% endspaceless %}
+                    {% endblock field_errors %}
+{% endif %}
             </div>
     </div>
     </p>

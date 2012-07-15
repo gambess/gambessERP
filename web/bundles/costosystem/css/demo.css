@@ -298,3 +298,12 @@ ul#menu
 {
     width: 83px;
 }
+#block-quick-tour2
+{
+    background-color: whitesmoke;
+    float: none;
+    width:            240px;
+/*    margin-right:     14px;*/
+    text-align:       center;
+    padding:          26px 20px;
+}

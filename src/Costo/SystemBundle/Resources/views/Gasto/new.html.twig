@@ -6,7 +6,21 @@
         <script type="text/javascript" src="{{ asset( asset_url) }}"></script>
 {% endjavascripts %}
 <script type="text/javascript">
-			$(function(){
+    $(document).ready(function() {
+                        var name = $('#gasto_nombre_gasto');
+                        name.val('Ingrese el nombre del gasto...');
+                        name.focus(function() {
+                            var default_name = name.val();
+                            if(name.val() == default_name) $(this).val("");
+                        })
+			var Input = $('#gasto_costo_gasto');
+                        Input.focus(function() {
+                            var default_value = $(this).val();
+                            if($(this).val() == default_value) $(this).val("");
+                            }).blur(function(){
+                                if($(this).val().length == 0) $(this).val(0);
+                             });
+
                                 $.datepicker.setDefaults( $.datepicker.regional[ "es" ] );
 				// Datepicker
 				$('#gasto_fecha_emision_gasto').datepicker({

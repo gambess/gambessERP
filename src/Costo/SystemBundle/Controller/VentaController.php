@@ -2,10 +2,12 @@
 
 namespace Costo\SystemBundle\Controller;
 
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Costo\SystemBundle\Model\Venta;
 use Costo\SystemBundle\Model\VentaQuery;
 use Costo\SystemBundle\Form\Type\VentaType;
+use Symfony\Component\Form\FormError;
 
 /**
  * @author Raziel Valle <razielvalle@gambess.com>
@@ -60,6 +62,7 @@ class VentaController extends Controller {
         $form = $this->createForm(new VentaType(), $venta);
 
         return $this->render('CostoSystemBundle:Venta:new.html.twig', array(
+            'errors' => null,
             'venta' => $venta,
             'form' => $form->createView()
         ));
@@ -76,7 +79,7 @@ class VentaController extends Controller {
         $request = $this->getRequest();
         $form = $this->createForm(new VentaType(), $venta);
         $form->bindRequest($request);
-
+               
         if ($form->isValid()) {
             $venta_in = $form->get('fecha_venta')->getData();
             $exist = VentaQuery::create()->findOneByFechaVenta($venta_in);
@@ -85,18 +88,20 @@ class VentaController extends Controller {
                 return $this->redirect($this->generateUrl('show_venta', array('id' => $venta->getIdVenta())));
             }
             if($exist instanceof Venta){
-                echo "La fecha usada ya esta agregada";
+                $form->addError(new FormError('¡EXISTE VENTA! Seleccione otro día por favor y grabe.'));
                 return $this->render('CostoSystemBundle:Venta:new.html.twig', array(
-                'venta' => $venta,
-                'form' => $form->createView()
+                    'venta' => $venta,
+                    'errors' => $form->getErrors(),
+                    'form' => $form->createView()
         ));
             }
         }
-
-        return $this->render('CostoSystemBundle:Venta:new.html.twig', array(
-            'venta' => $venta,
-            'form' => $form->createView()
-        ));
+//
+//        return $this->render('CostoSystemBundle:Venta:new.html.twig', array(
+//            'errors' => null,
+//            'venta' => $venta,
+//            'form' => $form->createView()
+//        ));
     }
 
     /**

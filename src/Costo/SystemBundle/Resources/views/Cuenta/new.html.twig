@@ -1,6 +1,36 @@
 {% extends 'CostoSystemBundle::layout.html.twig' %}
+{% block content_header %}
+<script type="text/javascript">
+    $(document).ready(function() {
+                        var name = $('#cuenta_nombre_cuenta');
+                        name.val('Ingrese el nombre de la cuenta...');
+                        name.focus(function() {
+                            var default_name = name.val();
+                            if(name.val() == default_name) $(this).val("");
+                        })
+			var Input = $('#cuenta_valor_cuenta');
+                        Input.focus(function() {
+                            var default_value = $(this).val();
+                            if($(this).val() == default_value) $(this).val("");
+                            }).blur(function(){
+                                if($(this).val().length == 0) $(this).val(0);
+                             });
+});
+</script>
+<ul id="menu">
+                    {% block content_header_more %}
+                        <li><a class="symfony-button-green" href="{{ path('_homepage') }}">Ir a Inicio | Gestión de Costos</a></li>
+                    {% endblock %}
+</ul>
+<div style="clear: both"></div>
+{% endblock %}
 {% block title %}Agregar Cuenta{% endblock %}
 {% block content %}
+<script type="text/javascript">
+    $(document).ready(function() {
+			
+});
+</script>
 <h1><center>{{ block('title') }}</center></h1>
 <div style="float:left">
         <a class="symfony-button-green" href="{{ path('index_cuenta') }}">
