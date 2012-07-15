@@ -6,7 +6,9 @@
         <script type="text/javascript" src="{{ asset( asset_url) }}"></script>
 {% endjavascripts %}
 <script type="text/javascript">
+//Las funcionalidades se ejecutan una vez que el documento DOM isReady
     $(document).ready(function() {
+//Jquery -ui datepicker setaeado a spain lang y formateado se le asocia al id venta_fecha_venta
 			$(function(){
                                 $.datepicker.setDefaults( $.datepicker.regional[ "es" ] );
 				// Datepicker
@@ -14,8 +16,10 @@
                                         altFormat: "dd/mm/yyyy"
 				});
 			});
+                        //Este bloque se ejecuta si aparece el mensaje de error de fecha utilizada
                         if ($('.error_list').length > 0){
                             var error = $('.error_list');
+                            //all  dar el foco al elemento se borra el mensaje y se borra la fecha
                             $('#venta_fecha_venta').focus(function(){
                                 error.remove();
                                 $('#venta_fecha_venta').val("");
@@ -24,9 +28,7 @@
                         var Input = $('input[name*="total_venta"]');
                         Input.focus(function() {
                         var default_value = $(this).val();
-                            if($(this).val() == default_value) $(this).val("");
-                        }).blur(function(){
-                            if($(this).val().length == 0) $(this).val(0);
+                            if($(this).val() == 0) $(this).val("");
                         });
 
 
