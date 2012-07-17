@@ -20,6 +20,13 @@ framework:
 twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
+    globals:
+        pagerfanta_opts:
+            previous_message: '&laquo;  Anterior  '
+            next_message:     'Siguiente   &raquo; '
+            proximity: 4
+            css_current_class: symfony-button-green
+
 
 # Assetic Configuration
 assetic:
@@ -63,3 +70,9 @@ jms_security_extra:
 propel:
     path:       "%kernel.root_dir%/../vendor/propel"
     phing_path: "%kernel.root_dir%/../vendor/phing"
+
+knp_snappy:
+    pdf:
+        enabled:    true
+        binary:     /usr/bin/wkhtmltopdf
+        options:    []
