@@ -18,38 +18,59 @@
 				});
 			});
 		</script>
-<ul id="menu">
+                <ul id="menu">
                     {% block content_header_more %}
-                        <li><a class="symfony-button-green" href="{{ path('_homepage') }}">Ir a Inicio | Gestión de Costos</a></li>
+                        IR A:
+                        <li><a class="symfony-button-green" href="{{ path('_homepage') }}">Principal</a></li>
+                        <li><a class="symfony-button-green" href="{{ path('index_cuenta') }}">Cuentas</a></li>
+                        <li><a class="symfony-button-green"  href="{{ path('index_gasto') }}">Gastos</a></li>
+                        <li><a class="symfony-button-green" href="{{ path('index_venta') }}">Ventas</a></li>
                     {% endblock %}
                 </ul>
                 <div style="clear: both"></div>
 {% endblock %}
-{% block title %}Generar Reporte de Costos por Periódo{% endblock %}
+{% block title %}Generador de Informes de Costos{% endblock %}
 {% block content %}
-    <div>
+        <div>
         <form action="{{ path('create_report') }}" method="post" {{ form_enctype(form) }}>
-                    <h1><center>Generar Reporte</center></h1>
-                <div class="form-dates-item">
-                    {{ form_label(form.min_date, 'Fecha Inicio') }} {{ form_widget(form.min_date) }}  Hasta  {{ form_widget(form.max_date) }}
+                    <h1><center>Generar Informe</center></h1>
+                <div class="symfony-form-row">
+            {{ form_label(form.min_date, 'Desde el día: ') }} {{ form_widget(form.min_date) }}Hasta el día: {{ form_widget(form.max_date) }}
                  </div>
                 {{ form_rest(form) }}
+                <br />
                 <p align="right">
                 <button class="symfony-button-green" type="submit">Generar</button>
                 </p>
         </form>
-    </div>
-    {% if gastos|length == 0 and ventas|length == 0 %}
-<br /><br /><h1><center>Informe de Costos del: {{dates.min|date('d - m - Y')}} hasta {{dates.max|date('d - m - Y')}}</center></h1>
+        </div>
+    {% if gastos|length == 0 and  ventas|length == 0 %}
+        <br />
+        <br />
+        <h1><center>Informe de Costos del: {{dates.min|date('d - m - Y')}} hasta {{dates.max|date('d - m - Y')}}</center></h1>
         <h3><center>No se encontraron resultados en las fechas seleccionadas</center></h3>
     {% else %}
-<br /><br /><h1><center>Informe de Costos del: {{dates.min|date('d - m - Y')}} hasta {{dates.max|date('d - m - Y')}}</center></h1>
-        <div id="ingresos">
-            {% include 'CostoSystemBundle:Venta:ventarep.html.twig' with { 'ventas' : ventas, 'ivaventa': ivaventa, 'ventayear' : ventayear, 'gastoyear' : gastoyear } %}
+        <div style="float:right;">
+                        {# <a href="{{ path('print_report') }}"> #}
+                        <a href="#">
+                            <img src="{{ asset('bundles/costosystem/images/pdf.png') }}" alt="Imprimir Reporte" height="25" width="25" >
+                        </a>
         </div>
-        <div id="gastos">
-            {% include 'CostoSystemBundle:Gasto:gastorep.html.twig' with { 'gastos' : gastos, 'ivagasto' : ivagasto, 'totalventa' : totalventa, 'totalgasto' : totalgasto } %}
-        </div>
+        <div id="page-header">
+	        <h1 id="titlereport"><center>Informe de Costos del: {{dates.min|date('d - m - Y')}} hasta {{dates.max|date('d - m - Y')}}</center></h1>
+	</div>
+	<div id="page-content">
+		<div id="ingresos">
+                {% include 'CostoSystemBundle:Venta:ventarep.html.twig' with { 'ventas' : ventas, 'giva': giva, 'viva': viva, 'vyformal' : vyformal, 'vyinformal' : vyinformal, 'gyformal' : gyformal, 'gyinformal' : gyinformal } %}
+                </div>
+                <div id="gastos">
+                {% include 'CostoSystemBundle:Gasto:gastorep.html.twig' with { 'gastos' : gastos, 'gmiva': gmiva, 'vmiva': vmiva, 'vmformal' : vmformal, 'vminformal' : vminformal, 'gmformal' : gmformal, 'gminformal' : gminformal } %}
+                </div>
+	</div>
+        <div style="clear: both"></div>
+        <br />
+        <center><h3><b>Totales(*):</b> Es la diferencia entre los Ingresos menos los Gastos en la tabla</h3></center>
+        <center><h3><b>Total(**):</b> Es la suma de los valores de la columna en la tabla</h3></center>
+        <div style="clear: both"></div>
     {% endif %}
 {% endblock %}
-

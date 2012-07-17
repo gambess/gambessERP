@@ -2,12 +2,15 @@
 
 namespace Costo\SystemBundle\Controller;
 
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Costo\SystemBundle\Model\Venta;
 use Costo\SystemBundle\Model\VentaQuery;
 use Costo\SystemBundle\Form\Type\VentaType;
 use Symfony\Component\Form\FormError;
+use Pagerfanta\Pagerfanta;
+use Pagerfanta\Adapter\PropelAdapter;
+use Pagerfanta\Exception\NotValidCurrentPageException;
 
 /**
  * @author Raziel Valle <razielvalle@gambess.com>
@@ -22,11 +25,31 @@ class VentaController extends Controller {
      * @method GET route: "/" name="index_venta"
      * @return Response view
      */
-    public function indexAction() {
-        $ventas = VentaQuery::create()->orderByFechaVenta('DESC')->find();
-        return $this->render('CostoSystemBundle:Venta:index.html.twig', array(
-            'ventas' => $ventas,
-        ));
+    public function indexAction($page) {
+        $request = $this->getRequest();
+        if ('GET' === $request->getMethod()) {
+            if ($page == 0) {
+                $ventas = VentaQuery::create()->orderByFechaVenta('ASC')->find();
+                return $this->render('CostoSystemBundle:Venta:index.html.twig', array(
+                    'ventas' => $ventas,
+                    'page' => $page,
+                ));
+            } else {
+                $query = VentaQuery::create()->orderByFechaVenta('ASC');
+                $pagerfanta = new Pagerfanta(new PropelAdapter($query));
+                $pagerfanta->setMaxPerPage(7);
+                $pagerfanta->setCurrentPage($request->get('page')); // 1 by default
+                $collection = $pagerfanta->getCurrentPageResults();
+
+                return $this->render('CostoSystemBundle:Venta:index.html.twig', array(
+                    'ventas' => $collection,
+                    'end' => $collection->getFirst()->getFechaVenta(),
+                    'begin' => $collection->getLast()->getFechaVenta(),
+                    'page' => $page,
+                    'paginate' => $pagerfanta,
+                ));
+            }
+        }
     }
 
     /**
@@ -79,7 +102,8 @@ class VentaController extends Controller {
         $request = $this->getRequest();
         $form = $this->createForm(new VentaType(), $venta);
         $form->bindRequest($request);
-               
+
+        //no es valido completamente hasta validar que la fecha no este ingresada
         if ($form->isValid()) {
             $venta_in = $form->get('fecha_venta')->getData();
             $exist = VentaQuery::create()->findOneByFechaVenta($venta_in);
@@ -87,21 +111,15 @@ class VentaController extends Controller {
                 $venta->save();
                 return $this->redirect($this->generateUrl('show_venta', array('id' => $venta->getIdVenta())));
             }
-            if($exist instanceof Venta){
+            if ($exist instanceof Venta) {
                 $form->addError(new FormError('¡EXISTE VENTA! Seleccione otro día por favor y grabe.'));
                 return $this->render('CostoSystemBundle:Venta:new.html.twig', array(
                     'venta' => $venta,
                     'errors' => $form->getErrors(),
                     'form' => $form->createView()
-        ));
+                ));
             }
         }
-//
-//        return $this->render('CostoSystemBundle:Venta:new.html.twig', array(
-//            'errors' => null,
-//            'venta' => $venta,
-//            'form' => $form->createView()
-//        ));
     }
 
     /**
@@ -172,7 +190,6 @@ class VentaController extends Controller {
     public function deleteAction($id) {
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
-
         $form->bindRequest($request);
 
         if ($form->isValid()) {
@@ -188,9 +205,6 @@ class VentaController extends Controller {
         return $this->redirect($this->generateUrl('index_venta'));
     }
 
-    public function confirmAction($fecha){
-        return $this->render('CostoSystemBundle:Venta:confirm.html.twig', array('fecha' => $fecha));
-    }
 
     private function createDeleteForm($id) {
         return $this->createFormBuilder(array('id' => $id))

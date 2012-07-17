@@ -51,7 +51,7 @@ h1, h2, h3
 h1
 {
     font-size:      45px;
-    padding-bottom: 30px;
+    padding-bottom: 10px;
 }
 
 h2
@@ -104,7 +104,7 @@ ul li
 #symfony-header
 {
     position: relative;
-    padding: 30px 30px 20px 30px;
+    padding: 5px 30px 1px 30px;
 }
 
 #symfony-wrapper
@@ -282,21 +282,37 @@ input[type=text], input[type=password]
 
 ul#menu
 {
-    float: right;
-    margin-bottom: 20px;
-    padding-left: 0;
+    float: left;
+    margin-bottom: 5px;
+    padding-left: 20px;
 }
 
 #menu li
 {
     padding-left: 0;
-    margin-right: 10px;
+    margin-right: 3px;
     display: inline;
 }
 
 #form_min_date, #form_max_date, #gasto_fecha_emision_gasto, #gasto_fecha_pago_gasto, #venta_fecha_venta
 {
     width: 83px;
+}
+#desde, #hasta
+{
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+#form_min_date
+{
+    margin-right: 10px;
+    margin-left: -25px;
+}
+
+#form_max_date
+{
+    margin-left: 15px;
 }
 #block-quick-tour2
 {
@@ -312,4 +328,25 @@ ul#menu
      visibility: hidden;
      width: 1px;
      height: 1px;
+}
+
+@page {
+    size: A4 portrait; /* can use also 'landscape' for orientation */
+    margin-top: 3.0in;
+    margin-bottom: 1.0in;
+    @bottom-center {
+        content: element(footer);
+    }
+    @top-center {
+        content: element(header);
+    }
+}
+
+#page-header {
+    display: block;
+    position: running(header);
+}
+#page-footer {
+    display: block;
+    position: running(footer);
 }

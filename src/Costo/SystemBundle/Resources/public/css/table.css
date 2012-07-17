@@ -5,13 +5,22 @@ table
     background:-moz-linear-gradient(90deg, #ccc, #fff); /* Firefox */
     background:-webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc)); /* Webkit */
     font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
-    margin:60px auto 0;
+    margin:20px auto 0;
     padding:15px;
     width:440px;
     border:1px solid #aaa;
     -moz-box-shadow:0 0 15px #aaa;
     -webkit-box-shadow:0 0 15px #aaa;
 
+}
+#table_left, #table_right
+{
+    margin:25px auto 0;
+}
+#titlereport
+{
+    margin:35px auto 0;
+    padding:5px;
 }
 td
 {

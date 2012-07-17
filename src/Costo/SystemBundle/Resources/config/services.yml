@@ -5,3 +5,11 @@ services:
 #    costo_system.example:
 #        class: %costo_system.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
+    pagerfanta.view.default:
+        class: Pagerfanta\View\DefaultView
+        public: false
+        tags: [{ name: pagerfanta.view, alias: default }]
+
+    knp_snappy.pdf:
+        class:        snappy\Knp\Snappy\Pdf
+        arguments:    []

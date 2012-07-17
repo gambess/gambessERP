@@ -1,11 +1,21 @@
 {% extends 'CostoSystemBundle::layout.html.twig' %}
+{% block content_header %}
+<script type="text/javascript"></script>
+                <ul id="menu">
+                    {% block content_header_more %}
+                        IR A:
+                        <li><a class="symfony-button-green" href="{{ path('_homepage') }}">Principal</a></li>
+                        <li><a class="symfony-button-green" href="{{ path('index_cuenta') }}">Cuentas</a></li>
+                        <li><a class="symfony-button-green"  href="{{ path('index_gasto') }}">Gastos</a></li>
+                        <li><a class="symfony-button-green" href="{{ path('index_venta') }}">Ventas</a></li>
+                    {% endblock %}
+                </ul>
+                <div style="clear: both"></div>
+{% endblock %}
 {% block title %}Listado de Ventas{% endblock %}
 {% block content %}
+{% if page == 0 %}
 <h1><center>{{ block('title') }}</center></h1>
-<div style="float:left">
-        <a class="symfony-button-green" href="{{ path('index_cuenta') }}">Volver a Cuentas</a>
-        <a class="symfony-button-green" href="{{ path('index_gasto') }}">Volver a Gastos</a>
-</div>
 <table align="center">
     <thead>
         <tr>
@@ -37,4 +47,51 @@
             Crear Nueva
         </a>
 </p>
+{% endif %}
+{% if page > 0 %}
+<h1><center>{{ block('title') }}</center></h1>
+<p align="center">
+Mostrado ventas desde el día:
+<input id="desde" type="text" style="width: 83px;" value="{{end|date('d/m/Y')}}" disabled="disabled" />
+hasta el día:
+<input id="hasta" type="text" style="width: 83px;" value="{{begin|date('d/m/Y')}}" disabled="disabled" />
+</p>
+<table align="center">
+    <thead>
+        <tr>
+            <th><h1><center>Fecha<center></h1></th>
+            <th><h1><center>Cantidad(F)<center></h1></th>
+            <th><h1><center>I.V.A<center></h1></th>
+            <th colspan="2"><h1><center>Acciones</center></h1></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for venta in ventas %}
+        <tr>
+            <td>{% if venta.FechaVenta %}{{ venta.FechaVenta|date('d/m/Y') }}{% endif %}</td>
+            <td>${{ venta.FormalTotalVenta | number_format(0,',','.')}}</td>
+            <td>${{ venta.TotalIvaVentaFormal | number_format(0,',','.') }}</td>
+            <td>
+                        <a class="symfony-button-green" href="{{ path('show_venta', { 'id': venta.IdVenta }) }}">Detalle Venta</a>
+            </td>
+            <td>
+                        <a class="symfony-button-green" href="{{ path('edit_venta', { 'id': venta.IdVenta }) }}">Modificar Venta</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+    	<tr>
+        	<td colspan="5" align="center"><em>{{ pagerfanta(paginate , 'default_translated', pagerfanta_opts) }}</em></td>
+        </tr>
+    </tfoot>
+</table>
+<br />
+<p align="center">
+        <a class="symfony-button-green" href="{{ path('new_venta') }}">
+            Crear Nueva
+        </a>
+</p>
+{% endif %}
 {% endblock %}
+

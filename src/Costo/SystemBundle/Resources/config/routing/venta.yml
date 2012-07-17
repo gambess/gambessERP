@@ -1,9 +1,11 @@
 # Rutas para gestionar todas las acciones de las entidades de tipo Ciudad
 # Generado automáticamente por el comando generate:doctrine:crud
 index_venta:
-    pattern:  /
-    defaults: { _controller: "CostoSystemBundle:Venta:index" }
-
+    pattern:  /{page}
+    defaults: { _controller: "CostoSystemBundle:Venta:index", page: 1 }
+    requirements:
+      page: \d+
+      _method: GET
 show_venta:
     pattern:  /{id}/show
     defaults: { _controller: "CostoSystemBundle:Venta:show" }
@@ -30,3 +32,9 @@ delete_venta:
     pattern:  /{id}/delete
     defaults: { _controller: "CostoSystemBundle:Venta:delete" }
     requirements: { _method: post }
+
+paginate_venta:
+    pattern:  /{page}
+    defaults: { _controller: "CostoSystemBundle:Venta:index", page: 1 }
+    requirements:
+      page: \d+

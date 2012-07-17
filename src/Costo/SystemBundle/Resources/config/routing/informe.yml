@@ -8,3 +8,8 @@ create_report:
     pattern:  /create
     defaults: { _controller: CostoSystemBundle:Informe:report }
     requirements: { _method: post }
+
+print_report:
+    pattern:  /report
+    defaults: { _controller: CostoSystemBundle:Informe:report }
+    requirements: { _method: GET }

@@ -1,43 +1,82 @@
-<table align="left">
+<table id="table_left" align="left">
     <thead>
         <tr>
-            <th><h1><center>Total Mes</center></h1></th>
-            <th><h1><center>Importe</center></h1></th>
+            <th><h1><center>Mes</center></h1></th>
+            <th><h1><center>Formal</center></h1></th>
+            <th><h1><center>I.V.A</center></h1></th>
+            <th><h1><center>Informal</center></h1></th>
+            <th><h1><center>Total</center></h1></th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>Gastos</td>
-            <td>${{ totalgasto | number_format(0,',','.')}}</td>
+            <td><p align="center"><b>Gastos</b></p></td>
+            <td>${{gmformal | number_format(0,',','.')}}</td>
+            <td>${{gmiva | number_format(0,',','.')}}</td>
+            <td>${{gminformal | number_format(0,',','.')}}</td>
+            {% set gmtotal = "#{gmformal + gminformal}" %}
+            <td><b>${{gmtotal | number_format(0,',','.')}}</b></td>
         </tr>
         <tr>
-            <td>Ingresos</td>
-            <td>${{ totalventa | number_format(0,',','.')}}</td>
+            <td><p align="center"><b>Ingresos</b></p></td>
+            <td>${{vmformal | number_format(0,',','.')}}</td>
+            <td>${{vmiva | number_format(0,',','.')}}</td>
+            <td>${{vminformal| number_format(0,',','.')}}</td>
+            {% set vmtotal = "#{vmformal + vminformal}" %}
+            <td><b>${{vmtotal | number_format(0,',','.')}}</b></td>
         </tr>
-        {% set diferencia = "#{totalventa - totalgasto}" %}
         <tr>
-            <td>Diferencia Anual (Ingresos - Gastos)</td>
-            <td>${{ diferencia | number_format(0,',','.')}}</td>
+            <td><p align="center"><b>Totales(*)</b></p></td>
+            {% set mingreso = "#{vmformal - gmformal}" %}
+            <td><b>${{ mingreso | number_format(0,',','.')}}</b></td>
+            {% set ivapagarm = "#{vmiva - gmiva}" %}
+            <td><b>${{ ivapagarm | number_format(0,',','.')}}</b></td>
+            {% set informalm = "#{vminformal - gminformal}" %}
+            <td><b>${{ informalm | number_format(0,',','.')}}</b></td>
+            <td><b>${{ "#{vmtotal - gmtotal}" | number_format(0,',','.')}}</b></td>
         </tr>
     </tbody>
 </table>
-<!--<h1><center>Gastos</center></h1>-->
+<center><h3>Resúmen de Ingresos (Ventas) y de Gastos entre las fechas seleccionadas</h3></center>
 <table align="left">
     <thead>
         <tr>
             <th><h1><center>Fecha</center></h1></th>
-            <th><h1><center>Gasto</center></h1></th>
-            <th><h1><center>Cantidad</center></h1></th>
+            <th><h1><center>Formal</center></h1></th>
+            <th><h1><center>I.V.A</center></h1></th>
+            <th><h1><center>Informal</center></h1></th>
+            <th><h1><center>Total</center></h1></th>
         </tr>
     </thead>
     <tbody>
+    {% set mtf = 0 %}
+    {% set miv = 0 %}
+    {% set mti = 0 %}
+    {% set mt = 0 %}
     {% for gasto in gastos %}
         <tr>
-            <td>{{ gasto.FechaPagoGasto|date('d/m/y') }}</td>
-            <td>{{ gasto.NombreGasto }}</td>
-            <td>${{ gasto.CostoGasto | number_format(0,',','.')}}</td>
+            <td>{{ gasto.fechapagogasto|date('d/m/y') }}</td>
+            <td>${{ gasto.costogasto | number_format(0,',','.')}}</td>
+            {% set iva = ((gasto.costogasto/1.19)*0.19) %}
+            <td>${{ iva | number_format(0,',','.')}}</td>
+            <td>${{ gasto.informal | number_format(0,',','.')}}</td>
+            {% set totalmgasto = "#{gasto.costogasto + gasto.informal}" %}
+            <td><center><b>${{ totalmgasto | number_format(0,',','.')}}</b></center></td>
+        {% set mtf = "#{mtf + gasto.costogasto}" %}
+        {% set miv = "#{miv + iva}" %}
+        {% set mti = "#{mti + gasto.informal}" %}
+        {% set mt = "#{mt + totalmgasto}" %}
         </tr>
     {% endfor %}
     </tbody>
+    <tfoot>
+        <tr>
+        	<td><b>Total(**)</b></td>
+        	<td><b>${{ mtf | number_format(0,',','.')}}</b></td>
+        	<td><b>${{ miv | number_format(0,',','.')}}</b></td>
+        	<td><b>${{ mti | number_format(0,',','.')}}</b></td>
+        	<td><center><b>${{ mt | number_format(0,',','.')}}</b></center></td>
+        </tr>
+    </tfoot>
 </table>
-<h3>I.V.A gastos(19%): ${{ ivagasto | number_format(2,',','.')}}</h3>
+<center><h3>Detalle de los Gastos<h3></center>

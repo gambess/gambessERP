@@ -83,9 +83,13 @@
                             });
 });
 		</script>
-<ul id="menu">
+                <ul id="menu">
                     {% block content_header_more %}
-                        <li><a class="symfony-button-green" href="{{ path('_homepage') }}">Ir a Inicio | Gestión de Costos</a></li>
+                        IR A:
+                        <li><a class="symfony-button-green" href="{{ path('_homepage') }}">Principal</a></li>
+                        <li><a class="symfony-button-green" href="{{ path('index_cuenta') }}">Cuentas</a></li>
+                        <li><a class="symfony-button-green"  href="{{ path('index_gasto') }}">Gastos</a></li>
+                        <li><a class="symfony-button-green" href="{{ path('index_venta') }}">Ventas</a></li>
                     {% endblock %}
                 </ul>
                 <div style="clear: both"></div>
@@ -95,9 +99,6 @@
 <h1><center>{{ block('title') }}</center></h1>
 <div id="deletion_venta" title="Confirmar para borrar Venta">
 {% include 'CostoSystemBundle:Venta:delete.html.twig' with {'venta': venta} %}
-</div>
-<div style="float:left">
-        <a class="symfony-button-green" href="{{ path('index_venta') }}">Volver a Ventas</a>
 </div>
 <form id="edit_venta_form" action="{{ path('update_venta', { 'id': venta.IdVenta }) }}" method="post" {{ form_enctype(edit_form) }}>
     <h1><center>Formulario para Modificar Venta</center></h1>

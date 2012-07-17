@@ -17,6 +17,7 @@ class GastoController extends Controller {
      * @return Response view 
      */
     public function indexAction($id = 0) {
+
         $gastos = GastoQuery::create()
                         ->_if($id != 0)
                         ->filterByFkCuenta($id)
