@@ -115,7 +115,7 @@ class InformeController extends Controller {
                $tmparray = array_merge_recursive($arrf, $arr);
                $i = 0;
                foreach($tmparray as $fe => $montos){
-                   $gasto['fechapagogasto'] = \DateTime::createFromFormat('d/m/Y', $fe);
+                   $gasto['fechapagogasto'] = $fe;
                    $gasto['costogasto'] = $montos[0];
                    $gasto['informal'] = $montos[1];
                    $gastos[$i] = $gasto;
