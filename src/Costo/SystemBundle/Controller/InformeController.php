@@ -27,22 +27,7 @@ class InformeController extends Controller {
 //        if ($form->isValid()) {
 //            return $this->redirect($this->generateUrl('_report', array('date_max' => 'NOw', 'date_min'=> 'NOW')));
 //        }
-        $form = $this->createFormBuilder(null, array())
-                        ->add('min_date', 'date', array(
-                            'label' => 'Desde el día: ',
-                            'input' => 'string',
-                            'widget' => 'single_text',
-                            'format' => 'dd/MM/yyyy',
-                        ))
-                        ->add('max_date', 'date', array(
-                            'label' => ' Hasta el día: ',
-                            'input' => 'string',
-                            'widget' => 'single_text',
-                            'format' => 'dd/MM/yyyy',
-                                )
-                        )
-                        ->getForm()
-        ;
+        $form = $this->generateForm();
         return $this->render('CostoSystemBundle:Informe:index.html.twig', array(
             'form' => $form->createView(),
         ));
@@ -128,15 +113,12 @@ class InformeController extends Controller {
                 foreach ($tigastos->getIterator() as $tgi)
                     $gyinformal += $tgi;
             }
-           $form = $this->createFormBuilder(null, array())
-                        ->add('min_date', 'date', array('label' => 'Desde el día: ','input' => 'string','widget' => 'single_text','format' => 'dd/MM/yyyy'))
-                        ->add('max_date', 'date', array('label' => ' Hasta el día: ','input' => 'string','widget' => 'single_text','format' => 'dd/MM/yyyy'))
-                    ->getForm();
+           $form = $this->generateForm();
             // Se ponen las fechas elejidas en el formulario nuevamente
             $form->bindRequest($request);
 
                     // Se vuelve a generar el formulario
-                    return $this->render("CostoSystemBundle:Informe:report.html.twig", array(
+                    $view = $this->renderView("CostoSystemBundle:Informe:report.html.twig", array(
                             'form' => $form->createView(), 'dates' => $timeline, 'gastos' => $gastos, 'ventas' => $ventas,
                             //primer cuadro
                             //gastos
@@ -149,9 +131,35 @@ class InformeController extends Controller {
                             //ventas
                             'vmformal' => $vmformal, 'vminformal' => $vminformal, 'vmiva' => $vmiva
                         ));
+                     if('/informe/create' == $request->getPathInfo()){
+                            return new Response($view);
+                        }
+                     if('/informe/report' == $request->getPathInfo()){
+                            return new Response($this->get('knp_snappy.pdf')->getOutputFromHtml($view),
+                            200,
+                            array(
+                                'Content-Type'          => 'application/pdf',
+                                'Content-Disposition'   => 'attachment; filename="report.pdf"'
+                            )
+                        );
+                     }
                 }
     }
     /**
+     * Creador del formulario
+     * @return Form
+     */
+    protected function generateForm(){
+
+        return $this->createFormBuilder(null, array())
+                        ->add('min_date', 'date', array('label' => 'Desde el día: ','input' => 'string','widget' => 'single_text','format' => 'dd/MM/yyyy'))
+                        ->add('max_date', 'date', array('label' => ' Hasta el día: ','input' => 'string','widget' => 'single_text','format' => 'dd/MM/yyyy'))
+                    ->getForm()
+                ;
+
+    }
+
+        /**
      * Se recuperan los datos de todas las ventas los campos FormalTotalVenta, InformalTotalVenta, TotalIvaVentaFormal
      * return \PropelArrayCollection tventas
      */

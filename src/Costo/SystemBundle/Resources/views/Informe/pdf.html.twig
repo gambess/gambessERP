@@ -1,0 +1,32 @@
+{% extends 'CostoSystemBundle::layout.html.twig' %}
+{% block content %}
+        <div id="page-header">
+	        <h1 id="titlereport"><center>Informe de Ingresos(Ventas) y Gastos del: {{dates.min|date('d - m - Y')}} hasta {{dates.max|date('d - m - Y')}}</center></h1>
+	</div>
+<br />
+<br />
+	<div id="page-content">
+<center><h3><b>Resumen de Totales General y por Fechas seleccionadas</b></h3></center>
+<div style="clear: both"></div>
+		<div id="ingresos">
+                {% include 'CostoSystemBundle:Venta:ventarep.html.twig' with { 'ventas' : ventas, 'giva': giva, 'viva': viva, 'vyformal' : vyformal, 'vyinformal' : vyinformal, 'gyformal' : gyformal, 'gyinformal' : gyinformal } %}
+                </div>
+                <div id="gastos">
+                {% include 'CostoSystemBundle:Gasto:gastorep.html.twig' with { 'gastos' : gastos, 'gmiva': gmiva, 'vmiva': vmiva, 'vmformal' : vmformal, 'vminformal' : vminformal, 'gmformal' : gmformal, 'gminformal' : gminformal } %}
+                </div>
+	</div>
+<div style="clear: both"></div>
+        <center><h3><b>Detalles de Ingresos (Ventas) y Gastos</b></h3></center>
+<div style="clear: both"></div>
+        <br />
+        <br />
+        <p align="left"><h3><b>Nota:</b></h3><br />
+        <h3>Los cálculos se aplican a todas las tablas de igual manera.</h3>
+        <h3><b>TOTAL</b> se obtiene sumando <b>FORMAL</b> con <b>INFORMAL</b></h3>
+        <h3><b>FORMAL</b> es el <b><em>valor bruto</em></b> (NETO + IVA) </h3>
+        <h3><b>I.V.A</b> muestra valor del IVA añadido en <b>FORMAL</b></h3><br />
+        <h3><b>Leyenda:</b><br /></h3>
+        <h3>(*) Diferencia entre Ingresos menos Gastos en la Tabla</h3>
+        <h3>(**) Suma de valores de la columna en la tabla</h3></p>
+        <div style="clear: both"></div>
+{% endblock %}

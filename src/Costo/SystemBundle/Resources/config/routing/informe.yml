@@ -12,4 +12,4 @@ create_report:
 print_report:
     pattern:  /report
     defaults: { _controller: CostoSystemBundle:Informe:report }
-    requirements: { _method: GET }
+    requirements: { _method: post }

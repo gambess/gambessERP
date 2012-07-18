@@ -55,7 +55,7 @@
     {% set mt = 0 %}
     {% for gasto in gastos %}
         <tr>
-            <td>{{ gasto.fechapagogasto|date('d/m/y') }}</td>
+            <td><b>{{ gasto.fechapagogasto|date('d/m/y') }}</b></td>
             <td>${{ gasto.costogasto | number_format(0,',','.')}}</td>
             {% set iva = ((gasto.costogasto/1.19)*0.19) %}
             <td>${{ iva | number_format(0,',','.')}}</td>
