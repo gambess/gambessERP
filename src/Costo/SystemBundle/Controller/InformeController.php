@@ -40,19 +40,31 @@ class InformeController extends Controller {
         $dates = array();
         $request = $this->getRequest();
 
-            if ('POST' === $request->getMethod()) {
+        if ('POST' === $request->getMethod()) {
 
             // Se recuperan las fechas
             $dates = $request->request->get('form');
-            
+
             //Se convierten las fechas en Objetos DateTime y se almacenan en un arreglo con los indices mix y max
             $timeline = $this->proccessDates($dates);
             //variables a definir para el cuadro informativo de ingresos totales
-            $gyformal = 0; $gyinformal = 0; $vyformal = 0; $vyinformal = 0; $giva = 0; $viva = 0;
+            $gyformal = 0;
+            $gyinformal = 0;
+            $vyformal = 0;
+            $vyinformal = 0;
+            $giva = 0;
+            $viva = 0;
             //variables a definir para el cuadro informativo de ingresos de las fechas seleccionadas
-            $gmformal = 0; $gminformal = 0; $vmformal = 0; $vminformal = 0; $gmiva = 0; $vmiva = 0;
+            $gmformal = 0;
+            $gminformal = 0;
+            $vmformal = 0;
+            $vminformal = 0;
+            $gmiva = 0;
+            $vmiva = 0;
             //Arrays necesarios
-            $tmparray = array(); $gasto = array(); $gastos = array();
+            $tmparray = array();
+            $gasto = array();
+            $gastos = array();
             // Solo se hacen los calculos si:
             // la fecha del textBox de la derecha es mayor que el de la izquierda
             if ($timeline['max'] >= $timeline['min']) {
@@ -60,20 +72,25 @@ class InformeController extends Controller {
                 $tventas = $this->getAllVentas();
                 //acumulador ventas totales
                 foreach ($tventas->getIterator() as $tv) {
-                    $vyformal += $tv['v.FormalTotalVenta']; $vyinformal += $tv['v.InformalTotalVenta']; $viva += $tv['v.TotalIvaVentaFormal'];
+                    $vyformal += $tv['v.FormalTotalVenta'];
+                    $vyinformal += $tv['v.InformalTotalVenta'];
+                    $viva += $tv['v.TotalIvaVentaFormal'];
                 }
                 // Calculos por fechas
                 // VENTAS en rango de fechas
                 $ventas = $this->getVentasByDate($timeline);
                 //acumulador Ventas
                 foreach ($ventas->getIterator() as $v) {
-                    $vmformal += $v->getFormalTotalVenta(); $vminformal += $v->getInformalTotalVenta(); $vmiva += $v->getTotalIvaVentaFormal();
+                    $vmformal += $v->getFormalTotalVenta();
+                    $vminformal += $v->getInformalTotalVenta();
+                    $vmiva += $v->getTotalIvaVentaFormal();
                 }
                 //GASTOS formales en rango de fechas
                 $gastosf = $this->getGastosFormalesByDate($timeline);
                 //acumulador Gastos
                 foreach ($gastosf->getIterator() as $gf) {
-                    $gmformal += $gf->getCostoGasto(); $gmiva += ( ($gf->getCostoGasto() / 1.19) * 0.19);
+                    $gmformal += $gf->getCostoGasto();
+                    $gmiva += ( ($gf->getCostoGasto() / 1.19) * 0.19);
                 }
                 //GASTOS informales en rango de fechas
                 $gastosi = $this->getGastosInformalesByDate($timeline);
@@ -83,44 +100,66 @@ class InformeController extends Controller {
                 }
 
                 $acumgf = GastoQuery::create('f')
-                        ->withColumn('SUM(f.CostoGasto)',  'totalformalGasto')
-                            ->useCuentaQuery('q')
+                                ->withColumn('SUM(f.CostoGasto)', 'totalformalGasto')
+                                ->useCuentaQuery('q')
                                 ->filterByTipoCuenta('FORMAL')
-                            ->endUse()
-                        ->groupByFechaPagoGasto()
-                        ->select('f.FechaPagoGasto', 'totalformalGasto')
-                        ->orderByFechaPagoGasto()
-                ->find();
+                                ->endUse()
+                                ->groupByFechaPagoGasto()
+                                ->select('f.FechaPagoGasto', 'totalformalGasto')
+                                ->orderByFechaPagoGasto()
+                                ->find();
                 $acumgi = GastoQuery::create('f')
-                        ->withColumn('SUM(f.CostoGasto)',  'informal')
-                            ->useCuentaQuery('q')
+                                ->withColumn('SUM(f.CostoGasto)', 'informal')
+                                ->useCuentaQuery('q')
                                 ->filterByTipoCuenta('INFORMAL')
-                            ->endUse()
-                        ->groupByFechaPagoGasto()
-                        ->select('f.FechaPagoGasto', 'informal')
-                        ->orderByFechaPagoGasto()
-                ->find();
-               
-               foreach ($acumgf as $rec => $data){
-                       $fecha = $data['f.FechaPagoGasto'];
-                       $cantidad =  $data['totalformalGasto'];
-                       $arrf[$fecha] = $cantidad;
-                                   }
-               foreach ($acumgi as $rec => $data){
-                       $fecha = $data['f.FechaPagoGasto'];
-                       $cantidad =  $data['informal'];
-                       $arr[$fecha] = $cantidad;
-               }
-               //creacion array resumen mensual
+                                ->endUse()
+                                ->groupByFechaPagoGasto()
+                                ->select('f.FechaPagoGasto', 'informal')
+                                ->orderByFechaPagoGasto()
+                                ->find();
+
+                foreach ($acumgf as $rec => $data) {
+                    $fecha = $data['f.FechaPagoGasto'];
+                    $cantidad = $data['totalformalGasto'] . "-f";
+                    $arrf[$fecha] = $cantidad;
+                }
+                foreach ($acumgi as $rec => $data) {
+                    $fecha = $data['f.FechaPagoGasto'];
+                    $cantidad = $data['informal'] . "-i";
+                    $arr[$fecha] = $cantidad;
+                }
+                //creacion array resumen mensual
                $tmparray = array_merge_recursive($arrf, $arr);
-               $i = 0;
-               foreach($tmparray as $fe => $montos){
-                   $gasto['fechapagogasto'] = $fe;
-                   $gasto['costogasto'] = $montos[0];
-                   $gasto['informal'] = $montos[1];
-                   $gastos[$i] = $gasto;
-                   $i++;
-               }
+                $i = 0;
+                $array = array();
+                foreach ($tmparray as $fe => $montos) {
+                    if (\sizeof($montos) > 1 and \sizeof($montos) == 2) {
+                        $gasto['fechapagogasto'] = $fe;
+                        $array = \explode("-", $montos[0]);
+                        $gasto['costogasto'] = \floatval($array[0]);
+                        unset ($array);
+                        $array = \explode("-", $montos[1]);
+                        $gasto['informal'] = \floatval($array[0]);
+                        unset ($array);
+                    }
+                    if (\sizeof($montos) == 1) {
+                        $gasto['fechapagogasto'] = $fe;
+                        $array = \explode("-", $montos);
+                        if('f' == $array[1])
+                            {
+                            $gasto['costogasto'] = \floatval($array[0]);
+                            $gasto['informal'] = 0;
+                            unset ($array);
+                        }elseif ('i' == $array[1]){
+                            $gasto['costogasto'] = 0;
+                            $gasto['informal'] = \floatval($array[0]);
+                            unset ($array);
+                        }
+                    }
+                        $gastos[$i] = $gasto;
+                        $i++;
+
+                }
                 // Calculos Totales
                 //GASTOS Totales Formales
                 $tfgastos = $this->getAllGastosFormales();
@@ -135,125 +174,131 @@ class InformeController extends Controller {
                 foreach ($tigastos->getIterator() as $tgi)
                     $gyinformal += $tgi;
             }
-           $form = $this->generateForm();
+            $form = $this->generateForm();
             // Se ponen las fechas elejidas en el formulario nuevamente
             $form->bindRequest($request);
 
-                    // Se vuelve a generar el formulario
-                    $view = $this->renderView("CostoSystemBundle:Informe:report.html.twig", array(
-                            'form' => $form->createView(), 'dates' => $timeline, 'gastos' => $gastos, 'ventas' => $ventas,
-                            //primer cuadro
-                            //gastos
-                            'gyformal' => $gyformal, 'gyinformal' => $gyinformal, 'giva' => $giva,
-                            //ventas
-                            'vyformal' => $vyformal, 'vyinformal' => $vyinformal, 'viva' => $viva,
-                            //segundo cuadro
-                            //gastos
-                            'gmformal' => $gmformal, 'gminformal' => $gminformal, 'gmiva' => $gmiva,
-                            //ventas
-                            'vmformal' => $vmformal, 'vminformal' => $vminformal, 'vmiva' => $vmiva
-                        ));
-                     if('/informe/create' == $request->getPathInfo()){
-                            return new Response($view);
-                        }
-                     if('/informe/report' == $request->getPathInfo()){
-                            return new Response($this->get('knp_snappy.pdf')->getOutputFromHtml($view),
-                            200,
-                            array(
-                                'Content-Type'          => 'application/pdf',
-                                'Content-Disposition'   => 'attachment; filename="report.pdf"'
-                            )
-                        );
-                     }
-                }
+            // Se vuelve a generar el formulario
+            $view = $this->renderView("CostoSystemBundle:Informe:report.html.twig", array(
+                        'form' => $form->createView(), 'dates' => $timeline, 'gastos' => $gastos, 'ventas' => $ventas,
+                        //primer cuadro
+                        //gastos
+                        'gyformal' => $gyformal, 'gyinformal' => $gyinformal, 'giva' => $giva,
+                        //ventas
+                        'vyformal' => $vyformal, 'vyinformal' => $vyinformal, 'viva' => $viva,
+                        //segundo cuadro
+                        //gastos
+                        'gmformal' => $gmformal, 'gminformal' => $gminformal, 'gmiva' => $gmiva,
+                        //ventas
+                        'vmformal' => $vmformal, 'vminformal' => $vminformal, 'vmiva' => $vmiva
+                    ));
+            if ('/informe/create' == $request->getPathInfo()) {
+                return new Response($view);
+            }
+            if ('/informe/report' == $request->getPathInfo()) {
+                return new Response($this->get('knp_snappy.pdf')->getOutputFromHtml($view),
+                        200,
+                        array(
+                            'Content-Type' => 'application/pdf',
+                            'Content-Disposition' => 'attachment; filename="report.pdf"'
+                        )
+                );
+            }
+        }
     }
+
     /**
      * Creador del formulario
      * @return Form
      */
-    protected function generateForm(){
+    protected function generateForm() {
 
         return $this->createFormBuilder(null, array())
-                        ->add('min_date', 'date', array('label' => 'Desde el día: ','input' => 'string','widget' => 'single_text','format' => 'dd/MM/yyyy'))
-                        ->add('max_date', 'date', array('label' => ' Hasta el día: ','input' => 'string','widget' => 'single_text','format' => 'dd/MM/yyyy'))
-                    ->getForm()
-                ;
-
+                ->add('min_date', 'date', array('label' => 'Desde el día: ', 'input' => 'string', 'widget' => 'single_text', 'format' => 'dd/MM/yyyy'))
+                ->add('max_date', 'date', array('label' => ' Hasta el día: ', 'input' => 'string', 'widget' => 'single_text', 'format' => 'dd/MM/yyyy'))
+                ->getForm()
+        ;
     }
 
-        /**
+    /**
      * Se recuperan los datos de todas las ventas los campos FormalTotalVenta, InformalTotalVenta, TotalIvaVentaFormal
      * return \PropelArrayCollection tventas
      */
-    protected function  getAllVentas(){
-        
+    protected function getAllVentas() {
+
         return VentaQuery::create('v')
-                    ->select(array('v.FormalTotalVenta', 'v.InformalTotalVenta', 'v.TotalIvaVentaFormal'))
+                ->select(array('v.FormalTotalVenta', 'v.InformalTotalVenta', 'v.TotalIvaVentaFormal'))
                 ->find();
     }
+
     /**
      * Se recuperan todos los gastos formales existentes
      * @return \PropelArrayCollection tfgastos
      */
-    protected function  getAllGastosFormales(){
+    protected function getAllGastosFormales() {
         return GastoQuery::create('g')
-                            ->useCuentaQuery('c')
-                                ->filterByTipoCuenta('FORMAL')
-                            ->endUse()
-                        ->select(array('g.CostoGasto'))
-                    ->find();
+                ->useCuentaQuery('c')
+                ->filterByTipoCuenta('FORMAL')
+                ->endUse()
+                ->select(array('g.CostoGasto'))
+                ->find();
     }
+
     /**
      * Se recuperan todos los gastos informales existentes
      * @return \PropelArrayCollection tigastos
      */
-    protected function  getAllGastosInformales(){
+    protected function getAllGastosInformales() {
         return GastoQuery::create('g')
-                                ->useCuentaQuery('c')
-                                    ->filterByTipoCuenta('INFORMAL')
-                                ->endUse()
-                            ->select(array('g.CostoGasto'))
-                        ->find();
+                ->useCuentaQuery('c')
+                ->filterByTipoCuenta('INFORMAL')
+                ->endUse()
+                ->select(array('g.CostoGasto'))
+                ->find();
     }
+
     /**
      * Se recuperan todas las fechas en el rango de fechas
      * @param array $dates
      * @return \PropelObjectCollection ventas
      */
-    protected function  getVentasByDate($dates){
+    protected function getVentasByDate($dates) {
         return VentaQuery::create('v')
-                        ->filterByFechaVenta($dates)
-                    ->orderByFechaVenta('ASC')
+                ->filterByFechaVenta($dates)
+                ->orderByFechaVenta('ASC')
                 ->find();
     }
+
     /**
      * Se recuperan todos los gastos formales por fechas
      * @param array $dates
      * @return \PropelObjectCollection gastosf
      */
-     protected function  getGastosFormalesByDate($dates){
+    protected function getGastosFormalesByDate($dates) {
         return GastoQuery::create('g')
-                                ->useCuentaQuery('c', 'INNER JOIN')
-                                    ->filterByTipoCuenta('FORMAL')
-                                ->endUse()
-                            ->orderByFechaPagoGasto('ASC')
-                            ->filterByFechaPagoGasto($dates)
-                        ->find();
+                ->useCuentaQuery('c', 'INNER JOIN')
+                ->filterByTipoCuenta('FORMAL')
+                ->endUse()
+                ->orderByFechaPagoGasto('ASC')
+                ->filterByFechaPagoGasto($dates)
+                ->find();
     }
+
     /**
      * Se recuperan todos los gastos Informales por fechas
      * @param array $dates
      * @return \PropelObjectCollection gastosi
      */
-    protected function  getGastosInformalesByDate($dates){
+    protected function getGastosInformalesByDate($dates) {
         return GastoQuery::create('g')
-                            ->useCuentaQuery('c', 'INNER JOIN')
-                                ->filterByTipoCuenta('INFORMAL')
-                            ->endUse()
-                        ->filterByFechaPagoGasto($dates)
-                        ->orderByFechaPagoGasto('ASC')
-                    ->find();
+                ->useCuentaQuery('c', 'INNER JOIN')
+                ->filterByTipoCuenta('INFORMAL')
+                ->endUse()
+                ->filterByFechaPagoGasto($dates)
+                ->orderByFechaPagoGasto('ASC')
+                ->find();
     }
+
     /**
      * Se genera el array de Objetos PHPDateTime
      * @param array $dates
