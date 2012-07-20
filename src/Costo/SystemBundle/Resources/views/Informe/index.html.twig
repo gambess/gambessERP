@@ -6,7 +6,7 @@
         <script type="text/javascript" src="{{ asset( asset_url) }}"></script>
 {% endjavascripts %}
 <script type="text/javascript">
-			$(function(){
+                     $(document).ready(function() {
                                 $.datepicker.setDefaults( $.datepicker.regional[ "es" ] );
 				// Datepicker
 				$('#form_min_date').datepicker({
@@ -14,6 +14,24 @@
                                 // Datepicker
 				$('#form_max_date').datepicker({
 				});
+                                if($('#errorfecha').length > 0){
+                                  $('#form_min_date').focus(function(){
+                                        $('#errorfecha').remove();
+                                        $('#form_min_date').val("");
+                                    });
+                                }
+                                if($('#form_max_date').val() != 0){
+                                  $('#form_max_date').focus(function(){
+                                        if($('#errorfecha').length > 0){
+                                            $('#errorfecha').remove();
+                                        }
+                                            $('#form_max_date').val("");
+                                    });
+                                }
+                                $('#form_min_date').focus(function(){
+                                        $('#errorfecha').remove();
+                                        $('#venta_fecha_venta').val("");
+                                    });
 			});
 		</script>
                 <ul id="menu">
@@ -34,6 +52,14 @@
             <h1><center>Generar Informe</center></h1>
         <div class="symfony-form-row">
     {{ form_label(form.min_date, 'Desde el día: ') }} {{ form_widget(form.min_date) }}Hasta el día: {{ form_widget(form.max_date) }}
+    {% if error is defined %}
+<br />
+<ul id="errorfecha" class="error_list">
+    <p align="left">
+                <li><h3>{{ error }}</h3></li>
+    </p>
+</ul>
+    {% endif%}
          </div>
         {{ form_rest(form) }}
         <br />
