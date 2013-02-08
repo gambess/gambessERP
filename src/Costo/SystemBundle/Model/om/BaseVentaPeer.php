@@ -14,19 +14,20 @@ use Costo\SystemBundle\Model\VentaPeer;
 use Costo\SystemBundle\Model\map\VentaTableMap;
 
 /**
- * Base static class for performing query and update operations on the 'ajuste_venta' table.
+ * Base static class for performing query and update operations on the 'venta' table.
  *
- * 
  *
- * @package    propel.generator.src.Costo.SystemBundle.Model.om
+ *
+ * @package propel.generator.src.Costo.SystemBundle.Model.om
  */
-abstract class BaseVentaPeer {
+abstract class BaseVentaPeer
+{
 
     /** the default database name for this class */
     const DATABASE_NAME = 'testing';
 
     /** the table name for this class */
-    const TABLE_NAME = 'ajuste_venta';
+    const TABLE_NAME = 'venta';
 
     /** the related Propel class for this table */
     const OM_CLASS = 'Costo\\SystemBundle\\Model\\Venta';
@@ -43,32 +44,32 @@ abstract class BaseVentaPeer {
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
     const NUM_HYDRATE_COLUMNS = 9;
 
-    /** the column name for the ID_AJUSTE_VENTA field */
-    const ID_AJUSTE_VENTA = 'ajuste_venta.ID_AJUSTE_VENTA';
+    /** the column name for the id_venta field */
+    const ID_VENTA = 'venta.id_venta';
 
-    /** the column name for the FK_VENTA field */
-    const FK_VENTA = 'ajuste_venta.FK_VENTA';
+    /** the column name for the fecha_venta field */
+    const FECHA_VENTA = 'venta.fecha_venta';
 
-    /** the column name for the FECHA_VENTA field */
-    const FECHA_VENTA = 'ajuste_venta.FECHA_VENTA';
+    /** the column name for the total_venta field */
+    const TOTAL_VENTA = 'venta.total_venta';
 
-    /** the column name for the TIPO_VENTA field */
-    const TIPO_VENTA = 'ajuste_venta.TIPO_VENTA';
+    /** the column name for the formal_total_venta field */
+    const FORMAL_TOTAL_VENTA = 'venta.formal_total_venta';
 
-    /** the column name for the TOTAL_VENTA field */
-    const TOTAL_VENTA = 'ajuste_venta.TOTAL_VENTA';
+    /** the column name for the informal_total_venta field */
+    const INFORMAL_TOTAL_VENTA = 'venta.informal_total_venta';
 
-    /** the column name for the TOTAL_VENTA_FORMAL field */
-    const TOTAL_VENTA_FORMAL = 'ajuste_venta.TOTAL_VENTA_FORMAL';
+    /** the column name for the total_iva_venta_formal field */
+    const TOTAL_IVA_VENTA_FORMAL = 'venta.total_iva_venta_formal';
 
-    /** the column name for the TOTAL_VENTA_INFORMAL field */
-    const TOTAL_VENTA_INFORMAL = 'ajuste_venta.TOTAL_VENTA_INFORMAL';
+    /** the column name for the detalle_venta field */
+    const DETALLE_VENTA = 'venta.detalle_venta';
 
-    /** the column name for the TOTAL_IVA_VENTA field */
-    const TOTAL_IVA_VENTA = 'ajuste_venta.TOTAL_IVA_VENTA';
+    /** the column name for the fecha_creacion_venta field */
+    const FECHA_CREACION_VENTA = 'venta.fecha_creacion_venta';
 
-    /** the column name for the DETALLE_VENTA field */
-    const DETALLE_VENTA = 'ajuste_venta.DETALLE_VENTA';
+    /** the column name for the fecha_modificacion_venta field */
+    const FECHA_MODIFICACION_VENTA = 'venta.fecha_modificacion_venta';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -86,14 +87,14 @@ abstract class BaseVentaPeer {
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
-     * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     * e.g. VentaPeer::$fieldNames[VentaPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('IdVenta', 'FkVenta', 'FechaVenta', 'TipoVenta', 'TotalVenta', 'TotalVentaFormal', 'TotalVentaInformal', 'TotalIvaVenta', 'DetalleVenta', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idVenta', 'fkVenta', 'fechaVenta', 'tipoVenta', 'totalVenta', 'totalVentaFormal', 'totalVentaInformal', 'totalIvaVenta', 'detalleVenta', ),
-        BasePeer::TYPE_COLNAME => array (self::ID_AJUSTE_VENTA, self::FK_VENTA, self::FECHA_VENTA, self::TIPO_VENTA, self::TOTAL_VENTA, self::TOTAL_VENTA_FORMAL, self::TOTAL_VENTA_INFORMAL, self::TOTAL_IVA_VENTA, self::DETALLE_VENTA, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID_AJUSTE_VENTA', 'FK_VENTA', 'FECHA_VENTA', 'TIPO_VENTA', 'TOTAL_VENTA', 'TOTAL_VENTA_FORMAL', 'TOTAL_VENTA_INFORMAL', 'TOTAL_IVA_VENTA', 'DETALLE_VENTA', ),
-        BasePeer::TYPE_FIELDNAME => array ('id_ajuste_venta', 'fk_venta', 'fecha_venta', 'tipo_venta', 'total_venta', 'total_venta_formal', 'total_venta_informal', 'total_iva_venta', 'detalle_venta', ),
+        BasePeer::TYPE_PHPNAME => array ('IdVenta', 'FechaVenta', 'TotalVenta', 'FormalTotalVenta', 'InformalTotalVenta', 'TotalIvaVentaFormal', 'DetalleVenta', 'FechaCreacionVenta', 'FechaModificacionVenta', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idVenta', 'fechaVenta', 'totalVenta', 'formalTotalVenta', 'informalTotalVenta', 'totalIvaVentaFormal', 'detalleVenta', 'fechaCreacionVenta', 'fechaModificacionVenta', ),
+        BasePeer::TYPE_COLNAME => array (VentaPeer::ID_VENTA, VentaPeer::FECHA_VENTA, VentaPeer::TOTAL_VENTA, VentaPeer::FORMAL_TOTAL_VENTA, VentaPeer::INFORMAL_TOTAL_VENTA, VentaPeer::TOTAL_IVA_VENTA_FORMAL, VentaPeer::DETALLE_VENTA, VentaPeer::FECHA_CREACION_VENTA, VentaPeer::FECHA_MODIFICACION_VENTA, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID_VENTA', 'FECHA_VENTA', 'TOTAL_VENTA', 'FORMAL_TOTAL_VENTA', 'INFORMAL_TOTAL_VENTA', 'TOTAL_IVA_VENTA_FORMAL', 'DETALLE_VENTA', 'FECHA_CREACION_VENTA', 'FECHA_MODIFICACION_VENTA', ),
+        BasePeer::TYPE_FIELDNAME => array ('id_venta', 'fecha_venta', 'total_venta', 'formal_total_venta', 'informal_total_venta', 'total_iva_venta_formal', 'detalle_venta', 'fecha_creacion_venta', 'fecha_modificacion_venta', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
@@ -101,14 +102,14 @@ abstract class BaseVentaPeer {
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
-     * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
+     * e.g. VentaPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('IdVenta' => 0, 'FkVenta' => 1, 'FechaVenta' => 2, 'TipoVenta' => 3, 'TotalVenta' => 4, 'TotalVentaFormal' => 5, 'TotalVentaInformal' => 6, 'TotalIvaVenta' => 7, 'DetalleVenta' => 8, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idVenta' => 0, 'fkVenta' => 1, 'fechaVenta' => 2, 'tipoVenta' => 3, 'totalVenta' => 4, 'totalVentaFormal' => 5, 'totalVentaInformal' => 6, 'totalIvaVenta' => 7, 'detalleVenta' => 8, ),
-        BasePeer::TYPE_COLNAME => array (self::ID_AJUSTE_VENTA => 0, self::FK_VENTA => 1, self::FECHA_VENTA => 2, self::TIPO_VENTA => 3, self::TOTAL_VENTA => 4, self::TOTAL_VENTA_FORMAL => 5, self::TOTAL_VENTA_INFORMAL => 6, self::TOTAL_IVA_VENTA => 7, self::DETALLE_VENTA => 8, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID_AJUSTE_VENTA' => 0, 'FK_VENTA' => 1, 'FECHA_VENTA' => 2, 'TIPO_VENTA' => 3, 'TOTAL_VENTA' => 4, 'TOTAL_VENTA_FORMAL' => 5, 'TOTAL_VENTA_INFORMAL' => 6, 'TOTAL_IVA_VENTA' => 7, 'DETALLE_VENTA' => 8, ),
-        BasePeer::TYPE_FIELDNAME => array ('id_ajuste_venta' => 0, 'fk_venta' => 1, 'fecha_venta' => 2, 'tipo_venta' => 3, 'total_venta' => 4, 'total_venta_formal' => 5, 'total_venta_informal' => 6, 'total_iva_venta' => 7, 'detalle_venta' => 8, ),
+        BasePeer::TYPE_PHPNAME => array ('IdVenta' => 0, 'FechaVenta' => 1, 'TotalVenta' => 2, 'FormalTotalVenta' => 3, 'InformalTotalVenta' => 4, 'TotalIvaVentaFormal' => 5, 'DetalleVenta' => 6, 'FechaCreacionVenta' => 7, 'FechaModificacionVenta' => 8, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idVenta' => 0, 'fechaVenta' => 1, 'totalVenta' => 2, 'formalTotalVenta' => 3, 'informalTotalVenta' => 4, 'totalIvaVentaFormal' => 5, 'detalleVenta' => 6, 'fechaCreacionVenta' => 7, 'fechaModificacionVenta' => 8, ),
+        BasePeer::TYPE_COLNAME => array (VentaPeer::ID_VENTA => 0, VentaPeer::FECHA_VENTA => 1, VentaPeer::TOTAL_VENTA => 2, VentaPeer::FORMAL_TOTAL_VENTA => 3, VentaPeer::INFORMAL_TOTAL_VENTA => 4, VentaPeer::TOTAL_IVA_VENTA_FORMAL => 5, VentaPeer::DETALLE_VENTA => 6, VentaPeer::FECHA_CREACION_VENTA => 7, VentaPeer::FECHA_MODIFICACION_VENTA => 8, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID_VENTA' => 0, 'FECHA_VENTA' => 1, 'TOTAL_VENTA' => 2, 'FORMAL_TOTAL_VENTA' => 3, 'INFORMAL_TOTAL_VENTA' => 4, 'TOTAL_IVA_VENTA_FORMAL' => 5, 'DETALLE_VENTA' => 6, 'FECHA_CREACION_VENTA' => 7, 'FECHA_MODIFICACION_VENTA' => 8, ),
+        BasePeer::TYPE_FIELDNAME => array ('id_venta' => 0, 'fecha_venta' => 1, 'total_venta' => 2, 'formal_total_venta' => 3, 'informal_total_venta' => 4, 'total_iva_venta_formal' => 5, 'detalle_venta' => 6, 'fecha_creacion_venta' => 7, 'fecha_modificacion_venta' => 8, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
@@ -124,10 +125,10 @@ abstract class BaseVentaPeer {
      */
     public static function translateFieldName($name, $fromType, $toType)
     {
-        $toNames = self::getFieldNames($toType);
-        $key = isset(self::$fieldKeys[$fromType][$name]) ? self::$fieldKeys[$fromType][$name] : null;
+        $toNames = VentaPeer::getFieldNames($toType);
+        $key = isset(VentaPeer::$fieldKeys[$fromType][$name]) ? VentaPeer::$fieldKeys[$fromType][$name] : null;
         if ($key === null) {
-            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(self::$fieldKeys[$fromType], true));
+            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(VentaPeer::$fieldKeys[$fromType], true));
         }
 
         return $toNames[$key];
@@ -144,11 +145,11 @@ abstract class BaseVentaPeer {
      */
     public static function getFieldNames($type = BasePeer::TYPE_PHPNAME)
     {
-        if (!array_key_exists($type, self::$fieldNames)) {
+        if (!array_key_exists($type, VentaPeer::$fieldNames)) {
             throw new PropelException('Method getFieldNames() expects the parameter $type to be one of the class constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME, BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. ' . $type . ' was given.');
         }
 
-        return self::$fieldNames[$type];
+        return VentaPeer::$fieldNames[$type];
     }
 
     /**
@@ -183,25 +184,25 @@ abstract class BaseVentaPeer {
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(VentaPeer::ID_AJUSTE_VENTA);
-            $criteria->addSelectColumn(VentaPeer::FK_VENTA);
+            $criteria->addSelectColumn(VentaPeer::ID_VENTA);
             $criteria->addSelectColumn(VentaPeer::FECHA_VENTA);
-            $criteria->addSelectColumn(VentaPeer::TIPO_VENTA);
             $criteria->addSelectColumn(VentaPeer::TOTAL_VENTA);
-            $criteria->addSelectColumn(VentaPeer::TOTAL_VENTA_FORMAL);
-            $criteria->addSelectColumn(VentaPeer::TOTAL_VENTA_INFORMAL);
-            $criteria->addSelectColumn(VentaPeer::TOTAL_IVA_VENTA);
+            $criteria->addSelectColumn(VentaPeer::FORMAL_TOTAL_VENTA);
+            $criteria->addSelectColumn(VentaPeer::INFORMAL_TOTAL_VENTA);
+            $criteria->addSelectColumn(VentaPeer::TOTAL_IVA_VENTA_FORMAL);
             $criteria->addSelectColumn(VentaPeer::DETALLE_VENTA);
+            $criteria->addSelectColumn(VentaPeer::FECHA_CREACION_VENTA);
+            $criteria->addSelectColumn(VentaPeer::FECHA_MODIFICACION_VENTA);
         } else {
-            $criteria->addSelectColumn($alias . '.ID_AJUSTE_VENTA');
-            $criteria->addSelectColumn($alias . '.FK_VENTA');
-            $criteria->addSelectColumn($alias . '.FECHA_VENTA');
-            $criteria->addSelectColumn($alias . '.TIPO_VENTA');
-            $criteria->addSelectColumn($alias . '.TOTAL_VENTA');
-            $criteria->addSelectColumn($alias . '.TOTAL_VENTA_FORMAL');
-            $criteria->addSelectColumn($alias . '.TOTAL_VENTA_INFORMAL');
-            $criteria->addSelectColumn($alias . '.TOTAL_IVA_VENTA');
-            $criteria->addSelectColumn($alias . '.DETALLE_VENTA');
+            $criteria->addSelectColumn($alias . '.id_venta');
+            $criteria->addSelectColumn($alias . '.fecha_venta');
+            $criteria->addSelectColumn($alias . '.total_venta');
+            $criteria->addSelectColumn($alias . '.formal_total_venta');
+            $criteria->addSelectColumn($alias . '.informal_total_venta');
+            $criteria->addSelectColumn($alias . '.total_iva_venta_formal');
+            $criteria->addSelectColumn($alias . '.detalle_venta');
+            $criteria->addSelectColumn($alias . '.fecha_creacion_venta');
+            $criteria->addSelectColumn($alias . '.fecha_modificacion_venta');
         }
     }
 
@@ -232,7 +233,7 @@ abstract class BaseVentaPeer {
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-        $criteria->setDbName(self::DATABASE_NAME); // Set the correct dbName
+        $criteria->setDbName(VentaPeer::DATABASE_NAME); // Set the correct dbName
 
         if ($con === null) {
             $con = Propel::getConnection(VentaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
@@ -285,7 +286,7 @@ abstract class BaseVentaPeer {
     /**
      * Prepares the Criteria object and uses the parent doSelect() method to execute a PDOStatement.
      *
-     * Use this method directly if you want to work with an executed statement durirectly (for example
+     * Use this method directly if you want to work with an executed statement directly (for example
      * to perform your own object hydration).
      *
      * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
@@ -307,7 +308,7 @@ abstract class BaseVentaPeer {
         }
 
         // Set the correct dbName
-        $criteria->setDbName(self::DATABASE_NAME);
+        $criteria->setDbName(VentaPeer::DATABASE_NAME);
 
         // BasePeer returns a PDOStatement
         return BasePeer::doSelect($criteria, $con);
@@ -330,7 +331,7 @@ abstract class BaseVentaPeer {
             if ($key === null) {
                 $key = (string) $obj->getIdVenta();
             } // if key === null
-            self::$instances[$key] = $obj;
+            VentaPeer::$instances[$key] = $obj;
         }
     }
 
@@ -360,7 +361,7 @@ abstract class BaseVentaPeer {
                 throw $e;
             }
 
-            unset(self::$instances[$key]);
+            unset(VentaPeer::$instances[$key]);
         }
     } // removeInstanceFromPool()
 
@@ -371,32 +372,39 @@ abstract class BaseVentaPeer {
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
      * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-     * @return   Venta Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+     * @return   Venta Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
      * @see        getPrimaryKeyHash()
      */
     public static function getInstanceFromPool($key)
     {
         if (Propel::isInstancePoolingEnabled()) {
-            if (isset(self::$instances[$key])) {
-                return self::$instances[$key];
+            if (isset(VentaPeer::$instances[$key])) {
+                return VentaPeer::$instances[$key];
             }
         }
 
         return null; // just to be explicit
     }
-    
+
     /**
      * Clear the instance pool.
      *
      * @return void
      */
-    public static function clearInstancePool()
+    public static function clearInstancePool($and_clear_all_references = false)
     {
-        self::$instances = array();
+      if ($and_clear_all_references)
+      {
+        foreach (VentaPeer::$instances as $instance)
+        {
+          $instance->clearAllReferences(true);
+        }
+      }
+        VentaPeer::$instances = array();
     }
-    
+
     /**
-     * Method to invalidate the instance pool of all tables related to ajuste_venta
+     * Method to invalidate the instance pool of all tables related to venta
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -411,11 +419,11 @@ abstract class BaseVentaPeer {
      *
      * @param      array $row PropelPDO resultset row.
      * @param      int $startcol The 0-based offset for reading from the resultset row.
-     * @return string A string version of PK or NULL if the components of primary key in result array are all null.
+     * @return string A string version of PK or null if the components of primary key in result array are all null.
      */
     public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
     {
-        // If the PK cannot be derived from the row, return NULL.
+        // If the PK cannot be derived from the row, return null.
         if ($row[$startcol] === null) {
             return null;
         }
@@ -437,7 +445,7 @@ abstract class BaseVentaPeer {
 
         return (int) $row[$startcol];
     }
-    
+
     /**
      * The returned array will contain objects of the default type or
      * objects that inherit from the default.
@@ -448,7 +456,7 @@ abstract class BaseVentaPeer {
     public static function populateObjects(PDOStatement $stmt)
     {
         $results = array();
-    
+
         // set the class once to avoid overhead in the loop
         $cls = VentaPeer::getOMClass();
         // populate the object(s)
@@ -506,7 +514,7 @@ abstract class BaseVentaPeer {
      */
     public static function getTableMap()
     {
-        return Propel::getDatabaseMap(self::DATABASE_NAME)->getTable(self::TABLE_NAME);
+        return Propel::getDatabaseMap(VentaPeer::DATABASE_NAME)->getTable(VentaPeer::TABLE_NAME);
     }
 
     /**
@@ -552,13 +560,13 @@ abstract class BaseVentaPeer {
             $criteria = $values->buildCriteria(); // build Criteria from Venta object
         }
 
-        if ($criteria->containsKey(VentaPeer::ID_AJUSTE_VENTA) && $criteria->keyContainsValue(VentaPeer::ID_AJUSTE_VENTA) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.VentaPeer::ID_AJUSTE_VENTA.')');
+        if ($criteria->containsKey(VentaPeer::ID_VENTA) && $criteria->keyContainsValue(VentaPeer::ID_VENTA) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.VentaPeer::ID_VENTA.')');
         }
 
 
         // Set the correct dbName
-        $criteria->setDbName(self::DATABASE_NAME);
+        $criteria->setDbName(VentaPeer::DATABASE_NAME);
 
         try {
             // use transaction because $criteria could contain info
@@ -589,15 +597,15 @@ abstract class BaseVentaPeer {
             $con = Propel::getConnection(VentaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
-        $selectCriteria = new Criteria(self::DATABASE_NAME);
+        $selectCriteria = new Criteria(VentaPeer::DATABASE_NAME);
 
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
 
-            $comparison = $criteria->getComparison(VentaPeer::ID_AJUSTE_VENTA);
-            $value = $criteria->remove(VentaPeer::ID_AJUSTE_VENTA);
+            $comparison = $criteria->getComparison(VentaPeer::ID_VENTA);
+            $value = $criteria->remove(VentaPeer::ID_VENTA);
             if ($value) {
-                $selectCriteria->add(VentaPeer::ID_AJUSTE_VENTA, $value, $comparison);
+                $selectCriteria->add(VentaPeer::ID_VENTA, $value, $comparison);
             } else {
                 $selectCriteria->setPrimaryTableName(VentaPeer::TABLE_NAME);
             }
@@ -608,13 +616,13 @@ abstract class BaseVentaPeer {
         }
 
         // set the correct dbName
-        $criteria->setDbName(self::DATABASE_NAME);
+        $criteria->setDbName(VentaPeer::DATABASE_NAME);
 
         return BasePeer::doUpdate($selectCriteria, $criteria, $con);
     }
 
     /**
-     * Deletes all rows from the ajuste_venta table.
+     * Deletes all rows from the venta table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).
@@ -675,8 +683,8 @@ abstract class BaseVentaPeer {
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(self::DATABASE_NAME);
-            $criteria->add(VentaPeer::ID_AJUSTE_VENTA, (array) $values, Criteria::IN);
+            $criteria = new Criteria(VentaPeer::DATABASE_NAME);
+            $criteria->add(VentaPeer::ID_VENTA, (array) $values, Criteria::IN);
             // invalidate the cache for this object(s)
             foreach ((array) $values as $singleval) {
                 VentaPeer::removeInstanceFromPool($singleval);
@@ -684,7 +692,7 @@ abstract class BaseVentaPeer {
         }
 
         // Set the correct dbName
-        $criteria->setDbName(self::DATABASE_NAME);
+        $criteria->setDbName(VentaPeer::DATABASE_NAME);
 
         $affectedRows = 0; // initialize var to track total num of affected rows
 
@@ -692,7 +700,7 @@ abstract class BaseVentaPeer {
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
-            
+
             $affectedRows += BasePeer::doDelete($criteria, $con);
             VentaPeer::clearRelatedInstancePool();
             $con->commit();
@@ -760,7 +768,7 @@ abstract class BaseVentaPeer {
         }
 
         $criteria = new Criteria(VentaPeer::DATABASE_NAME);
-        $criteria->add(VentaPeer::ID_AJUSTE_VENTA, $pk);
+        $criteria->add(VentaPeer::ID_VENTA, $pk);
 
         $v = VentaPeer::doSelect($criteria, $con);
 
@@ -787,7 +795,7 @@ abstract class BaseVentaPeer {
             $objs = array();
         } else {
             $criteria = new Criteria(VentaPeer::DATABASE_NAME);
-            $criteria->add(VentaPeer::ID_AJUSTE_VENTA, $pks, Criteria::IN);
+            $criteria->add(VentaPeer::ID_VENTA, $pks, Criteria::IN);
             $objs = VentaPeer::doSelect($criteria, $con);
         }
 

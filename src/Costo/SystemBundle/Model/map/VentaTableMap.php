@@ -7,7 +7,7 @@ use \TableMap;
 
 
 /**
- * This class defines the structure of the 'ajuste_venta' table.
+ * This class defines the structure of the 'venta' table.
  *
  *
  *
@@ -36,21 +36,21 @@ class VentaTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('ajuste_venta');
+        $this->setName('venta');
         $this->setPhpName('Venta');
         $this->setClassname('Costo\\SystemBundle\\Model\\Venta');
         $this->setPackage('src.Costo.SystemBundle.Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('ID_AJUSTE_VENTA', 'IdVenta', 'INTEGER', true, null, null);
-        $this->addColumn('FK_VENTA', 'FkVenta', 'INTEGER', true, 20, 0);
-        $this->addColumn('FECHA_VENTA', 'FechaVenta', 'TIMESTAMP', true, null, 'CURRENT_TIMESTAMP');
-        $this->addColumn('TIPO_VENTA', 'TipoVenta', 'CHAR', true, null, 'FORMAL');
-        $this->addColumn('TOTAL_VENTA', 'TotalVenta', 'FLOAT', true, 7, 0);
-        $this->addColumn('TOTAL_VENTA_FORMAL', 'TotalVentaFormal', 'FLOAT', true, 7, 0);
-        $this->addColumn('TOTAL_VENTA_INFORMAL', 'TotalVentaInformal', 'FLOAT', true, 7, 0);
-        $this->addColumn('TOTAL_IVA_VENTA', 'TotalIvaVenta', 'FLOAT', true, 7, 0);
-        $this->addColumn('DETALLE_VENTA', 'DetalleVenta', 'LONGVARCHAR', false, null, null);
+        $this->addPrimaryKey('id_venta', 'IdVenta', 'INTEGER', true, null, null);
+        $this->addColumn('fecha_venta', 'FechaVenta', 'DATE', true, null, null);
+        $this->addColumn('total_venta', 'TotalVenta', 'FLOAT', true, 11, 0);
+        $this->addColumn('formal_total_venta', 'FormalTotalVenta', 'FLOAT', true, 11, 0);
+        $this->addColumn('informal_total_venta', 'InformalTotalVenta', 'FLOAT', true, 11, 0);
+        $this->addColumn('total_iva_venta_formal', 'TotalIvaVentaFormal', 'FLOAT', true, 11, 0);
+        $this->addColumn('detalle_venta', 'DetalleVenta', 'LONGVARCHAR', false, null, null);
+        $this->addColumn('fecha_creacion_venta', 'FechaCreacionVenta', 'TIMESTAMP', false, null, null);
+        $this->addColumn('fecha_modificacion_venta', 'FechaModificacionVenta', 'TIMESTAMP', false, null, null);
         // validators
     } // initialize()
 
@@ -60,5 +60,22 @@ class VentaTableMap extends TableMap
     public function buildRelations()
     {
     } // buildRelations()
+
+    /**
+     *
+     * Gets the list of behaviors registered for this table
+     *
+     * @return array Associative array (name => parameters) of behaviors
+     */
+    public function getBehaviors()
+    {
+        return array(
+            'timestampable' =>  array (
+  'create_column' => 'fecha_creacion_venta',
+  'update_column' => 'fecha_modificacion_venta',
+  'disable_updated_at' => 'false',
+),
+        );
+    } // getBehaviors()
 
 } // VentaTableMap

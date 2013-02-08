@@ -2,7 +2,7 @@
 # Generado automáticamente por el comando generate:doctrine:crud
 index_venta:
     pattern:  /{page}
-    defaults: { _controller: "CostoSystemBundle:Venta:index", page: 1 }
+    defaults: { _controller: "CostoSystemBundle:Venta:index", page: 0 }
     requirements:
       page: \d+
       _method: GET

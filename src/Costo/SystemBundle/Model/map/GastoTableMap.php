@@ -42,15 +42,15 @@ class GastoTableMap extends TableMap
         $this->setPackage('src.Costo.SystemBundle.Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('ID_GASTO', 'IdGasto', 'INTEGER', true, 20, null);
-        $this->addForeignKey('FK_CUENTA', 'FkCuenta', 'INTEGER', 'cuenta', 'ID_CUENTA', false, 20, null);
-        $this->addColumn('NOMBRE_GASTO', 'NombreGasto', 'VARCHAR', false, 100, null);
-        $this->addColumn('COSTO_GASTO', 'CostoGasto', 'FLOAT', true, 7, 0);
-        $this->addColumn('FECHA_CREACION_GASTO', 'FechaCreacionGasto', 'TIMESTAMP', true, null, 'CURRENT_TIMESTAMP');
-        $this->addColumn('FECHA_EMISION_GASTO', 'FechaEmisionGasto', 'TIMESTAMP', false, null, null);
-        $this->addColumn('FECHA_PAGO_GASTO', 'FechaPagoGasto', 'TIMESTAMP', false, null, null);
-        $this->addColumn('ACTIVA_GASTO', 'ActivaGasto', 'BOOLEAN', true, 1, true);
-        $this->addColumn('NUMERO_DOC_GASTO', 'NumeroDocGasto', 'VARCHAR', false, 100, null);
+        $this->addPrimaryKey('id_gasto', 'IdGasto', 'INTEGER', true, 20, null);
+        $this->addForeignKey('fk_cuenta', 'FkCuenta', 'INTEGER', 'cuenta', 'id_cuenta', true, 20, 0);
+        $this->addColumn('nombre_gasto', 'NombreGasto', 'VARCHAR', true, 100, null);
+        $this->addColumn('costo_gasto', 'CostoGasto', 'FLOAT', true, 11, 0);
+        $this->addColumn('fecha_emision_gasto', 'FechaEmisionGasto', 'DATE', false, null, null);
+        $this->addColumn('fecha_pago_gasto', 'FechaPagoGasto', 'DATE', false, null, null);
+        $this->addColumn('numero_doc_gasto', 'NumeroDocGasto', 'LONGVARCHAR', false, null, null);
+        $this->addColumn('fecha_creacion_gasto', 'FechaCreacionGasto', 'TIMESTAMP', false, null, null);
+        $this->addColumn('fecha_modificacion_gasto', 'FechaModificacionGasto', 'TIMESTAMP', false, null, null);
         // validators
     } // initialize()
 
@@ -61,5 +61,26 @@ class GastoTableMap extends TableMap
     {
         $this->addRelation('Cuenta', 'Costo\\SystemBundle\\Model\\Cuenta', RelationMap::MANY_TO_ONE, array('fk_cuenta' => 'id_cuenta', ), null, null);
     } // buildRelations()
+
+    /**
+     *
+     * Gets the list of behaviors registered for this table
+     *
+     * @return array Associative array (name => parameters) of behaviors
+     */
+    public function getBehaviors()
+    {
+        return array(
+            'timestampable' =>  array (
+  'create_column' => 'fecha_creacion_gasto',
+  'update_column' => 'fecha_modificacion_gasto',
+  'disable_updated_at' => 'false',
+),
+            'aggregate_column_relation' =>  array (
+  'foreign_table' => 'cuenta',
+  'update_method' => 'updateValorCuenta',
+),
+        );
+    } // getBehaviors()
 
 } // GastoTableMap

@@ -13,6 +13,7 @@ use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
 use Costo\SystemBundle\Model\Cuenta;
+use Costo\SystemBundle\Model\CuentaQuery;
 use Costo\SystemBundle\Model\Gasto;
 use Costo\SystemBundle\Model\GastoPeer;
 use Costo\SystemBundle\Model\GastoQuery;
@@ -20,64 +21,62 @@ use Costo\SystemBundle\Model\GastoQuery;
 /**
  * Base class that represents a query for the 'gasto' table.
  *
- * 
  *
- * @method     GastoQuery orderByIdGasto($order = Criteria::ASC) Order by the id_gasto column
- * @method     GastoQuery orderByFkCuenta($order = Criteria::ASC) Order by the fk_cuenta column
- * @method     GastoQuery orderByNombreGasto($order = Criteria::ASC) Order by the nombre_gasto column
- * @method     GastoQuery orderByCostoGasto($order = Criteria::ASC) Order by the costo_gasto column
- * @method     GastoQuery orderByFechaCreacionGasto($order = Criteria::ASC) Order by the fecha_creacion_gasto column
- * @method     GastoQuery orderByFechaEmisionGasto($order = Criteria::ASC) Order by the fecha_emision_gasto column
- * @method     GastoQuery orderByFechaPagoGasto($order = Criteria::ASC) Order by the fecha_pago_gasto column
- * @method     GastoQuery orderByActivaGasto($order = Criteria::ASC) Order by the activa_gasto column
- * @method     GastoQuery orderByNumeroDocGasto($order = Criteria::ASC) Order by the numero_doc_gasto column
  *
- * @method     GastoQuery groupByIdGasto() Group by the id_gasto column
- * @method     GastoQuery groupByFkCuenta() Group by the fk_cuenta column
- * @method     GastoQuery groupByNombreGasto() Group by the nombre_gasto column
- * @method     GastoQuery groupByCostoGasto() Group by the costo_gasto column
- * @method     GastoQuery groupByFechaCreacionGasto() Group by the fecha_creacion_gasto column
- * @method     GastoQuery groupByFechaEmisionGasto() Group by the fecha_emision_gasto column
- * @method     GastoQuery groupByFechaPagoGasto() Group by the fecha_pago_gasto column
- * @method     GastoQuery groupByActivaGasto() Group by the activa_gasto column
- * @method     GastoQuery groupByNumeroDocGasto() Group by the numero_doc_gasto column
+ * @method GastoQuery orderByIdGasto($order = Criteria::ASC) Order by the id_gasto column
+ * @method GastoQuery orderByFkCuenta($order = Criteria::ASC) Order by the fk_cuenta column
+ * @method GastoQuery orderByNombreGasto($order = Criteria::ASC) Order by the nombre_gasto column
+ * @method GastoQuery orderByCostoGasto($order = Criteria::ASC) Order by the costo_gasto column
+ * @method GastoQuery orderByFechaEmisionGasto($order = Criteria::ASC) Order by the fecha_emision_gasto column
+ * @method GastoQuery orderByFechaPagoGasto($order = Criteria::ASC) Order by the fecha_pago_gasto column
+ * @method GastoQuery orderByNumeroDocGasto($order = Criteria::ASC) Order by the numero_doc_gasto column
+ * @method GastoQuery orderByFechaCreacionGasto($order = Criteria::ASC) Order by the fecha_creacion_gasto column
+ * @method GastoQuery orderByFechaModificacionGasto($order = Criteria::ASC) Order by the fecha_modificacion_gasto column
  *
- * @method     GastoQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     GastoQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     GastoQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method GastoQuery groupByIdGasto() Group by the id_gasto column
+ * @method GastoQuery groupByFkCuenta() Group by the fk_cuenta column
+ * @method GastoQuery groupByNombreGasto() Group by the nombre_gasto column
+ * @method GastoQuery groupByCostoGasto() Group by the costo_gasto column
+ * @method GastoQuery groupByFechaEmisionGasto() Group by the fecha_emision_gasto column
+ * @method GastoQuery groupByFechaPagoGasto() Group by the fecha_pago_gasto column
+ * @method GastoQuery groupByNumeroDocGasto() Group by the numero_doc_gasto column
+ * @method GastoQuery groupByFechaCreacionGasto() Group by the fecha_creacion_gasto column
+ * @method GastoQuery groupByFechaModificacionGasto() Group by the fecha_modificacion_gasto column
  *
- * @method     GastoQuery leftJoinCuenta($relationAlias = null) Adds a LEFT JOIN clause to the query using the Cuenta relation
- * @method     GastoQuery rightJoinCuenta($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Cuenta relation
- * @method     GastoQuery innerJoinCuenta($relationAlias = null) Adds a INNER JOIN clause to the query using the Cuenta relation
+ * @method GastoQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method GastoQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method GastoQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     Gasto findOne(PropelPDO $con = null) Return the first Gasto matching the query
- * @method     Gasto findOneOrCreate(PropelPDO $con = null) Return the first Gasto matching the query, or a new Gasto object populated from the query conditions when no match is found
+ * @method GastoQuery leftJoinCuenta($relationAlias = null) Adds a LEFT JOIN clause to the query using the Cuenta relation
+ * @method GastoQuery rightJoinCuenta($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Cuenta relation
+ * @method GastoQuery innerJoinCuenta($relationAlias = null) Adds a INNER JOIN clause to the query using the Cuenta relation
  *
- * @method     Gasto findOneByIdGasto(int $id_gasto) Return the first Gasto filtered by the id_gasto column
- * @method     Gasto findOneByFkCuenta(int $fk_cuenta) Return the first Gasto filtered by the fk_cuenta column
- * @method     Gasto findOneByNombreGasto(string $nombre_gasto) Return the first Gasto filtered by the nombre_gasto column
- * @method     Gasto findOneByCostoGasto(double $costo_gasto) Return the first Gasto filtered by the costo_gasto column
- * @method     Gasto findOneByFechaCreacionGasto(string $fecha_creacion_gasto) Return the first Gasto filtered by the fecha_creacion_gasto column
- * @method     Gasto findOneByFechaEmisionGasto(string $fecha_emision_gasto) Return the first Gasto filtered by the fecha_emision_gasto column
- * @method     Gasto findOneByFechaPagoGasto(string $fecha_pago_gasto) Return the first Gasto filtered by the fecha_pago_gasto column
- * @method     Gasto findOneByActivaGasto(boolean $activa_gasto) Return the first Gasto filtered by the activa_gasto column
- * @method     Gasto findOneByNumeroDocGasto(string $numero_doc_gasto) Return the first Gasto filtered by the numero_doc_gasto column
+ * @method Gasto findOne(PropelPDO $con = null) Return the first Gasto matching the query
+ * @method Gasto findOneOrCreate(PropelPDO $con = null) Return the first Gasto matching the query, or a new Gasto object populated from the query conditions when no match is found
  *
- * @method     array findByIdGasto(int $id_gasto) Return Gasto objects filtered by the id_gasto column
- * @method     array findByFkCuenta(int $fk_cuenta) Return Gasto objects filtered by the fk_cuenta column
- * @method     array findByNombreGasto(string $nombre_gasto) Return Gasto objects filtered by the nombre_gasto column
- * @method     array findByCostoGasto(double $costo_gasto) Return Gasto objects filtered by the costo_gasto column
- * @method     array findByFechaCreacionGasto(string $fecha_creacion_gasto) Return Gasto objects filtered by the fecha_creacion_gasto column
- * @method     array findByFechaEmisionGasto(string $fecha_emision_gasto) Return Gasto objects filtered by the fecha_emision_gasto column
- * @method     array findByFechaPagoGasto(string $fecha_pago_gasto) Return Gasto objects filtered by the fecha_pago_gasto column
- * @method     array findByActivaGasto(boolean $activa_gasto) Return Gasto objects filtered by the activa_gasto column
- * @method     array findByNumeroDocGasto(string $numero_doc_gasto) Return Gasto objects filtered by the numero_doc_gasto column
+ * @method Gasto findOneByFkCuenta(int $fk_cuenta) Return the first Gasto filtered by the fk_cuenta column
+ * @method Gasto findOneByNombreGasto(string $nombre_gasto) Return the first Gasto filtered by the nombre_gasto column
+ * @method Gasto findOneByCostoGasto(double $costo_gasto) Return the first Gasto filtered by the costo_gasto column
+ * @method Gasto findOneByFechaEmisionGasto(string $fecha_emision_gasto) Return the first Gasto filtered by the fecha_emision_gasto column
+ * @method Gasto findOneByFechaPagoGasto(string $fecha_pago_gasto) Return the first Gasto filtered by the fecha_pago_gasto column
+ * @method Gasto findOneByNumeroDocGasto(string $numero_doc_gasto) Return the first Gasto filtered by the numero_doc_gasto column
+ * @method Gasto findOneByFechaCreacionGasto(string $fecha_creacion_gasto) Return the first Gasto filtered by the fecha_creacion_gasto column
+ * @method Gasto findOneByFechaModificacionGasto(string $fecha_modificacion_gasto) Return the first Gasto filtered by the fecha_modificacion_gasto column
+ *
+ * @method array findByIdGasto(int $id_gasto) Return Gasto objects filtered by the id_gasto column
+ * @method array findByFkCuenta(int $fk_cuenta) Return Gasto objects filtered by the fk_cuenta column
+ * @method array findByNombreGasto(string $nombre_gasto) Return Gasto objects filtered by the nombre_gasto column
+ * @method array findByCostoGasto(double $costo_gasto) Return Gasto objects filtered by the costo_gasto column
+ * @method array findByFechaEmisionGasto(string $fecha_emision_gasto) Return Gasto objects filtered by the fecha_emision_gasto column
+ * @method array findByFechaPagoGasto(string $fecha_pago_gasto) Return Gasto objects filtered by the fecha_pago_gasto column
+ * @method array findByNumeroDocGasto(string $numero_doc_gasto) Return Gasto objects filtered by the numero_doc_gasto column
+ * @method array findByFechaCreacionGasto(string $fecha_creacion_gasto) Return Gasto objects filtered by the fecha_creacion_gasto column
+ * @method array findByFechaModificacionGasto(string $fecha_modificacion_gasto) Return Gasto objects filtered by the fecha_modificacion_gasto column
  *
  * @package    propel.generator.src.Costo.SystemBundle.Model.om
  */
 abstract class BaseGastoQuery extends ModelCriteria
 {
-    
     /**
      * Initializes internal state of BaseGastoQuery object.
      *
@@ -94,7 +93,7 @@ abstract class BaseGastoQuery extends ModelCriteria
      * Returns a new GastoQuery object.
      *
      * @param     string $modelAlias The alias of a model in the query
-     * @param     GastoQuery|Criteria $criteria Optional Criteria to build the query from
+     * @param   GastoQuery|Criteria $criteria Optional Criteria to build the query from
      *
      * @return GastoQuery
      */
@@ -123,7 +122,7 @@ abstract class BaseGastoQuery extends ModelCriteria
      * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param mixed $key Primary key to use for the query 
+     * @param mixed $key Primary key to use for the query
      * @param     PropelPDO $con an optional connection object
      *
      * @return   Gasto|Gasto[]|mixed the result, formatted by the current formatter
@@ -151,21 +150,35 @@ abstract class BaseGastoQuery extends ModelCriteria
     }
 
     /**
+     * Alias of findPk to use instance pooling
+     *
+     * @param     mixed $key Primary key to use for the query
+     * @param     PropelPDO $con A connection object
+     *
+     * @return                 Gasto A model object, or null if the key is not found
+     * @throws PropelException
+     */
+     public function findOneByIdGasto($key, $con = null)
+     {
+        return $this->findPk($key, $con);
+     }
+
+    /**
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
      * @param     mixed $key Primary key to use for the query
      * @param     PropelPDO $con A connection object
      *
-     * @return   Gasto A model object, or null if the key is not found
-     * @throws   PropelException
+     * @return                 Gasto A model object, or null if the key is not found
+     * @throws PropelException
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `ID_GASTO`, `FK_CUENTA`, `NOMBRE_GASTO`, `COSTO_GASTO`, `FECHA_CREACION_GASTO`, `FECHA_EMISION_GASTO`, `FECHA_PAGO_GASTO`, `ACTIVA_GASTO`, `NUMERO_DOC_GASTO` FROM `gasto` WHERE `ID_GASTO` = :p0';
+        $sql = 'SELECT `id_gasto`, `fk_cuenta`, `nombre_gasto`, `costo_gasto`, `fecha_emision_gasto`, `fecha_pago_gasto`, `numero_doc_gasto`, `fecha_creacion_gasto`, `fecha_modificacion_gasto` FROM `gasto` WHERE `id_gasto` = :p0';
         try {
             $stmt = $con->prepare($sql);
-			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
+            $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
@@ -258,7 +271,8 @@ abstract class BaseGastoQuery extends ModelCriteria
      * <code>
      * $query->filterByIdGasto(1234); // WHERE id_gasto = 1234
      * $query->filterByIdGasto(array(12, 34)); // WHERE id_gasto IN (12, 34)
-     * $query->filterByIdGasto(array('min' => 12)); // WHERE id_gasto > 12
+     * $query->filterByIdGasto(array('min' => 12)); // WHERE id_gasto >= 12
+     * $query->filterByIdGasto(array('max' => 12)); // WHERE id_gasto <= 12
      * </code>
      *
      * @param     mixed $idGasto The value to use as filter.
@@ -271,8 +285,22 @@ abstract class BaseGastoQuery extends ModelCriteria
      */
     public function filterByIdGasto($idGasto = null, $comparison = null)
     {
-        if (is_array($idGasto) && null === $comparison) {
-            $comparison = Criteria::IN;
+        if (is_array($idGasto)) {
+            $useMinMax = false;
+            if (isset($idGasto['min'])) {
+                $this->addUsingAlias(GastoPeer::ID_GASTO, $idGasto['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idGasto['max'])) {
+                $this->addUsingAlias(GastoPeer::ID_GASTO, $idGasto['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
         }
 
         return $this->addUsingAlias(GastoPeer::ID_GASTO, $idGasto, $comparison);
@@ -285,7 +313,8 @@ abstract class BaseGastoQuery extends ModelCriteria
      * <code>
      * $query->filterByFkCuenta(1234); // WHERE fk_cuenta = 1234
      * $query->filterByFkCuenta(array(12, 34)); // WHERE fk_cuenta IN (12, 34)
-     * $query->filterByFkCuenta(array('min' => 12)); // WHERE fk_cuenta > 12
+     * $query->filterByFkCuenta(array('min' => 12)); // WHERE fk_cuenta >= 12
+     * $query->filterByFkCuenta(array('max' => 12)); // WHERE fk_cuenta <= 12
      * </code>
      *
      * @see       filterByCuenta()
@@ -357,7 +386,8 @@ abstract class BaseGastoQuery extends ModelCriteria
      * <code>
      * $query->filterByCostoGasto(1234); // WHERE costo_gasto = 1234
      * $query->filterByCostoGasto(array(12, 34)); // WHERE costo_gasto IN (12, 34)
-     * $query->filterByCostoGasto(array('min' => 12)); // WHERE costo_gasto > 12
+     * $query->filterByCostoGasto(array('min' => 12)); // WHERE costo_gasto >= 12
+     * $query->filterByCostoGasto(array('max' => 12)); // WHERE costo_gasto <= 12
      * </code>
      *
      * @param     mixed $costoGasto The value to use as filter.
@@ -389,49 +419,6 @@ abstract class BaseGastoQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(GastoPeer::COSTO_GASTO, $costoGasto, $comparison);
-    }
-
-    /**
-     * Filter the query on the fecha_creacion_gasto column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByFechaCreacionGasto('2011-03-14'); // WHERE fecha_creacion_gasto = '2011-03-14'
-     * $query->filterByFechaCreacionGasto('now'); // WHERE fecha_creacion_gasto = '2011-03-14'
-     * $query->filterByFechaCreacionGasto(array('max' => 'yesterday')); // WHERE fecha_creacion_gasto > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $fechaCreacionGasto The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return GastoQuery The current query, for fluid interface
-     */
-    public function filterByFechaCreacionGasto($fechaCreacionGasto = null, $comparison = null)
-    {
-        if (is_array($fechaCreacionGasto)) {
-            $useMinMax = false;
-            if (isset($fechaCreacionGasto['min'])) {
-                $this->addUsingAlias(GastoPeer::FECHA_CREACION_GASTO, $fechaCreacionGasto['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($fechaCreacionGasto['max'])) {
-                $this->addUsingAlias(GastoPeer::FECHA_CREACION_GASTO, $fechaCreacionGasto['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(GastoPeer::FECHA_CREACION_GASTO, $fechaCreacionGasto, $comparison);
     }
 
     /**
@@ -521,33 +508,6 @@ abstract class BaseGastoQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the activa_gasto column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByActivaGasto(true); // WHERE activa_gasto = true
-     * $query->filterByActivaGasto('yes'); // WHERE activa_gasto = true
-     * </code>
-     *
-     * @param     boolean|string $activaGasto The value to use as filter.
-     *              Non-boolean arguments are converted using the following rules:
-     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return GastoQuery The current query, for fluid interface
-     */
-    public function filterByActivaGasto($activaGasto = null, $comparison = null)
-    {
-        if (is_string($activaGasto)) {
-            $activa_gasto = in_array(strtolower($activaGasto), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-        }
-
-        return $this->addUsingAlias(GastoPeer::ACTIVA_GASTO, $activaGasto, $comparison);
-    }
-
-    /**
      * Filter the query on the numero_doc_gasto column
      *
      * Example usage:
@@ -577,13 +537,99 @@ abstract class BaseGastoQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the fecha_creacion_gasto column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByFechaCreacionGasto('2011-03-14'); // WHERE fecha_creacion_gasto = '2011-03-14'
+     * $query->filterByFechaCreacionGasto('now'); // WHERE fecha_creacion_gasto = '2011-03-14'
+     * $query->filterByFechaCreacionGasto(array('max' => 'yesterday')); // WHERE fecha_creacion_gasto > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $fechaCreacionGasto The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return GastoQuery The current query, for fluid interface
+     */
+    public function filterByFechaCreacionGasto($fechaCreacionGasto = null, $comparison = null)
+    {
+        if (is_array($fechaCreacionGasto)) {
+            $useMinMax = false;
+            if (isset($fechaCreacionGasto['min'])) {
+                $this->addUsingAlias(GastoPeer::FECHA_CREACION_GASTO, $fechaCreacionGasto['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($fechaCreacionGasto['max'])) {
+                $this->addUsingAlias(GastoPeer::FECHA_CREACION_GASTO, $fechaCreacionGasto['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(GastoPeer::FECHA_CREACION_GASTO, $fechaCreacionGasto, $comparison);
+    }
+
+    /**
+     * Filter the query on the fecha_modificacion_gasto column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByFechaModificacionGasto('2011-03-14'); // WHERE fecha_modificacion_gasto = '2011-03-14'
+     * $query->filterByFechaModificacionGasto('now'); // WHERE fecha_modificacion_gasto = '2011-03-14'
+     * $query->filterByFechaModificacionGasto(array('max' => 'yesterday')); // WHERE fecha_modificacion_gasto > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $fechaModificacionGasto The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return GastoQuery The current query, for fluid interface
+     */
+    public function filterByFechaModificacionGasto($fechaModificacionGasto = null, $comparison = null)
+    {
+        if (is_array($fechaModificacionGasto)) {
+            $useMinMax = false;
+            if (isset($fechaModificacionGasto['min'])) {
+                $this->addUsingAlias(GastoPeer::FECHA_MODIFICACION_GASTO, $fechaModificacionGasto['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($fechaModificacionGasto['max'])) {
+                $this->addUsingAlias(GastoPeer::FECHA_MODIFICACION_GASTO, $fechaModificacionGasto['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(GastoPeer::FECHA_MODIFICACION_GASTO, $fechaModificacionGasto, $comparison);
+    }
+
+    /**
      * Filter the query by a related Cuenta object
      *
      * @param   Cuenta|PropelObjectCollection $cuenta The related object(s) to use as filter
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return   GastoQuery The current query, for fluid interface
-     * @throws   PropelException - if the provided filter is invalid.
+     * @return                 GastoQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
      */
     public function filterByCuenta($cuenta, $comparison = null)
     {
@@ -610,7 +656,7 @@ abstract class BaseGastoQuery extends ModelCriteria
      *
      * @return GastoQuery The current query, for fluid interface
      */
-    public function joinCuenta($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinCuenta($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Cuenta');
@@ -645,7 +691,7 @@ abstract class BaseGastoQuery extends ModelCriteria
      *
      * @return   \Costo\SystemBundle\Model\CuentaQuery A secondary query class using the current class as primary query
      */
-    public function useCuentaQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useCuentaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinCuenta($relationAlias, $joinType)
@@ -668,4 +714,155 @@ abstract class BaseGastoQuery extends ModelCriteria
         return $this;
     }
 
-} // BaseGastoQuery
+    /**
+     * Code to execute before every DELETE statement
+     *
+     * @param     PropelPDO $con The connection object used by the query
+     */
+    protected function basePreDelete(PropelPDO $con)
+    {
+        // aggregate_column_relation behavior
+        $this->findRelatedCuentas($con);
+
+        return $this->preDelete($con);
+    }
+
+    /**
+     * Code to execute after every DELETE statement
+     *
+     * @param     int $affectedRows the number of deleted rows
+     * @param     PropelPDO $con The connection object used by the query
+     */
+    protected function basePostDelete($affectedRows, PropelPDO $con)
+    {
+        // aggregate_column_relation behavior
+        $this->updateRelatedCuentas($con);
+
+        return $this->postDelete($affectedRows, $con);
+    }
+
+    /**
+     * Code to execute before every UPDATE statement
+     *
+     * @param     array $values The associatiove array of columns and values for the update
+     * @param     PropelPDO $con The connection object used by the query
+     * @param     boolean $forceIndividualSaves If false (default), the resulting call is a BasePeer::doUpdate(), ortherwise it is a series of save() calls on all the found objects
+     */
+    protected function basePreUpdate(&$values, PropelPDO $con, $forceIndividualSaves = false)
+    {
+        // aggregate_column_relation behavior
+        $this->findRelatedCuentas($con);
+
+        return $this->preUpdate($values, $con, $forceIndividualSaves);
+    }
+
+    /**
+     * Code to execute after every UPDATE statement
+     *
+     * @param     int $affectedRows the number of udated rows
+     * @param     PropelPDO $con The connection object used by the query
+     */
+    protected function basePostUpdate($affectedRows, PropelPDO $con)
+    {
+        // aggregate_column_relation behavior
+        $this->updateRelatedCuentas($con);
+
+        return $this->postUpdate($affectedRows, $con);
+    }
+
+    // timestampable behavior
+
+    /**
+     * Filter by the latest updated
+     *
+     * @param      int $nbDays Maximum age of the latest update in days
+     *
+     * @return     GastoQuery The current query, for fluid interface
+     */
+    public function recentlyUpdated($nbDays = 7)
+    {
+        return $this->addUsingAlias(GastoPeer::FECHA_MODIFICACION_GASTO, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+    }
+
+    /**
+     * Order by update date desc
+     *
+     * @return     GastoQuery The current query, for fluid interface
+     */
+    public function lastUpdatedFirst()
+    {
+        return $this->addDescendingOrderByColumn(GastoPeer::FECHA_MODIFICACION_GASTO);
+    }
+
+    /**
+     * Order by update date asc
+     *
+     * @return     GastoQuery The current query, for fluid interface
+     */
+    public function firstUpdatedFirst()
+    {
+        return $this->addAscendingOrderByColumn(GastoPeer::FECHA_MODIFICACION_GASTO);
+    }
+
+    /**
+     * Filter by the latest created
+     *
+     * @param      int $nbDays Maximum age of in days
+     *
+     * @return     GastoQuery The current query, for fluid interface
+     */
+    public function recentlyCreated($nbDays = 7)
+    {
+        return $this->addUsingAlias(GastoPeer::FECHA_CREACION_GASTO, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+    }
+
+    /**
+     * Order by create date desc
+     *
+     * @return     GastoQuery The current query, for fluid interface
+     */
+    public function lastCreatedFirst()
+    {
+        return $this->addDescendingOrderByColumn(GastoPeer::FECHA_CREACION_GASTO);
+    }
+
+    /**
+     * Order by create date asc
+     *
+     * @return     GastoQuery The current query, for fluid interface
+     */
+    public function firstCreatedFirst()
+    {
+        return $this->addAscendingOrderByColumn(GastoPeer::FECHA_CREACION_GASTO);
+    }
+    // aggregate_column_relation behavior
+
+    /**
+     * Finds the related Cuenta objects and keep them for later
+     *
+     * @param PropelPDO $con A connection object
+     */
+    protected function findRelatedCuentas($con)
+    {
+        $criteria = clone $this;
+        if ($this->useAliasInSQL) {
+            $alias = $this->getModelAlias();
+            $criteria->removeAlias($alias);
+        } else {
+            $alias = '';
+        }
+        $this->cuentas = CuentaQuery::create()
+            ->joinGasto($alias)
+            ->mergeWith($criteria)
+            ->find($con);
+    }
+
+    protected function updateRelatedCuentas($con)
+    {
+        foreach ($this->cuentas as $cuenta) {
+            $cuenta->updateValorCuenta($con);
+        }
+        $this->cuentas = array();
+    }
+
+}

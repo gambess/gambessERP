@@ -17,11 +17,12 @@ use Costo\SystemBundle\Model\map\GastoTableMap;
 /**
  * Base static class for performing query and update operations on the 'gasto' table.
  *
- * 
  *
- * @package    propel.generator.src.Costo.SystemBundle.Model.om
+ *
+ * @package propel.generator.src.Costo.SystemBundle.Model.om
  */
-abstract class BaseGastoPeer {
+abstract class BaseGastoPeer
+{
 
     /** the default database name for this class */
     const DATABASE_NAME = 'testing';
@@ -44,32 +45,32 @@ abstract class BaseGastoPeer {
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
     const NUM_HYDRATE_COLUMNS = 9;
 
-    /** the column name for the ID_GASTO field */
-    const ID_GASTO = 'gasto.ID_GASTO';
+    /** the column name for the id_gasto field */
+    const ID_GASTO = 'gasto.id_gasto';
 
-    /** the column name for the FK_CUENTA field */
-    const FK_CUENTA = 'gasto.FK_CUENTA';
+    /** the column name for the fk_cuenta field */
+    const FK_CUENTA = 'gasto.fk_cuenta';
 
-    /** the column name for the NOMBRE_GASTO field */
-    const NOMBRE_GASTO = 'gasto.NOMBRE_GASTO';
+    /** the column name for the nombre_gasto field */
+    const NOMBRE_GASTO = 'gasto.nombre_gasto';
 
-    /** the column name for the COSTO_GASTO field */
-    const COSTO_GASTO = 'gasto.COSTO_GASTO';
+    /** the column name for the costo_gasto field */
+    const COSTO_GASTO = 'gasto.costo_gasto';
 
-    /** the column name for the FECHA_CREACION_GASTO field */
-    const FECHA_CREACION_GASTO = 'gasto.FECHA_CREACION_GASTO';
+    /** the column name for the fecha_emision_gasto field */
+    const FECHA_EMISION_GASTO = 'gasto.fecha_emision_gasto';
 
-    /** the column name for the FECHA_EMISION_GASTO field */
-    const FECHA_EMISION_GASTO = 'gasto.FECHA_EMISION_GASTO';
+    /** the column name for the fecha_pago_gasto field */
+    const FECHA_PAGO_GASTO = 'gasto.fecha_pago_gasto';
 
-    /** the column name for the FECHA_PAGO_GASTO field */
-    const FECHA_PAGO_GASTO = 'gasto.FECHA_PAGO_GASTO';
+    /** the column name for the numero_doc_gasto field */
+    const NUMERO_DOC_GASTO = 'gasto.numero_doc_gasto';
 
-    /** the column name for the ACTIVA_GASTO field */
-    const ACTIVA_GASTO = 'gasto.ACTIVA_GASTO';
+    /** the column name for the fecha_creacion_gasto field */
+    const FECHA_CREACION_GASTO = 'gasto.fecha_creacion_gasto';
 
-    /** the column name for the NUMERO_DOC_GASTO field */
-    const NUMERO_DOC_GASTO = 'gasto.NUMERO_DOC_GASTO';
+    /** the column name for the fecha_modificacion_gasto field */
+    const FECHA_MODIFICACION_GASTO = 'gasto.fecha_modificacion_gasto';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -87,14 +88,14 @@ abstract class BaseGastoPeer {
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
-     * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     * e.g. GastoPeer::$fieldNames[GastoPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('IdGasto', 'FkCuenta', 'NombreGasto', 'CostoGasto', 'FechaCreacionGasto', 'FechaEmisionGasto', 'FechaPagoGasto', 'ActivaGasto', 'NumeroDocGasto', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idGasto', 'fkCuenta', 'nombreGasto', 'costoGasto', 'fechaCreacionGasto', 'fechaEmisionGasto', 'fechaPagoGasto', 'activaGasto', 'numeroDocGasto', ),
-        BasePeer::TYPE_COLNAME => array (self::ID_GASTO, self::FK_CUENTA, self::NOMBRE_GASTO, self::COSTO_GASTO, self::FECHA_CREACION_GASTO, self::FECHA_EMISION_GASTO, self::FECHA_PAGO_GASTO, self::ACTIVA_GASTO, self::NUMERO_DOC_GASTO, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID_GASTO', 'FK_CUENTA', 'NOMBRE_GASTO', 'COSTO_GASTO', 'FECHA_CREACION_GASTO', 'FECHA_EMISION_GASTO', 'FECHA_PAGO_GASTO', 'ACTIVA_GASTO', 'NUMERO_DOC_GASTO', ),
-        BasePeer::TYPE_FIELDNAME => array ('id_gasto', 'fk_cuenta', 'nombre_gasto', 'costo_gasto', 'fecha_creacion_gasto', 'fecha_emision_gasto', 'fecha_pago_gasto', 'activa_gasto', 'numero_doc_gasto', ),
+        BasePeer::TYPE_PHPNAME => array ('IdGasto', 'FkCuenta', 'NombreGasto', 'CostoGasto', 'FechaEmisionGasto', 'FechaPagoGasto', 'NumeroDocGasto', 'FechaCreacionGasto', 'FechaModificacionGasto', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idGasto', 'fkCuenta', 'nombreGasto', 'costoGasto', 'fechaEmisionGasto', 'fechaPagoGasto', 'numeroDocGasto', 'fechaCreacionGasto', 'fechaModificacionGasto', ),
+        BasePeer::TYPE_COLNAME => array (GastoPeer::ID_GASTO, GastoPeer::FK_CUENTA, GastoPeer::NOMBRE_GASTO, GastoPeer::COSTO_GASTO, GastoPeer::FECHA_EMISION_GASTO, GastoPeer::FECHA_PAGO_GASTO, GastoPeer::NUMERO_DOC_GASTO, GastoPeer::FECHA_CREACION_GASTO, GastoPeer::FECHA_MODIFICACION_GASTO, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID_GASTO', 'FK_CUENTA', 'NOMBRE_GASTO', 'COSTO_GASTO', 'FECHA_EMISION_GASTO', 'FECHA_PAGO_GASTO', 'NUMERO_DOC_GASTO', 'FECHA_CREACION_GASTO', 'FECHA_MODIFICACION_GASTO', ),
+        BasePeer::TYPE_FIELDNAME => array ('id_gasto', 'fk_cuenta', 'nombre_gasto', 'costo_gasto', 'fecha_emision_gasto', 'fecha_pago_gasto', 'numero_doc_gasto', 'fecha_creacion_gasto', 'fecha_modificacion_gasto', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
@@ -102,14 +103,14 @@ abstract class BaseGastoPeer {
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
-     * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
+     * e.g. GastoPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('IdGasto' => 0, 'FkCuenta' => 1, 'NombreGasto' => 2, 'CostoGasto' => 3, 'FechaCreacionGasto' => 4, 'FechaEmisionGasto' => 5, 'FechaPagoGasto' => 6, 'ActivaGasto' => 7, 'NumeroDocGasto' => 8, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idGasto' => 0, 'fkCuenta' => 1, 'nombreGasto' => 2, 'costoGasto' => 3, 'fechaCreacionGasto' => 4, 'fechaEmisionGasto' => 5, 'fechaPagoGasto' => 6, 'activaGasto' => 7, 'numeroDocGasto' => 8, ),
-        BasePeer::TYPE_COLNAME => array (self::ID_GASTO => 0, self::FK_CUENTA => 1, self::NOMBRE_GASTO => 2, self::COSTO_GASTO => 3, self::FECHA_CREACION_GASTO => 4, self::FECHA_EMISION_GASTO => 5, self::FECHA_PAGO_GASTO => 6, self::ACTIVA_GASTO => 7, self::NUMERO_DOC_GASTO => 8, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID_GASTO' => 0, 'FK_CUENTA' => 1, 'NOMBRE_GASTO' => 2, 'COSTO_GASTO' => 3, 'FECHA_CREACION_GASTO' => 4, 'FECHA_EMISION_GASTO' => 5, 'FECHA_PAGO_GASTO' => 6, 'ACTIVA_GASTO' => 7, 'NUMERO_DOC_GASTO' => 8, ),
-        BasePeer::TYPE_FIELDNAME => array ('id_gasto' => 0, 'fk_cuenta' => 1, 'nombre_gasto' => 2, 'costo_gasto' => 3, 'fecha_creacion_gasto' => 4, 'fecha_emision_gasto' => 5, 'fecha_pago_gasto' => 6, 'activa_gasto' => 7, 'numero_doc_gasto' => 8, ),
+        BasePeer::TYPE_PHPNAME => array ('IdGasto' => 0, 'FkCuenta' => 1, 'NombreGasto' => 2, 'CostoGasto' => 3, 'FechaEmisionGasto' => 4, 'FechaPagoGasto' => 5, 'NumeroDocGasto' => 6, 'FechaCreacionGasto' => 7, 'FechaModificacionGasto' => 8, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idGasto' => 0, 'fkCuenta' => 1, 'nombreGasto' => 2, 'costoGasto' => 3, 'fechaEmisionGasto' => 4, 'fechaPagoGasto' => 5, 'numeroDocGasto' => 6, 'fechaCreacionGasto' => 7, 'fechaModificacionGasto' => 8, ),
+        BasePeer::TYPE_COLNAME => array (GastoPeer::ID_GASTO => 0, GastoPeer::FK_CUENTA => 1, GastoPeer::NOMBRE_GASTO => 2, GastoPeer::COSTO_GASTO => 3, GastoPeer::FECHA_EMISION_GASTO => 4, GastoPeer::FECHA_PAGO_GASTO => 5, GastoPeer::NUMERO_DOC_GASTO => 6, GastoPeer::FECHA_CREACION_GASTO => 7, GastoPeer::FECHA_MODIFICACION_GASTO => 8, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID_GASTO' => 0, 'FK_CUENTA' => 1, 'NOMBRE_GASTO' => 2, 'COSTO_GASTO' => 3, 'FECHA_EMISION_GASTO' => 4, 'FECHA_PAGO_GASTO' => 5, 'NUMERO_DOC_GASTO' => 6, 'FECHA_CREACION_GASTO' => 7, 'FECHA_MODIFICACION_GASTO' => 8, ),
+        BasePeer::TYPE_FIELDNAME => array ('id_gasto' => 0, 'fk_cuenta' => 1, 'nombre_gasto' => 2, 'costo_gasto' => 3, 'fecha_emision_gasto' => 4, 'fecha_pago_gasto' => 5, 'numero_doc_gasto' => 6, 'fecha_creacion_gasto' => 7, 'fecha_modificacion_gasto' => 8, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
@@ -125,10 +126,10 @@ abstract class BaseGastoPeer {
      */
     public static function translateFieldName($name, $fromType, $toType)
     {
-        $toNames = self::getFieldNames($toType);
-        $key = isset(self::$fieldKeys[$fromType][$name]) ? self::$fieldKeys[$fromType][$name] : null;
+        $toNames = GastoPeer::getFieldNames($toType);
+        $key = isset(GastoPeer::$fieldKeys[$fromType][$name]) ? GastoPeer::$fieldKeys[$fromType][$name] : null;
         if ($key === null) {
-            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(self::$fieldKeys[$fromType], true));
+            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(GastoPeer::$fieldKeys[$fromType], true));
         }
 
         return $toNames[$key];
@@ -145,11 +146,11 @@ abstract class BaseGastoPeer {
      */
     public static function getFieldNames($type = BasePeer::TYPE_PHPNAME)
     {
-        if (!array_key_exists($type, self::$fieldNames)) {
+        if (!array_key_exists($type, GastoPeer::$fieldNames)) {
             throw new PropelException('Method getFieldNames() expects the parameter $type to be one of the class constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME, BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. ' . $type . ' was given.');
         }
 
-        return self::$fieldNames[$type];
+        return GastoPeer::$fieldNames[$type];
     }
 
     /**
@@ -188,21 +189,21 @@ abstract class BaseGastoPeer {
             $criteria->addSelectColumn(GastoPeer::FK_CUENTA);
             $criteria->addSelectColumn(GastoPeer::NOMBRE_GASTO);
             $criteria->addSelectColumn(GastoPeer::COSTO_GASTO);
-            $criteria->addSelectColumn(GastoPeer::FECHA_CREACION_GASTO);
             $criteria->addSelectColumn(GastoPeer::FECHA_EMISION_GASTO);
             $criteria->addSelectColumn(GastoPeer::FECHA_PAGO_GASTO);
-            $criteria->addSelectColumn(GastoPeer::ACTIVA_GASTO);
             $criteria->addSelectColumn(GastoPeer::NUMERO_DOC_GASTO);
+            $criteria->addSelectColumn(GastoPeer::FECHA_CREACION_GASTO);
+            $criteria->addSelectColumn(GastoPeer::FECHA_MODIFICACION_GASTO);
         } else {
-            $criteria->addSelectColumn($alias . '.ID_GASTO');
-            $criteria->addSelectColumn($alias . '.FK_CUENTA');
-            $criteria->addSelectColumn($alias . '.NOMBRE_GASTO');
-            $criteria->addSelectColumn($alias . '.COSTO_GASTO');
-            $criteria->addSelectColumn($alias . '.FECHA_CREACION_GASTO');
-            $criteria->addSelectColumn($alias . '.FECHA_EMISION_GASTO');
-            $criteria->addSelectColumn($alias . '.FECHA_PAGO_GASTO');
-            $criteria->addSelectColumn($alias . '.ACTIVA_GASTO');
-            $criteria->addSelectColumn($alias . '.NUMERO_DOC_GASTO');
+            $criteria->addSelectColumn($alias . '.id_gasto');
+            $criteria->addSelectColumn($alias . '.fk_cuenta');
+            $criteria->addSelectColumn($alias . '.nombre_gasto');
+            $criteria->addSelectColumn($alias . '.costo_gasto');
+            $criteria->addSelectColumn($alias . '.fecha_emision_gasto');
+            $criteria->addSelectColumn($alias . '.fecha_pago_gasto');
+            $criteria->addSelectColumn($alias . '.numero_doc_gasto');
+            $criteria->addSelectColumn($alias . '.fecha_creacion_gasto');
+            $criteria->addSelectColumn($alias . '.fecha_modificacion_gasto');
         }
     }
 
@@ -233,7 +234,7 @@ abstract class BaseGastoPeer {
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-        $criteria->setDbName(self::DATABASE_NAME); // Set the correct dbName
+        $criteria->setDbName(GastoPeer::DATABASE_NAME); // Set the correct dbName
 
         if ($con === null) {
             $con = Propel::getConnection(GastoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
@@ -286,7 +287,7 @@ abstract class BaseGastoPeer {
     /**
      * Prepares the Criteria object and uses the parent doSelect() method to execute a PDOStatement.
      *
-     * Use this method directly if you want to work with an executed statement durirectly (for example
+     * Use this method directly if you want to work with an executed statement directly (for example
      * to perform your own object hydration).
      *
      * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
@@ -308,7 +309,7 @@ abstract class BaseGastoPeer {
         }
 
         // Set the correct dbName
-        $criteria->setDbName(self::DATABASE_NAME);
+        $criteria->setDbName(GastoPeer::DATABASE_NAME);
 
         // BasePeer returns a PDOStatement
         return BasePeer::doSelect($criteria, $con);
@@ -331,7 +332,7 @@ abstract class BaseGastoPeer {
             if ($key === null) {
                 $key = (string) $obj->getIdGasto();
             } // if key === null
-            self::$instances[$key] = $obj;
+            GastoPeer::$instances[$key] = $obj;
         }
     }
 
@@ -361,7 +362,7 @@ abstract class BaseGastoPeer {
                 throw $e;
             }
 
-            unset(self::$instances[$key]);
+            unset(GastoPeer::$instances[$key]);
         }
     } // removeInstanceFromPool()
 
@@ -372,30 +373,37 @@ abstract class BaseGastoPeer {
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
      * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-     * @return   Gasto Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+     * @return   Gasto Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
      * @see        getPrimaryKeyHash()
      */
     public static function getInstanceFromPool($key)
     {
         if (Propel::isInstancePoolingEnabled()) {
-            if (isset(self::$instances[$key])) {
-                return self::$instances[$key];
+            if (isset(GastoPeer::$instances[$key])) {
+                return GastoPeer::$instances[$key];
             }
         }
 
         return null; // just to be explicit
     }
-    
+
     /**
      * Clear the instance pool.
      *
      * @return void
      */
-    public static function clearInstancePool()
+    public static function clearInstancePool($and_clear_all_references = false)
     {
-        self::$instances = array();
+      if ($and_clear_all_references)
+      {
+        foreach (GastoPeer::$instances as $instance)
+        {
+          $instance->clearAllReferences(true);
+        }
+      }
+        GastoPeer::$instances = array();
     }
-    
+
     /**
      * Method to invalidate the instance pool of all tables related to gasto
      * by a foreign key with ON DELETE CASCADE
@@ -412,11 +420,11 @@ abstract class BaseGastoPeer {
      *
      * @param      array $row PropelPDO resultset row.
      * @param      int $startcol The 0-based offset for reading from the resultset row.
-     * @return string A string version of PK or NULL if the components of primary key in result array are all null.
+     * @return string A string version of PK or null if the components of primary key in result array are all null.
      */
     public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
     {
-        // If the PK cannot be derived from the row, return NULL.
+        // If the PK cannot be derived from the row, return null.
         if ($row[$startcol] === null) {
             return null;
         }
@@ -438,7 +446,7 @@ abstract class BaseGastoPeer {
 
         return (int) $row[$startcol];
     }
-    
+
     /**
      * The returned array will contain objects of the default type or
      * objects that inherit from the default.
@@ -449,7 +457,7 @@ abstract class BaseGastoPeer {
     public static function populateObjects(PDOStatement $stmt)
     {
         $results = array();
-    
+
         // set the class once to avoid overhead in the loop
         $cls = GastoPeer::getOMClass();
         // populate the object(s)
@@ -529,7 +537,7 @@ abstract class BaseGastoPeer {
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(self::DATABASE_NAME);
+        $criteria->setDbName(GastoPeer::DATABASE_NAME);
 
         if ($con === null) {
             $con = Propel::getConnection(GastoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
@@ -565,7 +573,7 @@ abstract class BaseGastoPeer {
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(self::DATABASE_NAME);
+            $criteria->setDbName(GastoPeer::DATABASE_NAME);
         }
 
         GastoPeer::addSelectColumns($criteria);
@@ -647,7 +655,7 @@ abstract class BaseGastoPeer {
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(self::DATABASE_NAME);
+        $criteria->setDbName(GastoPeer::DATABASE_NAME);
 
         if ($con === null) {
             $con = Propel::getConnection(GastoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
@@ -683,7 +691,7 @@ abstract class BaseGastoPeer {
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(self::DATABASE_NAME);
+            $criteria->setDbName(GastoPeer::DATABASE_NAME);
         }
 
         GastoPeer::addSelectColumns($criteria);
@@ -745,7 +753,7 @@ abstract class BaseGastoPeer {
      */
     public static function getTableMap()
     {
-        return Propel::getDatabaseMap(self::DATABASE_NAME)->getTable(self::TABLE_NAME);
+        return Propel::getDatabaseMap(GastoPeer::DATABASE_NAME)->getTable(GastoPeer::TABLE_NAME);
     }
 
     /**
@@ -797,7 +805,7 @@ abstract class BaseGastoPeer {
 
 
         // Set the correct dbName
-        $criteria->setDbName(self::DATABASE_NAME);
+        $criteria->setDbName(GastoPeer::DATABASE_NAME);
 
         try {
             // use transaction because $criteria could contain info
@@ -828,7 +836,7 @@ abstract class BaseGastoPeer {
             $con = Propel::getConnection(GastoPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
-        $selectCriteria = new Criteria(self::DATABASE_NAME);
+        $selectCriteria = new Criteria(GastoPeer::DATABASE_NAME);
 
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
@@ -847,7 +855,7 @@ abstract class BaseGastoPeer {
         }
 
         // set the correct dbName
-        $criteria->setDbName(self::DATABASE_NAME);
+        $criteria->setDbName(GastoPeer::DATABASE_NAME);
 
         return BasePeer::doUpdate($selectCriteria, $criteria, $con);
     }
@@ -914,7 +922,7 @@ abstract class BaseGastoPeer {
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(self::DATABASE_NAME);
+            $criteria = new Criteria(GastoPeer::DATABASE_NAME);
             $criteria->add(GastoPeer::ID_GASTO, (array) $values, Criteria::IN);
             // invalidate the cache for this object(s)
             foreach ((array) $values as $singleval) {
@@ -923,7 +931,7 @@ abstract class BaseGastoPeer {
         }
 
         // Set the correct dbName
-        $criteria->setDbName(self::DATABASE_NAME);
+        $criteria->setDbName(GastoPeer::DATABASE_NAME);
 
         $affectedRows = 0; // initialize var to track total num of affected rows
 
@@ -931,7 +939,7 @@ abstract class BaseGastoPeer {
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
-            
+
             $affectedRows += BasePeer::doDelete($criteria, $con);
             GastoPeer::clearRelatedInstancePool();
             $con->commit();

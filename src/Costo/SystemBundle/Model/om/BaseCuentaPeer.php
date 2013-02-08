@@ -11,17 +11,17 @@ use \PropelException;
 use \PropelPDO;
 use Costo\SystemBundle\Model\Cuenta;
 use Costo\SystemBundle\Model\CuentaPeer;
-use Costo\SystemBundle\Model\GastoPeer;
 use Costo\SystemBundle\Model\map\CuentaTableMap;
 
 /**
  * Base static class for performing query and update operations on the 'cuenta' table.
  *
- * 
  *
- * @package    propel.generator.src.Costo.SystemBundle.Model.om
+ *
+ * @package propel.generator.src.Costo.SystemBundle.Model.om
  */
-abstract class BaseCuentaPeer {
+abstract class BaseCuentaPeer
+{
 
     /** the default database name for this class */
     const DATABASE_NAME = 'testing';
@@ -44,26 +44,30 @@ abstract class BaseCuentaPeer {
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
     const NUM_HYDRATE_COLUMNS = 7;
 
-    /** the column name for the ID_CUENTA field */
-    const ID_CUENTA = 'cuenta.ID_CUENTA';
+    /** the column name for the id_cuenta field */
+    const ID_CUENTA = 'cuenta.id_cuenta';
 
-    /** the column name for the NOMBRE_CUENTA field */
-    const NOMBRE_CUENTA = 'cuenta.NOMBRE_CUENTA';
+    /** the column name for the nombre_cuenta field */
+    const NOMBRE_CUENTA = 'cuenta.nombre_cuenta';
 
-    /** the column name for the VALOR_CUENTA field */
-    const VALOR_CUENTA = 'cuenta.VALOR_CUENTA';
+    /** the column name for the valor_cuenta field */
+    const VALOR_CUENTA = 'cuenta.valor_cuenta';
 
-    /** the column name for the TIPO_CUENTA field */
-    const TIPO_CUENTA = 'cuenta.TIPO_CUENTA';
+    /** the column name for the tipo_cuenta field */
+    const TIPO_CUENTA = 'cuenta.tipo_cuenta';
 
-    /** the column name for the FECHA_CREACION_CUENTA field */
-    const FECHA_CREACION_CUENTA = 'cuenta.FECHA_CREACION_CUENTA';
+    /** the column name for the user_crea_cuenta field */
+    const USER_CREA_CUENTA = 'cuenta.user_crea_cuenta';
 
-    /** the column name for the USER_CREA_CUENTA field */
-    const USER_CREA_CUENTA = 'cuenta.USER_CREA_CUENTA';
+    /** the column name for the fecha_creacion_cuenta field */
+    const FECHA_CREACION_CUENTA = 'cuenta.fecha_creacion_cuenta';
 
-    /** the column name for the ACTIVA_CUENTA field */
-    const ACTIVA_CUENTA = 'cuenta.ACTIVA_CUENTA';
+    /** the column name for the fecha_modificacion_cuenta field */
+    const FECHA_MODIFICACION_CUENTA = 'cuenta.fecha_modificacion_cuenta';
+
+    /** The enumerated values for the tipo_cuenta field */
+    const TIPO_CUENTA_FORMAL = 'FORMAL';
+    const TIPO_CUENTA_INFORMAL = 'INFORMAL';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -81,14 +85,14 @@ abstract class BaseCuentaPeer {
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
-     * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     * e.g. CuentaPeer::$fieldNames[CuentaPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('IdCuenta', 'NombreCuenta', 'ValorCuenta', 'TipoCuenta', 'FechaCreacionCuenta', 'UserCreaCuenta', 'ActivaCuenta', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idCuenta', 'nombreCuenta', 'valorCuenta', 'tipoCuenta', 'fechaCreacionCuenta', 'userCreaCuenta', 'activaCuenta', ),
-        BasePeer::TYPE_COLNAME => array (self::ID_CUENTA, self::NOMBRE_CUENTA, self::VALOR_CUENTA, self::TIPO_CUENTA, self::FECHA_CREACION_CUENTA, self::USER_CREA_CUENTA, self::ACTIVA_CUENTA, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID_CUENTA', 'NOMBRE_CUENTA', 'VALOR_CUENTA', 'TIPO_CUENTA', 'FECHA_CREACION_CUENTA', 'USER_CREA_CUENTA', 'ACTIVA_CUENTA', ),
-        BasePeer::TYPE_FIELDNAME => array ('id_cuenta', 'nombre_cuenta', 'valor_cuenta', 'tipo_cuenta', 'fecha_creacion_cuenta', 'user_crea_cuenta', 'activa_cuenta', ),
+        BasePeer::TYPE_PHPNAME => array ('IdCuenta', 'NombreCuenta', 'ValorCuenta', 'TipoCuenta', 'UserCreaCuenta', 'FechaCreacionCuenta', 'FechaModificacionCuenta', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idCuenta', 'nombreCuenta', 'valorCuenta', 'tipoCuenta', 'userCreaCuenta', 'fechaCreacionCuenta', 'fechaModificacionCuenta', ),
+        BasePeer::TYPE_COLNAME => array (CuentaPeer::ID_CUENTA, CuentaPeer::NOMBRE_CUENTA, CuentaPeer::VALOR_CUENTA, CuentaPeer::TIPO_CUENTA, CuentaPeer::USER_CREA_CUENTA, CuentaPeer::FECHA_CREACION_CUENTA, CuentaPeer::FECHA_MODIFICACION_CUENTA, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID_CUENTA', 'NOMBRE_CUENTA', 'VALOR_CUENTA', 'TIPO_CUENTA', 'USER_CREA_CUENTA', 'FECHA_CREACION_CUENTA', 'FECHA_MODIFICACION_CUENTA', ),
+        BasePeer::TYPE_FIELDNAME => array ('id_cuenta', 'nombre_cuenta', 'valor_cuenta', 'tipo_cuenta', 'user_crea_cuenta', 'fecha_creacion_cuenta', 'fecha_modificacion_cuenta', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
     );
 
@@ -96,15 +100,23 @@ abstract class BaseCuentaPeer {
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
-     * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
+     * e.g. CuentaPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('IdCuenta' => 0, 'NombreCuenta' => 1, 'ValorCuenta' => 2, 'TipoCuenta' => 3, 'FechaCreacionCuenta' => 4, 'UserCreaCuenta' => 5, 'ActivaCuenta' => 6, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idCuenta' => 0, 'nombreCuenta' => 1, 'valorCuenta' => 2, 'tipoCuenta' => 3, 'fechaCreacionCuenta' => 4, 'userCreaCuenta' => 5, 'activaCuenta' => 6, ),
-        BasePeer::TYPE_COLNAME => array (self::ID_CUENTA => 0, self::NOMBRE_CUENTA => 1, self::VALOR_CUENTA => 2, self::TIPO_CUENTA => 3, self::FECHA_CREACION_CUENTA => 4, self::USER_CREA_CUENTA => 5, self::ACTIVA_CUENTA => 6, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID_CUENTA' => 0, 'NOMBRE_CUENTA' => 1, 'VALOR_CUENTA' => 2, 'TIPO_CUENTA' => 3, 'FECHA_CREACION_CUENTA' => 4, 'USER_CREA_CUENTA' => 5, 'ACTIVA_CUENTA' => 6, ),
-        BasePeer::TYPE_FIELDNAME => array ('id_cuenta' => 0, 'nombre_cuenta' => 1, 'valor_cuenta' => 2, 'tipo_cuenta' => 3, 'fecha_creacion_cuenta' => 4, 'user_crea_cuenta' => 5, 'activa_cuenta' => 6, ),
+        BasePeer::TYPE_PHPNAME => array ('IdCuenta' => 0, 'NombreCuenta' => 1, 'ValorCuenta' => 2, 'TipoCuenta' => 3, 'UserCreaCuenta' => 4, 'FechaCreacionCuenta' => 5, 'FechaModificacionCuenta' => 6, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idCuenta' => 0, 'nombreCuenta' => 1, 'valorCuenta' => 2, 'tipoCuenta' => 3, 'userCreaCuenta' => 4, 'fechaCreacionCuenta' => 5, 'fechaModificacionCuenta' => 6, ),
+        BasePeer::TYPE_COLNAME => array (CuentaPeer::ID_CUENTA => 0, CuentaPeer::NOMBRE_CUENTA => 1, CuentaPeer::VALOR_CUENTA => 2, CuentaPeer::TIPO_CUENTA => 3, CuentaPeer::USER_CREA_CUENTA => 4, CuentaPeer::FECHA_CREACION_CUENTA => 5, CuentaPeer::FECHA_MODIFICACION_CUENTA => 6, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID_CUENTA' => 0, 'NOMBRE_CUENTA' => 1, 'VALOR_CUENTA' => 2, 'TIPO_CUENTA' => 3, 'USER_CREA_CUENTA' => 4, 'FECHA_CREACION_CUENTA' => 5, 'FECHA_MODIFICACION_CUENTA' => 6, ),
+        BasePeer::TYPE_FIELDNAME => array ('id_cuenta' => 0, 'nombre_cuenta' => 1, 'valor_cuenta' => 2, 'tipo_cuenta' => 3, 'user_crea_cuenta' => 4, 'fecha_creacion_cuenta' => 5, 'fecha_modificacion_cuenta' => 6, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+    );
+
+    /** The enumerated values for this table */
+    protected static $enumValueSets = array(
+        CuentaPeer::TIPO_CUENTA => array(
+            CuentaPeer::TIPO_CUENTA_FORMAL,
+            CuentaPeer::TIPO_CUENTA_INFORMAL,
+        ),
     );
 
     /**
@@ -119,10 +131,10 @@ abstract class BaseCuentaPeer {
      */
     public static function translateFieldName($name, $fromType, $toType)
     {
-        $toNames = self::getFieldNames($toType);
-        $key = isset(self::$fieldKeys[$fromType][$name]) ? self::$fieldKeys[$fromType][$name] : null;
+        $toNames = CuentaPeer::getFieldNames($toType);
+        $key = isset(CuentaPeer::$fieldKeys[$fromType][$name]) ? CuentaPeer::$fieldKeys[$fromType][$name] : null;
         if ($key === null) {
-            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(self::$fieldKeys[$fromType], true));
+            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(CuentaPeer::$fieldKeys[$fromType], true));
         }
 
         return $toNames[$key];
@@ -139,11 +151,55 @@ abstract class BaseCuentaPeer {
      */
     public static function getFieldNames($type = BasePeer::TYPE_PHPNAME)
     {
-        if (!array_key_exists($type, self::$fieldNames)) {
+        if (!array_key_exists($type, CuentaPeer::$fieldNames)) {
             throw new PropelException('Method getFieldNames() expects the parameter $type to be one of the class constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME, BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. ' . $type . ' was given.');
         }
 
-        return self::$fieldNames[$type];
+        return CuentaPeer::$fieldNames[$type];
+    }
+
+    /**
+     * Gets the list of values for all ENUM columns
+     * @return array
+     */
+    public static function getValueSets()
+    {
+      return CuentaPeer::$enumValueSets;
+    }
+
+    /**
+     * Gets the list of values for an ENUM column
+     *
+     * @param string $colname The ENUM column name.
+     *
+     * @return array list of possible values for the column
+     */
+    public static function getValueSet($colname)
+    {
+        $valueSets = CuentaPeer::getValueSets();
+
+        if (!isset($valueSets[$colname])) {
+            throw new PropelException(sprintf('Column "%s" has no ValueSet.', $colname));
+        }
+
+        return $valueSets[$colname];
+    }
+
+    /**
+     * Gets the SQL value for the ENUM column value
+     *
+     * @param string $colname ENUM column name.
+     * @param string $enumVal ENUM value.
+     *
+     * @return int            SQL value
+     */
+    public static function getSqlValueForEnum($colname, $enumVal)
+    {
+        $values = CuentaPeer::getValueSet($colname);
+        if (!in_array($enumVal, $values)) {
+            throw new PropelException(sprintf('Value "%s" is not accepted in this enumerated column', $colname));
+        }
+        return array_search($enumVal, $values);
     }
 
     /**
@@ -182,17 +238,17 @@ abstract class BaseCuentaPeer {
             $criteria->addSelectColumn(CuentaPeer::NOMBRE_CUENTA);
             $criteria->addSelectColumn(CuentaPeer::VALOR_CUENTA);
             $criteria->addSelectColumn(CuentaPeer::TIPO_CUENTA);
-            $criteria->addSelectColumn(CuentaPeer::FECHA_CREACION_CUENTA);
             $criteria->addSelectColumn(CuentaPeer::USER_CREA_CUENTA);
-            $criteria->addSelectColumn(CuentaPeer::ACTIVA_CUENTA);
+            $criteria->addSelectColumn(CuentaPeer::FECHA_CREACION_CUENTA);
+            $criteria->addSelectColumn(CuentaPeer::FECHA_MODIFICACION_CUENTA);
         } else {
-            $criteria->addSelectColumn($alias . '.ID_CUENTA');
-            $criteria->addSelectColumn($alias . '.NOMBRE_CUENTA');
-            $criteria->addSelectColumn($alias . '.VALOR_CUENTA');
-            $criteria->addSelectColumn($alias . '.TIPO_CUENTA');
-            $criteria->addSelectColumn($alias . '.FECHA_CREACION_CUENTA');
-            $criteria->addSelectColumn($alias . '.USER_CREA_CUENTA');
-            $criteria->addSelectColumn($alias . '.ACTIVA_CUENTA');
+            $criteria->addSelectColumn($alias . '.id_cuenta');
+            $criteria->addSelectColumn($alias . '.nombre_cuenta');
+            $criteria->addSelectColumn($alias . '.valor_cuenta');
+            $criteria->addSelectColumn($alias . '.tipo_cuenta');
+            $criteria->addSelectColumn($alias . '.user_crea_cuenta');
+            $criteria->addSelectColumn($alias . '.fecha_creacion_cuenta');
+            $criteria->addSelectColumn($alias . '.fecha_modificacion_cuenta');
         }
     }
 
@@ -223,7 +279,7 @@ abstract class BaseCuentaPeer {
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-        $criteria->setDbName(self::DATABASE_NAME); // Set the correct dbName
+        $criteria->setDbName(CuentaPeer::DATABASE_NAME); // Set the correct dbName
 
         if ($con === null) {
             $con = Propel::getConnection(CuentaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
@@ -276,7 +332,7 @@ abstract class BaseCuentaPeer {
     /**
      * Prepares the Criteria object and uses the parent doSelect() method to execute a PDOStatement.
      *
-     * Use this method directly if you want to work with an executed statement durirectly (for example
+     * Use this method directly if you want to work with an executed statement directly (for example
      * to perform your own object hydration).
      *
      * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
@@ -298,7 +354,7 @@ abstract class BaseCuentaPeer {
         }
 
         // Set the correct dbName
-        $criteria->setDbName(self::DATABASE_NAME);
+        $criteria->setDbName(CuentaPeer::DATABASE_NAME);
 
         // BasePeer returns a PDOStatement
         return BasePeer::doSelect($criteria, $con);
@@ -321,7 +377,7 @@ abstract class BaseCuentaPeer {
             if ($key === null) {
                 $key = (string) $obj->getIdCuenta();
             } // if key === null
-            self::$instances[$key] = $obj;
+            CuentaPeer::$instances[$key] = $obj;
         }
     }
 
@@ -351,7 +407,7 @@ abstract class BaseCuentaPeer {
                 throw $e;
             }
 
-            unset(self::$instances[$key]);
+            unset(CuentaPeer::$instances[$key]);
         }
     } // removeInstanceFromPool()
 
@@ -362,30 +418,37 @@ abstract class BaseCuentaPeer {
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
      * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-     * @return   Cuenta Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+     * @return   Cuenta Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
      * @see        getPrimaryKeyHash()
      */
     public static function getInstanceFromPool($key)
     {
         if (Propel::isInstancePoolingEnabled()) {
-            if (isset(self::$instances[$key])) {
-                return self::$instances[$key];
+            if (isset(CuentaPeer::$instances[$key])) {
+                return CuentaPeer::$instances[$key];
             }
         }
 
         return null; // just to be explicit
     }
-    
+
     /**
      * Clear the instance pool.
      *
      * @return void
      */
-    public static function clearInstancePool()
+    public static function clearInstancePool($and_clear_all_references = false)
     {
-        self::$instances = array();
+      if ($and_clear_all_references)
+      {
+        foreach (CuentaPeer::$instances as $instance)
+        {
+          $instance->clearAllReferences(true);
+        }
+      }
+        CuentaPeer::$instances = array();
     }
-    
+
     /**
      * Method to invalidate the instance pool of all tables related to cuenta
      * by a foreign key with ON DELETE CASCADE
@@ -402,11 +465,11 @@ abstract class BaseCuentaPeer {
      *
      * @param      array $row PropelPDO resultset row.
      * @param      int $startcol The 0-based offset for reading from the resultset row.
-     * @return string A string version of PK or NULL if the components of primary key in result array are all null.
+     * @return string A string version of PK or null if the components of primary key in result array are all null.
      */
     public static function getPrimaryKeyHashFromRow($row, $startcol = 0)
     {
-        // If the PK cannot be derived from the row, return NULL.
+        // If the PK cannot be derived from the row, return null.
         if ($row[$startcol] === null) {
             return null;
         }
@@ -428,7 +491,7 @@ abstract class BaseCuentaPeer {
 
         return (int) $row[$startcol];
     }
-    
+
     /**
      * The returned array will contain objects of the default type or
      * objects that inherit from the default.
@@ -439,7 +502,7 @@ abstract class BaseCuentaPeer {
     public static function populateObjects(PDOStatement $stmt)
     {
         $results = array();
-    
+
         // set the class once to avoid overhead in the loop
         $cls = CuentaPeer::getOMClass();
         // populate the object(s)
@@ -497,7 +560,7 @@ abstract class BaseCuentaPeer {
      */
     public static function getTableMap()
     {
-        return Propel::getDatabaseMap(self::DATABASE_NAME)->getTable(self::TABLE_NAME);
+        return Propel::getDatabaseMap(CuentaPeer::DATABASE_NAME)->getTable(CuentaPeer::TABLE_NAME);
     }
 
     /**
@@ -549,7 +612,7 @@ abstract class BaseCuentaPeer {
 
 
         // Set the correct dbName
-        $criteria->setDbName(self::DATABASE_NAME);
+        $criteria->setDbName(CuentaPeer::DATABASE_NAME);
 
         try {
             // use transaction because $criteria could contain info
@@ -580,7 +643,7 @@ abstract class BaseCuentaPeer {
             $con = Propel::getConnection(CuentaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
-        $selectCriteria = new Criteria(self::DATABASE_NAME);
+        $selectCriteria = new Criteria(CuentaPeer::DATABASE_NAME);
 
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
@@ -599,7 +662,7 @@ abstract class BaseCuentaPeer {
         }
 
         // set the correct dbName
-        $criteria->setDbName(self::DATABASE_NAME);
+        $criteria->setDbName(CuentaPeer::DATABASE_NAME);
 
         return BasePeer::doUpdate($selectCriteria, $criteria, $con);
     }
@@ -666,7 +729,7 @@ abstract class BaseCuentaPeer {
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(self::DATABASE_NAME);
+            $criteria = new Criteria(CuentaPeer::DATABASE_NAME);
             $criteria->add(CuentaPeer::ID_CUENTA, (array) $values, Criteria::IN);
             // invalidate the cache for this object(s)
             foreach ((array) $values as $singleval) {
@@ -675,7 +738,7 @@ abstract class BaseCuentaPeer {
         }
 
         // Set the correct dbName
-        $criteria->setDbName(self::DATABASE_NAME);
+        $criteria->setDbName(CuentaPeer::DATABASE_NAME);
 
         $affectedRows = 0; // initialize var to track total num of affected rows
 
@@ -683,7 +746,7 @@ abstract class BaseCuentaPeer {
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
-            
+
             $affectedRows += BasePeer::doDelete($criteria, $con);
             CuentaPeer::clearRelatedInstancePool();
             $con->commit();
