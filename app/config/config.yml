@@ -46,9 +46,9 @@ doctrine:
         driver:   pdo_mysql
         host:     %database_host%
         port:     3306
-        dbname:   testing2
-        user:     root
-        password: gambess
+        dbname:   aricaguau 
+        user:     aricaguau-user
+        password: aricaguau-pass
         charset:  UTF8
 
     orm:

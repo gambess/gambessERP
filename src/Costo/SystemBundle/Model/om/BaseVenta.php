@@ -46,62 +46,56 @@ abstract class BaseVenta extends BaseObject implements Persistent
     protected $startCopy = false;
 
     /**
-     * The value for the id_venta field.
+     * The value for the id field.
      * @var        int
      */
-    protected $id_venta;
+    protected $id;
 
     /**
-     * The value for the fecha_venta field.
+     * The value for the fecha field.
      * @var        string
      */
-    protected $fecha_venta;
+    protected $fecha;
 
     /**
-     * The value for the total_venta field.
+     * The value for the total_documentada field.
      * Note: this column has a database default value of: 0
      * @var        double
      */
-    protected $total_venta;
+    protected $total_documentada;
 
     /**
-     * The value for the formal_total_venta field.
+     * The value for the total_no_documentada field.
      * Note: this column has a database default value of: 0
      * @var        double
      */
-    protected $formal_total_venta;
+    protected $total_no_documentada;
 
     /**
-     * The value for the informal_total_venta field.
+     * The value for the total_iva field.
      * Note: this column has a database default value of: 0
      * @var        double
      */
-    protected $informal_total_venta;
+    protected $total_iva;
 
     /**
-     * The value for the total_iva_venta_formal field.
+     * The value for the total field.
      * Note: this column has a database default value of: 0
      * @var        double
      */
-    protected $total_iva_venta_formal;
+    protected $total;
 
     /**
-     * The value for the detalle_venta field.
+     * The value for the fecha_creacion field.
      * @var        string
      */
-    protected $detalle_venta;
+    protected $fecha_creacion;
 
     /**
-     * The value for the fecha_creacion_venta field.
+     * The value for the fecha_modificacion field.
      * @var        string
      */
-    protected $fecha_creacion_venta;
-
-    /**
-     * The value for the fecha_modificacion_venta field.
-     * @var        string
-     */
-    protected $fecha_modificacion_venta;
+    protected $fecha_modificacion;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -131,10 +125,10 @@ abstract class BaseVenta extends BaseObject implements Persistent
      */
     public function applyDefaultValues()
     {
-        $this->total_venta = 0;
-        $this->formal_total_venta = 0;
-        $this->informal_total_venta = 0;
-        $this->total_iva_venta_formal = 0;
+        $this->total_documentada = 0;
+        $this->total_no_documentada = 0;
+        $this->total_iva = 0;
+        $this->total = 0;
     }
 
     /**
@@ -148,107 +142,17 @@ abstract class BaseVenta extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [id_venta] column value.
+     * Get the [id] column value.
      *
      * @return int
      */
-    public function getIdVenta()
+    public function getId()
     {
-        return $this->id_venta;
+        return $this->id;
     }
 
     /**
-     * Get the [optionally formatted] temporal [fecha_venta] column value.
-     *
-     *
-     * @param string $format The date/time format string (either date()-style or strftime()-style).
-     *				 If format is null, then the raw DateTime object will be returned.
-     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     */
-    public function getFechaVenta($format = null)
-    {
-        if ($this->fecha_venta === null) {
-            return null;
-        }
-
-        if ($this->fecha_venta === '0000-00-00') {
-            // while technically this is not a default value of null,
-            // this seems to be closest in meaning.
-            return null;
-        }
-
-        try {
-            $dt = new DateTime($this->fecha_venta);
-        } catch (Exception $x) {
-            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->fecha_venta, true), $x);
-        }
-
-        if ($format === null) {
-            // Because propel.useDateTimeClass is true, we return a DateTime object.
-            return $dt;
-        }
-
-        if (strpos($format, '%') !== false) {
-            return strftime($format, $dt->format('U'));
-        }
-
-        return $dt->format($format);
-
-    }
-
-    /**
-     * Get the [total_venta] column value.
-     *
-     * @return double
-     */
-    public function getTotalVenta()
-    {
-        return $this->total_venta;
-    }
-
-    /**
-     * Get the [formal_total_venta] column value.
-     *
-     * @return double
-     */
-    public function getFormalTotalVenta()
-    {
-        return $this->formal_total_venta;
-    }
-
-    /**
-     * Get the [informal_total_venta] column value.
-     *
-     * @return double
-     */
-    public function getInformalTotalVenta()
-    {
-        return $this->informal_total_venta;
-    }
-
-    /**
-     * Get the [total_iva_venta_formal] column value.
-     *
-     * @return double
-     */
-    public function getTotalIvaVentaFormal()
-    {
-        return $this->total_iva_venta_formal;
-    }
-
-    /**
-     * Get the [detalle_venta] column value.
-     *
-     * @return string
-     */
-    public function getDetalleVenta()
-    {
-        return $this->detalle_venta;
-    }
-
-    /**
-     * Get the [optionally formatted] temporal [fecha_creacion_venta] column value.
+     * Get the [optionally formatted] temporal [fecha] column value.
      *
      *
      * @param string $format The date/time format string (either date()-style or strftime()-style).
@@ -256,22 +160,22 @@ abstract class BaseVenta extends BaseObject implements Persistent
      * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getFechaCreacionVenta($format = null)
+    public function getFecha($format = null)
     {
-        if ($this->fecha_creacion_venta === null) {
+        if ($this->fecha === null) {
             return null;
         }
 
-        if ($this->fecha_creacion_venta === '0000-00-00 00:00:00') {
+        if ($this->fecha === '0000-00-00 00:00:00') {
             // while technically this is not a default value of null,
             // this seems to be closest in meaning.
             return null;
         }
 
         try {
-            $dt = new DateTime($this->fecha_creacion_venta);
+            $dt = new DateTime($this->fecha);
         } catch (Exception $x) {
-            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->fecha_creacion_venta, true), $x);
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->fecha, true), $x);
         }
 
         if ($format === null) {
@@ -288,7 +192,47 @@ abstract class BaseVenta extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [optionally formatted] temporal [fecha_modificacion_venta] column value.
+     * Get the [total_documentada] column value.
+     *
+     * @return double
+     */
+    public function getTotalDocumentada()
+    {
+        return $this->total_documentada;
+    }
+
+    /**
+     * Get the [total_no_documentada] column value.
+     *
+     * @return double
+     */
+    public function getTotalNoDocumentada()
+    {
+        return $this->total_no_documentada;
+    }
+
+    /**
+     * Get the [total_iva] column value.
+     *
+     * @return double
+     */
+    public function getTotalIva()
+    {
+        return $this->total_iva;
+    }
+
+    /**
+     * Get the [total] column value.
+     *
+     * @return double
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [fecha_creacion] column value.
      *
      *
      * @param string $format The date/time format string (either date()-style or strftime()-style).
@@ -296,22 +240,22 @@ abstract class BaseVenta extends BaseObject implements Persistent
      * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getFechaModificacionVenta($format = null)
+    public function getFechaCreacion($format = null)
     {
-        if ($this->fecha_modificacion_venta === null) {
+        if ($this->fecha_creacion === null) {
             return null;
         }
 
-        if ($this->fecha_modificacion_venta === '0000-00-00 00:00:00') {
+        if ($this->fecha_creacion === '0000-00-00 00:00:00') {
             // while technically this is not a default value of null,
             // this seems to be closest in meaning.
             return null;
         }
 
         try {
-            $dt = new DateTime($this->fecha_modificacion_venta);
+            $dt = new DateTime($this->fecha_creacion);
         } catch (Exception $x) {
-            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->fecha_modificacion_venta, true), $x);
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->fecha_creacion, true), $x);
         }
 
         if ($format === null) {
@@ -328,199 +272,218 @@ abstract class BaseVenta extends BaseObject implements Persistent
     }
 
     /**
-     * Set the value of [id_venta] column.
+     * Get the [optionally formatted] temporal [fecha_modificacion] column value.
+     *
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getFechaModificacion($format = null)
+    {
+        if ($this->fecha_modificacion === null) {
+            return null;
+        }
+
+        if ($this->fecha_modificacion === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->fecha_modificacion);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->fecha_modificacion, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
+    }
+
+    /**
+     * Set the value of [id] column.
      *
      * @param int $v new value
      * @return Venta The current object (for fluent API support)
      */
-    public function setIdVenta($v)
+    public function setId($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->id_venta !== $v) {
-            $this->id_venta = $v;
-            $this->modifiedColumns[] = VentaPeer::ID_VENTA;
+        if ($this->id !== $v) {
+            $this->id = $v;
+            $this->modifiedColumns[] = VentaPeer::ID;
         }
 
 
         return $this;
-    } // setIdVenta()
+    } // setId()
 
     /**
-     * Sets the value of [fecha_venta] column to a normalized version of the date/time value specified.
+     * Sets the value of [fecha] column to a normalized version of the date/time value specified.
      *
      * @param mixed $v string, integer (timestamp), or DateTime value.
      *               Empty strings are treated as null.
      * @return Venta The current object (for fluent API support)
      */
-    public function setFechaVenta($v)
+    public function setFecha($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->fecha_venta !== null || $dt !== null) {
-            $currentDateAsString = ($this->fecha_venta !== null && $tmpDt = new DateTime($this->fecha_venta)) ? $tmpDt->format('Y-m-d') : null;
-            $newDateAsString = $dt ? $dt->format('Y-m-d') : null;
-            if ($currentDateAsString !== $newDateAsString) {
-                $this->fecha_venta = $newDateAsString;
-                $this->modifiedColumns[] = VentaPeer::FECHA_VENTA;
-            }
-        } // if either are not null
-
-
-        return $this;
-    } // setFechaVenta()
-
-    /**
-     * Set the value of [total_venta] column.
-     *
-     * @param double $v new value
-     * @return Venta The current object (for fluent API support)
-     */
-    public function setTotalVenta($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (double) $v;
-        }
-
-        if ($this->total_venta !== $v) {
-            $this->total_venta = $v;
-            $this->modifiedColumns[] = VentaPeer::TOTAL_VENTA;
-        }
-
-
-        return $this;
-    } // setTotalVenta()
-
-    /**
-     * Set the value of [formal_total_venta] column.
-     *
-     * @param double $v new value
-     * @return Venta The current object (for fluent API support)
-     */
-    public function setFormalTotalVenta($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (double) $v;
-        }
-
-        if ($this->formal_total_venta !== $v) {
-            $this->formal_total_venta = $v;
-            $this->modifiedColumns[] = VentaPeer::FORMAL_TOTAL_VENTA;
-        }
-
-
-        return $this;
-    } // setFormalTotalVenta()
-
-    /**
-     * Set the value of [informal_total_venta] column.
-     *
-     * @param double $v new value
-     * @return Venta The current object (for fluent API support)
-     */
-    public function setInformalTotalVenta($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (double) $v;
-        }
-
-        if ($this->informal_total_venta !== $v) {
-            $this->informal_total_venta = $v;
-            $this->modifiedColumns[] = VentaPeer::INFORMAL_TOTAL_VENTA;
-        }
-
-
-        return $this;
-    } // setInformalTotalVenta()
-
-    /**
-     * Set the value of [total_iva_venta_formal] column.
-     *
-     * @param double $v new value
-     * @return Venta The current object (for fluent API support)
-     */
-    public function setTotalIvaVentaFormal($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (double) $v;
-        }
-
-        if ($this->total_iva_venta_formal !== $v) {
-            $this->total_iva_venta_formal = $v;
-            $this->modifiedColumns[] = VentaPeer::TOTAL_IVA_VENTA_FORMAL;
-        }
-
-
-        return $this;
-    } // setTotalIvaVentaFormal()
-
-    /**
-     * Set the value of [detalle_venta] column.
-     *
-     * @param string $v new value
-     * @return Venta The current object (for fluent API support)
-     */
-    public function setDetalleVenta($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (string) $v;
-        }
-
-        if ($this->detalle_venta !== $v) {
-            $this->detalle_venta = $v;
-            $this->modifiedColumns[] = VentaPeer::DETALLE_VENTA;
-        }
-
-
-        return $this;
-    } // setDetalleVenta()
-
-    /**
-     * Sets the value of [fecha_creacion_venta] column to a normalized version of the date/time value specified.
-     *
-     * @param mixed $v string, integer (timestamp), or DateTime value.
-     *               Empty strings are treated as null.
-     * @return Venta The current object (for fluent API support)
-     */
-    public function setFechaCreacionVenta($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->fecha_creacion_venta !== null || $dt !== null) {
-            $currentDateAsString = ($this->fecha_creacion_venta !== null && $tmpDt = new DateTime($this->fecha_creacion_venta)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+        if ($this->fecha !== null || $dt !== null) {
+            $currentDateAsString = ($this->fecha !== null && $tmpDt = new DateTime($this->fecha)) ? $tmpDt->format('Y-m-d H:i:s') : null;
             $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
             if ($currentDateAsString !== $newDateAsString) {
-                $this->fecha_creacion_venta = $newDateAsString;
-                $this->modifiedColumns[] = VentaPeer::FECHA_CREACION_VENTA;
+                $this->fecha = $newDateAsString;
+                $this->modifiedColumns[] = VentaPeer::FECHA;
             }
         } // if either are not null
 
 
         return $this;
-    } // setFechaCreacionVenta()
+    } // setFecha()
 
     /**
-     * Sets the value of [fecha_modificacion_venta] column to a normalized version of the date/time value specified.
+     * Set the value of [total_documentada] column.
+     *
+     * @param double $v new value
+     * @return Venta The current object (for fluent API support)
+     */
+    public function setTotalDocumentada($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (double) $v;
+        }
+
+        if ($this->total_documentada !== $v) {
+            $this->total_documentada = $v;
+            $this->modifiedColumns[] = VentaPeer::TOTAL_DOCUMENTADA;
+        }
+
+
+        return $this;
+    } // setTotalDocumentada()
+
+    /**
+     * Set the value of [total_no_documentada] column.
+     *
+     * @param double $v new value
+     * @return Venta The current object (for fluent API support)
+     */
+    public function setTotalNoDocumentada($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (double) $v;
+        }
+
+        if ($this->total_no_documentada !== $v) {
+            $this->total_no_documentada = $v;
+            $this->modifiedColumns[] = VentaPeer::TOTAL_NO_DOCUMENTADA;
+        }
+
+
+        return $this;
+    } // setTotalNoDocumentada()
+
+    /**
+     * Set the value of [total_iva] column.
+     *
+     * @param double $v new value
+     * @return Venta The current object (for fluent API support)
+     */
+    public function setTotalIva($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (double) $v;
+        }
+
+        if ($this->total_iva !== $v) {
+            $this->total_iva = $v;
+            $this->modifiedColumns[] = VentaPeer::TOTAL_IVA;
+        }
+
+
+        return $this;
+    } // setTotalIva()
+
+    /**
+     * Set the value of [total] column.
+     *
+     * @param double $v new value
+     * @return Venta The current object (for fluent API support)
+     */
+    public function setTotal($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (double) $v;
+        }
+
+        if ($this->total !== $v) {
+            $this->total = $v;
+            $this->modifiedColumns[] = VentaPeer::TOTAL;
+        }
+
+
+        return $this;
+    } // setTotal()
+
+    /**
+     * Sets the value of [fecha_creacion] column to a normalized version of the date/time value specified.
      *
      * @param mixed $v string, integer (timestamp), or DateTime value.
      *               Empty strings are treated as null.
      * @return Venta The current object (for fluent API support)
      */
-    public function setFechaModificacionVenta($v)
+    public function setFechaCreacion($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->fecha_modificacion_venta !== null || $dt !== null) {
-            $currentDateAsString = ($this->fecha_modificacion_venta !== null && $tmpDt = new DateTime($this->fecha_modificacion_venta)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+        if ($this->fecha_creacion !== null || $dt !== null) {
+            $currentDateAsString = ($this->fecha_creacion !== null && $tmpDt = new DateTime($this->fecha_creacion)) ? $tmpDt->format('Y-m-d H:i:s') : null;
             $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
             if ($currentDateAsString !== $newDateAsString) {
-                $this->fecha_modificacion_venta = $newDateAsString;
-                $this->modifiedColumns[] = VentaPeer::FECHA_MODIFICACION_VENTA;
+                $this->fecha_creacion = $newDateAsString;
+                $this->modifiedColumns[] = VentaPeer::FECHA_CREACION;
             }
         } // if either are not null
 
 
         return $this;
-    } // setFechaModificacionVenta()
+    } // setFechaCreacion()
+
+    /**
+     * Sets the value of [fecha_modificacion] column to a normalized version of the date/time value specified.
+     *
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
+     * @return Venta The current object (for fluent API support)
+     */
+    public function setFechaModificacion($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->fecha_modificacion !== null || $dt !== null) {
+            $currentDateAsString = ($this->fecha_modificacion !== null && $tmpDt = new DateTime($this->fecha_modificacion)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->fecha_modificacion = $newDateAsString;
+                $this->modifiedColumns[] = VentaPeer::FECHA_MODIFICACION;
+            }
+        } // if either are not null
+
+
+        return $this;
+    } // setFechaModificacion()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -532,19 +495,19 @@ abstract class BaseVenta extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
-            if ($this->total_venta !== 0) {
+            if ($this->total_documentada !== 0) {
                 return false;
             }
 
-            if ($this->formal_total_venta !== 0) {
+            if ($this->total_no_documentada !== 0) {
                 return false;
             }
 
-            if ($this->informal_total_venta !== 0) {
+            if ($this->total_iva !== 0) {
                 return false;
             }
 
-            if ($this->total_iva_venta_formal !== 0) {
+            if ($this->total !== 0) {
                 return false;
             }
 
@@ -570,15 +533,14 @@ abstract class BaseVenta extends BaseObject implements Persistent
     {
         try {
 
-            $this->id_venta = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->fecha_venta = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->total_venta = ($row[$startcol + 2] !== null) ? (double) $row[$startcol + 2] : null;
-            $this->formal_total_venta = ($row[$startcol + 3] !== null) ? (double) $row[$startcol + 3] : null;
-            $this->informal_total_venta = ($row[$startcol + 4] !== null) ? (double) $row[$startcol + 4] : null;
-            $this->total_iva_venta_formal = ($row[$startcol + 5] !== null) ? (double) $row[$startcol + 5] : null;
-            $this->detalle_venta = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-            $this->fecha_creacion_venta = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-            $this->fecha_modificacion_venta = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+            $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
+            $this->fecha = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
+            $this->total_documentada = ($row[$startcol + 2] !== null) ? (double) $row[$startcol + 2] : null;
+            $this->total_no_documentada = ($row[$startcol + 3] !== null) ? (double) $row[$startcol + 3] : null;
+            $this->total_iva = ($row[$startcol + 4] !== null) ? (double) $row[$startcol + 4] : null;
+            $this->total = ($row[$startcol + 5] !== null) ? (double) $row[$startcol + 5] : null;
+            $this->fecha_creacion = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+            $this->fecha_modificacion = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -587,7 +549,7 @@ abstract class BaseVenta extends BaseObject implements Persistent
                 $this->ensureConsistency();
             }
             $this->postHydrate($row, $startcol, $rehydrate);
-            return $startcol + 9; // 9 = VentaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = VentaPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Venta object", $e);
@@ -721,19 +683,8 @@ abstract class BaseVenta extends BaseObject implements Persistent
             $ret = $this->preSave($con);
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
-                // timestampable behavior
-                if (!$this->isColumnModified(VentaPeer::FECHA_CREACION_VENTA)) {
-                    $this->setFechaCreacionVenta(time());
-                }
-                if (!$this->isColumnModified(VentaPeer::FECHA_MODIFICACION_VENTA)) {
-                    $this->setFechaModificacionVenta(time());
-                }
             } else {
                 $ret = $ret && $this->preUpdate($con);
-                // timestampable behavior
-                if ($this->isModified() && !$this->isColumnModified(VentaPeer::FECHA_MODIFICACION_VENTA)) {
-                    $this->setFechaModificacionVenta(time());
-                }
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -804,38 +755,35 @@ abstract class BaseVenta extends BaseObject implements Persistent
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[] = VentaPeer::ID_VENTA;
-        if (null !== $this->id_venta) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . VentaPeer::ID_VENTA . ')');
+        $this->modifiedColumns[] = VentaPeer::ID;
+        if (null !== $this->id) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . VentaPeer::ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(VentaPeer::ID_VENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`id_venta`';
+        if ($this->isColumnModified(VentaPeer::ID)) {
+            $modifiedColumns[':p' . $index++]  = '`id`';
         }
-        if ($this->isColumnModified(VentaPeer::FECHA_VENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`fecha_venta`';
+        if ($this->isColumnModified(VentaPeer::FECHA)) {
+            $modifiedColumns[':p' . $index++]  = '`fecha`';
         }
-        if ($this->isColumnModified(VentaPeer::TOTAL_VENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`total_venta`';
+        if ($this->isColumnModified(VentaPeer::TOTAL_DOCUMENTADA)) {
+            $modifiedColumns[':p' . $index++]  = '`total_documentada`';
         }
-        if ($this->isColumnModified(VentaPeer::FORMAL_TOTAL_VENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`formal_total_venta`';
+        if ($this->isColumnModified(VentaPeer::TOTAL_NO_DOCUMENTADA)) {
+            $modifiedColumns[':p' . $index++]  = '`total_no_documentada`';
         }
-        if ($this->isColumnModified(VentaPeer::INFORMAL_TOTAL_VENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`informal_total_venta`';
+        if ($this->isColumnModified(VentaPeer::TOTAL_IVA)) {
+            $modifiedColumns[':p' . $index++]  = '`total_iva`';
         }
-        if ($this->isColumnModified(VentaPeer::TOTAL_IVA_VENTA_FORMAL)) {
-            $modifiedColumns[':p' . $index++]  = '`total_iva_venta_formal`';
+        if ($this->isColumnModified(VentaPeer::TOTAL)) {
+            $modifiedColumns[':p' . $index++]  = '`total`';
         }
-        if ($this->isColumnModified(VentaPeer::DETALLE_VENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`detalle_venta`';
+        if ($this->isColumnModified(VentaPeer::FECHA_CREACION)) {
+            $modifiedColumns[':p' . $index++]  = '`fecha_creacion`';
         }
-        if ($this->isColumnModified(VentaPeer::FECHA_CREACION_VENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`fecha_creacion_venta`';
-        }
-        if ($this->isColumnModified(VentaPeer::FECHA_MODIFICACION_VENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`fecha_modificacion_venta`';
+        if ($this->isColumnModified(VentaPeer::FECHA_MODIFICACION)) {
+            $modifiedColumns[':p' . $index++]  = '`fecha_modificacion`';
         }
 
         $sql = sprintf(
@@ -848,32 +796,29 @@ abstract class BaseVenta extends BaseObject implements Persistent
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`id_venta`':
-                        $stmt->bindValue($identifier, $this->id_venta, PDO::PARAM_INT);
+                    case '`id`':
+                        $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case '`fecha_venta`':
-                        $stmt->bindValue($identifier, $this->fecha_venta, PDO::PARAM_STR);
+                    case '`fecha`':
+                        $stmt->bindValue($identifier, $this->fecha, PDO::PARAM_STR);
                         break;
-                    case '`total_venta`':
-                        $stmt->bindValue($identifier, $this->total_venta, PDO::PARAM_STR);
+                    case '`total_documentada`':
+                        $stmt->bindValue($identifier, $this->total_documentada, PDO::PARAM_STR);
                         break;
-                    case '`formal_total_venta`':
-                        $stmt->bindValue($identifier, $this->formal_total_venta, PDO::PARAM_STR);
+                    case '`total_no_documentada`':
+                        $stmt->bindValue($identifier, $this->total_no_documentada, PDO::PARAM_STR);
                         break;
-                    case '`informal_total_venta`':
-                        $stmt->bindValue($identifier, $this->informal_total_venta, PDO::PARAM_STR);
+                    case '`total_iva`':
+                        $stmt->bindValue($identifier, $this->total_iva, PDO::PARAM_STR);
                         break;
-                    case '`total_iva_venta_formal`':
-                        $stmt->bindValue($identifier, $this->total_iva_venta_formal, PDO::PARAM_STR);
+                    case '`total`':
+                        $stmt->bindValue($identifier, $this->total, PDO::PARAM_STR);
                         break;
-                    case '`detalle_venta`':
-                        $stmt->bindValue($identifier, $this->detalle_venta, PDO::PARAM_STR);
+                    case '`fecha_creacion`':
+                        $stmt->bindValue($identifier, $this->fecha_creacion, PDO::PARAM_STR);
                         break;
-                    case '`fecha_creacion_venta`':
-                        $stmt->bindValue($identifier, $this->fecha_creacion_venta, PDO::PARAM_STR);
-                        break;
-                    case '`fecha_modificacion_venta`':
-                        $stmt->bindValue($identifier, $this->fecha_modificacion_venta, PDO::PARAM_STR);
+                    case '`fecha_modificacion`':
+                        $stmt->bindValue($identifier, $this->fecha_modificacion, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -888,7 +833,7 @@ abstract class BaseVenta extends BaseObject implements Persistent
         } catch (Exception $e) {
             throw new PropelException('Unable to get autoincrement id.', $e);
         }
-        $this->setIdVenta($pk);
+        $this->setId($pk);
 
         $this->setNew(false);
     }
@@ -1010,31 +955,28 @@ abstract class BaseVenta extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                return $this->getIdVenta();
+                return $this->getId();
                 break;
             case 1:
-                return $this->getFechaVenta();
+                return $this->getFecha();
                 break;
             case 2:
-                return $this->getTotalVenta();
+                return $this->getTotalDocumentada();
                 break;
             case 3:
-                return $this->getFormalTotalVenta();
+                return $this->getTotalNoDocumentada();
                 break;
             case 4:
-                return $this->getInformalTotalVenta();
+                return $this->getTotalIva();
                 break;
             case 5:
-                return $this->getTotalIvaVentaFormal();
+                return $this->getTotal();
                 break;
             case 6:
-                return $this->getDetalleVenta();
+                return $this->getFechaCreacion();
                 break;
             case 7:
-                return $this->getFechaCreacionVenta();
-                break;
-            case 8:
-                return $this->getFechaModificacionVenta();
+                return $this->getFechaModificacion();
                 break;
             default:
                 return null;
@@ -1064,15 +1006,14 @@ abstract class BaseVenta extends BaseObject implements Persistent
         $alreadyDumpedObjects['Venta'][$this->getPrimaryKey()] = true;
         $keys = VentaPeer::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getIdVenta(),
-            $keys[1] => $this->getFechaVenta(),
-            $keys[2] => $this->getTotalVenta(),
-            $keys[3] => $this->getFormalTotalVenta(),
-            $keys[4] => $this->getInformalTotalVenta(),
-            $keys[5] => $this->getTotalIvaVentaFormal(),
-            $keys[6] => $this->getDetalleVenta(),
-            $keys[7] => $this->getFechaCreacionVenta(),
-            $keys[8] => $this->getFechaModificacionVenta(),
+            $keys[0] => $this->getId(),
+            $keys[1] => $this->getFecha(),
+            $keys[2] => $this->getTotalDocumentada(),
+            $keys[3] => $this->getTotalNoDocumentada(),
+            $keys[4] => $this->getTotalIva(),
+            $keys[5] => $this->getTotal(),
+            $keys[6] => $this->getFechaCreacion(),
+            $keys[7] => $this->getFechaModificacion(),
         );
 
         return $result;
@@ -1108,31 +1049,28 @@ abstract class BaseVenta extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                $this->setIdVenta($value);
+                $this->setId($value);
                 break;
             case 1:
-                $this->setFechaVenta($value);
+                $this->setFecha($value);
                 break;
             case 2:
-                $this->setTotalVenta($value);
+                $this->setTotalDocumentada($value);
                 break;
             case 3:
-                $this->setFormalTotalVenta($value);
+                $this->setTotalNoDocumentada($value);
                 break;
             case 4:
-                $this->setInformalTotalVenta($value);
+                $this->setTotalIva($value);
                 break;
             case 5:
-                $this->setTotalIvaVentaFormal($value);
+                $this->setTotal($value);
                 break;
             case 6:
-                $this->setDetalleVenta($value);
+                $this->setFechaCreacion($value);
                 break;
             case 7:
-                $this->setFechaCreacionVenta($value);
-                break;
-            case 8:
-                $this->setFechaModificacionVenta($value);
+                $this->setFechaModificacion($value);
                 break;
         } // switch()
     }
@@ -1158,15 +1096,14 @@ abstract class BaseVenta extends BaseObject implements Persistent
     {
         $keys = VentaPeer::getFieldNames($keyType);
 
-        if (array_key_exists($keys[0], $arr)) $this->setIdVenta($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setFechaVenta($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setTotalVenta($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setFormalTotalVenta($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setInformalTotalVenta($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setTotalIvaVentaFormal($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setDetalleVenta($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setFechaCreacionVenta($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setFechaModificacionVenta($arr[$keys[8]]);
+        if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
+        if (array_key_exists($keys[1], $arr)) $this->setFecha($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setTotalDocumentada($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setTotalNoDocumentada($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setTotalIva($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setTotal($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setFechaCreacion($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setFechaModificacion($arr[$keys[7]]);
     }
 
     /**
@@ -1178,15 +1115,14 @@ abstract class BaseVenta extends BaseObject implements Persistent
     {
         $criteria = new Criteria(VentaPeer::DATABASE_NAME);
 
-        if ($this->isColumnModified(VentaPeer::ID_VENTA)) $criteria->add(VentaPeer::ID_VENTA, $this->id_venta);
-        if ($this->isColumnModified(VentaPeer::FECHA_VENTA)) $criteria->add(VentaPeer::FECHA_VENTA, $this->fecha_venta);
-        if ($this->isColumnModified(VentaPeer::TOTAL_VENTA)) $criteria->add(VentaPeer::TOTAL_VENTA, $this->total_venta);
-        if ($this->isColumnModified(VentaPeer::FORMAL_TOTAL_VENTA)) $criteria->add(VentaPeer::FORMAL_TOTAL_VENTA, $this->formal_total_venta);
-        if ($this->isColumnModified(VentaPeer::INFORMAL_TOTAL_VENTA)) $criteria->add(VentaPeer::INFORMAL_TOTAL_VENTA, $this->informal_total_venta);
-        if ($this->isColumnModified(VentaPeer::TOTAL_IVA_VENTA_FORMAL)) $criteria->add(VentaPeer::TOTAL_IVA_VENTA_FORMAL, $this->total_iva_venta_formal);
-        if ($this->isColumnModified(VentaPeer::DETALLE_VENTA)) $criteria->add(VentaPeer::DETALLE_VENTA, $this->detalle_venta);
-        if ($this->isColumnModified(VentaPeer::FECHA_CREACION_VENTA)) $criteria->add(VentaPeer::FECHA_CREACION_VENTA, $this->fecha_creacion_venta);
-        if ($this->isColumnModified(VentaPeer::FECHA_MODIFICACION_VENTA)) $criteria->add(VentaPeer::FECHA_MODIFICACION_VENTA, $this->fecha_modificacion_venta);
+        if ($this->isColumnModified(VentaPeer::ID)) $criteria->add(VentaPeer::ID, $this->id);
+        if ($this->isColumnModified(VentaPeer::FECHA)) $criteria->add(VentaPeer::FECHA, $this->fecha);
+        if ($this->isColumnModified(VentaPeer::TOTAL_DOCUMENTADA)) $criteria->add(VentaPeer::TOTAL_DOCUMENTADA, $this->total_documentada);
+        if ($this->isColumnModified(VentaPeer::TOTAL_NO_DOCUMENTADA)) $criteria->add(VentaPeer::TOTAL_NO_DOCUMENTADA, $this->total_no_documentada);
+        if ($this->isColumnModified(VentaPeer::TOTAL_IVA)) $criteria->add(VentaPeer::TOTAL_IVA, $this->total_iva);
+        if ($this->isColumnModified(VentaPeer::TOTAL)) $criteria->add(VentaPeer::TOTAL, $this->total);
+        if ($this->isColumnModified(VentaPeer::FECHA_CREACION)) $criteria->add(VentaPeer::FECHA_CREACION, $this->fecha_creacion);
+        if ($this->isColumnModified(VentaPeer::FECHA_MODIFICACION)) $criteria->add(VentaPeer::FECHA_MODIFICACION, $this->fecha_modificacion);
 
         return $criteria;
     }
@@ -1202,7 +1138,7 @@ abstract class BaseVenta extends BaseObject implements Persistent
     public function buildPkeyCriteria()
     {
         $criteria = new Criteria(VentaPeer::DATABASE_NAME);
-        $criteria->add(VentaPeer::ID_VENTA, $this->id_venta);
+        $criteria->add(VentaPeer::ID, $this->id);
 
         return $criteria;
     }
@@ -1213,18 +1149,18 @@ abstract class BaseVenta extends BaseObject implements Persistent
      */
     public function getPrimaryKey()
     {
-        return $this->getIdVenta();
+        return $this->getId();
     }
 
     /**
-     * Generic method to set the primary key (id_venta column).
+     * Generic method to set the primary key (id column).
      *
      * @param  int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
     {
-        $this->setIdVenta($key);
+        $this->setId($key);
     }
 
     /**
@@ -1234,7 +1170,7 @@ abstract class BaseVenta extends BaseObject implements Persistent
     public function isPrimaryKeyNull()
     {
 
-        return null === $this->getIdVenta();
+        return null === $this->getId();
     }
 
     /**
@@ -1250,17 +1186,16 @@ abstract class BaseVenta extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setFechaVenta($this->getFechaVenta());
-        $copyObj->setTotalVenta($this->getTotalVenta());
-        $copyObj->setFormalTotalVenta($this->getFormalTotalVenta());
-        $copyObj->setInformalTotalVenta($this->getInformalTotalVenta());
-        $copyObj->setTotalIvaVentaFormal($this->getTotalIvaVentaFormal());
-        $copyObj->setDetalleVenta($this->getDetalleVenta());
-        $copyObj->setFechaCreacionVenta($this->getFechaCreacionVenta());
-        $copyObj->setFechaModificacionVenta($this->getFechaModificacionVenta());
+        $copyObj->setFecha($this->getFecha());
+        $copyObj->setTotalDocumentada($this->getTotalDocumentada());
+        $copyObj->setTotalNoDocumentada($this->getTotalNoDocumentada());
+        $copyObj->setTotalIva($this->getTotalIva());
+        $copyObj->setTotal($this->getTotal());
+        $copyObj->setFechaCreacion($this->getFechaCreacion());
+        $copyObj->setFechaModificacion($this->getFechaModificacion());
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setIdVenta(NULL); // this is a auto-increment column, so set to default value
+            $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1309,15 +1244,14 @@ abstract class BaseVenta extends BaseObject implements Persistent
      */
     public function clear()
     {
-        $this->id_venta = null;
-        $this->fecha_venta = null;
-        $this->total_venta = null;
-        $this->formal_total_venta = null;
-        $this->informal_total_venta = null;
-        $this->total_iva_venta_formal = null;
-        $this->detalle_venta = null;
-        $this->fecha_creacion_venta = null;
-        $this->fecha_modificacion_venta = null;
+        $this->id = null;
+        $this->fecha = null;
+        $this->total_documentada = null;
+        $this->total_no_documentada = null;
+        $this->total_iva = null;
+        $this->total = null;
+        $this->fecha_creacion = null;
+        $this->fecha_modificacion = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -1365,20 +1299,6 @@ abstract class BaseVenta extends BaseObject implements Persistent
     public function isAlreadyInSave()
     {
         return $this->alreadyInSave;
-    }
-
-    // timestampable behavior
-
-    /**
-     * Mark the current object so that the update date doesn't get updated during next save
-     *
-     * @return     Venta The current object (for fluent API support)
-     */
-    public function keepUpdateDateUnchanged()
-    {
-        $this->modifiedColumns[] = VentaPeer::FECHA_MODIFICACION_VENTA;
-
-        return $this;
     }
 
 }

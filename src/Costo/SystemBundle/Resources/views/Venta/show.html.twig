@@ -46,31 +46,27 @@
     <tbody>
         <tr>
             <th>Código</th>
-            <td>{{ venta.IdVenta }}</td>
+            <td>{{ venta.IdDetalle }}</td>
         </tr>
         <tr>
             <th>Fecha</th>
             <td>{{ venta.FechaVenta|date('d/m/Y') }}</td>
         </tr>
         <tr>
-            <th>Total</th>
-            <td>${{ venta.TotalVenta | number_format(0,',','.')}}</td>
-        </tr>
-        <tr>
             <th>Total Formal</th>
-            <td>${{ venta.FormalTotalVenta | number_format(0,',','.')}}</td>
+            <td>${{ venta.TotalNetoVenta | number_format(0,',','.')}}</td>
         </tr>
         <tr>
             <th>Total Informal</th>
-            <td>${{ venta.InformalTotalVenta | number_format(0,',','.')}}</td>
+            <td>${{ venta.TotalIvaVenta | number_format(0,',','.')}}</td>
         </tr>
         <tr>
             <th>Total I.V.A (f)</th>
-            <td>${{ venta.TotalIvaVentaFormal | number_format(0,',','.')}}</td>
+            <td>${{ venta.TotalVenta | number_format(0,',','.')}}</td>
         </tr>
         <tr>
             <th>Detalle</th>
-            <td>{{ venta.DetalleVenta }}</td>
+            <td>{{ venta.DescripcionVenta }}</td>
         </tr>
     </tbody>
 </table>

@@ -10,34 +10,36 @@ use \Exception;
 use \PDO;
 use \Persistent;
 use \Propel;
+use \PropelCollection;
 use \PropelDateTime;
 use \PropelException;
+use \PropelObjectCollection;
 use \PropelPDO;
-use Costo\SystemBundle\Model\Cuenta;
-use Costo\SystemBundle\Model\CuentaQuery;
-use Costo\SystemBundle\Model\Gasto;
-use Costo\SystemBundle\Model\GastoPeer;
-use Costo\SystemBundle\Model\GastoQuery;
+use Costo\SystemBundle\Model\DetalleVenta;
+use Costo\SystemBundle\Model\DetalleVentaQuery;
+use Costo\SystemBundle\Model\FormaPago;
+use Costo\SystemBundle\Model\FormaPagoPeer;
+use Costo\SystemBundle\Model\FormaPagoQuery;
 
 /**
- * Base class that represents a row from the 'gasto' table.
+ * Base class that represents a row from the 'forma_pago' table.
  *
  *
  *
  * @package    propel.generator.src.Costo.SystemBundle.Model.om
  */
-abstract class BaseGasto extends BaseObject implements Persistent
+abstract class BaseFormaPago extends BaseObject implements Persistent
 {
     /**
      * Peer class name
      */
-    const PEER = 'Costo\\SystemBundle\\Model\\GastoPeer';
+    const PEER = 'Costo\\SystemBundle\\Model\\FormaPagoPeer';
 
     /**
      * The Peer class.
      * Instance provides a convenient way of calling static methods on a class
      * that calling code may not be able to identify.
-     * @var        GastoPeer
+     * @var        FormaPagoPeer
      */
     protected static $peer;
 
@@ -48,65 +50,40 @@ abstract class BaseGasto extends BaseObject implements Persistent
     protected $startCopy = false;
 
     /**
-     * The value for the id_gasto field.
+     * The value for the id_forma_pago field.
      * @var        int
      */
-    protected $id_gasto;
+    protected $id_forma_pago;
 
     /**
-     * The value for the fk_cuenta field.
-     * Note: this column has a database default value of: 0
-     * @var        int
-     */
-    protected $fk_cuenta;
-
-    /**
-     * The value for the nombre_gasto field.
+     * The value for the nombre_forma_pago field.
      * @var        string
      */
-    protected $nombre_gasto;
+    protected $nombre_forma_pago;
 
     /**
-     * The value for the costo_gasto field.
-     * Note: this column has a database default value of: 0
-     * @var        double
-     */
-    protected $costo_gasto;
-
-    /**
-     * The value for the fecha_emision_gasto field.
+     * The value for the descripcion_forma_pago field.
      * @var        string
      */
-    protected $fecha_emision_gasto;
+    protected $descripcion_forma_pago;
 
     /**
-     * The value for the fecha_pago_gasto field.
+     * The value for the fecha_creacion_forma_pago field.
      * @var        string
      */
-    protected $fecha_pago_gasto;
+    protected $fecha_creacion_forma_pago;
 
     /**
-     * The value for the numero_doc_gasto field.
+     * The value for the fecha_modificacion_forma_pago field.
      * @var        string
      */
-    protected $numero_doc_gasto;
+    protected $fecha_modificacion_forma_pago;
 
     /**
-     * The value for the fecha_creacion_gasto field.
-     * @var        string
+     * @var        PropelObjectCollection|DetalleVenta[] Collection to store aggregation of DetalleVenta objects.
      */
-    protected $fecha_creacion_gasto;
-
-    /**
-     * The value for the fecha_modificacion_gasto field.
-     * @var        string
-     */
-    protected $fecha_modificacion_gasto;
-
-    /**
-     * @var        Cuenta
-     */
-    protected $aCuenta;
+    protected $collDetalleVentas;
+    protected $collDetalleVentasPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -129,159 +106,43 @@ abstract class BaseGasto extends BaseObject implements Persistent
     protected $alreadyInClearAllReferencesDeep = false;
 
     /**
-     * Applies default values to this object.
-     * This method should be called from the object's constructor (or
-     * equivalent initialization method).
-     * @see        __construct()
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
      */
-    public function applyDefaultValues()
-    {
-        $this->fk_cuenta = 0;
-        $this->costo_gasto = 0;
-    }
+    protected $detalleVentasScheduledForDeletion = null;
 
     /**
-     * Initializes internal state of BaseGasto object.
-     * @see        applyDefaults()
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->applyDefaultValues();
-    }
-
-    /**
-     * Get the [id_gasto] column value.
+     * Get the [id_forma_pago] column value.
      *
      * @return int
      */
-    public function getIdGasto()
+    public function getIdFormaPago()
     {
-        return $this->id_gasto;
+        return $this->id_forma_pago;
     }
 
     /**
-     * Get the [fk_cuenta] column value.
-     *
-     * @return int
-     */
-    public function getFkCuenta()
-    {
-        return $this->fk_cuenta;
-    }
-
-    /**
-     * Get the [nombre_gasto] column value.
+     * Get the [nombre_forma_pago] column value.
      *
      * @return string
      */
-    public function getNombreGasto()
+    public function getNombreFormaPago()
     {
-        return $this->nombre_gasto;
+        return $this->nombre_forma_pago;
     }
 
     /**
-     * Get the [costo_gasto] column value.
-     *
-     * @return double
-     */
-    public function getCostoGasto()
-    {
-        return $this->costo_gasto;
-    }
-
-    /**
-     * Get the [optionally formatted] temporal [fecha_emision_gasto] column value.
-     *
-     *
-     * @param string $format The date/time format string (either date()-style or strftime()-style).
-     *				 If format is null, then the raw DateTime object will be returned.
-     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     */
-    public function getFechaEmisionGasto($format = null)
-    {
-        if ($this->fecha_emision_gasto === null) {
-            return null;
-        }
-
-        if ($this->fecha_emision_gasto === '0000-00-00') {
-            // while technically this is not a default value of null,
-            // this seems to be closest in meaning.
-            return null;
-        }
-
-        try {
-            $dt = new DateTime($this->fecha_emision_gasto);
-        } catch (Exception $x) {
-            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->fecha_emision_gasto, true), $x);
-        }
-
-        if ($format === null) {
-            // Because propel.useDateTimeClass is true, we return a DateTime object.
-            return $dt;
-        }
-
-        if (strpos($format, '%') !== false) {
-            return strftime($format, $dt->format('U'));
-        }
-
-        return $dt->format($format);
-
-    }
-
-    /**
-     * Get the [optionally formatted] temporal [fecha_pago_gasto] column value.
-     *
-     *
-     * @param string $format The date/time format string (either date()-style or strftime()-style).
-     *				 If format is null, then the raw DateTime object will be returned.
-     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     */
-    public function getFechaPagoGasto($format = null)
-    {
-        if ($this->fecha_pago_gasto === null) {
-            return null;
-        }
-
-        if ($this->fecha_pago_gasto === '0000-00-00') {
-            // while technically this is not a default value of null,
-            // this seems to be closest in meaning.
-            return null;
-        }
-
-        try {
-            $dt = new DateTime($this->fecha_pago_gasto);
-        } catch (Exception $x) {
-            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->fecha_pago_gasto, true), $x);
-        }
-
-        if ($format === null) {
-            // Because propel.useDateTimeClass is true, we return a DateTime object.
-            return $dt;
-        }
-
-        if (strpos($format, '%') !== false) {
-            return strftime($format, $dt->format('U'));
-        }
-
-        return $dt->format($format);
-
-    }
-
-    /**
-     * Get the [numero_doc_gasto] column value.
+     * Get the [descripcion_forma_pago] column value.
      *
      * @return string
      */
-    public function getNumeroDocGasto()
+    public function getDescripcionFormaPago()
     {
-        return $this->numero_doc_gasto;
+        return $this->descripcion_forma_pago;
     }
 
     /**
-     * Get the [optionally formatted] temporal [fecha_creacion_gasto] column value.
+     * Get the [optionally formatted] temporal [fecha_creacion_forma_pago] column value.
      *
      *
      * @param string $format The date/time format string (either date()-style or strftime()-style).
@@ -289,22 +150,22 @@ abstract class BaseGasto extends BaseObject implements Persistent
      * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getFechaCreacionGasto($format = null)
+    public function getFechaCreacionFormaPago($format = null)
     {
-        if ($this->fecha_creacion_gasto === null) {
+        if ($this->fecha_creacion_forma_pago === null) {
             return null;
         }
 
-        if ($this->fecha_creacion_gasto === '0000-00-00 00:00:00') {
+        if ($this->fecha_creacion_forma_pago === '0000-00-00 00:00:00') {
             // while technically this is not a default value of null,
             // this seems to be closest in meaning.
             return null;
         }
 
         try {
-            $dt = new DateTime($this->fecha_creacion_gasto);
+            $dt = new DateTime($this->fecha_creacion_forma_pago);
         } catch (Exception $x) {
-            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->fecha_creacion_gasto, true), $x);
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->fecha_creacion_forma_pago, true), $x);
         }
 
         if ($format === null) {
@@ -321,7 +182,7 @@ abstract class BaseGasto extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [optionally formatted] temporal [fecha_modificacion_gasto] column value.
+     * Get the [optionally formatted] temporal [fecha_modificacion_forma_pago] column value.
      *
      *
      * @param string $format The date/time format string (either date()-style or strftime()-style).
@@ -329,22 +190,22 @@ abstract class BaseGasto extends BaseObject implements Persistent
      * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getFechaModificacionGasto($format = null)
+    public function getFechaModificacionFormaPago($format = null)
     {
-        if ($this->fecha_modificacion_gasto === null) {
+        if ($this->fecha_modificacion_forma_pago === null) {
             return null;
         }
 
-        if ($this->fecha_modificacion_gasto === '0000-00-00 00:00:00') {
+        if ($this->fecha_modificacion_forma_pago === '0000-00-00 00:00:00') {
             // while technically this is not a default value of null,
             // this seems to be closest in meaning.
             return null;
         }
 
         try {
-            $dt = new DateTime($this->fecha_modificacion_gasto);
+            $dt = new DateTime($this->fecha_modificacion_forma_pago);
         } catch (Exception $x) {
-            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->fecha_modificacion_gasto, true), $x);
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->fecha_modificacion_forma_pago, true), $x);
         }
 
         if ($format === null) {
@@ -361,205 +222,113 @@ abstract class BaseGasto extends BaseObject implements Persistent
     }
 
     /**
-     * Set the value of [id_gasto] column.
+     * Set the value of [id_forma_pago] column.
      *
      * @param int $v new value
-     * @return Gasto The current object (for fluent API support)
+     * @return FormaPago The current object (for fluent API support)
      */
-    public function setIdGasto($v)
+    public function setIdFormaPago($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->id_gasto !== $v) {
-            $this->id_gasto = $v;
-            $this->modifiedColumns[] = GastoPeer::ID_GASTO;
+        if ($this->id_forma_pago !== $v) {
+            $this->id_forma_pago = $v;
+            $this->modifiedColumns[] = FormaPagoPeer::ID_FORMA_PAGO;
         }
 
 
         return $this;
-    } // setIdGasto()
+    } // setIdFormaPago()
 
     /**
-     * Set the value of [fk_cuenta] column.
-     *
-     * @param int $v new value
-     * @return Gasto The current object (for fluent API support)
-     */
-    public function setFkCuenta($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
-        }
-
-        if ($this->fk_cuenta !== $v) {
-            $this->fk_cuenta = $v;
-            $this->modifiedColumns[] = GastoPeer::FK_CUENTA;
-        }
-
-        if ($this->aCuenta !== null && $this->aCuenta->getIdCuenta() !== $v) {
-            $this->aCuenta = null;
-        }
-
-
-        return $this;
-    } // setFkCuenta()
-
-    /**
-     * Set the value of [nombre_gasto] column.
+     * Set the value of [nombre_forma_pago] column.
      *
      * @param string $v new value
-     * @return Gasto The current object (for fluent API support)
+     * @return FormaPago The current object (for fluent API support)
      */
-    public function setNombreGasto($v)
+    public function setNombreFormaPago($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (string) $v;
         }
 
-        if ($this->nombre_gasto !== $v) {
-            $this->nombre_gasto = $v;
-            $this->modifiedColumns[] = GastoPeer::NOMBRE_GASTO;
+        if ($this->nombre_forma_pago !== $v) {
+            $this->nombre_forma_pago = $v;
+            $this->modifiedColumns[] = FormaPagoPeer::NOMBRE_FORMA_PAGO;
         }
 
 
         return $this;
-    } // setNombreGasto()
+    } // setNombreFormaPago()
 
     /**
-     * Set the value of [costo_gasto] column.
-     *
-     * @param double $v new value
-     * @return Gasto The current object (for fluent API support)
-     */
-    public function setCostoGasto($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (double) $v;
-        }
-
-        if ($this->costo_gasto !== $v) {
-            $this->costo_gasto = $v;
-            $this->modifiedColumns[] = GastoPeer::COSTO_GASTO;
-        }
-
-
-        return $this;
-    } // setCostoGasto()
-
-    /**
-     * Sets the value of [fecha_emision_gasto] column to a normalized version of the date/time value specified.
-     *
-     * @param mixed $v string, integer (timestamp), or DateTime value.
-     *               Empty strings are treated as null.
-     * @return Gasto The current object (for fluent API support)
-     */
-    public function setFechaEmisionGasto($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->fecha_emision_gasto !== null || $dt !== null) {
-            $currentDateAsString = ($this->fecha_emision_gasto !== null && $tmpDt = new DateTime($this->fecha_emision_gasto)) ? $tmpDt->format('Y-m-d') : null;
-            $newDateAsString = $dt ? $dt->format('Y-m-d') : null;
-            if ($currentDateAsString !== $newDateAsString) {
-                $this->fecha_emision_gasto = $newDateAsString;
-                $this->modifiedColumns[] = GastoPeer::FECHA_EMISION_GASTO;
-            }
-        } // if either are not null
-
-
-        return $this;
-    } // setFechaEmisionGasto()
-
-    /**
-     * Sets the value of [fecha_pago_gasto] column to a normalized version of the date/time value specified.
-     *
-     * @param mixed $v string, integer (timestamp), or DateTime value.
-     *               Empty strings are treated as null.
-     * @return Gasto The current object (for fluent API support)
-     */
-    public function setFechaPagoGasto($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->fecha_pago_gasto !== null || $dt !== null) {
-            $currentDateAsString = ($this->fecha_pago_gasto !== null && $tmpDt = new DateTime($this->fecha_pago_gasto)) ? $tmpDt->format('Y-m-d') : null;
-            $newDateAsString = $dt ? $dt->format('Y-m-d') : null;
-            if ($currentDateAsString !== $newDateAsString) {
-                $this->fecha_pago_gasto = $newDateAsString;
-                $this->modifiedColumns[] = GastoPeer::FECHA_PAGO_GASTO;
-            }
-        } // if either are not null
-
-
-        return $this;
-    } // setFechaPagoGasto()
-
-    /**
-     * Set the value of [numero_doc_gasto] column.
+     * Set the value of [descripcion_forma_pago] column.
      *
      * @param string $v new value
-     * @return Gasto The current object (for fluent API support)
+     * @return FormaPago The current object (for fluent API support)
      */
-    public function setNumeroDocGasto($v)
+    public function setDescripcionFormaPago($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (string) $v;
         }
 
-        if ($this->numero_doc_gasto !== $v) {
-            $this->numero_doc_gasto = $v;
-            $this->modifiedColumns[] = GastoPeer::NUMERO_DOC_GASTO;
+        if ($this->descripcion_forma_pago !== $v) {
+            $this->descripcion_forma_pago = $v;
+            $this->modifiedColumns[] = FormaPagoPeer::DESCRIPCION_FORMA_PAGO;
         }
 
 
         return $this;
-    } // setNumeroDocGasto()
+    } // setDescripcionFormaPago()
 
     /**
-     * Sets the value of [fecha_creacion_gasto] column to a normalized version of the date/time value specified.
+     * Sets the value of [fecha_creacion_forma_pago] column to a normalized version of the date/time value specified.
      *
      * @param mixed $v string, integer (timestamp), or DateTime value.
      *               Empty strings are treated as null.
-     * @return Gasto The current object (for fluent API support)
+     * @return FormaPago The current object (for fluent API support)
      */
-    public function setFechaCreacionGasto($v)
+    public function setFechaCreacionFormaPago($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->fecha_creacion_gasto !== null || $dt !== null) {
-            $currentDateAsString = ($this->fecha_creacion_gasto !== null && $tmpDt = new DateTime($this->fecha_creacion_gasto)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+        if ($this->fecha_creacion_forma_pago !== null || $dt !== null) {
+            $currentDateAsString = ($this->fecha_creacion_forma_pago !== null && $tmpDt = new DateTime($this->fecha_creacion_forma_pago)) ? $tmpDt->format('Y-m-d H:i:s') : null;
             $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
             if ($currentDateAsString !== $newDateAsString) {
-                $this->fecha_creacion_gasto = $newDateAsString;
-                $this->modifiedColumns[] = GastoPeer::FECHA_CREACION_GASTO;
+                $this->fecha_creacion_forma_pago = $newDateAsString;
+                $this->modifiedColumns[] = FormaPagoPeer::FECHA_CREACION_FORMA_PAGO;
             }
         } // if either are not null
 
 
         return $this;
-    } // setFechaCreacionGasto()
+    } // setFechaCreacionFormaPago()
 
     /**
-     * Sets the value of [fecha_modificacion_gasto] column to a normalized version of the date/time value specified.
+     * Sets the value of [fecha_modificacion_forma_pago] column to a normalized version of the date/time value specified.
      *
      * @param mixed $v string, integer (timestamp), or DateTime value.
      *               Empty strings are treated as null.
-     * @return Gasto The current object (for fluent API support)
+     * @return FormaPago The current object (for fluent API support)
      */
-    public function setFechaModificacionGasto($v)
+    public function setFechaModificacionFormaPago($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->fecha_modificacion_gasto !== null || $dt !== null) {
-            $currentDateAsString = ($this->fecha_modificacion_gasto !== null && $tmpDt = new DateTime($this->fecha_modificacion_gasto)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+        if ($this->fecha_modificacion_forma_pago !== null || $dt !== null) {
+            $currentDateAsString = ($this->fecha_modificacion_forma_pago !== null && $tmpDt = new DateTime($this->fecha_modificacion_forma_pago)) ? $tmpDt->format('Y-m-d H:i:s') : null;
             $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
             if ($currentDateAsString !== $newDateAsString) {
-                $this->fecha_modificacion_gasto = $newDateAsString;
-                $this->modifiedColumns[] = GastoPeer::FECHA_MODIFICACION_GASTO;
+                $this->fecha_modificacion_forma_pago = $newDateAsString;
+                $this->modifiedColumns[] = FormaPagoPeer::FECHA_MODIFICACION_FORMA_PAGO;
             }
         } // if either are not null
 
 
         return $this;
-    } // setFechaModificacionGasto()
+    } // setFechaModificacionFormaPago()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -571,14 +340,6 @@ abstract class BaseGasto extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
-            if ($this->fk_cuenta !== 0) {
-                return false;
-            }
-
-            if ($this->costo_gasto !== 0) {
-                return false;
-            }
-
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -601,15 +362,11 @@ abstract class BaseGasto extends BaseObject implements Persistent
     {
         try {
 
-            $this->id_gasto = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->fk_cuenta = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-            $this->nombre_gasto = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-            $this->costo_gasto = ($row[$startcol + 3] !== null) ? (double) $row[$startcol + 3] : null;
-            $this->fecha_emision_gasto = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-            $this->fecha_pago_gasto = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-            $this->numero_doc_gasto = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-            $this->fecha_creacion_gasto = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-            $this->fecha_modificacion_gasto = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+            $this->id_forma_pago = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
+            $this->nombre_forma_pago = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
+            $this->descripcion_forma_pago = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->fecha_creacion_forma_pago = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->fecha_modificacion_forma_pago = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -618,10 +375,10 @@ abstract class BaseGasto extends BaseObject implements Persistent
                 $this->ensureConsistency();
             }
             $this->postHydrate($row, $startcol, $rehydrate);
-            return $startcol + 9; // 9 = GastoPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = FormaPagoPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException("Error populating Gasto object", $e);
+            throw new PropelException("Error populating FormaPago object", $e);
         }
     }
 
@@ -641,9 +398,6 @@ abstract class BaseGasto extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
-        if ($this->aCuenta !== null && $this->fk_cuenta !== $this->aCuenta->getIdCuenta()) {
-            $this->aCuenta = null;
-        }
     } // ensureConsistency
 
     /**
@@ -667,13 +421,13 @@ abstract class BaseGasto extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(GastoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(FormaPagoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $stmt = GastoPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
+        $stmt = FormaPagoPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
         $row = $stmt->fetch(PDO::FETCH_NUM);
         $stmt->closeCursor();
         if (!$row) {
@@ -683,7 +437,8 @@ abstract class BaseGasto extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aCuenta = null;
+            $this->collDetalleVentas = null;
+
         } // if (deep)
     }
 
@@ -704,12 +459,12 @@ abstract class BaseGasto extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(GastoPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(FormaPagoPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
         try {
-            $deleteQuery = GastoQuery::create()
+            $deleteQuery = FormaPagoQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -747,7 +502,7 @@ abstract class BaseGasto extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(GastoPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(FormaPagoPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
@@ -757,17 +512,17 @@ abstract class BaseGasto extends BaseObject implements Persistent
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
                 // timestampable behavior
-                if (!$this->isColumnModified(GastoPeer::FECHA_CREACION_GASTO)) {
-                    $this->setFechaCreacionGasto(time());
+                if (!$this->isColumnModified(FormaPagoPeer::FECHA_CREACION_FORMA_PAGO)) {
+                    $this->setFechaCreacionFormaPago(time());
                 }
-                if (!$this->isColumnModified(GastoPeer::FECHA_MODIFICACION_GASTO)) {
-                    $this->setFechaModificacionGasto(time());
+                if (!$this->isColumnModified(FormaPagoPeer::FECHA_MODIFICACION_FORMA_PAGO)) {
+                    $this->setFechaModificacionFormaPago(time());
                 }
             } else {
                 $ret = $ret && $this->preUpdate($con);
                 // timestampable behavior
-                if ($this->isModified() && !$this->isColumnModified(GastoPeer::FECHA_MODIFICACION_GASTO)) {
-                    $this->setFechaModificacionGasto(time());
+                if ($this->isModified() && !$this->isColumnModified(FormaPagoPeer::FECHA_MODIFICACION_FORMA_PAGO)) {
+                    $this->setFechaModificacionFormaPago(time());
                 }
             }
             if ($ret) {
@@ -778,7 +533,7 @@ abstract class BaseGasto extends BaseObject implements Persistent
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                GastoPeer::addInstanceToPool($this);
+                FormaPagoPeer::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -808,18 +563,6 @@ abstract class BaseGasto extends BaseObject implements Persistent
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
-            // We call the save method on the following object(s) if they
-            // were passed to this object by their coresponding set
-            // method.  This object relates to these object(s) by a
-            // foreign key reference.
-
-            if ($this->aCuenta !== null) {
-                if ($this->aCuenta->isModified() || $this->aCuenta->isNew()) {
-                    $affectedRows += $this->aCuenta->save($con);
-                }
-                $this->setCuenta($this->aCuenta);
-            }
-
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -829,6 +572,24 @@ abstract class BaseGasto extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
+            }
+
+            if ($this->detalleVentasScheduledForDeletion !== null) {
+                if (!$this->detalleVentasScheduledForDeletion->isEmpty()) {
+                    foreach ($this->detalleVentasScheduledForDeletion as $detalleVenta) {
+                        // need to save related object because we set the relation to null
+                        $detalleVenta->save($con);
+                    }
+                    $this->detalleVentasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collDetalleVentas !== null) {
+                foreach ($this->collDetalleVentas as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             $this->alreadyInSave = false;
@@ -851,42 +612,30 @@ abstract class BaseGasto extends BaseObject implements Persistent
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[] = GastoPeer::ID_GASTO;
-        if (null !== $this->id_gasto) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . GastoPeer::ID_GASTO . ')');
+        $this->modifiedColumns[] = FormaPagoPeer::ID_FORMA_PAGO;
+        if (null !== $this->id_forma_pago) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . FormaPagoPeer::ID_FORMA_PAGO . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(GastoPeer::ID_GASTO)) {
-            $modifiedColumns[':p' . $index++]  = '`id_gasto`';
+        if ($this->isColumnModified(FormaPagoPeer::ID_FORMA_PAGO)) {
+            $modifiedColumns[':p' . $index++]  = '`id_forma_pago`';
         }
-        if ($this->isColumnModified(GastoPeer::FK_CUENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`fk_cuenta`';
+        if ($this->isColumnModified(FormaPagoPeer::NOMBRE_FORMA_PAGO)) {
+            $modifiedColumns[':p' . $index++]  = '`nombre_forma_pago`';
         }
-        if ($this->isColumnModified(GastoPeer::NOMBRE_GASTO)) {
-            $modifiedColumns[':p' . $index++]  = '`nombre_gasto`';
+        if ($this->isColumnModified(FormaPagoPeer::DESCRIPCION_FORMA_PAGO)) {
+            $modifiedColumns[':p' . $index++]  = '`descripcion_forma_pago`';
         }
-        if ($this->isColumnModified(GastoPeer::COSTO_GASTO)) {
-            $modifiedColumns[':p' . $index++]  = '`costo_gasto`';
+        if ($this->isColumnModified(FormaPagoPeer::FECHA_CREACION_FORMA_PAGO)) {
+            $modifiedColumns[':p' . $index++]  = '`fecha_creacion_forma_pago`';
         }
-        if ($this->isColumnModified(GastoPeer::FECHA_EMISION_GASTO)) {
-            $modifiedColumns[':p' . $index++]  = '`fecha_emision_gasto`';
-        }
-        if ($this->isColumnModified(GastoPeer::FECHA_PAGO_GASTO)) {
-            $modifiedColumns[':p' . $index++]  = '`fecha_pago_gasto`';
-        }
-        if ($this->isColumnModified(GastoPeer::NUMERO_DOC_GASTO)) {
-            $modifiedColumns[':p' . $index++]  = '`numero_doc_gasto`';
-        }
-        if ($this->isColumnModified(GastoPeer::FECHA_CREACION_GASTO)) {
-            $modifiedColumns[':p' . $index++]  = '`fecha_creacion_gasto`';
-        }
-        if ($this->isColumnModified(GastoPeer::FECHA_MODIFICACION_GASTO)) {
-            $modifiedColumns[':p' . $index++]  = '`fecha_modificacion_gasto`';
+        if ($this->isColumnModified(FormaPagoPeer::FECHA_MODIFICACION_FORMA_PAGO)) {
+            $modifiedColumns[':p' . $index++]  = '`fecha_modificacion_forma_pago`';
         }
 
         $sql = sprintf(
-            'INSERT INTO `gasto` (%s) VALUES (%s)',
+            'INSERT INTO `forma_pago` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -895,32 +644,20 @@ abstract class BaseGasto extends BaseObject implements Persistent
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`id_gasto`':
-                        $stmt->bindValue($identifier, $this->id_gasto, PDO::PARAM_INT);
+                    case '`id_forma_pago`':
+                        $stmt->bindValue($identifier, $this->id_forma_pago, PDO::PARAM_INT);
                         break;
-                    case '`fk_cuenta`':
-                        $stmt->bindValue($identifier, $this->fk_cuenta, PDO::PARAM_INT);
+                    case '`nombre_forma_pago`':
+                        $stmt->bindValue($identifier, $this->nombre_forma_pago, PDO::PARAM_STR);
                         break;
-                    case '`nombre_gasto`':
-                        $stmt->bindValue($identifier, $this->nombre_gasto, PDO::PARAM_STR);
+                    case '`descripcion_forma_pago`':
+                        $stmt->bindValue($identifier, $this->descripcion_forma_pago, PDO::PARAM_STR);
                         break;
-                    case '`costo_gasto`':
-                        $stmt->bindValue($identifier, $this->costo_gasto, PDO::PARAM_STR);
+                    case '`fecha_creacion_forma_pago`':
+                        $stmt->bindValue($identifier, $this->fecha_creacion_forma_pago, PDO::PARAM_STR);
                         break;
-                    case '`fecha_emision_gasto`':
-                        $stmt->bindValue($identifier, $this->fecha_emision_gasto, PDO::PARAM_STR);
-                        break;
-                    case '`fecha_pago_gasto`':
-                        $stmt->bindValue($identifier, $this->fecha_pago_gasto, PDO::PARAM_STR);
-                        break;
-                    case '`numero_doc_gasto`':
-                        $stmt->bindValue($identifier, $this->numero_doc_gasto, PDO::PARAM_STR);
-                        break;
-                    case '`fecha_creacion_gasto`':
-                        $stmt->bindValue($identifier, $this->fecha_creacion_gasto, PDO::PARAM_STR);
-                        break;
-                    case '`fecha_modificacion_gasto`':
-                        $stmt->bindValue($identifier, $this->fecha_modificacion_gasto, PDO::PARAM_STR);
+                    case '`fecha_modificacion_forma_pago`':
+                        $stmt->bindValue($identifier, $this->fecha_modificacion_forma_pago, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -935,7 +672,7 @@ abstract class BaseGasto extends BaseObject implements Persistent
         } catch (Exception $e) {
             throw new PropelException('Unable to get autoincrement id.', $e);
         }
-        $this->setIdGasto($pk);
+        $this->setIdFormaPago($pk);
 
         $this->setNew(false);
     }
@@ -1016,22 +753,18 @@ abstract class BaseGasto extends BaseObject implements Persistent
             $failureMap = array();
 
 
-            // We call the validate method on the following object(s) if they
-            // were passed to this object by their coresponding set
-            // method.  This object relates to these object(s) by a
-            // foreign key reference.
-
-            if ($this->aCuenta !== null) {
-                if (!$this->aCuenta->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aCuenta->getValidationFailures());
-                }
-            }
-
-
-            if (($retval = GastoPeer::doValidate($this, $columns)) !== true) {
+            if (($retval = FormaPagoPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
 
+
+                if ($this->collDetalleVentas !== null) {
+                    foreach ($this->collDetalleVentas as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
 
 
             $this->alreadyInValidation = false;
@@ -1052,7 +785,7 @@ abstract class BaseGasto extends BaseObject implements Persistent
      */
     public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = GastoPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = FormaPagoPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -1069,31 +802,19 @@ abstract class BaseGasto extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                return $this->getIdGasto();
+                return $this->getIdFormaPago();
                 break;
             case 1:
-                return $this->getFkCuenta();
+                return $this->getNombreFormaPago();
                 break;
             case 2:
-                return $this->getNombreGasto();
+                return $this->getDescripcionFormaPago();
                 break;
             case 3:
-                return $this->getCostoGasto();
+                return $this->getFechaCreacionFormaPago();
                 break;
             case 4:
-                return $this->getFechaEmisionGasto();
-                break;
-            case 5:
-                return $this->getFechaPagoGasto();
-                break;
-            case 6:
-                return $this->getNumeroDocGasto();
-                break;
-            case 7:
-                return $this->getFechaCreacionGasto();
-                break;
-            case 8:
-                return $this->getFechaModificacionGasto();
+                return $this->getFechaModificacionFormaPago();
                 break;
             default:
                 return null;
@@ -1118,25 +839,21 @@ abstract class BaseGasto extends BaseObject implements Persistent
      */
     public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
-        if (isset($alreadyDumpedObjects['Gasto'][$this->getPrimaryKey()])) {
+        if (isset($alreadyDumpedObjects['FormaPago'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Gasto'][$this->getPrimaryKey()] = true;
-        $keys = GastoPeer::getFieldNames($keyType);
+        $alreadyDumpedObjects['FormaPago'][$this->getPrimaryKey()] = true;
+        $keys = FormaPagoPeer::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getIdGasto(),
-            $keys[1] => $this->getFkCuenta(),
-            $keys[2] => $this->getNombreGasto(),
-            $keys[3] => $this->getCostoGasto(),
-            $keys[4] => $this->getFechaEmisionGasto(),
-            $keys[5] => $this->getFechaPagoGasto(),
-            $keys[6] => $this->getNumeroDocGasto(),
-            $keys[7] => $this->getFechaCreacionGasto(),
-            $keys[8] => $this->getFechaModificacionGasto(),
+            $keys[0] => $this->getIdFormaPago(),
+            $keys[1] => $this->getNombreFormaPago(),
+            $keys[2] => $this->getDescripcionFormaPago(),
+            $keys[3] => $this->getFechaCreacionFormaPago(),
+            $keys[4] => $this->getFechaModificacionFormaPago(),
         );
         if ($includeForeignObjects) {
-            if (null !== $this->aCuenta) {
-                $result['Cuenta'] = $this->aCuenta->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            if (null !== $this->collDetalleVentas) {
+                $result['DetalleVentas'] = $this->collDetalleVentas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1156,7 +873,7 @@ abstract class BaseGasto extends BaseObject implements Persistent
      */
     public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = GastoPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = FormaPagoPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 
         $this->setByPosition($pos, $value);
     }
@@ -1173,31 +890,19 @@ abstract class BaseGasto extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                $this->setIdGasto($value);
+                $this->setIdFormaPago($value);
                 break;
             case 1:
-                $this->setFkCuenta($value);
+                $this->setNombreFormaPago($value);
                 break;
             case 2:
-                $this->setNombreGasto($value);
+                $this->setDescripcionFormaPago($value);
                 break;
             case 3:
-                $this->setCostoGasto($value);
+                $this->setFechaCreacionFormaPago($value);
                 break;
             case 4:
-                $this->setFechaEmisionGasto($value);
-                break;
-            case 5:
-                $this->setFechaPagoGasto($value);
-                break;
-            case 6:
-                $this->setNumeroDocGasto($value);
-                break;
-            case 7:
-                $this->setFechaCreacionGasto($value);
-                break;
-            case 8:
-                $this->setFechaModificacionGasto($value);
+                $this->setFechaModificacionFormaPago($value);
                 break;
         } // switch()
     }
@@ -1221,17 +926,13 @@ abstract class BaseGasto extends BaseObject implements Persistent
      */
     public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
     {
-        $keys = GastoPeer::getFieldNames($keyType);
+        $keys = FormaPagoPeer::getFieldNames($keyType);
 
-        if (array_key_exists($keys[0], $arr)) $this->setIdGasto($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setFkCuenta($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setNombreGasto($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setCostoGasto($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setFechaEmisionGasto($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setFechaPagoGasto($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setNumeroDocGasto($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setFechaCreacionGasto($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setFechaModificacionGasto($arr[$keys[8]]);
+        if (array_key_exists($keys[0], $arr)) $this->setIdFormaPago($arr[$keys[0]]);
+        if (array_key_exists($keys[1], $arr)) $this->setNombreFormaPago($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setDescripcionFormaPago($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setFechaCreacionFormaPago($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setFechaModificacionFormaPago($arr[$keys[4]]);
     }
 
     /**
@@ -1241,17 +942,13 @@ abstract class BaseGasto extends BaseObject implements Persistent
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(GastoPeer::DATABASE_NAME);
+        $criteria = new Criteria(FormaPagoPeer::DATABASE_NAME);
 
-        if ($this->isColumnModified(GastoPeer::ID_GASTO)) $criteria->add(GastoPeer::ID_GASTO, $this->id_gasto);
-        if ($this->isColumnModified(GastoPeer::FK_CUENTA)) $criteria->add(GastoPeer::FK_CUENTA, $this->fk_cuenta);
-        if ($this->isColumnModified(GastoPeer::NOMBRE_GASTO)) $criteria->add(GastoPeer::NOMBRE_GASTO, $this->nombre_gasto);
-        if ($this->isColumnModified(GastoPeer::COSTO_GASTO)) $criteria->add(GastoPeer::COSTO_GASTO, $this->costo_gasto);
-        if ($this->isColumnModified(GastoPeer::FECHA_EMISION_GASTO)) $criteria->add(GastoPeer::FECHA_EMISION_GASTO, $this->fecha_emision_gasto);
-        if ($this->isColumnModified(GastoPeer::FECHA_PAGO_GASTO)) $criteria->add(GastoPeer::FECHA_PAGO_GASTO, $this->fecha_pago_gasto);
-        if ($this->isColumnModified(GastoPeer::NUMERO_DOC_GASTO)) $criteria->add(GastoPeer::NUMERO_DOC_GASTO, $this->numero_doc_gasto);
-        if ($this->isColumnModified(GastoPeer::FECHA_CREACION_GASTO)) $criteria->add(GastoPeer::FECHA_CREACION_GASTO, $this->fecha_creacion_gasto);
-        if ($this->isColumnModified(GastoPeer::FECHA_MODIFICACION_GASTO)) $criteria->add(GastoPeer::FECHA_MODIFICACION_GASTO, $this->fecha_modificacion_gasto);
+        if ($this->isColumnModified(FormaPagoPeer::ID_FORMA_PAGO)) $criteria->add(FormaPagoPeer::ID_FORMA_PAGO, $this->id_forma_pago);
+        if ($this->isColumnModified(FormaPagoPeer::NOMBRE_FORMA_PAGO)) $criteria->add(FormaPagoPeer::NOMBRE_FORMA_PAGO, $this->nombre_forma_pago);
+        if ($this->isColumnModified(FormaPagoPeer::DESCRIPCION_FORMA_PAGO)) $criteria->add(FormaPagoPeer::DESCRIPCION_FORMA_PAGO, $this->descripcion_forma_pago);
+        if ($this->isColumnModified(FormaPagoPeer::FECHA_CREACION_FORMA_PAGO)) $criteria->add(FormaPagoPeer::FECHA_CREACION_FORMA_PAGO, $this->fecha_creacion_forma_pago);
+        if ($this->isColumnModified(FormaPagoPeer::FECHA_MODIFICACION_FORMA_PAGO)) $criteria->add(FormaPagoPeer::FECHA_MODIFICACION_FORMA_PAGO, $this->fecha_modificacion_forma_pago);
 
         return $criteria;
     }
@@ -1266,8 +963,8 @@ abstract class BaseGasto extends BaseObject implements Persistent
      */
     public function buildPkeyCriteria()
     {
-        $criteria = new Criteria(GastoPeer::DATABASE_NAME);
-        $criteria->add(GastoPeer::ID_GASTO, $this->id_gasto);
+        $criteria = new Criteria(FormaPagoPeer::DATABASE_NAME);
+        $criteria->add(FormaPagoPeer::ID_FORMA_PAGO, $this->id_forma_pago);
 
         return $criteria;
     }
@@ -1278,18 +975,18 @@ abstract class BaseGasto extends BaseObject implements Persistent
      */
     public function getPrimaryKey()
     {
-        return $this->getIdGasto();
+        return $this->getIdFormaPago();
     }
 
     /**
-     * Generic method to set the primary key (id_gasto column).
+     * Generic method to set the primary key (id_forma_pago column).
      *
      * @param  int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
     {
-        $this->setIdGasto($key);
+        $this->setIdFormaPago($key);
     }
 
     /**
@@ -1299,7 +996,7 @@ abstract class BaseGasto extends BaseObject implements Persistent
     public function isPrimaryKeyNull()
     {
 
-        return null === $this->getIdGasto();
+        return null === $this->getIdFormaPago();
     }
 
     /**
@@ -1308,21 +1005,17 @@ abstract class BaseGasto extends BaseObject implements Persistent
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param object $copyObj An object of Gasto (or compatible) type.
+     * @param object $copyObj An object of FormaPago (or compatible) type.
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setFkCuenta($this->getFkCuenta());
-        $copyObj->setNombreGasto($this->getNombreGasto());
-        $copyObj->setCostoGasto($this->getCostoGasto());
-        $copyObj->setFechaEmisionGasto($this->getFechaEmisionGasto());
-        $copyObj->setFechaPagoGasto($this->getFechaPagoGasto());
-        $copyObj->setNumeroDocGasto($this->getNumeroDocGasto());
-        $copyObj->setFechaCreacionGasto($this->getFechaCreacionGasto());
-        $copyObj->setFechaModificacionGasto($this->getFechaModificacionGasto());
+        $copyObj->setNombreFormaPago($this->getNombreFormaPago());
+        $copyObj->setDescripcionFormaPago($this->getDescripcionFormaPago());
+        $copyObj->setFechaCreacionFormaPago($this->getFechaCreacionFormaPago());
+        $copyObj->setFechaModificacionFormaPago($this->getFechaModificacionFormaPago());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1331,13 +1024,19 @@ abstract class BaseGasto extends BaseObject implements Persistent
             // store object hash to prevent cycle
             $this->startCopy = true;
 
+            foreach ($this->getDetalleVentas() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addDetalleVenta($relObj->copy($deepCopy));
+                }
+            }
+
             //unflag object copy
             $this->startCopy = false;
         } // if ($deepCopy)
 
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setIdGasto(NULL); // this is a auto-increment column, so set to default value
+            $copyObj->setIdFormaPago(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1350,7 +1049,7 @@ abstract class BaseGasto extends BaseObject implements Persistent
      * objects.
      *
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return Gasto Clone of current object.
+     * @return FormaPago Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1370,67 +1069,300 @@ abstract class BaseGasto extends BaseObject implements Persistent
      * same instance for all member of this class. The method could therefore
      * be static, but this would prevent one from overriding the behavior.
      *
-     * @return GastoPeer
+     * @return FormaPagoPeer
      */
     public function getPeer()
     {
         if (self::$peer === null) {
-            self::$peer = new GastoPeer();
+            self::$peer = new FormaPagoPeer();
         }
 
         return self::$peer;
     }
 
+
     /**
-     * Declares an association between this object and a Cuenta object.
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
      *
-     * @param             Cuenta $v
-     * @return Gasto The current object (for fluent API support)
+     * @param string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('DetalleVenta' == $relationName) {
+            $this->initDetalleVentas();
+        }
+    }
+
+    /**
+     * Clears out the collDetalleVentas collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return FormaPago The current object (for fluent API support)
+     * @see        addDetalleVentas()
+     */
+    public function clearDetalleVentas()
+    {
+        $this->collDetalleVentas = null; // important to set this to null since that means it is uninitialized
+        $this->collDetalleVentasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collDetalleVentas collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialDetalleVentas($v = true)
+    {
+        $this->collDetalleVentasPartial = $v;
+    }
+
+    /**
+     * Initializes the collDetalleVentas collection.
+     *
+     * By default this just sets the collDetalleVentas collection to an empty array (like clearcollDetalleVentas());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initDetalleVentas($overrideExisting = true)
+    {
+        if (null !== $this->collDetalleVentas && !$overrideExisting) {
+            return;
+        }
+        $this->collDetalleVentas = new PropelObjectCollection();
+        $this->collDetalleVentas->setModel('DetalleVenta');
+    }
+
+    /**
+     * Gets an array of DetalleVenta objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this FormaPago is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|DetalleVenta[] List of DetalleVenta objects
      * @throws PropelException
      */
-    public function setCuenta(Cuenta $v = null)
+    public function getDetalleVentas($criteria = null, PropelPDO $con = null)
     {
-        if ($v === null) {
-            $this->setFkCuenta(0);
-        } else {
-            $this->setFkCuenta($v->getIdCuenta());
+        $partial = $this->collDetalleVentasPartial && !$this->isNew();
+        if (null === $this->collDetalleVentas || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collDetalleVentas) {
+                // return empty collection
+                $this->initDetalleVentas();
+            } else {
+                $collDetalleVentas = DetalleVentaQuery::create(null, $criteria)
+                    ->filterByFormaPago($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collDetalleVentasPartial && count($collDetalleVentas)) {
+                      $this->initDetalleVentas(false);
+
+                      foreach($collDetalleVentas as $obj) {
+                        if (false == $this->collDetalleVentas->contains($obj)) {
+                          $this->collDetalleVentas->append($obj);
+                        }
+                      }
+
+                      $this->collDetalleVentasPartial = true;
+                    }
+
+                    $collDetalleVentas->getInternalIterator()->rewind();
+                    return $collDetalleVentas;
+                }
+
+                if($partial && $this->collDetalleVentas) {
+                    foreach($this->collDetalleVentas as $obj) {
+                        if($obj->isNew()) {
+                            $collDetalleVentas[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collDetalleVentas = $collDetalleVentas;
+                $this->collDetalleVentasPartial = false;
+            }
         }
 
-        $this->aCuenta = $v;
+        return $this->collDetalleVentas;
+    }
 
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Cuenta object, it will not be re-added.
-        if ($v !== null) {
-            $v->addGasto($this);
+    /**
+     * Sets a collection of DetalleVenta objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $detalleVentas A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return FormaPago The current object (for fluent API support)
+     */
+    public function setDetalleVentas(PropelCollection $detalleVentas, PropelPDO $con = null)
+    {
+        $detalleVentasToDelete = $this->getDetalleVentas(new Criteria(), $con)->diff($detalleVentas);
+
+
+        $this->detalleVentasScheduledForDeletion = $detalleVentasToDelete;
+
+        foreach ($detalleVentasToDelete as $detalleVentaRemoved) {
+            $detalleVentaRemoved->setFormaPago(null);
         }
 
+        $this->collDetalleVentas = null;
+        foreach ($detalleVentas as $detalleVenta) {
+            $this->addDetalleVenta($detalleVenta);
+        }
+
+        $this->collDetalleVentas = $detalleVentas;
+        $this->collDetalleVentasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related DetalleVenta objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related DetalleVenta objects.
+     * @throws PropelException
+     */
+    public function countDetalleVentas(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collDetalleVentasPartial && !$this->isNew();
+        if (null === $this->collDetalleVentas || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collDetalleVentas) {
+                return 0;
+            }
+
+            if($partial && !$criteria) {
+                return count($this->getDetalleVentas());
+            }
+            $query = DetalleVentaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByFormaPago($this)
+                ->count($con);
+        }
+
+        return count($this->collDetalleVentas);
+    }
+
+    /**
+     * Method called to associate a DetalleVenta object to this object
+     * through the DetalleVenta foreign key attribute.
+     *
+     * @param    DetalleVenta $l DetalleVenta
+     * @return FormaPago The current object (for fluent API support)
+     */
+    public function addDetalleVenta(DetalleVenta $l)
+    {
+        if ($this->collDetalleVentas === null) {
+            $this->initDetalleVentas();
+            $this->collDetalleVentasPartial = true;
+        }
+        if (!in_array($l, $this->collDetalleVentas->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddDetalleVenta($l);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	DetalleVenta $detalleVenta The detalleVenta object to add.
+     */
+    protected function doAddDetalleVenta($detalleVenta)
+    {
+        $this->collDetalleVentas[]= $detalleVenta;
+        $detalleVenta->setFormaPago($this);
+    }
+
+    /**
+     * @param	DetalleVenta $detalleVenta The detalleVenta object to remove.
+     * @return FormaPago The current object (for fluent API support)
+     */
+    public function removeDetalleVenta($detalleVenta)
+    {
+        if ($this->getDetalleVentas()->contains($detalleVenta)) {
+            $this->collDetalleVentas->remove($this->collDetalleVentas->search($detalleVenta));
+            if (null === $this->detalleVentasScheduledForDeletion) {
+                $this->detalleVentasScheduledForDeletion = clone $this->collDetalleVentas;
+                $this->detalleVentasScheduledForDeletion->clear();
+            }
+            $this->detalleVentasScheduledForDeletion[]= clone $detalleVenta;
+            $detalleVenta->setFormaPago(null);
+        }
 
         return $this;
     }
 
 
     /**
-     * Get the associated Cuenta object
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this FormaPago is new, it will return
+     * an empty collection; or if this FormaPago has previously
+     * been saved, it will retrieve related DetalleVentas from storage.
      *
-     * @param PropelPDO $con Optional Connection object.
-     * @param $doQuery Executes a query to get the object if required
-     * @return Cuenta The associated Cuenta object.
-     * @throws PropelException
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in FormaPago.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|DetalleVenta[] List of DetalleVenta objects
      */
-    public function getCuenta(PropelPDO $con = null, $doQuery = true)
+    public function getDetalleVentasJoinVentaForma($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
-        if ($this->aCuenta === null && ($this->fk_cuenta !== null) && $doQuery) {
-            $this->aCuenta = CuentaQuery::create()->findPk($this->fk_cuenta, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aCuenta->addGastos($this);
-             */
-        }
+        $query = DetalleVentaQuery::create(null, $criteria);
+        $query->joinWith('VentaForma', $join_behavior);
 
-        return $this->aCuenta;
+        return $this->getDetalleVentas($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this FormaPago is new, it will return
+     * an empty collection; or if this FormaPago has previously
+     * been saved, it will retrieve related DetalleVentas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in FormaPago.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|DetalleVenta[] List of DetalleVenta objects
+     */
+    public function getDetalleVentasJoinLugarVenta($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = DetalleVentaQuery::create(null, $criteria);
+        $query->joinWith('LugarVenta', $join_behavior);
+
+        return $this->getDetalleVentas($query, $con);
     }
 
     /**
@@ -1438,20 +1370,15 @@ abstract class BaseGasto extends BaseObject implements Persistent
      */
     public function clear()
     {
-        $this->id_gasto = null;
-        $this->fk_cuenta = null;
-        $this->nombre_gasto = null;
-        $this->costo_gasto = null;
-        $this->fecha_emision_gasto = null;
-        $this->fecha_pago_gasto = null;
-        $this->numero_doc_gasto = null;
-        $this->fecha_creacion_gasto = null;
-        $this->fecha_modificacion_gasto = null;
+        $this->id_forma_pago = null;
+        $this->nombre_forma_pago = null;
+        $this->descripcion_forma_pago = null;
+        $this->fecha_creacion_forma_pago = null;
+        $this->fecha_modificacion_forma_pago = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
-        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);
@@ -1470,14 +1397,19 @@ abstract class BaseGasto extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
-            if ($this->aCuenta instanceof Persistent) {
-              $this->aCuenta->clearAllReferences($deep);
+            if ($this->collDetalleVentas) {
+                foreach ($this->collDetalleVentas as $o) {
+                    $o->clearAllReferences($deep);
+                }
             }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
-        $this->aCuenta = null;
+        if ($this->collDetalleVentas instanceof PropelCollection) {
+            $this->collDetalleVentas->clearIterator();
+        }
+        $this->collDetalleVentas = null;
     }
 
     /**
@@ -1487,7 +1419,7 @@ abstract class BaseGasto extends BaseObject implements Persistent
      */
     public function __toString()
     {
-        return (string) $this->exportTo(GastoPeer::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(FormaPagoPeer::DEFAULT_STRING_FORMAT);
     }
 
     /**
@@ -1505,11 +1437,11 @@ abstract class BaseGasto extends BaseObject implements Persistent
     /**
      * Mark the current object so that the update date doesn't get updated during next save
      *
-     * @return     Gasto The current object (for fluent API support)
+     * @return     FormaPago The current object (for fluent API support)
      */
     public function keepUpdateDateUnchanged()
     {
-        $this->modifiedColumns[] = GastoPeer::FECHA_MODIFICACION_GASTO;
+        $this->modifiedColumns[] = FormaPagoPeer::FECHA_MODIFICACION_FORMA_PAGO;
 
         return $this;
     }

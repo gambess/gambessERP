@@ -9,70 +9,64 @@ use \PDOStatement;
 use \Propel;
 use \PropelException;
 use \PropelPDO;
-use Costo\SystemBundle\Model\Cuenta;
-use Costo\SystemBundle\Model\CuentaPeer;
-use Costo\SystemBundle\Model\map\CuentaTableMap;
+use Costo\SystemBundle\Model\TipoVentaForma;
+use Costo\SystemBundle\Model\TipoVentaFormaPeer;
+use Costo\SystemBundle\Model\map\TipoVentaFormaTableMap;
 
 /**
- * Base static class for performing query and update operations on the 'cuenta' table.
+ * Base static class for performing query and update operations on the 'tipo_venta_forma' table.
  *
  *
  *
  * @package propel.generator.src.Costo.SystemBundle.Model.om
  */
-abstract class BaseCuentaPeer
+abstract class BaseTipoVentaFormaPeer
 {
 
     /** the default database name for this class */
     const DATABASE_NAME = 'testing';
 
     /** the table name for this class */
-    const TABLE_NAME = 'cuenta';
+    const TABLE_NAME = 'tipo_venta_forma';
 
     /** the related Propel class for this table */
-    const OM_CLASS = 'Costo\\SystemBundle\\Model\\Cuenta';
+    const OM_CLASS = 'Costo\\SystemBundle\\Model\\TipoVentaForma';
 
     /** the related TableMap class for this table */
-    const TM_CLASS = 'CuentaTableMap';
+    const TM_CLASS = 'TipoVentaFormaTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 5;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 5;
 
-    /** the column name for the id_cuenta field */
-    const ID_CUENTA = 'cuenta.id_cuenta';
+    /** the column name for the id_tipo_venta_forma field */
+    const ID_TIPO_VENTA_FORMA = 'tipo_venta_forma.id_tipo_venta_forma';
 
-    /** the column name for the nombre_cuenta field */
-    const NOMBRE_CUENTA = 'cuenta.nombre_cuenta';
+    /** the column name for the nombre_tipo_venta_forma field */
+    const NOMBRE_TIPO_VENTA_FORMA = 'tipo_venta_forma.nombre_tipo_venta_forma';
 
-    /** the column name for the valor_cuenta field */
-    const VALOR_CUENTA = 'cuenta.valor_cuenta';
+    /** the column name for the descripcion_tipo_venta_forma field */
+    const DESCRIPCION_TIPO_VENTA_FORMA = 'tipo_venta_forma.descripcion_tipo_venta_forma';
 
-    /** the column name for the tipo_cuenta field */
-    const TIPO_CUENTA = 'cuenta.tipo_cuenta';
+    /** the column name for the fecha_creacion_tipo_venta_forma field */
+    const FECHA_CREACION_TIPO_VENTA_FORMA = 'tipo_venta_forma.fecha_creacion_tipo_venta_forma';
 
-    /** the column name for the user_crea_cuenta field */
-    const USER_CREA_CUENTA = 'cuenta.user_crea_cuenta';
-
-    /** the column name for the fecha_creacion_cuenta field */
-    const FECHA_CREACION_CUENTA = 'cuenta.fecha_creacion_cuenta';
-
-    /** the column name for the fecha_modificacion_cuenta field */
-    const FECHA_MODIFICACION_CUENTA = 'cuenta.fecha_modificacion_cuenta';
+    /** the column name for the fecha_modificacion_tipo_venta_forma field */
+    const FECHA_MODIFICACION_TIPO_VENTA_FORMA = 'tipo_venta_forma.fecha_modificacion_tipo_venta_forma';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
-     * An identiy map to hold any loaded instances of Cuenta objects.
+     * An identiy map to hold any loaded instances of TipoVentaForma objects.
      * This must be public so that other peer classes can access this when hydrating from JOIN
      * queries.
-     * @var        array Cuenta[]
+     * @var        array TipoVentaForma[]
      */
     public static $instances = array();
 
@@ -81,30 +75,30 @@ abstract class BaseCuentaPeer
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
-     * e.g. CuentaPeer::$fieldNames[CuentaPeer::TYPE_PHPNAME][0] = 'Id'
+     * e.g. TipoVentaFormaPeer::$fieldNames[TipoVentaFormaPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('IdCuenta', 'NombreCuenta', 'ValorCuenta', 'TipoCuenta', 'UserCreaCuenta', 'FechaCreacionCuenta', 'FechaModificacionCuenta', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idCuenta', 'nombreCuenta', 'valorCuenta', 'tipoCuenta', 'userCreaCuenta', 'fechaCreacionCuenta', 'fechaModificacionCuenta', ),
-        BasePeer::TYPE_COLNAME => array (CuentaPeer::ID_CUENTA, CuentaPeer::NOMBRE_CUENTA, CuentaPeer::VALOR_CUENTA, CuentaPeer::TIPO_CUENTA, CuentaPeer::USER_CREA_CUENTA, CuentaPeer::FECHA_CREACION_CUENTA, CuentaPeer::FECHA_MODIFICACION_CUENTA, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID_CUENTA', 'NOMBRE_CUENTA', 'VALOR_CUENTA', 'TIPO_CUENTA', 'USER_CREA_CUENTA', 'FECHA_CREACION_CUENTA', 'FECHA_MODIFICACION_CUENTA', ),
-        BasePeer::TYPE_FIELDNAME => array ('id_cuenta', 'nombre_cuenta', 'valor_cuenta', 'tipo_cuenta', 'user_crea_cuenta', 'fecha_creacion_cuenta', 'fecha_modificacion_cuenta', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+        BasePeer::TYPE_PHPNAME => array ('IdTipoVentaForma', 'NombreTipoVentaForma', 'DescripcionTipoVentaForma', 'FechaCreacionTipoVentaForma', 'FechaActualizacionTipoVentaForma', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idTipoVentaForma', 'nombreTipoVentaForma', 'descripcionTipoVentaForma', 'fechaCreacionTipoVentaForma', 'fechaActualizacionTipoVentaForma', ),
+        BasePeer::TYPE_COLNAME => array (TipoVentaFormaPeer::ID_TIPO_VENTA_FORMA, TipoVentaFormaPeer::NOMBRE_TIPO_VENTA_FORMA, TipoVentaFormaPeer::DESCRIPCION_TIPO_VENTA_FORMA, TipoVentaFormaPeer::FECHA_CREACION_TIPO_VENTA_FORMA, TipoVentaFormaPeer::FECHA_MODIFICACION_TIPO_VENTA_FORMA, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID_TIPO_VENTA_FORMA', 'NOMBRE_TIPO_VENTA_FORMA', 'DESCRIPCION_TIPO_VENTA_FORMA', 'FECHA_CREACION_TIPO_VENTA_FORMA', 'FECHA_MODIFICACION_TIPO_VENTA_FORMA', ),
+        BasePeer::TYPE_FIELDNAME => array ('id_tipo_venta_forma', 'nombre_tipo_venta_forma', 'descripcion_tipo_venta_forma', 'fecha_creacion_tipo_venta_forma', 'fecha_modificacion_tipo_venta_forma', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
-     * e.g. CuentaPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
+     * e.g. TipoVentaFormaPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('IdCuenta' => 0, 'NombreCuenta' => 1, 'ValorCuenta' => 2, 'TipoCuenta' => 3, 'UserCreaCuenta' => 4, 'FechaCreacionCuenta' => 5, 'FechaModificacionCuenta' => 6, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idCuenta' => 0, 'nombreCuenta' => 1, 'valorCuenta' => 2, 'tipoCuenta' => 3, 'userCreaCuenta' => 4, 'fechaCreacionCuenta' => 5, 'fechaModificacionCuenta' => 6, ),
-        BasePeer::TYPE_COLNAME => array (CuentaPeer::ID_CUENTA => 0, CuentaPeer::NOMBRE_CUENTA => 1, CuentaPeer::VALOR_CUENTA => 2, CuentaPeer::TIPO_CUENTA => 3, CuentaPeer::USER_CREA_CUENTA => 4, CuentaPeer::FECHA_CREACION_CUENTA => 5, CuentaPeer::FECHA_MODIFICACION_CUENTA => 6, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID_CUENTA' => 0, 'NOMBRE_CUENTA' => 1, 'VALOR_CUENTA' => 2, 'TIPO_CUENTA' => 3, 'USER_CREA_CUENTA' => 4, 'FECHA_CREACION_CUENTA' => 5, 'FECHA_MODIFICACION_CUENTA' => 6, ),
-        BasePeer::TYPE_FIELDNAME => array ('id_cuenta' => 0, 'nombre_cuenta' => 1, 'valor_cuenta' => 2, 'tipo_cuenta' => 3, 'user_crea_cuenta' => 4, 'fecha_creacion_cuenta' => 5, 'fecha_modificacion_cuenta' => 6, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+        BasePeer::TYPE_PHPNAME => array ('IdTipoVentaForma' => 0, 'NombreTipoVentaForma' => 1, 'DescripcionTipoVentaForma' => 2, 'FechaCreacionTipoVentaForma' => 3, 'FechaActualizacionTipoVentaForma' => 4, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idTipoVentaForma' => 0, 'nombreTipoVentaForma' => 1, 'descripcionTipoVentaForma' => 2, 'fechaCreacionTipoVentaForma' => 3, 'fechaActualizacionTipoVentaForma' => 4, ),
+        BasePeer::TYPE_COLNAME => array (TipoVentaFormaPeer::ID_TIPO_VENTA_FORMA => 0, TipoVentaFormaPeer::NOMBRE_TIPO_VENTA_FORMA => 1, TipoVentaFormaPeer::DESCRIPCION_TIPO_VENTA_FORMA => 2, TipoVentaFormaPeer::FECHA_CREACION_TIPO_VENTA_FORMA => 3, TipoVentaFormaPeer::FECHA_MODIFICACION_TIPO_VENTA_FORMA => 4, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID_TIPO_VENTA_FORMA' => 0, 'NOMBRE_TIPO_VENTA_FORMA' => 1, 'DESCRIPCION_TIPO_VENTA_FORMA' => 2, 'FECHA_CREACION_TIPO_VENTA_FORMA' => 3, 'FECHA_MODIFICACION_TIPO_VENTA_FORMA' => 4, ),
+        BasePeer::TYPE_FIELDNAME => array ('id_tipo_venta_forma' => 0, 'nombre_tipo_venta_forma' => 1, 'descripcion_tipo_venta_forma' => 2, 'fecha_creacion_tipo_venta_forma' => 3, 'fecha_modificacion_tipo_venta_forma' => 4, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
     /**
@@ -119,10 +113,10 @@ abstract class BaseCuentaPeer
      */
     public static function translateFieldName($name, $fromType, $toType)
     {
-        $toNames = CuentaPeer::getFieldNames($toType);
-        $key = isset(CuentaPeer::$fieldKeys[$fromType][$name]) ? CuentaPeer::$fieldKeys[$fromType][$name] : null;
+        $toNames = TipoVentaFormaPeer::getFieldNames($toType);
+        $key = isset(TipoVentaFormaPeer::$fieldKeys[$fromType][$name]) ? TipoVentaFormaPeer::$fieldKeys[$fromType][$name] : null;
         if ($key === null) {
-            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(CuentaPeer::$fieldKeys[$fromType], true));
+            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(TipoVentaFormaPeer::$fieldKeys[$fromType], true));
         }
 
         return $toNames[$key];
@@ -139,11 +133,11 @@ abstract class BaseCuentaPeer
      */
     public static function getFieldNames($type = BasePeer::TYPE_PHPNAME)
     {
-        if (!array_key_exists($type, CuentaPeer::$fieldNames)) {
+        if (!array_key_exists($type, TipoVentaFormaPeer::$fieldNames)) {
             throw new PropelException('Method getFieldNames() expects the parameter $type to be one of the class constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME, BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. ' . $type . ' was given.');
         }
 
-        return CuentaPeer::$fieldNames[$type];
+        return TipoVentaFormaPeer::$fieldNames[$type];
     }
 
     /**
@@ -155,12 +149,12 @@ abstract class BaseCuentaPeer
      *		$c->addJoin(TablePeer::alias("alias1", TablePeer::PRIMARY_KEY_COLUMN), TablePeer::PRIMARY_KEY_COLUMN);
      * </code>
      * @param      string $alias The alias for the current table.
-     * @param      string $column The column name for current table. (i.e. CuentaPeer::COLUMN_NAME).
+     * @param      string $column The column name for current table. (i.e. TipoVentaFormaPeer::COLUMN_NAME).
      * @return string
      */
     public static function alias($alias, $column)
     {
-        return str_replace(CuentaPeer::TABLE_NAME.'.', $alias.'.', $column);
+        return str_replace(TipoVentaFormaPeer::TABLE_NAME.'.', $alias.'.', $column);
     }
 
     /**
@@ -178,21 +172,17 @@ abstract class BaseCuentaPeer
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(CuentaPeer::ID_CUENTA);
-            $criteria->addSelectColumn(CuentaPeer::NOMBRE_CUENTA);
-            $criteria->addSelectColumn(CuentaPeer::VALOR_CUENTA);
-            $criteria->addSelectColumn(CuentaPeer::TIPO_CUENTA);
-            $criteria->addSelectColumn(CuentaPeer::USER_CREA_CUENTA);
-            $criteria->addSelectColumn(CuentaPeer::FECHA_CREACION_CUENTA);
-            $criteria->addSelectColumn(CuentaPeer::FECHA_MODIFICACION_CUENTA);
+            $criteria->addSelectColumn(TipoVentaFormaPeer::ID_TIPO_VENTA_FORMA);
+            $criteria->addSelectColumn(TipoVentaFormaPeer::NOMBRE_TIPO_VENTA_FORMA);
+            $criteria->addSelectColumn(TipoVentaFormaPeer::DESCRIPCION_TIPO_VENTA_FORMA);
+            $criteria->addSelectColumn(TipoVentaFormaPeer::FECHA_CREACION_TIPO_VENTA_FORMA);
+            $criteria->addSelectColumn(TipoVentaFormaPeer::FECHA_MODIFICACION_TIPO_VENTA_FORMA);
         } else {
-            $criteria->addSelectColumn($alias . '.id_cuenta');
-            $criteria->addSelectColumn($alias . '.nombre_cuenta');
-            $criteria->addSelectColumn($alias . '.valor_cuenta');
-            $criteria->addSelectColumn($alias . '.tipo_cuenta');
-            $criteria->addSelectColumn($alias . '.user_crea_cuenta');
-            $criteria->addSelectColumn($alias . '.fecha_creacion_cuenta');
-            $criteria->addSelectColumn($alias . '.fecha_modificacion_cuenta');
+            $criteria->addSelectColumn($alias . '.id_tipo_venta_forma');
+            $criteria->addSelectColumn($alias . '.nombre_tipo_venta_forma');
+            $criteria->addSelectColumn($alias . '.descripcion_tipo_venta_forma');
+            $criteria->addSelectColumn($alias . '.fecha_creacion_tipo_venta_forma');
+            $criteria->addSelectColumn($alias . '.fecha_modificacion_tipo_venta_forma');
         }
     }
 
@@ -212,21 +202,21 @@ abstract class BaseCuentaPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(CuentaPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(TipoVentaFormaPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            CuentaPeer::addSelectColumns($criteria);
+            TipoVentaFormaPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-        $criteria->setDbName(CuentaPeer::DATABASE_NAME); // Set the correct dbName
+        $criteria->setDbName(TipoVentaFormaPeer::DATABASE_NAME); // Set the correct dbName
 
         if ($con === null) {
-            $con = Propel::getConnection(CuentaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(TipoVentaFormaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
         // BasePeer returns a PDOStatement
         $stmt = BasePeer::doCount($criteria, $con);
@@ -245,7 +235,7 @@ abstract class BaseCuentaPeer
      *
      * @param      Criteria $criteria object used to create the SELECT statement.
      * @param      PropelPDO $con
-     * @return                 Cuenta
+     * @return                 TipoVentaForma
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -253,7 +243,7 @@ abstract class BaseCuentaPeer
     {
         $critcopy = clone $criteria;
         $critcopy->setLimit(1);
-        $objects = CuentaPeer::doSelect($critcopy, $con);
+        $objects = TipoVentaFormaPeer::doSelect($critcopy, $con);
         if ($objects) {
             return $objects[0];
         }
@@ -271,7 +261,7 @@ abstract class BaseCuentaPeer
      */
     public static function doSelect(Criteria $criteria, PropelPDO $con = null)
     {
-        return CuentaPeer::populateObjects(CuentaPeer::doSelectStmt($criteria, $con));
+        return TipoVentaFormaPeer::populateObjects(TipoVentaFormaPeer::doSelectStmt($criteria, $con));
     }
     /**
      * Prepares the Criteria object and uses the parent doSelect() method to execute a PDOStatement.
@@ -289,16 +279,16 @@ abstract class BaseCuentaPeer
     public static function doSelectStmt(Criteria $criteria, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(CuentaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(TipoVentaFormaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         if (!$criteria->hasSelectClause()) {
             $criteria = clone $criteria;
-            CuentaPeer::addSelectColumns($criteria);
+            TipoVentaFormaPeer::addSelectColumns($criteria);
         }
 
         // Set the correct dbName
-        $criteria->setDbName(CuentaPeer::DATABASE_NAME);
+        $criteria->setDbName(TipoVentaFormaPeer::DATABASE_NAME);
 
         // BasePeer returns a PDOStatement
         return BasePeer::doSelect($criteria, $con);
@@ -312,16 +302,16 @@ abstract class BaseCuentaPeer
      * to the cache in order to ensure that the same objects are always returned by doSelect*()
      * and retrieveByPK*() calls.
      *
-     * @param      Cuenta $obj A Cuenta object.
+     * @param      TipoVentaForma $obj A TipoVentaForma object.
      * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
      */
     public static function addInstanceToPool($obj, $key = null)
     {
         if (Propel::isInstancePoolingEnabled()) {
             if ($key === null) {
-                $key = (string) $obj->getIdCuenta();
+                $key = (string) $obj->getIdTipoVentaForma();
             } // if key === null
-            CuentaPeer::$instances[$key] = $obj;
+            TipoVentaFormaPeer::$instances[$key] = $obj;
         }
     }
 
@@ -333,7 +323,7 @@ abstract class BaseCuentaPeer
      * methods in your stub classes -- you may need to explicitly remove objects
      * from the cache in order to prevent returning objects that no longer exist.
      *
-     * @param      mixed $value A Cuenta object or a primary key value.
+     * @param      mixed $value A TipoVentaForma object or a primary key value.
      *
      * @return void
      * @throws PropelException - if the value is invalid.
@@ -341,17 +331,17 @@ abstract class BaseCuentaPeer
     public static function removeInstanceFromPool($value)
     {
         if (Propel::isInstancePoolingEnabled() && $value !== null) {
-            if (is_object($value) && $value instanceof Cuenta) {
-                $key = (string) $value->getIdCuenta();
+            if (is_object($value) && $value instanceof TipoVentaForma) {
+                $key = (string) $value->getIdTipoVentaForma();
             } elseif (is_scalar($value)) {
                 // assume we've been passed a primary key
                 $key = (string) $value;
             } else {
-                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or Cuenta object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
+                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or TipoVentaForma object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
                 throw $e;
             }
 
-            unset(CuentaPeer::$instances[$key]);
+            unset(TipoVentaFormaPeer::$instances[$key]);
         }
     } // removeInstanceFromPool()
 
@@ -362,14 +352,14 @@ abstract class BaseCuentaPeer
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
      * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-     * @return   Cuenta Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+     * @return   TipoVentaForma Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
      * @see        getPrimaryKeyHash()
      */
     public static function getInstanceFromPool($key)
     {
         if (Propel::isInstancePoolingEnabled()) {
-            if (isset(CuentaPeer::$instances[$key])) {
-                return CuentaPeer::$instances[$key];
+            if (isset(TipoVentaFormaPeer::$instances[$key])) {
+                return TipoVentaFormaPeer::$instances[$key];
             }
         }
 
@@ -385,16 +375,16 @@ abstract class BaseCuentaPeer
     {
       if ($and_clear_all_references)
       {
-        foreach (CuentaPeer::$instances as $instance)
+        foreach (TipoVentaFormaPeer::$instances as $instance)
         {
           $instance->clearAllReferences(true);
         }
       }
-        CuentaPeer::$instances = array();
+        TipoVentaFormaPeer::$instances = array();
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to cuenta
+     * Method to invalidate the instance pool of all tables related to tipo_venta_forma
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -448,11 +438,11 @@ abstract class BaseCuentaPeer
         $results = array();
 
         // set the class once to avoid overhead in the loop
-        $cls = CuentaPeer::getOMClass();
+        $cls = TipoVentaFormaPeer::getOMClass();
         // populate the object(s)
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key = CuentaPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj = CuentaPeer::getInstanceFromPool($key))) {
+            $key = TipoVentaFormaPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj = TipoVentaFormaPeer::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
@@ -461,7 +451,7 @@ abstract class BaseCuentaPeer
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                CuentaPeer::addInstanceToPool($obj, $key);
+                TipoVentaFormaPeer::addInstanceToPool($obj, $key);
             } // if key exists
         }
         $stmt->closeCursor();
@@ -475,21 +465,21 @@ abstract class BaseCuentaPeer
      * @param      int $startcol The 0-based offset for reading from the resultset row.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
-     * @return array (Cuenta object, last column rank)
+     * @return array (TipoVentaForma object, last column rank)
      */
     public static function populateObject($row, $startcol = 0)
     {
-        $key = CuentaPeer::getPrimaryKeyHashFromRow($row, $startcol);
-        if (null !== ($obj = CuentaPeer::getInstanceFromPool($key))) {
+        $key = TipoVentaFormaPeer::getPrimaryKeyHashFromRow($row, $startcol);
+        if (null !== ($obj = TipoVentaFormaPeer::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $startcol, true); // rehydrate
-            $col = $startcol + CuentaPeer::NUM_HYDRATE_COLUMNS;
+            $col = $startcol + TipoVentaFormaPeer::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = CuentaPeer::OM_CLASS;
+            $cls = TipoVentaFormaPeer::OM_CLASS;
             $obj = new $cls();
             $col = $obj->hydrate($row, $startcol);
-            CuentaPeer::addInstanceToPool($obj, $key);
+            TipoVentaFormaPeer::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -504,7 +494,7 @@ abstract class BaseCuentaPeer
      */
     public static function getTableMap()
     {
-        return Propel::getDatabaseMap(CuentaPeer::DATABASE_NAME)->getTable(CuentaPeer::TABLE_NAME);
+        return Propel::getDatabaseMap(TipoVentaFormaPeer::DATABASE_NAME)->getTable(TipoVentaFormaPeer::TABLE_NAME);
     }
 
     /**
@@ -512,9 +502,9 @@ abstract class BaseCuentaPeer
      */
     public static function buildTableMap()
     {
-      $dbMap = Propel::getDatabaseMap(BaseCuentaPeer::DATABASE_NAME);
-      if (!$dbMap->hasTable(BaseCuentaPeer::TABLE_NAME)) {
-        $dbMap->addTableObject(new CuentaTableMap());
+      $dbMap = Propel::getDatabaseMap(BaseTipoVentaFormaPeer::DATABASE_NAME);
+      if (!$dbMap->hasTable(BaseTipoVentaFormaPeer::TABLE_NAME)) {
+        $dbMap->addTableObject(new TipoVentaFormaTableMap());
       }
     }
 
@@ -526,13 +516,13 @@ abstract class BaseCuentaPeer
      */
     public static function getOMClass($row = 0, $colnum = 0)
     {
-        return CuentaPeer::OM_CLASS;
+        return TipoVentaFormaPeer::OM_CLASS;
     }
 
     /**
-     * Performs an INSERT on the database, given a Cuenta or Criteria object.
+     * Performs an INSERT on the database, given a TipoVentaForma or Criteria object.
      *
-     * @param      mixed $values Criteria or Cuenta object containing data that is used to create the INSERT statement.
+     * @param      mixed $values Criteria or TipoVentaForma object containing data that is used to create the INSERT statement.
      * @param      PropelPDO $con the PropelPDO connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -541,22 +531,22 @@ abstract class BaseCuentaPeer
     public static function doInsert($values, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(CuentaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(TipoVentaFormaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
         } else {
-            $criteria = $values->buildCriteria(); // build Criteria from Cuenta object
+            $criteria = $values->buildCriteria(); // build Criteria from TipoVentaForma object
         }
 
-        if ($criteria->containsKey(CuentaPeer::ID_CUENTA) && $criteria->keyContainsValue(CuentaPeer::ID_CUENTA) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.CuentaPeer::ID_CUENTA.')');
+        if ($criteria->containsKey(TipoVentaFormaPeer::ID_TIPO_VENTA_FORMA) && $criteria->keyContainsValue(TipoVentaFormaPeer::ID_TIPO_VENTA_FORMA) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.TipoVentaFormaPeer::ID_TIPO_VENTA_FORMA.')');
         }
 
 
         // Set the correct dbName
-        $criteria->setDbName(CuentaPeer::DATABASE_NAME);
+        $criteria->setDbName(TipoVentaFormaPeer::DATABASE_NAME);
 
         try {
             // use transaction because $criteria could contain info
@@ -573,9 +563,9 @@ abstract class BaseCuentaPeer
     }
 
     /**
-     * Performs an UPDATE on the database, given a Cuenta or Criteria object.
+     * Performs an UPDATE on the database, given a TipoVentaForma or Criteria object.
      *
-     * @param      mixed $values Criteria or Cuenta object containing data that is used to create the UPDATE statement.
+     * @param      mixed $values Criteria or TipoVentaForma object containing data that is used to create the UPDATE statement.
      * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
      * @return int             The number of affected rows (if supported by underlying database driver).
      * @throws PropelException Any exceptions caught during processing will be
@@ -584,35 +574,35 @@ abstract class BaseCuentaPeer
     public static function doUpdate($values, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(CuentaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(TipoVentaFormaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
-        $selectCriteria = new Criteria(CuentaPeer::DATABASE_NAME);
+        $selectCriteria = new Criteria(TipoVentaFormaPeer::DATABASE_NAME);
 
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
 
-            $comparison = $criteria->getComparison(CuentaPeer::ID_CUENTA);
-            $value = $criteria->remove(CuentaPeer::ID_CUENTA);
+            $comparison = $criteria->getComparison(TipoVentaFormaPeer::ID_TIPO_VENTA_FORMA);
+            $value = $criteria->remove(TipoVentaFormaPeer::ID_TIPO_VENTA_FORMA);
             if ($value) {
-                $selectCriteria->add(CuentaPeer::ID_CUENTA, $value, $comparison);
+                $selectCriteria->add(TipoVentaFormaPeer::ID_TIPO_VENTA_FORMA, $value, $comparison);
             } else {
-                $selectCriteria->setPrimaryTableName(CuentaPeer::TABLE_NAME);
+                $selectCriteria->setPrimaryTableName(TipoVentaFormaPeer::TABLE_NAME);
             }
 
-        } else { // $values is Cuenta object
+        } else { // $values is TipoVentaForma object
             $criteria = $values->buildCriteria(); // gets full criteria
             $selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
         }
 
         // set the correct dbName
-        $criteria->setDbName(CuentaPeer::DATABASE_NAME);
+        $criteria->setDbName(TipoVentaFormaPeer::DATABASE_NAME);
 
         return BasePeer::doUpdate($selectCriteria, $criteria, $con);
     }
 
     /**
-     * Deletes all rows from the cuenta table.
+     * Deletes all rows from the tipo_venta_forma table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).
@@ -621,19 +611,19 @@ abstract class BaseCuentaPeer
     public static function doDeleteAll(PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(CuentaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(TipoVentaFormaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
         $affectedRows = 0; // initialize var to track total num of affected rows
         try {
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
-            $affectedRows += BasePeer::doDeleteAll(CuentaPeer::TABLE_NAME, $con, CuentaPeer::DATABASE_NAME);
+            $affectedRows += BasePeer::doDeleteAll(TipoVentaFormaPeer::TABLE_NAME, $con, TipoVentaFormaPeer::DATABASE_NAME);
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            CuentaPeer::clearInstancePool();
-            CuentaPeer::clearRelatedInstancePool();
+            TipoVentaFormaPeer::clearInstancePool();
+            TipoVentaFormaPeer::clearRelatedInstancePool();
             $con->commit();
 
             return $affectedRows;
@@ -644,9 +634,9 @@ abstract class BaseCuentaPeer
     }
 
     /**
-     * Performs a DELETE on the database, given a Cuenta or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a TipoVentaForma or Criteria object OR a primary key value.
      *
-     * @param      mixed $values Criteria or Cuenta object or primary key or array of primary keys
+     * @param      mixed $values Criteria or TipoVentaForma object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param      PropelPDO $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -657,32 +647,32 @@ abstract class BaseCuentaPeer
      public static function doDelete($values, PropelPDO $con = null)
      {
         if ($con === null) {
-            $con = Propel::getConnection(CuentaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(TipoVentaFormaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         if ($values instanceof Criteria) {
             // invalidate the cache for all objects of this type, since we have no
             // way of knowing (without running a query) what objects should be invalidated
             // from the cache based on this Criteria.
-            CuentaPeer::clearInstancePool();
+            TipoVentaFormaPeer::clearInstancePool();
             // rename for clarity
             $criteria = clone $values;
-        } elseif ($values instanceof Cuenta) { // it's a model object
+        } elseif ($values instanceof TipoVentaForma) { // it's a model object
             // invalidate the cache for this single object
-            CuentaPeer::removeInstanceFromPool($values);
+            TipoVentaFormaPeer::removeInstanceFromPool($values);
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(CuentaPeer::DATABASE_NAME);
-            $criteria->add(CuentaPeer::ID_CUENTA, (array) $values, Criteria::IN);
+            $criteria = new Criteria(TipoVentaFormaPeer::DATABASE_NAME);
+            $criteria->add(TipoVentaFormaPeer::ID_TIPO_VENTA_FORMA, (array) $values, Criteria::IN);
             // invalidate the cache for this object(s)
             foreach ((array) $values as $singleval) {
-                CuentaPeer::removeInstanceFromPool($singleval);
+                TipoVentaFormaPeer::removeInstanceFromPool($singleval);
             }
         }
 
         // Set the correct dbName
-        $criteria->setDbName(CuentaPeer::DATABASE_NAME);
+        $criteria->setDbName(TipoVentaFormaPeer::DATABASE_NAME);
 
         $affectedRows = 0; // initialize var to track total num of affected rows
 
@@ -692,7 +682,7 @@ abstract class BaseCuentaPeer
             $con->beginTransaction();
 
             $affectedRows += BasePeer::doDelete($criteria, $con);
-            CuentaPeer::clearRelatedInstancePool();
+            TipoVentaFormaPeer::clearRelatedInstancePool();
             $con->commit();
 
             return $affectedRows;
@@ -703,13 +693,13 @@ abstract class BaseCuentaPeer
     }
 
     /**
-     * Validates all modified columns of given Cuenta object.
+     * Validates all modified columns of given TipoVentaForma object.
      * If parameter $columns is either a single column name or an array of column names
      * than only those columns are validated.
      *
      * NOTICE: This does not apply to primary or foreign keys for now.
      *
-     * @param      Cuenta $obj The object to validate.
+     * @param      TipoVentaForma $obj The object to validate.
      * @param      mixed $cols Column name or array of column names.
      *
      * @return mixed TRUE if all columns are valid or the error message of the first invalid column.
@@ -719,8 +709,8 @@ abstract class BaseCuentaPeer
         $columns = array();
 
         if ($cols) {
-            $dbMap = Propel::getDatabaseMap(CuentaPeer::DATABASE_NAME);
-            $tableMap = $dbMap->getTable(CuentaPeer::TABLE_NAME);
+            $dbMap = Propel::getDatabaseMap(TipoVentaFormaPeer::DATABASE_NAME);
+            $tableMap = $dbMap->getTable(TipoVentaFormaPeer::TABLE_NAME);
 
             if (! is_array($cols)) {
                 $cols = array($cols);
@@ -736,7 +726,7 @@ abstract class BaseCuentaPeer
 
         }
 
-        return BasePeer::doValidate(CuentaPeer::DATABASE_NAME, CuentaPeer::TABLE_NAME, $columns);
+        return BasePeer::doValidate(TipoVentaFormaPeer::DATABASE_NAME, TipoVentaFormaPeer::TABLE_NAME, $columns);
     }
 
     /**
@@ -744,23 +734,23 @@ abstract class BaseCuentaPeer
      *
      * @param      int $pk the primary key.
      * @param      PropelPDO $con the connection to use
-     * @return Cuenta
+     * @return TipoVentaForma
      */
     public static function retrieveByPK($pk, PropelPDO $con = null)
     {
 
-        if (null !== ($obj = CuentaPeer::getInstanceFromPool((string) $pk))) {
+        if (null !== ($obj = TipoVentaFormaPeer::getInstanceFromPool((string) $pk))) {
             return $obj;
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(CuentaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(TipoVentaFormaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria = new Criteria(CuentaPeer::DATABASE_NAME);
-        $criteria->add(CuentaPeer::ID_CUENTA, $pk);
+        $criteria = new Criteria(TipoVentaFormaPeer::DATABASE_NAME);
+        $criteria->add(TipoVentaFormaPeer::ID_TIPO_VENTA_FORMA, $pk);
 
-        $v = CuentaPeer::doSelect($criteria, $con);
+        $v = TipoVentaFormaPeer::doSelect($criteria, $con);
 
         return !empty($v) > 0 ? $v[0] : null;
     }
@@ -770,31 +760,31 @@ abstract class BaseCuentaPeer
      *
      * @param      array $pks List of primary keys
      * @param      PropelPDO $con the connection to use
-     * @return Cuenta[]
+     * @return TipoVentaForma[]
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
     public static function retrieveByPKs($pks, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(CuentaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(TipoVentaFormaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         $objs = null;
         if (empty($pks)) {
             $objs = array();
         } else {
-            $criteria = new Criteria(CuentaPeer::DATABASE_NAME);
-            $criteria->add(CuentaPeer::ID_CUENTA, $pks, Criteria::IN);
-            $objs = CuentaPeer::doSelect($criteria, $con);
+            $criteria = new Criteria(TipoVentaFormaPeer::DATABASE_NAME);
+            $criteria->add(TipoVentaFormaPeer::ID_TIPO_VENTA_FORMA, $pks, Criteria::IN);
+            $objs = TipoVentaFormaPeer::doSelect($criteria, $con);
         }
 
         return $objs;
     }
 
-} // BaseCuentaPeer
+} // BaseTipoVentaFormaPeer
 
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-BaseCuentaPeer::buildTableMap();
+BaseTipoVentaFormaPeer::buildTableMap();
 

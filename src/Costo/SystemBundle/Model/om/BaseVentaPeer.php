@@ -36,40 +36,37 @@ abstract class BaseVentaPeer
     const TM_CLASS = 'VentaTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 9;
+    const NUM_COLUMNS = 8;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 9;
+    const NUM_HYDRATE_COLUMNS = 8;
 
-    /** the column name for the id_venta field */
-    const ID_VENTA = 'venta.id_venta';
+    /** the column name for the id field */
+    const ID = 'venta.id';
 
-    /** the column name for the fecha_venta field */
-    const FECHA_VENTA = 'venta.fecha_venta';
+    /** the column name for the fecha field */
+    const FECHA = 'venta.fecha';
 
-    /** the column name for the total_venta field */
-    const TOTAL_VENTA = 'venta.total_venta';
+    /** the column name for the total_documentada field */
+    const TOTAL_DOCUMENTADA = 'venta.total_documentada';
 
-    /** the column name for the formal_total_venta field */
-    const FORMAL_TOTAL_VENTA = 'venta.formal_total_venta';
+    /** the column name for the total_no_documentada field */
+    const TOTAL_NO_DOCUMENTADA = 'venta.total_no_documentada';
 
-    /** the column name for the informal_total_venta field */
-    const INFORMAL_TOTAL_VENTA = 'venta.informal_total_venta';
+    /** the column name for the total_iva field */
+    const TOTAL_IVA = 'venta.total_iva';
 
-    /** the column name for the total_iva_venta_formal field */
-    const TOTAL_IVA_VENTA_FORMAL = 'venta.total_iva_venta_formal';
+    /** the column name for the total field */
+    const TOTAL = 'venta.total';
 
-    /** the column name for the detalle_venta field */
-    const DETALLE_VENTA = 'venta.detalle_venta';
+    /** the column name for the fecha_creacion field */
+    const FECHA_CREACION = 'venta.fecha_creacion';
 
-    /** the column name for the fecha_creacion_venta field */
-    const FECHA_CREACION_VENTA = 'venta.fecha_creacion_venta';
-
-    /** the column name for the fecha_modificacion_venta field */
-    const FECHA_MODIFICACION_VENTA = 'venta.fecha_modificacion_venta';
+    /** the column name for the fecha_modificacion field */
+    const FECHA_MODIFICACION = 'venta.fecha_modificacion';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -90,12 +87,12 @@ abstract class BaseVentaPeer
      * e.g. VentaPeer::$fieldNames[VentaPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('IdVenta', 'FechaVenta', 'TotalVenta', 'FormalTotalVenta', 'InformalTotalVenta', 'TotalIvaVentaFormal', 'DetalleVenta', 'FechaCreacionVenta', 'FechaModificacionVenta', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idVenta', 'fechaVenta', 'totalVenta', 'formalTotalVenta', 'informalTotalVenta', 'totalIvaVentaFormal', 'detalleVenta', 'fechaCreacionVenta', 'fechaModificacionVenta', ),
-        BasePeer::TYPE_COLNAME => array (VentaPeer::ID_VENTA, VentaPeer::FECHA_VENTA, VentaPeer::TOTAL_VENTA, VentaPeer::FORMAL_TOTAL_VENTA, VentaPeer::INFORMAL_TOTAL_VENTA, VentaPeer::TOTAL_IVA_VENTA_FORMAL, VentaPeer::DETALLE_VENTA, VentaPeer::FECHA_CREACION_VENTA, VentaPeer::FECHA_MODIFICACION_VENTA, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID_VENTA', 'FECHA_VENTA', 'TOTAL_VENTA', 'FORMAL_TOTAL_VENTA', 'INFORMAL_TOTAL_VENTA', 'TOTAL_IVA_VENTA_FORMAL', 'DETALLE_VENTA', 'FECHA_CREACION_VENTA', 'FECHA_MODIFICACION_VENTA', ),
-        BasePeer::TYPE_FIELDNAME => array ('id_venta', 'fecha_venta', 'total_venta', 'formal_total_venta', 'informal_total_venta', 'total_iva_venta_formal', 'detalle_venta', 'fecha_creacion_venta', 'fecha_modificacion_venta', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Fecha', 'TotalDocumentada', 'TotalNoDocumentada', 'TotalIva', 'Total', 'FechaCreacion', 'FechaModificacion', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'fecha', 'totalDocumentada', 'totalNoDocumentada', 'totalIva', 'total', 'fechaCreacion', 'fechaModificacion', ),
+        BasePeer::TYPE_COLNAME => array (VentaPeer::ID, VentaPeer::FECHA, VentaPeer::TOTAL_DOCUMENTADA, VentaPeer::TOTAL_NO_DOCUMENTADA, VentaPeer::TOTAL_IVA, VentaPeer::TOTAL, VentaPeer::FECHA_CREACION, VentaPeer::FECHA_MODIFICACION, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'FECHA', 'TOTAL_DOCUMENTADA', 'TOTAL_NO_DOCUMENTADA', 'TOTAL_IVA', 'TOTAL', 'FECHA_CREACION', 'FECHA_MODIFICACION', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'fecha', 'total_documentada', 'total_no_documentada', 'total_iva', 'total', 'fecha_creacion', 'fecha_modificacion', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -105,12 +102,12 @@ abstract class BaseVentaPeer
      * e.g. VentaPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('IdVenta' => 0, 'FechaVenta' => 1, 'TotalVenta' => 2, 'FormalTotalVenta' => 3, 'InformalTotalVenta' => 4, 'TotalIvaVentaFormal' => 5, 'DetalleVenta' => 6, 'FechaCreacionVenta' => 7, 'FechaModificacionVenta' => 8, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idVenta' => 0, 'fechaVenta' => 1, 'totalVenta' => 2, 'formalTotalVenta' => 3, 'informalTotalVenta' => 4, 'totalIvaVentaFormal' => 5, 'detalleVenta' => 6, 'fechaCreacionVenta' => 7, 'fechaModificacionVenta' => 8, ),
-        BasePeer::TYPE_COLNAME => array (VentaPeer::ID_VENTA => 0, VentaPeer::FECHA_VENTA => 1, VentaPeer::TOTAL_VENTA => 2, VentaPeer::FORMAL_TOTAL_VENTA => 3, VentaPeer::INFORMAL_TOTAL_VENTA => 4, VentaPeer::TOTAL_IVA_VENTA_FORMAL => 5, VentaPeer::DETALLE_VENTA => 6, VentaPeer::FECHA_CREACION_VENTA => 7, VentaPeer::FECHA_MODIFICACION_VENTA => 8, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID_VENTA' => 0, 'FECHA_VENTA' => 1, 'TOTAL_VENTA' => 2, 'FORMAL_TOTAL_VENTA' => 3, 'INFORMAL_TOTAL_VENTA' => 4, 'TOTAL_IVA_VENTA_FORMAL' => 5, 'DETALLE_VENTA' => 6, 'FECHA_CREACION_VENTA' => 7, 'FECHA_MODIFICACION_VENTA' => 8, ),
-        BasePeer::TYPE_FIELDNAME => array ('id_venta' => 0, 'fecha_venta' => 1, 'total_venta' => 2, 'formal_total_venta' => 3, 'informal_total_venta' => 4, 'total_iva_venta_formal' => 5, 'detalle_venta' => 6, 'fecha_creacion_venta' => 7, 'fecha_modificacion_venta' => 8, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Fecha' => 1, 'TotalDocumentada' => 2, 'TotalNoDocumentada' => 3, 'TotalIva' => 4, 'Total' => 5, 'FechaCreacion' => 6, 'FechaModificacion' => 7, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'fecha' => 1, 'totalDocumentada' => 2, 'totalNoDocumentada' => 3, 'totalIva' => 4, 'total' => 5, 'fechaCreacion' => 6, 'fechaModificacion' => 7, ),
+        BasePeer::TYPE_COLNAME => array (VentaPeer::ID => 0, VentaPeer::FECHA => 1, VentaPeer::TOTAL_DOCUMENTADA => 2, VentaPeer::TOTAL_NO_DOCUMENTADA => 3, VentaPeer::TOTAL_IVA => 4, VentaPeer::TOTAL => 5, VentaPeer::FECHA_CREACION => 6, VentaPeer::FECHA_MODIFICACION => 7, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'FECHA' => 1, 'TOTAL_DOCUMENTADA' => 2, 'TOTAL_NO_DOCUMENTADA' => 3, 'TOTAL_IVA' => 4, 'TOTAL' => 5, 'FECHA_CREACION' => 6, 'FECHA_MODIFICACION' => 7, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'fecha' => 1, 'total_documentada' => 2, 'total_no_documentada' => 3, 'total_iva' => 4, 'total' => 5, 'fecha_creacion' => 6, 'fecha_modificacion' => 7, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -184,25 +181,23 @@ abstract class BaseVentaPeer
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(VentaPeer::ID_VENTA);
-            $criteria->addSelectColumn(VentaPeer::FECHA_VENTA);
-            $criteria->addSelectColumn(VentaPeer::TOTAL_VENTA);
-            $criteria->addSelectColumn(VentaPeer::FORMAL_TOTAL_VENTA);
-            $criteria->addSelectColumn(VentaPeer::INFORMAL_TOTAL_VENTA);
-            $criteria->addSelectColumn(VentaPeer::TOTAL_IVA_VENTA_FORMAL);
-            $criteria->addSelectColumn(VentaPeer::DETALLE_VENTA);
-            $criteria->addSelectColumn(VentaPeer::FECHA_CREACION_VENTA);
-            $criteria->addSelectColumn(VentaPeer::FECHA_MODIFICACION_VENTA);
+            $criteria->addSelectColumn(VentaPeer::ID);
+            $criteria->addSelectColumn(VentaPeer::FECHA);
+            $criteria->addSelectColumn(VentaPeer::TOTAL_DOCUMENTADA);
+            $criteria->addSelectColumn(VentaPeer::TOTAL_NO_DOCUMENTADA);
+            $criteria->addSelectColumn(VentaPeer::TOTAL_IVA);
+            $criteria->addSelectColumn(VentaPeer::TOTAL);
+            $criteria->addSelectColumn(VentaPeer::FECHA_CREACION);
+            $criteria->addSelectColumn(VentaPeer::FECHA_MODIFICACION);
         } else {
-            $criteria->addSelectColumn($alias . '.id_venta');
-            $criteria->addSelectColumn($alias . '.fecha_venta');
-            $criteria->addSelectColumn($alias . '.total_venta');
-            $criteria->addSelectColumn($alias . '.formal_total_venta');
-            $criteria->addSelectColumn($alias . '.informal_total_venta');
-            $criteria->addSelectColumn($alias . '.total_iva_venta_formal');
-            $criteria->addSelectColumn($alias . '.detalle_venta');
-            $criteria->addSelectColumn($alias . '.fecha_creacion_venta');
-            $criteria->addSelectColumn($alias . '.fecha_modificacion_venta');
+            $criteria->addSelectColumn($alias . '.id');
+            $criteria->addSelectColumn($alias . '.fecha');
+            $criteria->addSelectColumn($alias . '.total_documentada');
+            $criteria->addSelectColumn($alias . '.total_no_documentada');
+            $criteria->addSelectColumn($alias . '.total_iva');
+            $criteria->addSelectColumn($alias . '.total');
+            $criteria->addSelectColumn($alias . '.fecha_creacion');
+            $criteria->addSelectColumn($alias . '.fecha_modificacion');
         }
     }
 
@@ -329,7 +324,7 @@ abstract class BaseVentaPeer
     {
         if (Propel::isInstancePoolingEnabled()) {
             if ($key === null) {
-                $key = (string) $obj->getIdVenta();
+                $key = (string) $obj->getId();
             } // if key === null
             VentaPeer::$instances[$key] = $obj;
         }
@@ -352,7 +347,7 @@ abstract class BaseVentaPeer
     {
         if (Propel::isInstancePoolingEnabled() && $value !== null) {
             if (is_object($value) && $value instanceof Venta) {
-                $key = (string) $value->getIdVenta();
+                $key = (string) $value->getId();
             } elseif (is_scalar($value)) {
                 // assume we've been passed a primary key
                 $key = (string) $value;
@@ -534,7 +529,7 @@ abstract class BaseVentaPeer
      *
      * @return string ClassName
      */
-    public static function getOMClass()
+    public static function getOMClass($row = 0, $colnum = 0)
     {
         return VentaPeer::OM_CLASS;
     }
@@ -560,8 +555,8 @@ abstract class BaseVentaPeer
             $criteria = $values->buildCriteria(); // build Criteria from Venta object
         }
 
-        if ($criteria->containsKey(VentaPeer::ID_VENTA) && $criteria->keyContainsValue(VentaPeer::ID_VENTA) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.VentaPeer::ID_VENTA.')');
+        if ($criteria->containsKey(VentaPeer::ID) && $criteria->keyContainsValue(VentaPeer::ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.VentaPeer::ID.')');
         }
 
 
@@ -602,10 +597,10 @@ abstract class BaseVentaPeer
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
 
-            $comparison = $criteria->getComparison(VentaPeer::ID_VENTA);
-            $value = $criteria->remove(VentaPeer::ID_VENTA);
+            $comparison = $criteria->getComparison(VentaPeer::ID);
+            $value = $criteria->remove(VentaPeer::ID);
             if ($value) {
-                $selectCriteria->add(VentaPeer::ID_VENTA, $value, $comparison);
+                $selectCriteria->add(VentaPeer::ID, $value, $comparison);
             } else {
                 $selectCriteria->setPrimaryTableName(VentaPeer::TABLE_NAME);
             }
@@ -684,7 +679,7 @@ abstract class BaseVentaPeer
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(VentaPeer::DATABASE_NAME);
-            $criteria->add(VentaPeer::ID_VENTA, (array) $values, Criteria::IN);
+            $criteria->add(VentaPeer::ID, (array) $values, Criteria::IN);
             // invalidate the cache for this object(s)
             foreach ((array) $values as $singleval) {
                 VentaPeer::removeInstanceFromPool($singleval);
@@ -768,7 +763,7 @@ abstract class BaseVentaPeer
         }
 
         $criteria = new Criteria(VentaPeer::DATABASE_NAME);
-        $criteria->add(VentaPeer::ID_VENTA, $pk);
+        $criteria->add(VentaPeer::ID, $pk);
 
         $v = VentaPeer::doSelect($criteria, $con);
 
@@ -795,7 +790,7 @@ abstract class BaseVentaPeer
             $objs = array();
         } else {
             $criteria = new Criteria(VentaPeer::DATABASE_NAME);
-            $criteria->add(VentaPeer::ID_VENTA, $pks, Criteria::IN);
+            $criteria->add(VentaPeer::ID, $pks, Criteria::IN);
             $objs = VentaPeer::doSelect($criteria, $con);
         }
 

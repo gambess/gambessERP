@@ -4,9 +4,11 @@ namespace Costo\SystemBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Costo\SystemBundle\Model\DetalleVenta;
+use Costo\SystemBundle\Model\DetalleVentaQuery;
 use Costo\SystemBundle\Model\Venta;
 use Costo\SystemBundle\Model\VentaQuery;
-use Costo\SystemBundle\Form\Type\VentaType;
+use Costo\SystemBundle\Form\Type\DetalleVentaType;
 use Symfony\Component\Form\FormError;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\PropelAdapter;
@@ -29,13 +31,13 @@ class VentaController extends Controller {
         $request = $this->getRequest();
         if ('GET' === $request->getMethod()) {
             if ($page == 0) {
-                $ventas = VentaQuery::create()->orderByFechaVenta('ASC')->find();
+                $ventas = DetalleVentaQuery::create()->orderByFechaVenta('ASC')->find();
                 return $this->render('CostoSystemBundle:Venta:index.html.twig', array(
                     'ventas' => $ventas,
                     'page' => $page,
                 ));
             } else {
-                $query = VentaQuery::create()->orderByFechaVenta('ASC');
+                $query = DetalleVentaQuery::create()->orderByFechaVenta('ASC');
                 $pagerfanta = new Pagerfanta(new PropelAdapter($query));
                 $pagerfanta->setMaxPerPage(7);
                 $pagerfanta->setCurrentPage($request->get('page')); // 1 by default
@@ -60,7 +62,7 @@ class VentaController extends Controller {
      * @return Response view
      */
     public function showAction($id) {
-        $venta = VentaQuery::create()->findPk($id);
+        $venta = DetalleVentaQuery::create()->findPk($id);
 
         if (!$venta) {
             throw $this->createNotFoundException('No se ha encontrado la venta solicitada');
@@ -81,8 +83,8 @@ class VentaController extends Controller {
      * @return Response view
      */
     public function newAction() {
-        $venta = new Venta();
-        $form = $this->createForm(new VentaType(), $venta);
+        $venta = new DetalleVenta();
+        $form = $this->createForm(new DetalleVentaType(), $venta);
 
         return $this->render('CostoSystemBundle:Venta:new.html.twig', array(
             'errors' => null,
@@ -98,27 +100,27 @@ class VentaController extends Controller {
      * @return mixed, Si es valido se muestra la venta creada en caso contrario exije validacion
      */
     public function createAction() {
-        $venta = new Venta();
+        $venta = new DetalleVenta();
         $request = $this->getRequest();
-        $form = $this->createForm(new VentaType(), $venta);
+        $form = $this->createForm(new DetalleVentaType(), $venta);
         $form->bindRequest($request);
 
         //no es valido completamente hasta validar que la fecha no este ingresada
         if ($form->isValid()) {
-            $venta_in = $form->get('fecha_venta')->getData();
-            $exist = VentaQuery::create()->findOneByFechaVenta($venta_in);
-            if (null === $exist) {
+            //$venta_in = $form->get('fecha_venta')->getData();
+            //$exist = VentaQuery::create()->findOneByFechaVenta($venta_in);
+            //if (null === $exist) {
                 $venta->save();
-                return $this->redirect($this->generateUrl('show_venta', array('id' => $venta->getIdVenta())));
-            }
-            if ($exist instanceof Venta) {
-                $form->addError(new FormError('¡EXISTE VENTA! Seleccione otro día por favor y grabe.'));
-                return $this->render('CostoSystemBundle:Venta:new.html.twig', array(
-                    'venta' => $venta,
-                    'errors' => $form->getErrors(),
-                    'form' => $form->createView()
-                ));
-            }
+                return $this->redirect($this->generateUrl('show_venta', array('id' => $venta->getIdDetalle())));
+            //}
+//            if ($exist instanceof Venta) {
+//                $form->addError(new FormError('¡EXISTE VENTA! Seleccione otro día por favor y grabe.'));
+//                return $this->render('CostoSystemBundle:Venta:new.html.twig', array(
+//                    'venta' => $venta,
+//                    'errors' => $form->getErrors(),
+//                    'form' => $form->createView()
+//                ));
+//            }
         }
     }
 

@@ -13,7 +13,6 @@ use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
 use Costo\SystemBundle\Model\Cuenta;
-use Costo\SystemBundle\Model\CuentaQuery;
 use Costo\SystemBundle\Model\Gasto;
 use Costo\SystemBundle\Model\GastoPeer;
 use Costo\SystemBundle\Model\GastoQuery;
@@ -714,62 +713,6 @@ abstract class BaseGastoQuery extends ModelCriteria
         return $this;
     }
 
-    /**
-     * Code to execute before every DELETE statement
-     *
-     * @param     PropelPDO $con The connection object used by the query
-     */
-    protected function basePreDelete(PropelPDO $con)
-    {
-        // aggregate_column_relation behavior
-        $this->findRelatedCuentas($con);
-
-        return $this->preDelete($con);
-    }
-
-    /**
-     * Code to execute after every DELETE statement
-     *
-     * @param     int $affectedRows the number of deleted rows
-     * @param     PropelPDO $con The connection object used by the query
-     */
-    protected function basePostDelete($affectedRows, PropelPDO $con)
-    {
-        // aggregate_column_relation behavior
-        $this->updateRelatedCuentas($con);
-
-        return $this->postDelete($affectedRows, $con);
-    }
-
-    /**
-     * Code to execute before every UPDATE statement
-     *
-     * @param     array $values The associatiove array of columns and values for the update
-     * @param     PropelPDO $con The connection object used by the query
-     * @param     boolean $forceIndividualSaves If false (default), the resulting call is a BasePeer::doUpdate(), ortherwise it is a series of save() calls on all the found objects
-     */
-    protected function basePreUpdate(&$values, PropelPDO $con, $forceIndividualSaves = false)
-    {
-        // aggregate_column_relation behavior
-        $this->findRelatedCuentas($con);
-
-        return $this->preUpdate($values, $con, $forceIndividualSaves);
-    }
-
-    /**
-     * Code to execute after every UPDATE statement
-     *
-     * @param     int $affectedRows the number of udated rows
-     * @param     PropelPDO $con The connection object used by the query
-     */
-    protected function basePostUpdate($affectedRows, PropelPDO $con)
-    {
-        // aggregate_column_relation behavior
-        $this->updateRelatedCuentas($con);
-
-        return $this->postUpdate($affectedRows, $con);
-    }
-
     // timestampable behavior
 
     /**
@@ -835,34 +778,4 @@ abstract class BaseGastoQuery extends ModelCriteria
     {
         return $this->addAscendingOrderByColumn(GastoPeer::FECHA_CREACION_GASTO);
     }
-    // aggregate_column_relation behavior
-
-    /**
-     * Finds the related Cuenta objects and keep them for later
-     *
-     * @param PropelPDO $con A connection object
-     */
-    protected function findRelatedCuentas($con)
-    {
-        $criteria = clone $this;
-        if ($this->useAliasInSQL) {
-            $alias = $this->getModelAlias();
-            $criteria->removeAlias($alias);
-        } else {
-            $alias = '';
-        }
-        $this->cuentas = CuentaQuery::create()
-            ->joinGasto($alias)
-            ->mergeWith($criteria)
-            ->find($con);
-    }
-
-    protected function updateRelatedCuentas($con)
-    {
-        foreach ($this->cuentas as $cuenta) {
-            $cuenta->updateValorCuenta($con);
-        }
-        $this->cuentas = array();
-    }
-
 }

@@ -28,9 +28,9 @@ propel:
         connections:
            testing:
                 driver:               mysql
-                user:                 root
-                password:             gambess
-                dsn:                  mysql:host=localhost;dbname=testing;charset=UTF8
+                user:                 aricaguau-user
+                password:             aricaguau-pass
+                dsn:                  mysql:host=localhost;dbname=aricaguau;charset=UTF8
                 options:              {}
                 attributes:           {}
 #               options:

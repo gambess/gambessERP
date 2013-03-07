@@ -19,25 +19,23 @@ use Costo\SystemBundle\Model\VentaQuery;
  *
  *
  *
- * @method VentaQuery orderByIdVenta($order = Criteria::ASC) Order by the id_venta column
- * @method VentaQuery orderByFechaVenta($order = Criteria::ASC) Order by the fecha_venta column
- * @method VentaQuery orderByTotalVenta($order = Criteria::ASC) Order by the total_venta column
- * @method VentaQuery orderByFormalTotalVenta($order = Criteria::ASC) Order by the formal_total_venta column
- * @method VentaQuery orderByInformalTotalVenta($order = Criteria::ASC) Order by the informal_total_venta column
- * @method VentaQuery orderByTotalIvaVentaFormal($order = Criteria::ASC) Order by the total_iva_venta_formal column
- * @method VentaQuery orderByDetalleVenta($order = Criteria::ASC) Order by the detalle_venta column
- * @method VentaQuery orderByFechaCreacionVenta($order = Criteria::ASC) Order by the fecha_creacion_venta column
- * @method VentaQuery orderByFechaModificacionVenta($order = Criteria::ASC) Order by the fecha_modificacion_venta column
+ * @method VentaQuery orderById($order = Criteria::ASC) Order by the id column
+ * @method VentaQuery orderByFecha($order = Criteria::ASC) Order by the fecha column
+ * @method VentaQuery orderByTotalDocumentada($order = Criteria::ASC) Order by the total_documentada column
+ * @method VentaQuery orderByTotalNoDocumentada($order = Criteria::ASC) Order by the total_no_documentada column
+ * @method VentaQuery orderByTotalIva($order = Criteria::ASC) Order by the total_iva column
+ * @method VentaQuery orderByTotal($order = Criteria::ASC) Order by the total column
+ * @method VentaQuery orderByFechaCreacion($order = Criteria::ASC) Order by the fecha_creacion column
+ * @method VentaQuery orderByFechaModificacion($order = Criteria::ASC) Order by the fecha_modificacion column
  *
- * @method VentaQuery groupByIdVenta() Group by the id_venta column
- * @method VentaQuery groupByFechaVenta() Group by the fecha_venta column
- * @method VentaQuery groupByTotalVenta() Group by the total_venta column
- * @method VentaQuery groupByFormalTotalVenta() Group by the formal_total_venta column
- * @method VentaQuery groupByInformalTotalVenta() Group by the informal_total_venta column
- * @method VentaQuery groupByTotalIvaVentaFormal() Group by the total_iva_venta_formal column
- * @method VentaQuery groupByDetalleVenta() Group by the detalle_venta column
- * @method VentaQuery groupByFechaCreacionVenta() Group by the fecha_creacion_venta column
- * @method VentaQuery groupByFechaModificacionVenta() Group by the fecha_modificacion_venta column
+ * @method VentaQuery groupById() Group by the id column
+ * @method VentaQuery groupByFecha() Group by the fecha column
+ * @method VentaQuery groupByTotalDocumentada() Group by the total_documentada column
+ * @method VentaQuery groupByTotalNoDocumentada() Group by the total_no_documentada column
+ * @method VentaQuery groupByTotalIva() Group by the total_iva column
+ * @method VentaQuery groupByTotal() Group by the total column
+ * @method VentaQuery groupByFechaCreacion() Group by the fecha_creacion column
+ * @method VentaQuery groupByFechaModificacion() Group by the fecha_modificacion column
  *
  * @method VentaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method VentaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -46,24 +44,22 @@ use Costo\SystemBundle\Model\VentaQuery;
  * @method Venta findOne(PropelPDO $con = null) Return the first Venta matching the query
  * @method Venta findOneOrCreate(PropelPDO $con = null) Return the first Venta matching the query, or a new Venta object populated from the query conditions when no match is found
  *
- * @method Venta findOneByFechaVenta(string $fecha_venta) Return the first Venta filtered by the fecha_venta column
- * @method Venta findOneByTotalVenta(double $total_venta) Return the first Venta filtered by the total_venta column
- * @method Venta findOneByFormalTotalVenta(double $formal_total_venta) Return the first Venta filtered by the formal_total_venta column
- * @method Venta findOneByInformalTotalVenta(double $informal_total_venta) Return the first Venta filtered by the informal_total_venta column
- * @method Venta findOneByTotalIvaVentaFormal(double $total_iva_venta_formal) Return the first Venta filtered by the total_iva_venta_formal column
- * @method Venta findOneByDetalleVenta(string $detalle_venta) Return the first Venta filtered by the detalle_venta column
- * @method Venta findOneByFechaCreacionVenta(string $fecha_creacion_venta) Return the first Venta filtered by the fecha_creacion_venta column
- * @method Venta findOneByFechaModificacionVenta(string $fecha_modificacion_venta) Return the first Venta filtered by the fecha_modificacion_venta column
+ * @method Venta findOneByFecha(string $fecha) Return the first Venta filtered by the fecha column
+ * @method Venta findOneByTotalDocumentada(double $total_documentada) Return the first Venta filtered by the total_documentada column
+ * @method Venta findOneByTotalNoDocumentada(double $total_no_documentada) Return the first Venta filtered by the total_no_documentada column
+ * @method Venta findOneByTotalIva(double $total_iva) Return the first Venta filtered by the total_iva column
+ * @method Venta findOneByTotal(double $total) Return the first Venta filtered by the total column
+ * @method Venta findOneByFechaCreacion(string $fecha_creacion) Return the first Venta filtered by the fecha_creacion column
+ * @method Venta findOneByFechaModificacion(string $fecha_modificacion) Return the first Venta filtered by the fecha_modificacion column
  *
- * @method array findByIdVenta(int $id_venta) Return Venta objects filtered by the id_venta column
- * @method array findByFechaVenta(string $fecha_venta) Return Venta objects filtered by the fecha_venta column
- * @method array findByTotalVenta(double $total_venta) Return Venta objects filtered by the total_venta column
- * @method array findByFormalTotalVenta(double $formal_total_venta) Return Venta objects filtered by the formal_total_venta column
- * @method array findByInformalTotalVenta(double $informal_total_venta) Return Venta objects filtered by the informal_total_venta column
- * @method array findByTotalIvaVentaFormal(double $total_iva_venta_formal) Return Venta objects filtered by the total_iva_venta_formal column
- * @method array findByDetalleVenta(string $detalle_venta) Return Venta objects filtered by the detalle_venta column
- * @method array findByFechaCreacionVenta(string $fecha_creacion_venta) Return Venta objects filtered by the fecha_creacion_venta column
- * @method array findByFechaModificacionVenta(string $fecha_modificacion_venta) Return Venta objects filtered by the fecha_modificacion_venta column
+ * @method array findById(int $id) Return Venta objects filtered by the id column
+ * @method array findByFecha(string $fecha) Return Venta objects filtered by the fecha column
+ * @method array findByTotalDocumentada(double $total_documentada) Return Venta objects filtered by the total_documentada column
+ * @method array findByTotalNoDocumentada(double $total_no_documentada) Return Venta objects filtered by the total_no_documentada column
+ * @method array findByTotalIva(double $total_iva) Return Venta objects filtered by the total_iva column
+ * @method array findByTotal(double $total) Return Venta objects filtered by the total column
+ * @method array findByFechaCreacion(string $fecha_creacion) Return Venta objects filtered by the fecha_creacion column
+ * @method array findByFechaModificacion(string $fecha_modificacion) Return Venta objects filtered by the fecha_modificacion column
  *
  * @package    propel.generator.src.Costo.SystemBundle.Model.om
  */
@@ -150,7 +146,7 @@ abstract class BaseVentaQuery extends ModelCriteria
      * @return                 Venta A model object, or null if the key is not found
      * @throws PropelException
      */
-     public function findOneByIdVenta($key, $con = null)
+     public function findOneById($key, $con = null)
      {
         return $this->findPk($key, $con);
      }
@@ -167,7 +163,7 @@ abstract class BaseVentaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id_venta`, `fecha_venta`, `total_venta`, `formal_total_venta`, `informal_total_venta`, `total_iva_venta_formal`, `detalle_venta`, `fecha_creacion_venta`, `fecha_modificacion_venta` FROM `venta` WHERE `id_venta` = :p0';
+        $sql = 'SELECT `id`, `fecha`, `total_documentada`, `total_no_documentada`, `total_iva`, `total`, `fecha_creacion`, `fecha_modificacion` FROM `venta` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -240,7 +236,7 @@ abstract class BaseVentaQuery extends ModelCriteria
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(VentaPeer::ID_VENTA, $key, Criteria::EQUAL);
+        return $this->addUsingAlias(VentaPeer::ID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -253,21 +249,21 @@ abstract class BaseVentaQuery extends ModelCriteria
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(VentaPeer::ID_VENTA, $keys, Criteria::IN);
+        return $this->addUsingAlias(VentaPeer::ID, $keys, Criteria::IN);
     }
 
     /**
-     * Filter the query on the id_venta column
+     * Filter the query on the id column
      *
      * Example usage:
      * <code>
-     * $query->filterByIdVenta(1234); // WHERE id_venta = 1234
-     * $query->filterByIdVenta(array(12, 34)); // WHERE id_venta IN (12, 34)
-     * $query->filterByIdVenta(array('min' => 12)); // WHERE id_venta >= 12
-     * $query->filterByIdVenta(array('max' => 12)); // WHERE id_venta <= 12
+     * $query->filterById(1234); // WHERE id = 1234
+     * $query->filterById(array(12, 34)); // WHERE id IN (12, 34)
+     * $query->filterById(array('min' => 12)); // WHERE id >= 12
+     * $query->filterById(array('max' => 12)); // WHERE id <= 12
      * </code>
      *
-     * @param     mixed $idVenta The value to use as filter.
+     * @param     mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -275,16 +271,16 @@ abstract class BaseVentaQuery extends ModelCriteria
      *
      * @return VentaQuery The current query, for fluid interface
      */
-    public function filterByIdVenta($idVenta = null, $comparison = null)
+    public function filterById($id = null, $comparison = null)
     {
-        if (is_array($idVenta)) {
+        if (is_array($id)) {
             $useMinMax = false;
-            if (isset($idVenta['min'])) {
-                $this->addUsingAlias(VentaPeer::ID_VENTA, $idVenta['min'], Criteria::GREATER_EQUAL);
+            if (isset($id['min'])) {
+                $this->addUsingAlias(VentaPeer::ID, $id['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($idVenta['max'])) {
-                $this->addUsingAlias(VentaPeer::ID_VENTA, $idVenta['max'], Criteria::LESS_EQUAL);
+            if (isset($id['max'])) {
+                $this->addUsingAlias(VentaPeer::ID, $id['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -295,20 +291,20 @@ abstract class BaseVentaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(VentaPeer::ID_VENTA, $idVenta, $comparison);
+        return $this->addUsingAlias(VentaPeer::ID, $id, $comparison);
     }
 
     /**
-     * Filter the query on the fecha_venta column
+     * Filter the query on the fecha column
      *
      * Example usage:
      * <code>
-     * $query->filterByFechaVenta('2011-03-14'); // WHERE fecha_venta = '2011-03-14'
-     * $query->filterByFechaVenta('now'); // WHERE fecha_venta = '2011-03-14'
-     * $query->filterByFechaVenta(array('max' => 'yesterday')); // WHERE fecha_venta > '2011-03-13'
+     * $query->filterByFecha('2011-03-14'); // WHERE fecha = '2011-03-14'
+     * $query->filterByFecha('now'); // WHERE fecha = '2011-03-14'
+     * $query->filterByFecha(array('max' => 'yesterday')); // WHERE fecha > '2011-03-13'
      * </code>
      *
-     * @param     mixed $fechaVenta The value to use as filter.
+     * @param     mixed $fecha The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
@@ -318,16 +314,16 @@ abstract class BaseVentaQuery extends ModelCriteria
      *
      * @return VentaQuery The current query, for fluid interface
      */
-    public function filterByFechaVenta($fechaVenta = null, $comparison = null)
+    public function filterByFecha($fecha = null, $comparison = null)
     {
-        if (is_array($fechaVenta)) {
+        if (is_array($fecha)) {
             $useMinMax = false;
-            if (isset($fechaVenta['min'])) {
-                $this->addUsingAlias(VentaPeer::FECHA_VENTA, $fechaVenta['min'], Criteria::GREATER_EQUAL);
+            if (isset($fecha['min'])) {
+                $this->addUsingAlias(VentaPeer::FECHA, $fecha['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($fechaVenta['max'])) {
-                $this->addUsingAlias(VentaPeer::FECHA_VENTA, $fechaVenta['max'], Criteria::LESS_EQUAL);
+            if (isset($fecha['max'])) {
+                $this->addUsingAlias(VentaPeer::FECHA, $fecha['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -338,21 +334,21 @@ abstract class BaseVentaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(VentaPeer::FECHA_VENTA, $fechaVenta, $comparison);
+        return $this->addUsingAlias(VentaPeer::FECHA, $fecha, $comparison);
     }
 
     /**
-     * Filter the query on the total_venta column
+     * Filter the query on the total_documentada column
      *
      * Example usage:
      * <code>
-     * $query->filterByTotalVenta(1234); // WHERE total_venta = 1234
-     * $query->filterByTotalVenta(array(12, 34)); // WHERE total_venta IN (12, 34)
-     * $query->filterByTotalVenta(array('min' => 12)); // WHERE total_venta >= 12
-     * $query->filterByTotalVenta(array('max' => 12)); // WHERE total_venta <= 12
+     * $query->filterByTotalDocumentada(1234); // WHERE total_documentada = 1234
+     * $query->filterByTotalDocumentada(array(12, 34)); // WHERE total_documentada IN (12, 34)
+     * $query->filterByTotalDocumentada(array('min' => 12)); // WHERE total_documentada >= 12
+     * $query->filterByTotalDocumentada(array('max' => 12)); // WHERE total_documentada <= 12
      * </code>
      *
-     * @param     mixed $totalVenta The value to use as filter.
+     * @param     mixed $totalDocumentada The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -360,16 +356,16 @@ abstract class BaseVentaQuery extends ModelCriteria
      *
      * @return VentaQuery The current query, for fluid interface
      */
-    public function filterByTotalVenta($totalVenta = null, $comparison = null)
+    public function filterByTotalDocumentada($totalDocumentada = null, $comparison = null)
     {
-        if (is_array($totalVenta)) {
+        if (is_array($totalDocumentada)) {
             $useMinMax = false;
-            if (isset($totalVenta['min'])) {
-                $this->addUsingAlias(VentaPeer::TOTAL_VENTA, $totalVenta['min'], Criteria::GREATER_EQUAL);
+            if (isset($totalDocumentada['min'])) {
+                $this->addUsingAlias(VentaPeer::TOTAL_DOCUMENTADA, $totalDocumentada['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($totalVenta['max'])) {
-                $this->addUsingAlias(VentaPeer::TOTAL_VENTA, $totalVenta['max'], Criteria::LESS_EQUAL);
+            if (isset($totalDocumentada['max'])) {
+                $this->addUsingAlias(VentaPeer::TOTAL_DOCUMENTADA, $totalDocumentada['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -380,21 +376,21 @@ abstract class BaseVentaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(VentaPeer::TOTAL_VENTA, $totalVenta, $comparison);
+        return $this->addUsingAlias(VentaPeer::TOTAL_DOCUMENTADA, $totalDocumentada, $comparison);
     }
 
     /**
-     * Filter the query on the formal_total_venta column
+     * Filter the query on the total_no_documentada column
      *
      * Example usage:
      * <code>
-     * $query->filterByFormalTotalVenta(1234); // WHERE formal_total_venta = 1234
-     * $query->filterByFormalTotalVenta(array(12, 34)); // WHERE formal_total_venta IN (12, 34)
-     * $query->filterByFormalTotalVenta(array('min' => 12)); // WHERE formal_total_venta >= 12
-     * $query->filterByFormalTotalVenta(array('max' => 12)); // WHERE formal_total_venta <= 12
+     * $query->filterByTotalNoDocumentada(1234); // WHERE total_no_documentada = 1234
+     * $query->filterByTotalNoDocumentada(array(12, 34)); // WHERE total_no_documentada IN (12, 34)
+     * $query->filterByTotalNoDocumentada(array('min' => 12)); // WHERE total_no_documentada >= 12
+     * $query->filterByTotalNoDocumentada(array('max' => 12)); // WHERE total_no_documentada <= 12
      * </code>
      *
-     * @param     mixed $formalTotalVenta The value to use as filter.
+     * @param     mixed $totalNoDocumentada The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -402,16 +398,16 @@ abstract class BaseVentaQuery extends ModelCriteria
      *
      * @return VentaQuery The current query, for fluid interface
      */
-    public function filterByFormalTotalVenta($formalTotalVenta = null, $comparison = null)
+    public function filterByTotalNoDocumentada($totalNoDocumentada = null, $comparison = null)
     {
-        if (is_array($formalTotalVenta)) {
+        if (is_array($totalNoDocumentada)) {
             $useMinMax = false;
-            if (isset($formalTotalVenta['min'])) {
-                $this->addUsingAlias(VentaPeer::FORMAL_TOTAL_VENTA, $formalTotalVenta['min'], Criteria::GREATER_EQUAL);
+            if (isset($totalNoDocumentada['min'])) {
+                $this->addUsingAlias(VentaPeer::TOTAL_NO_DOCUMENTADA, $totalNoDocumentada['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($formalTotalVenta['max'])) {
-                $this->addUsingAlias(VentaPeer::FORMAL_TOTAL_VENTA, $formalTotalVenta['max'], Criteria::LESS_EQUAL);
+            if (isset($totalNoDocumentada['max'])) {
+                $this->addUsingAlias(VentaPeer::TOTAL_NO_DOCUMENTADA, $totalNoDocumentada['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -422,21 +418,21 @@ abstract class BaseVentaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(VentaPeer::FORMAL_TOTAL_VENTA, $formalTotalVenta, $comparison);
+        return $this->addUsingAlias(VentaPeer::TOTAL_NO_DOCUMENTADA, $totalNoDocumentada, $comparison);
     }
 
     /**
-     * Filter the query on the informal_total_venta column
+     * Filter the query on the total_iva column
      *
      * Example usage:
      * <code>
-     * $query->filterByInformalTotalVenta(1234); // WHERE informal_total_venta = 1234
-     * $query->filterByInformalTotalVenta(array(12, 34)); // WHERE informal_total_venta IN (12, 34)
-     * $query->filterByInformalTotalVenta(array('min' => 12)); // WHERE informal_total_venta >= 12
-     * $query->filterByInformalTotalVenta(array('max' => 12)); // WHERE informal_total_venta <= 12
+     * $query->filterByTotalIva(1234); // WHERE total_iva = 1234
+     * $query->filterByTotalIva(array(12, 34)); // WHERE total_iva IN (12, 34)
+     * $query->filterByTotalIva(array('min' => 12)); // WHERE total_iva >= 12
+     * $query->filterByTotalIva(array('max' => 12)); // WHERE total_iva <= 12
      * </code>
      *
-     * @param     mixed $informalTotalVenta The value to use as filter.
+     * @param     mixed $totalIva The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -444,16 +440,16 @@ abstract class BaseVentaQuery extends ModelCriteria
      *
      * @return VentaQuery The current query, for fluid interface
      */
-    public function filterByInformalTotalVenta($informalTotalVenta = null, $comparison = null)
+    public function filterByTotalIva($totalIva = null, $comparison = null)
     {
-        if (is_array($informalTotalVenta)) {
+        if (is_array($totalIva)) {
             $useMinMax = false;
-            if (isset($informalTotalVenta['min'])) {
-                $this->addUsingAlias(VentaPeer::INFORMAL_TOTAL_VENTA, $informalTotalVenta['min'], Criteria::GREATER_EQUAL);
+            if (isset($totalIva['min'])) {
+                $this->addUsingAlias(VentaPeer::TOTAL_IVA, $totalIva['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($informalTotalVenta['max'])) {
-                $this->addUsingAlias(VentaPeer::INFORMAL_TOTAL_VENTA, $informalTotalVenta['max'], Criteria::LESS_EQUAL);
+            if (isset($totalIva['max'])) {
+                $this->addUsingAlias(VentaPeer::TOTAL_IVA, $totalIva['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -464,21 +460,21 @@ abstract class BaseVentaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(VentaPeer::INFORMAL_TOTAL_VENTA, $informalTotalVenta, $comparison);
+        return $this->addUsingAlias(VentaPeer::TOTAL_IVA, $totalIva, $comparison);
     }
 
     /**
-     * Filter the query on the total_iva_venta_formal column
+     * Filter the query on the total column
      *
      * Example usage:
      * <code>
-     * $query->filterByTotalIvaVentaFormal(1234); // WHERE total_iva_venta_formal = 1234
-     * $query->filterByTotalIvaVentaFormal(array(12, 34)); // WHERE total_iva_venta_formal IN (12, 34)
-     * $query->filterByTotalIvaVentaFormal(array('min' => 12)); // WHERE total_iva_venta_formal >= 12
-     * $query->filterByTotalIvaVentaFormal(array('max' => 12)); // WHERE total_iva_venta_formal <= 12
+     * $query->filterByTotal(1234); // WHERE total = 1234
+     * $query->filterByTotal(array(12, 34)); // WHERE total IN (12, 34)
+     * $query->filterByTotal(array('min' => 12)); // WHERE total >= 12
+     * $query->filterByTotal(array('max' => 12)); // WHERE total <= 12
      * </code>
      *
-     * @param     mixed $totalIvaVentaFormal The value to use as filter.
+     * @param     mixed $total The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -486,16 +482,16 @@ abstract class BaseVentaQuery extends ModelCriteria
      *
      * @return VentaQuery The current query, for fluid interface
      */
-    public function filterByTotalIvaVentaFormal($totalIvaVentaFormal = null, $comparison = null)
+    public function filterByTotal($total = null, $comparison = null)
     {
-        if (is_array($totalIvaVentaFormal)) {
+        if (is_array($total)) {
             $useMinMax = false;
-            if (isset($totalIvaVentaFormal['min'])) {
-                $this->addUsingAlias(VentaPeer::TOTAL_IVA_VENTA_FORMAL, $totalIvaVentaFormal['min'], Criteria::GREATER_EQUAL);
+            if (isset($total['min'])) {
+                $this->addUsingAlias(VentaPeer::TOTAL, $total['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($totalIvaVentaFormal['max'])) {
-                $this->addUsingAlias(VentaPeer::TOTAL_IVA_VENTA_FORMAL, $totalIvaVentaFormal['max'], Criteria::LESS_EQUAL);
+            if (isset($total['max'])) {
+                $this->addUsingAlias(VentaPeer::TOTAL, $total['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -506,49 +502,20 @@ abstract class BaseVentaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(VentaPeer::TOTAL_IVA_VENTA_FORMAL, $totalIvaVentaFormal, $comparison);
+        return $this->addUsingAlias(VentaPeer::TOTAL, $total, $comparison);
     }
 
     /**
-     * Filter the query on the detalle_venta column
+     * Filter the query on the fecha_creacion column
      *
      * Example usage:
      * <code>
-     * $query->filterByDetalleVenta('fooValue');   // WHERE detalle_venta = 'fooValue'
-     * $query->filterByDetalleVenta('%fooValue%'); // WHERE detalle_venta LIKE '%fooValue%'
+     * $query->filterByFechaCreacion('2011-03-14'); // WHERE fecha_creacion = '2011-03-14'
+     * $query->filterByFechaCreacion('now'); // WHERE fecha_creacion = '2011-03-14'
+     * $query->filterByFechaCreacion(array('max' => 'yesterday')); // WHERE fecha_creacion > '2011-03-13'
      * </code>
      *
-     * @param     string $detalleVenta The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return VentaQuery The current query, for fluid interface
-     */
-    public function filterByDetalleVenta($detalleVenta = null, $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($detalleVenta)) {
-                $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $detalleVenta)) {
-                $detalleVenta = str_replace('*', '%', $detalleVenta);
-                $comparison = Criteria::LIKE;
-            }
-        }
-
-        return $this->addUsingAlias(VentaPeer::DETALLE_VENTA, $detalleVenta, $comparison);
-    }
-
-    /**
-     * Filter the query on the fecha_creacion_venta column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByFechaCreacionVenta('2011-03-14'); // WHERE fecha_creacion_venta = '2011-03-14'
-     * $query->filterByFechaCreacionVenta('now'); // WHERE fecha_creacion_venta = '2011-03-14'
-     * $query->filterByFechaCreacionVenta(array('max' => 'yesterday')); // WHERE fecha_creacion_venta > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $fechaCreacionVenta The value to use as filter.
+     * @param     mixed $fechaCreacion The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
@@ -558,16 +525,16 @@ abstract class BaseVentaQuery extends ModelCriteria
      *
      * @return VentaQuery The current query, for fluid interface
      */
-    public function filterByFechaCreacionVenta($fechaCreacionVenta = null, $comparison = null)
+    public function filterByFechaCreacion($fechaCreacion = null, $comparison = null)
     {
-        if (is_array($fechaCreacionVenta)) {
+        if (is_array($fechaCreacion)) {
             $useMinMax = false;
-            if (isset($fechaCreacionVenta['min'])) {
-                $this->addUsingAlias(VentaPeer::FECHA_CREACION_VENTA, $fechaCreacionVenta['min'], Criteria::GREATER_EQUAL);
+            if (isset($fechaCreacion['min'])) {
+                $this->addUsingAlias(VentaPeer::FECHA_CREACION, $fechaCreacion['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($fechaCreacionVenta['max'])) {
-                $this->addUsingAlias(VentaPeer::FECHA_CREACION_VENTA, $fechaCreacionVenta['max'], Criteria::LESS_EQUAL);
+            if (isset($fechaCreacion['max'])) {
+                $this->addUsingAlias(VentaPeer::FECHA_CREACION, $fechaCreacion['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -578,20 +545,20 @@ abstract class BaseVentaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(VentaPeer::FECHA_CREACION_VENTA, $fechaCreacionVenta, $comparison);
+        return $this->addUsingAlias(VentaPeer::FECHA_CREACION, $fechaCreacion, $comparison);
     }
 
     /**
-     * Filter the query on the fecha_modificacion_venta column
+     * Filter the query on the fecha_modificacion column
      *
      * Example usage:
      * <code>
-     * $query->filterByFechaModificacionVenta('2011-03-14'); // WHERE fecha_modificacion_venta = '2011-03-14'
-     * $query->filterByFechaModificacionVenta('now'); // WHERE fecha_modificacion_venta = '2011-03-14'
-     * $query->filterByFechaModificacionVenta(array('max' => 'yesterday')); // WHERE fecha_modificacion_venta > '2011-03-13'
+     * $query->filterByFechaModificacion('2011-03-14'); // WHERE fecha_modificacion = '2011-03-14'
+     * $query->filterByFechaModificacion('now'); // WHERE fecha_modificacion = '2011-03-14'
+     * $query->filterByFechaModificacion(array('max' => 'yesterday')); // WHERE fecha_modificacion > '2011-03-13'
      * </code>
      *
-     * @param     mixed $fechaModificacionVenta The value to use as filter.
+     * @param     mixed $fechaModificacion The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
@@ -601,16 +568,16 @@ abstract class BaseVentaQuery extends ModelCriteria
      *
      * @return VentaQuery The current query, for fluid interface
      */
-    public function filterByFechaModificacionVenta($fechaModificacionVenta = null, $comparison = null)
+    public function filterByFechaModificacion($fechaModificacion = null, $comparison = null)
     {
-        if (is_array($fechaModificacionVenta)) {
+        if (is_array($fechaModificacion)) {
             $useMinMax = false;
-            if (isset($fechaModificacionVenta['min'])) {
-                $this->addUsingAlias(VentaPeer::FECHA_MODIFICACION_VENTA, $fechaModificacionVenta['min'], Criteria::GREATER_EQUAL);
+            if (isset($fechaModificacion['min'])) {
+                $this->addUsingAlias(VentaPeer::FECHA_MODIFICACION, $fechaModificacion['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($fechaModificacionVenta['max'])) {
-                $this->addUsingAlias(VentaPeer::FECHA_MODIFICACION_VENTA, $fechaModificacionVenta['max'], Criteria::LESS_EQUAL);
+            if (isset($fechaModificacion['max'])) {
+                $this->addUsingAlias(VentaPeer::FECHA_MODIFICACION, $fechaModificacion['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -621,7 +588,7 @@ abstract class BaseVentaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(VentaPeer::FECHA_MODIFICACION_VENTA, $fechaModificacionVenta, $comparison);
+        return $this->addUsingAlias(VentaPeer::FECHA_MODIFICACION, $fechaModificacion, $comparison);
     }
 
     /**
@@ -634,75 +601,10 @@ abstract class BaseVentaQuery extends ModelCriteria
     public function prune($venta = null)
     {
         if ($venta) {
-            $this->addUsingAlias(VentaPeer::ID_VENTA, $venta->getIdVenta(), Criteria::NOT_EQUAL);
+            $this->addUsingAlias(VentaPeer::ID, $venta->getId(), Criteria::NOT_EQUAL);
         }
 
         return $this;
     }
 
-    // timestampable behavior
-
-    /**
-     * Filter by the latest updated
-     *
-     * @param      int $nbDays Maximum age of the latest update in days
-     *
-     * @return     VentaQuery The current query, for fluid interface
-     */
-    public function recentlyUpdated($nbDays = 7)
-    {
-        return $this->addUsingAlias(VentaPeer::FECHA_MODIFICACION_VENTA, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
-    }
-
-    /**
-     * Order by update date desc
-     *
-     * @return     VentaQuery The current query, for fluid interface
-     */
-    public function lastUpdatedFirst()
-    {
-        return $this->addDescendingOrderByColumn(VentaPeer::FECHA_MODIFICACION_VENTA);
-    }
-
-    /**
-     * Order by update date asc
-     *
-     * @return     VentaQuery The current query, for fluid interface
-     */
-    public function firstUpdatedFirst()
-    {
-        return $this->addAscendingOrderByColumn(VentaPeer::FECHA_MODIFICACION_VENTA);
-    }
-
-    /**
-     * Filter by the latest created
-     *
-     * @param      int $nbDays Maximum age of in days
-     *
-     * @return     VentaQuery The current query, for fluid interface
-     */
-    public function recentlyCreated($nbDays = 7)
-    {
-        return $this->addUsingAlias(VentaPeer::FECHA_CREACION_VENTA, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
-    }
-
-    /**
-     * Order by create date desc
-     *
-     * @return     VentaQuery The current query, for fluid interface
-     */
-    public function lastCreatedFirst()
-    {
-        return $this->addDescendingOrderByColumn(VentaPeer::FECHA_CREACION_VENTA);
-    }
-
-    /**
-     * Order by create date asc
-     *
-     * @return     VentaQuery The current query, for fluid interface
-     */
-    public function firstCreatedFirst()
-    {
-        return $this->addAscendingOrderByColumn(VentaPeer::FECHA_CREACION_VENTA);
-    }
 }

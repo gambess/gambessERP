@@ -7,7 +7,7 @@ use \TableMap;
 
 
 /**
- * This class defines the structure of the 'gasto' table.
+ * This class defines the structure of the 'forma_pago' table.
  *
  *
  *
@@ -18,13 +18,13 @@ use \TableMap;
  *
  * @package    propel.generator.src.Costo.SystemBundle.Model.map
  */
-class GastoTableMap extends TableMap
+class FormaPagoTableMap extends TableMap
 {
 
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'src.Costo.SystemBundle.Model.map.GastoTableMap';
+    const CLASS_NAME = 'src.Costo.SystemBundle.Model.map.FormaPagoTableMap';
 
     /**
      * Initialize the table attributes, columns and validators
@@ -36,21 +36,17 @@ class GastoTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('gasto');
-        $this->setPhpName('Gasto');
-        $this->setClassname('Costo\\SystemBundle\\Model\\Gasto');
+        $this->setName('forma_pago');
+        $this->setPhpName('FormaPago');
+        $this->setClassname('Costo\\SystemBundle\\Model\\FormaPago');
         $this->setPackage('src.Costo.SystemBundle.Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('id_gasto', 'IdGasto', 'INTEGER', true, 20, null);
-        $this->addForeignKey('fk_cuenta', 'FkCuenta', 'INTEGER', 'cuenta', 'id_cuenta', true, 20, 0);
-        $this->addColumn('nombre_gasto', 'NombreGasto', 'VARCHAR', true, 100, null);
-        $this->addColumn('costo_gasto', 'CostoGasto', 'FLOAT', true, 11, 0);
-        $this->addColumn('fecha_emision_gasto', 'FechaEmisionGasto', 'DATE', false, null, null);
-        $this->addColumn('fecha_pago_gasto', 'FechaPagoGasto', 'DATE', false, null, null);
-        $this->addColumn('numero_doc_gasto', 'NumeroDocGasto', 'LONGVARCHAR', false, null, null);
-        $this->addColumn('fecha_creacion_gasto', 'FechaCreacionGasto', 'TIMESTAMP', false, null, null);
-        $this->addColumn('fecha_modificacion_gasto', 'FechaModificacionGasto', 'TIMESTAMP', false, null, null);
+        $this->addPrimaryKey('id_forma_pago', 'IdFormaPago', 'INTEGER', true, 20, null);
+        $this->addColumn('nombre_forma_pago', 'NombreFormaPago', 'VARCHAR', true, 100, null);
+        $this->addColumn('descripcion_forma_pago', 'DescripcionFormaPago', 'LONGVARCHAR', false, null, null);
+        $this->addColumn('fecha_creacion_forma_pago', 'FechaCreacionFormaPago', 'TIMESTAMP', false, null, null);
+        $this->addColumn('fecha_modificacion_forma_pago', 'FechaModificacionFormaPago', 'TIMESTAMP', false, null, null);
         // validators
     } // initialize()
 
@@ -59,7 +55,7 @@ class GastoTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Cuenta', 'Costo\\SystemBundle\\Model\\Cuenta', RelationMap::MANY_TO_ONE, array('fk_cuenta' => 'id_cuenta', ), null, null);
+        $this->addRelation('DetalleVenta', 'Costo\\SystemBundle\\Model\\DetalleVenta', RelationMap::ONE_TO_MANY, array('id_forma_pago' => 'id_forma_pago', ), null, null, 'DetalleVentas');
     } // buildRelations()
 
     /**
@@ -72,11 +68,11 @@ class GastoTableMap extends TableMap
     {
         return array(
             'timestampable' =>  array (
-  'create_column' => 'fecha_creacion_gasto',
-  'update_column' => 'fecha_modificacion_gasto',
+  'create_column' => 'fecha_creacion_forma_pago',
+  'update_column' => 'fecha_modificacion_forma_pago',
   'disable_updated_at' => 'false',
 ),
         );
     } // getBehaviors()
 
-} // GastoTableMap
+} // FormaPagoTableMap

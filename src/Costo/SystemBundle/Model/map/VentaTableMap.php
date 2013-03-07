@@ -42,15 +42,14 @@ class VentaTableMap extends TableMap
         $this->setPackage('src.Costo.SystemBundle.Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('id_venta', 'IdVenta', 'INTEGER', true, null, null);
-        $this->addColumn('fecha_venta', 'FechaVenta', 'DATE', true, null, null);
-        $this->addColumn('total_venta', 'TotalVenta', 'FLOAT', true, 11, 0);
-        $this->addColumn('formal_total_venta', 'FormalTotalVenta', 'FLOAT', true, 11, 0);
-        $this->addColumn('informal_total_venta', 'InformalTotalVenta', 'FLOAT', true, 11, 0);
-        $this->addColumn('total_iva_venta_formal', 'TotalIvaVentaFormal', 'FLOAT', true, 11, 0);
-        $this->addColumn('detalle_venta', 'DetalleVenta', 'LONGVARCHAR', false, null, null);
-        $this->addColumn('fecha_creacion_venta', 'FechaCreacionVenta', 'TIMESTAMP', false, null, null);
-        $this->addColumn('fecha_modificacion_venta', 'FechaModificacionVenta', 'TIMESTAMP', false, null, null);
+        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('fecha', 'Fecha', 'TIMESTAMP', true, null, null);
+        $this->addColumn('total_documentada', 'TotalDocumentada', 'FLOAT', true, 11, 0);
+        $this->addColumn('total_no_documentada', 'TotalNoDocumentada', 'FLOAT', true, 11, 0);
+        $this->addColumn('total_iva', 'TotalIva', 'FLOAT', true, 11, 0);
+        $this->addColumn('total', 'Total', 'FLOAT', true, 11, 0);
+        $this->addColumn('fecha_creacion', 'FechaCreacion', 'TIMESTAMP', false, null, null);
+        $this->addColumn('fecha_modificacion', 'FechaModificacion', 'TIMESTAMP', false, null, null);
         // validators
     } // initialize()
 
@@ -60,22 +59,5 @@ class VentaTableMap extends TableMap
     public function buildRelations()
     {
     } // buildRelations()
-
-    /**
-     *
-     * Gets the list of behaviors registered for this table
-     *
-     * @return array Associative array (name => parameters) of behaviors
-     */
-    public function getBehaviors()
-    {
-        return array(
-            'timestampable' =>  array (
-  'create_column' => 'fecha_creacion_venta',
-  'update_column' => 'fecha_modificacion_venta',
-  'disable_updated_at' => 'false',
-),
-        );
-    } // getBehaviors()
 
 } // VentaTableMap

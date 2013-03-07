@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new Costo\SystemBundle\CostoSystemBundle(),
             new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
+            new Testing\MiliBundle\TestingMiliBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -45,11 +45,7 @@ class CuentaTableMap extends TableMap
         $this->addPrimaryKey('id_cuenta', 'IdCuenta', 'INTEGER', true, 20, null);
         $this->addColumn('nombre_cuenta', 'NombreCuenta', 'VARCHAR', true, 150, null);
         $this->addColumn('valor_cuenta', 'ValorCuenta', 'FLOAT', true, 11, 0);
-        $this->addColumn('tipo_cuenta', 'TipoCuenta', 'CHAR', false, null, 'FORMAL');
-        $this->getColumn('tipo_cuenta', false)->setValueSet(array (
-  0 => 'FORMAL',
-  1 => 'INFORMAL',
-));
+        $this->addColumn('tipo_cuenta', 'TipoCuenta', 'VARCHAR', false, 10, 'FORMAL');
         $this->addColumn('user_crea_cuenta', 'UserCreaCuenta', 'VARCHAR', false, 20, null);
         $this->addColumn('fecha_creacion_cuenta', 'FechaCreacionCuenta', 'TIMESTAMP', false, null, null);
         $this->addColumn('fecha_modificacion_cuenta', 'FechaModificacionCuenta', 'TIMESTAMP', false, null, null);
@@ -63,29 +59,5 @@ class CuentaTableMap extends TableMap
     {
         $this->addRelation('Gasto', 'Costo\\SystemBundle\\Model\\Gasto', RelationMap::ONE_TO_MANY, array('id_cuenta' => 'fk_cuenta', ), null, null, 'Gastos');
     } // buildRelations()
-
-    /**
-     *
-     * Gets the list of behaviors registered for this table
-     *
-     * @return array Associative array (name => parameters) of behaviors
-     */
-    public function getBehaviors()
-    {
-        return array(
-            'timestampable' =>  array (
-  'create_column' => 'fecha_creacion_cuenta',
-  'update_column' => 'fecha_modificacion_cuenta',
-  'disable_updated_at' => 'false',
-),
-            'aggregate_column' =>  array (
-  'name' => 'valor_cuenta',
-  'expression' => 'SUM(costo_gasto)',
-  'condition' => NULL,
-  'foreign_table' => 'gasto',
-  'foreign_schema' => NULL,
-),
-        );
-    } // getBehaviors()
 
 } // CuentaTableMap
