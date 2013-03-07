@@ -45,23 +45,23 @@
 <table align="center">
     <tbody>
         <tr>
-            <th>Código</th>
+            <th>Id Venta</th>
             <td>{{ venta.IdDetalle }}</td>
         </tr>
         <tr>
-            <th>Fecha</th>
+            <th>Fecha Venta</th>
             <td>{{ venta.FechaVenta|date('d/m/Y') }}</td>
         </tr>
         <tr>
-            <th>Total Formal</th>
+            <th>Neto Venta</th>
             <td>${{ venta.TotalNetoVenta | number_format(0,',','.')}}</td>
         </tr>
         <tr>
-            <th>Total Informal</th>
+            <th>I.V.A</th>
             <td>${{ venta.TotalIvaVenta | number_format(0,',','.')}}</td>
         </tr>
         <tr>
-            <th>Total I.V.A (f)</th>
+            <th>Total Venta</th>
             <td>${{ venta.TotalVenta | number_format(0,',','.')}}</td>
         </tr>
         <tr>
@@ -72,7 +72,7 @@
 </table>
 <br />
 <p align="center">
-        <a class="symfony-button-green"  href="{{ path('edit_venta', { 'id': venta.IdVenta }) }}">Modificar Venta</a>
+        <a class="symfony-button-green"  href="{{ path('edit_venta', { 'id': venta.IdDetalle }) }}">Modificar Venta</a>
         <a id="open_deletion" class="symfony-button-green"  href="#">Borrar</a>
         </p>
 {% endblock %}
