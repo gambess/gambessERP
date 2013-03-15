@@ -34,7 +34,7 @@ form{
 	-webkit-box-shadow:0 0 15px #aaa;
 	margin:20px auto 0;
 	padding:20px;
-	width:440px;
+	width:800px;
 }
 h1{
 	border-bottom:1px solid #ccc;
@@ -173,4 +173,9 @@ a.submit:focus{
 	font-size:11px;
 	margin-top:20px;
 	text-align:center;
+}
+
+.new_detalle{
+        border: 1px solid #CCCCCC;
+        height:47px;
 }

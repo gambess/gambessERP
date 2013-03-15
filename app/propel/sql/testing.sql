@@ -30,6 +30,7 @@ DROP TABLE IF EXISTS `detalle_venta`;
 CREATE TABLE `detalle_venta`
 (
     `id_detalle` INTEGER(20) NOT NULL AUTO_INCREMENT,
+    `id_venta` INTEGER(20) NOT NULL,
     `id_venta_forma` INTEGER(20) NOT NULL,
     `id_lugar_venta` INTEGER(20) NOT NULL,
     `id_forma_pago` INTEGER(20) NOT NULL,
@@ -41,9 +42,13 @@ CREATE TABLE `detalle_venta`
     `fecha_creacion_detalle` DATETIME,
     `fecha_modificacion_detalle` DATETIME,
     PRIMARY KEY (`id_detalle`),
+    INDEX `FI_alle_venta_ibfk_4` (`id_venta`),
     INDEX `FI_alle_venta_ibfk_1` (`id_venta_forma`),
     INDEX `FI_alle_venta_ibfk_2` (`id_lugar_venta`),
     INDEX `FI_alle_venta_ibfk_3` (`id_forma_pago`),
+    CONSTRAINT `detalle_venta_ibfk_4`
+        FOREIGN KEY (`id_venta`)
+        REFERENCES `venta` (`id`),
     CONSTRAINT `detalle_venta_ibfk_1`
         FOREIGN KEY (`id_venta_forma`)
         REFERENCES `venta_forma` (`id_venta_forma`),
@@ -53,6 +58,29 @@ CREATE TABLE `detalle_venta`
     CONSTRAINT `detalle_venta_ibfk_3`
         FOREIGN KEY (`id_forma_pago`)
         REFERENCES `forma_pago` (`id_forma_pago`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- eventos_detalle
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `eventos_detalle`;
+
+CREATE TABLE `eventos_detalle`
+(
+    `id_evento` INTEGER(20) NOT NULL AUTO_INCREMENT,
+    `id_detalle` INTEGER(20) NOT NULL,
+    `etiqueta_evento` VARCHAR(100) NOT NULL,
+    `fecha_evento` DATETIME NOT NULL,
+    `color_evento` VARCHAR(10) NOT NULL,
+    `email_notificacion` VARCHAR(100) NOT NULL,
+    `fecha_creacion_evento` DATETIME,
+    `fecha_modificacion_evento` DATETIME,
+    PRIMARY KEY (`id_evento`),
+    INDEX `FI_ntos_detalle_ibfk_1` (`id_detalle`),
+    CONSTRAINT `eventos_detalle_ibfk_1`
+        FOREIGN KEY (`id_detalle`)
+        REFERENCES `detalle_venta` (`id_detalle`)
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -136,12 +164,21 @@ DROP TABLE IF EXISTS `venta`;
 
 CREATE TABLE `venta`
 (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id` INTEGER(20) NOT NULL AUTO_INCREMENT,
     `fecha` DATETIME NOT NULL,
+    `total_neto_documentada` FLOAT(11,2) DEFAULT 0.00 NOT NULL,
+    `total_iva_documentada` FLOAT(11,2) DEFAULT 0.00 NOT NULL,
     `total_documentada` FLOAT(11,2) DEFAULT 0.00 NOT NULL,
+    `total_neto_no_documentada` FLOAT(11,2) DEFAULT 0.00 NOT NULL,
+    `total_iva_no_documentada` FLOAT(11,2) DEFAULT 0.00 NOT NULL,
     `total_no_documentada` FLOAT(11,2) DEFAULT 0.00 NOT NULL,
+    `total_neto` FLOAT(11,2) DEFAULT 0.00 NOT NULL,
     `total_iva` FLOAT(11,2) DEFAULT 0.00 NOT NULL,
     `total` FLOAT(11,2) DEFAULT 0.00 NOT NULL,
+    `total_neto_real` FLOAT(11,2) DEFAULT 0.00 NOT NULL,
+    `total_iva_real` FLOAT(11,2) DEFAULT 0.00 NOT NULL,
+    `total_real` FLOAT(11,2) DEFAULT 0.00 NOT NULL,
+    `descripcion` TEXT,
     `fecha_creacion` DATETIME,
     `fecha_modificacion` DATETIME,
     PRIMARY KEY (`id`),

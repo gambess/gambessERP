@@ -602,4 +602,69 @@ abstract class BaseCuentaQuery extends ModelCriteria
         return $this;
     }
 
+    // timestampable behavior
+
+    /**
+     * Filter by the latest updated
+     *
+     * @param      int $nbDays Maximum age of the latest update in days
+     *
+     * @return     CuentaQuery The current query, for fluid interface
+     */
+    public function recentlyUpdated($nbDays = 7)
+    {
+        return $this->addUsingAlias(CuentaPeer::FECHA_MODIFICACION_CUENTA, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+    }
+
+    /**
+     * Order by update date desc
+     *
+     * @return     CuentaQuery The current query, for fluid interface
+     */
+    public function lastUpdatedFirst()
+    {
+        return $this->addDescendingOrderByColumn(CuentaPeer::FECHA_MODIFICACION_CUENTA);
+    }
+
+    /**
+     * Order by update date asc
+     *
+     * @return     CuentaQuery The current query, for fluid interface
+     */
+    public function firstUpdatedFirst()
+    {
+        return $this->addAscendingOrderByColumn(CuentaPeer::FECHA_MODIFICACION_CUENTA);
+    }
+
+    /**
+     * Filter by the latest created
+     *
+     * @param      int $nbDays Maximum age of in days
+     *
+     * @return     CuentaQuery The current query, for fluid interface
+     */
+    public function recentlyCreated($nbDays = 7)
+    {
+        return $this->addUsingAlias(CuentaPeer::FECHA_CREACION_CUENTA, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+    }
+
+    /**
+     * Order by create date desc
+     *
+     * @return     CuentaQuery The current query, for fluid interface
+     */
+    public function lastCreatedFirst()
+    {
+        return $this->addDescendingOrderByColumn(CuentaPeer::FECHA_CREACION_CUENTA);
+    }
+
+    /**
+     * Order by create date asc
+     *
+     * @return     CuentaQuery The current query, for fluid interface
+     */
+    public function firstCreatedFirst()
+    {
+        return $this->addAscendingOrderByColumn(CuentaPeer::FECHA_CREACION_CUENTA);
+    }
 }

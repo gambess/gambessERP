@@ -7,7 +7,7 @@ use \TableMap;
 
 
 /**
- * This class defines the structure of the 'cuenta' table.
+ * This class defines the structure of the 'eventos_detalle' table.
  *
  *
  *
@@ -18,13 +18,13 @@ use \TableMap;
  *
  * @package    propel.generator.src.Costo.SystemBundle.Model.map
  */
-class CuentaTableMap extends TableMap
+class EventosDetalleTableMap extends TableMap
 {
 
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'src.Costo.SystemBundle.Model.map.CuentaTableMap';
+    const CLASS_NAME = 'src.Costo.SystemBundle.Model.map.EventosDetalleTableMap';
 
     /**
      * Initialize the table attributes, columns and validators
@@ -36,19 +36,20 @@ class CuentaTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('cuenta');
-        $this->setPhpName('Cuenta');
-        $this->setClassname('Costo\\SystemBundle\\Model\\Cuenta');
+        $this->setName('eventos_detalle');
+        $this->setPhpName('EventosDetalle');
+        $this->setClassname('Costo\\SystemBundle\\Model\\EventosDetalle');
         $this->setPackage('src.Costo.SystemBundle.Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('id_cuenta', 'IdCuenta', 'INTEGER', true, 20, null);
-        $this->addColumn('nombre_cuenta', 'NombreCuenta', 'VARCHAR', true, 150, null);
-        $this->addColumn('valor_cuenta', 'ValorCuenta', 'FLOAT', true, 11, 0);
-        $this->addColumn('tipo_cuenta', 'TipoCuenta', 'VARCHAR', false, 10, 'FORMAL');
-        $this->addColumn('user_crea_cuenta', 'UserCreaCuenta', 'VARCHAR', false, 20, null);
-        $this->addColumn('fecha_creacion_cuenta', 'FechaCreacionCuenta', 'TIMESTAMP', false, null, null);
-        $this->addColumn('fecha_modificacion_cuenta', 'FechaModificacionCuenta', 'TIMESTAMP', false, null, null);
+        $this->addPrimaryKey('id_evento', 'IdEvento', 'INTEGER', true, 20, null);
+        $this->addForeignKey('id_detalle', 'IdDetalle', 'INTEGER', 'detalle_venta', 'id_detalle', true, 20, null);
+        $this->addColumn('etiqueta_evento', 'EtiquetaEvento', 'VARCHAR', true, 100, null);
+        $this->addColumn('fecha_evento', 'FechaEvento', 'TIMESTAMP', true, null, null);
+        $this->addColumn('color_evento', 'ColorEvento', 'VARCHAR', true, 10, null);
+        $this->addColumn('email_notificacion', 'EmailNotificacion', 'VARCHAR', true, 100, null);
+        $this->addColumn('fecha_creacion_evento', 'FechaCreacionEvento', 'TIMESTAMP', false, null, null);
+        $this->addColumn('fecha_modificacion_evento', 'FechaModificacionEvento', 'TIMESTAMP', false, null, null);
         // validators
     } // initialize()
 
@@ -57,7 +58,7 @@ class CuentaTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Gasto', 'Costo\\SystemBundle\\Model\\Gasto', RelationMap::ONE_TO_MANY, array('id_cuenta' => 'fk_cuenta', ), null, null, 'Gastos');
+        $this->addRelation('DetalleVenta', 'Costo\\SystemBundle\\Model\\DetalleVenta', RelationMap::MANY_TO_ONE, array('id_detalle' => 'id_detalle', ), null, null);
     } // buildRelations()
 
     /**
@@ -70,11 +71,11 @@ class CuentaTableMap extends TableMap
     {
         return array(
             'timestampable' =>  array (
-  'create_column' => 'fecha_creacion_cuenta',
-  'update_column' => 'fecha_modificacion_cuenta',
+  'create_column' => 'fecha_creacion_evento',
+  'update_column' => 'fecha_modificacion_evento',
   'disable_updated_at' => 'false',
 ),
         );
     } // getBehaviors()
 
-} // CuentaTableMap
+} // EventosDetalleTableMap

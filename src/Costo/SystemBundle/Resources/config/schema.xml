@@ -8,12 +8,14 @@
     <column name="user_crea_cuenta" phpName="UserCreaCuenta" type="VARCHAR" size="20" required="false"/>
     <column name="fecha_creacion_cuenta" phpName="FechaCreacionCuenta" type="TIMESTAMP" required="false"/>
     <column name="fecha_modificacion_cuenta" phpName="FechaModificacionCuenta" type="TIMESTAMP" required="false"/>
-    <vendor type="mysql">
-      <parameter name="Engine" value="InnoDB"/>
-    </vendor>
+   <behavior name="timestampable">
+        <parameter name="create_column" value="fecha_creacion_cuenta" />
+        <parameter name="update_column" value="fecha_modificacion_cuenta" />
+    </behavior>
   </table>
   <table name="detalle_venta" phpName="DetalleVenta" idMethod="native">
     <column name="id_detalle" phpName="IdDetalle" type="INTEGER" size="20" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="id_venta" phpName="IdVenta" type="INTEGER" size="20" required="true"/>
     <column name="id_venta_forma" phpName="IdVentaForma" type="INTEGER" size="20" required="true"/>
     <column name="id_lugar_venta" phpName="IdLugarVenta" type="INTEGER" size="20" required="true"/>
     <column name="id_forma_pago" phpName="IdFormaPago" type="INTEGER" size="20" required="true"/>
@@ -24,6 +26,9 @@
     <column name="descripcion_venta" phpName="DescripcionVenta" type="LONGVARCHAR" required="false"/>
     <column name="fecha_creacion_detalle" phpName="FechaCreacionDetalle" type="TIMESTAMP" required="false"/>
     <column name="fecha_modificacion_detalle" phpName="FechaModificacionDetalle" type="TIMESTAMP" required="false"/>
+    <foreign-key foreignTable="venta" name="detalle_venta_ibfk_4">
+      <reference local="id_venta" foreign="id"/>
+    </foreign-key>
     <foreign-key foreignTable="venta_forma" name="detalle_venta_ibfk_1">
       <reference local="id_venta_forma" foreign="id_venta_forma"/>
     </foreign-key>
@@ -36,6 +41,23 @@
     <behavior name="timestampable">
         <parameter name="create_column" value="fecha_creacion_detalle" />
         <parameter name="update_column" value="fecha_modificacion_detalle" />
+    </behavior>
+  </table>
+  <table name="eventos_detalle" phpName="EventosDetalle" idMethod="native">
+    <column name="id_evento" phpName="IdEvento" type="INTEGER" size="20" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="id_detalle" phpName="IdDetalle" type="INTEGER" size="20" required="true"/>
+    <column name="etiqueta_evento" phpName="EtiquetaEvento" type="VARCHAR" size="100" required="true"/>
+    <column name="fecha_evento" phpName="FechaEvento" type="TIMESTAMP" required="true"/>
+    <column name="color_evento" phpName="ColorEvento" type="VARCHAR" size="10" required="true"/>
+    <column name="email_notificacion" phpName="EmailNotificacion" type="VARCHAR" size="100" required="true"/>
+    <column name="fecha_creacion_evento" phpName="FechaCreacionEvento" type="TIMESTAMP" required="false"/>
+    <column name="fecha_modificacion_evento" phpName="FechaModificacionEvento" type="TIMESTAMP" required="false"/>
+    <foreign-key foreignTable="detalle_venta" name="eventos_detalle_ibfk_1">
+      <reference local="id_detalle" foreign="id_detalle"/>
+    </foreign-key>
+    <behavior name="timestampable">
+        <parameter name="create_column" value="fecha_creacion_evento" />
+        <parameter name="update_column" value="fecha_modificacion_evento" />
     </behavior>
   </table>
   <table name="forma_pago" phpName="FormaPago" idMethod="native">
@@ -91,18 +113,31 @@
     </behavior>
   </table>
   <table name="venta" phpName="Venta" idMethod="native">
-    <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="id" phpName="Id" type="INTEGER" size="20" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="fecha" phpName="Fecha" type="TIMESTAMP" required="true"/>
+    <column name="total_neto_documentada" phpName="TotalNetoDocumentada" type="FLOAT" size="11" scale="2" required="true" defaultValue="0.00"/>
+    <column name="total_iva_documentada" phpName="TotalIvaDocumentada" type="FLOAT" size="11" scale="2" required="true" defaultValue="0.00"/>
     <column name="total_documentada" phpName="TotalDocumentada" type="FLOAT" size="11" scale="2" required="true" defaultValue="0.00"/>
+    <column name="total_neto_no_documentada" phpName="TotalNetoNoDocumentada" type="FLOAT" size="11" scale="2" required="true" defaultValue="0.00"/>
+    <column name="total_iva_no_documentada" phpName="TotalIvaNoDocumentada" type="FLOAT" size="11" scale="2" required="true" defaultValue="0.00"/>
     <column name="total_no_documentada" phpName="TotalNoDocumentada" type="FLOAT" size="11" scale="2" required="true" defaultValue="0.00"/>
+    <column name="total_neto" phpName="TotalNeto" type="FLOAT" size="11" scale="2" required="true" defaultValue="0.00"/>
     <column name="total_iva" phpName="TotalIva" type="FLOAT" size="11" scale="2" required="true" defaultValue="0.00"/>
     <column name="total" phpName="Total" type="FLOAT" size="11" scale="2" required="true" defaultValue="0.00"/>
+    <column name="total_neto_real" phpName="TotalNetoReal" type="FLOAT" size="11" scale="2" required="true" defaultValue="0.00"/>
+    <column name="total_iva_real" phpName="TotalIvaReal" type="FLOAT" size="11" scale="2" required="true" defaultValue="0.00"/>
+    <column name="total_real" phpName="TotalReal" type="FLOAT" size="11" scale="2" required="true" defaultValue="0.00"/>
+    <column name="descripcion" phpName="Descripcion" type="LONGVARCHAR" required="false"/>
     <column name="fecha_creacion" phpName="FechaCreacion" type="TIMESTAMP" required="false"/>
     <column name="fecha_modificacion" phpName="FechaModificacion" type="TIMESTAMP" required="false"/>
     <unique name="fecha_venta_UNIQUE">
       <unique-column name="fecha"/>
     </unique>
-  </table>
+ <behavior name="timestampable">
+        <parameter name="create_column" value="fecha_creacion" />
+        <parameter name="update_column" value="fecha_modificacion" />
+    </behavior>  
+</table>
   <table name="venta_forma" phpName="VentaForma" idMethod="native">
     <column name="id_venta_forma" phpName="IdVentaForma" type="INTEGER" size="20" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="id_tipo_venta_forma" phpName="IdTipoVentaForma" type="INTEGER" size="20" required="true"/>

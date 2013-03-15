@@ -42,12 +42,21 @@ class VentaTableMap extends TableMap
         $this->setPackage('src.Costo.SystemBundle.Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
+        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, 20, null);
         $this->addColumn('fecha', 'Fecha', 'TIMESTAMP', true, null, null);
+        $this->addColumn('total_neto_documentada', 'TotalNetoDocumentada', 'FLOAT', true, 11, 0);
+        $this->addColumn('total_iva_documentada', 'TotalIvaDocumentada', 'FLOAT', true, 11, 0);
         $this->addColumn('total_documentada', 'TotalDocumentada', 'FLOAT', true, 11, 0);
+        $this->addColumn('total_neto_no_documentada', 'TotalNetoNoDocumentada', 'FLOAT', true, 11, 0);
+        $this->addColumn('total_iva_no_documentada', 'TotalIvaNoDocumentada', 'FLOAT', true, 11, 0);
         $this->addColumn('total_no_documentada', 'TotalNoDocumentada', 'FLOAT', true, 11, 0);
+        $this->addColumn('total_neto', 'TotalNeto', 'FLOAT', true, 11, 0);
         $this->addColumn('total_iva', 'TotalIva', 'FLOAT', true, 11, 0);
         $this->addColumn('total', 'Total', 'FLOAT', true, 11, 0);
+        $this->addColumn('total_neto_real', 'TotalNetoReal', 'FLOAT', true, 11, 0);
+        $this->addColumn('total_iva_real', 'TotalIvaReal', 'FLOAT', true, 11, 0);
+        $this->addColumn('total_real', 'TotalReal', 'FLOAT', true, 11, 0);
+        $this->addColumn('descripcion', 'Descripcion', 'LONGVARCHAR', false, null, null);
         $this->addColumn('fecha_creacion', 'FechaCreacion', 'TIMESTAMP', false, null, null);
         $this->addColumn('fecha_modificacion', 'FechaModificacion', 'TIMESTAMP', false, null, null);
         // validators
@@ -58,6 +67,24 @@ class VentaTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('DetalleVenta', 'Costo\\SystemBundle\\Model\\DetalleVenta', RelationMap::ONE_TO_MANY, array('id' => 'id_venta', ), null, null, 'DetalleVentas');
     } // buildRelations()
+
+    /**
+     *
+     * Gets the list of behaviors registered for this table
+     *
+     * @return array Associative array (name => parameters) of behaviors
+     */
+    public function getBehaviors()
+    {
+        return array(
+            'timestampable' =>  array (
+  'create_column' => 'fecha_creacion',
+  'update_column' => 'fecha_modificacion',
+  'disable_updated_at' => 'false',
+),
+        );
+    } // getBehaviors()
 
 } // VentaTableMap

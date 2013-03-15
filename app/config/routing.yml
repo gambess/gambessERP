@@ -1,8 +1,3 @@
-TestingMiliBundle:
-    resource: "@TestingMiliBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
 CostoSystemBundle:
     resource: "@CostoSystemBundle/Resources/config/routing.yml"
     prefix:   /

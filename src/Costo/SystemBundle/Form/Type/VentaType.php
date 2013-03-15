@@ -9,42 +9,63 @@ class VentaType extends AbstractType {
 
     public function buildForm(FormBuilder $builder, array $options) {
         $builder
-                ->add('fecha_venta', 'date', array(
+                ->add('fecha', 'date', array(
                     'label' => 'Fecha Venta',
                     'widget' => 'single_text',
                     'input' => 'datetime',
                     'format' => 'dd/MM/yyyy'
                         )
                 )
-                ->add('total_venta', 'money', array(
-                    'label' => 'Total Venta',
+                ->add('detalleVentas', 'collection', array(
+                    'type'          => new \Costo\SystemBundle\Form\Type\DetalleVentaType(),
+                    'allow_add'     => true,
+                    'allow_delete'  => true,
+                    'by_reference'  => false
+                     )
+                        )
+                ->add('total_documentada', 'money', array(
+                    'label' => 'Documentado',
                     'currency' => 'CLP',
                     'precision' => 0,
 //                    'grouping' => true
                         )
                 )
-                ->add('formal_total_venta', 'money', array(
-                    'label' => 'V. Formal',
+                ->add('total_no_documentada', 'money', array(
+                    'label' => 'No Documentado',
                     'currency' => 'CLP',
                     'precision' => 0,
 //                    'grouping' => true
                         )
                 )
-                ->add('informal_total_venta', 'money', array(
-                    'label' => 'V. Informal',
+                ->add('total_iva', 'money', array(
+                    'label' => 'I.V.A.',
                     'currency' => 'CLP',
                     'precision' => 0,
 //                    'grouping' => true
                         )
                 )
-                ->add('total_iva_venta_formal', 'money', array(
-                    'label' => 'I.V.A',
+                ->add('total', 'money', array(
+                    'label' => 'Total',
                     'currency' => 'CLP',
                     'precision' => 0,
 //                    'grouping' => true
                         )
                 )
-                ->add('detalle_venta', 'textarea', array('label' => 'Detalle'))
+                ->add('total_iva_real', 'money', array(
+                    'label' => 'I.V.A.',
+                    'currency' => 'CLP',
+                    'precision' => 0,
+//                    'grouping' => true
+                        )
+                )
+                ->add('total_real', 'money', array(
+                    'label' => 'Total',
+                    'currency' => 'CLP',
+                    'precision' => 0,
+//                    'grouping' => true
+                        )
+                )
+                ->add('descripcion', 'textarea', array('label' => 'Detalles de la Venta del día'))
         ;
     }
 

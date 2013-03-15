@@ -15,8 +15,10 @@ use \PropelPDO;
 use Costo\SystemBundle\Model\DetalleVenta;
 use Costo\SystemBundle\Model\DetalleVentaPeer;
 use Costo\SystemBundle\Model\DetalleVentaQuery;
+use Costo\SystemBundle\Model\EventosDetalle;
 use Costo\SystemBundle\Model\FormaPago;
 use Costo\SystemBundle\Model\LugarVenta;
+use Costo\SystemBundle\Model\Venta;
 use Costo\SystemBundle\Model\VentaForma;
 
 /**
@@ -25,6 +27,7 @@ use Costo\SystemBundle\Model\VentaForma;
  *
  *
  * @method DetalleVentaQuery orderByIdDetalle($order = Criteria::ASC) Order by the id_detalle column
+ * @method DetalleVentaQuery orderByIdVenta($order = Criteria::ASC) Order by the id_venta column
  * @method DetalleVentaQuery orderByIdVentaForma($order = Criteria::ASC) Order by the id_venta_forma column
  * @method DetalleVentaQuery orderByIdLugarVenta($order = Criteria::ASC) Order by the id_lugar_venta column
  * @method DetalleVentaQuery orderByIdFormaPago($order = Criteria::ASC) Order by the id_forma_pago column
@@ -37,6 +40,7 @@ use Costo\SystemBundle\Model\VentaForma;
  * @method DetalleVentaQuery orderByFechaModificacionDetalle($order = Criteria::ASC) Order by the fecha_modificacion_detalle column
  *
  * @method DetalleVentaQuery groupByIdDetalle() Group by the id_detalle column
+ * @method DetalleVentaQuery groupByIdVenta() Group by the id_venta column
  * @method DetalleVentaQuery groupByIdVentaForma() Group by the id_venta_forma column
  * @method DetalleVentaQuery groupByIdLugarVenta() Group by the id_lugar_venta column
  * @method DetalleVentaQuery groupByIdFormaPago() Group by the id_forma_pago column
@@ -52,6 +56,10 @@ use Costo\SystemBundle\Model\VentaForma;
  * @method DetalleVentaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method DetalleVentaQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
+ * @method DetalleVentaQuery leftJoinVenta($relationAlias = null) Adds a LEFT JOIN clause to the query using the Venta relation
+ * @method DetalleVentaQuery rightJoinVenta($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Venta relation
+ * @method DetalleVentaQuery innerJoinVenta($relationAlias = null) Adds a INNER JOIN clause to the query using the Venta relation
+ *
  * @method DetalleVentaQuery leftJoinVentaForma($relationAlias = null) Adds a LEFT JOIN clause to the query using the VentaForma relation
  * @method DetalleVentaQuery rightJoinVentaForma($relationAlias = null) Adds a RIGHT JOIN clause to the query using the VentaForma relation
  * @method DetalleVentaQuery innerJoinVentaForma($relationAlias = null) Adds a INNER JOIN clause to the query using the VentaForma relation
@@ -64,9 +72,14 @@ use Costo\SystemBundle\Model\VentaForma;
  * @method DetalleVentaQuery rightJoinFormaPago($relationAlias = null) Adds a RIGHT JOIN clause to the query using the FormaPago relation
  * @method DetalleVentaQuery innerJoinFormaPago($relationAlias = null) Adds a INNER JOIN clause to the query using the FormaPago relation
  *
+ * @method DetalleVentaQuery leftJoinEventosDetalle($relationAlias = null) Adds a LEFT JOIN clause to the query using the EventosDetalle relation
+ * @method DetalleVentaQuery rightJoinEventosDetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the EventosDetalle relation
+ * @method DetalleVentaQuery innerJoinEventosDetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the EventosDetalle relation
+ *
  * @method DetalleVenta findOne(PropelPDO $con = null) Return the first DetalleVenta matching the query
  * @method DetalleVenta findOneOrCreate(PropelPDO $con = null) Return the first DetalleVenta matching the query, or a new DetalleVenta object populated from the query conditions when no match is found
  *
+ * @method DetalleVenta findOneByIdVenta(int $id_venta) Return the first DetalleVenta filtered by the id_venta column
  * @method DetalleVenta findOneByIdVentaForma(int $id_venta_forma) Return the first DetalleVenta filtered by the id_venta_forma column
  * @method DetalleVenta findOneByIdLugarVenta(int $id_lugar_venta) Return the first DetalleVenta filtered by the id_lugar_venta column
  * @method DetalleVenta findOneByIdFormaPago(int $id_forma_pago) Return the first DetalleVenta filtered by the id_forma_pago column
@@ -79,6 +92,7 @@ use Costo\SystemBundle\Model\VentaForma;
  * @method DetalleVenta findOneByFechaModificacionDetalle(string $fecha_modificacion_detalle) Return the first DetalleVenta filtered by the fecha_modificacion_detalle column
  *
  * @method array findByIdDetalle(int $id_detalle) Return DetalleVenta objects filtered by the id_detalle column
+ * @method array findByIdVenta(int $id_venta) Return DetalleVenta objects filtered by the id_venta column
  * @method array findByIdVentaForma(int $id_venta_forma) Return DetalleVenta objects filtered by the id_venta_forma column
  * @method array findByIdLugarVenta(int $id_lugar_venta) Return DetalleVenta objects filtered by the id_lugar_venta column
  * @method array findByIdFormaPago(int $id_forma_pago) Return DetalleVenta objects filtered by the id_forma_pago column
@@ -192,7 +206,7 @@ abstract class BaseDetalleVentaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id_detalle`, `id_venta_forma`, `id_lugar_venta`, `id_forma_pago`, `fecha_venta`, `total_neto_venta`, `total_iva_venta`, `total_venta`, `descripcion_venta`, `fecha_creacion_detalle`, `fecha_modificacion_detalle` FROM `detalle_venta` WHERE `id_detalle` = :p0';
+        $sql = 'SELECT `id_detalle`, `id_venta`, `id_venta_forma`, `id_lugar_venta`, `id_forma_pago`, `fecha_venta`, `total_neto_venta`, `total_iva_venta`, `total_venta`, `descripcion_venta`, `fecha_creacion_detalle`, `fecha_modificacion_detalle` FROM `detalle_venta` WHERE `id_detalle` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -321,6 +335,50 @@ abstract class BaseDetalleVentaQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(DetalleVentaPeer::ID_DETALLE, $idDetalle, $comparison);
+    }
+
+    /**
+     * Filter the query on the id_venta column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdVenta(1234); // WHERE id_venta = 1234
+     * $query->filterByIdVenta(array(12, 34)); // WHERE id_venta IN (12, 34)
+     * $query->filterByIdVenta(array('min' => 12)); // WHERE id_venta >= 12
+     * $query->filterByIdVenta(array('max' => 12)); // WHERE id_venta <= 12
+     * </code>
+     *
+     * @see       filterByVenta()
+     *
+     * @param     mixed $idVenta The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return DetalleVentaQuery The current query, for fluid interface
+     */
+    public function filterByIdVenta($idVenta = null, $comparison = null)
+    {
+        if (is_array($idVenta)) {
+            $useMinMax = false;
+            if (isset($idVenta['min'])) {
+                $this->addUsingAlias(DetalleVentaPeer::ID_VENTA, $idVenta['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idVenta['max'])) {
+                $this->addUsingAlias(DetalleVentaPeer::ID_VENTA, $idVenta['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(DetalleVentaPeer::ID_VENTA, $idVenta, $comparison);
     }
 
     /**
@@ -740,6 +798,82 @@ abstract class BaseDetalleVentaQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Venta object
+     *
+     * @param   Venta|PropelObjectCollection $venta The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 DetalleVentaQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByVenta($venta, $comparison = null)
+    {
+        if ($venta instanceof Venta) {
+            return $this
+                ->addUsingAlias(DetalleVentaPeer::ID_VENTA, $venta->getId(), $comparison);
+        } elseif ($venta instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(DetalleVentaPeer::ID_VENTA, $venta->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByVenta() only accepts arguments of type Venta or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Venta relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return DetalleVentaQuery The current query, for fluid interface
+     */
+    public function joinVenta($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Venta');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Venta');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Venta relation Venta object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \Costo\SystemBundle\Model\VentaQuery A secondary query class using the current class as primary query
+     */
+    public function useVentaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinVenta($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Venta', '\Costo\SystemBundle\Model\VentaQuery');
+    }
+
+    /**
      * Filter the query by a related VentaForma object
      *
      * @param   VentaForma|PropelObjectCollection $ventaForma The related object(s) to use as filter
@@ -965,6 +1099,80 @@ abstract class BaseDetalleVentaQuery extends ModelCriteria
         return $this
             ->joinFormaPago($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'FormaPago', '\Costo\SystemBundle\Model\FormaPagoQuery');
+    }
+
+    /**
+     * Filter the query by a related EventosDetalle object
+     *
+     * @param   EventosDetalle|PropelObjectCollection $eventosDetalle  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 DetalleVentaQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByEventosDetalle($eventosDetalle, $comparison = null)
+    {
+        if ($eventosDetalle instanceof EventosDetalle) {
+            return $this
+                ->addUsingAlias(DetalleVentaPeer::ID_DETALLE, $eventosDetalle->getIdDetalle(), $comparison);
+        } elseif ($eventosDetalle instanceof PropelObjectCollection) {
+            return $this
+                ->useEventosDetalleQuery()
+                ->filterByPrimaryKeys($eventosDetalle->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByEventosDetalle() only accepts arguments of type EventosDetalle or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the EventosDetalle relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return DetalleVentaQuery The current query, for fluid interface
+     */
+    public function joinEventosDetalle($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('EventosDetalle');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'EventosDetalle');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the EventosDetalle relation EventosDetalle object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \Costo\SystemBundle\Model\EventosDetalleQuery A secondary query class using the current class as primary query
+     */
+    public function useEventosDetalleQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinEventosDetalle($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'EventosDetalle', '\Costo\SystemBundle\Model\EventosDetalleQuery');
     }
 
     /**

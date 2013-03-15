@@ -10,36 +10,34 @@ use \Exception;
 use \PDO;
 use \Persistent;
 use \Propel;
-use \PropelCollection;
 use \PropelDateTime;
 use \PropelException;
-use \PropelObjectCollection;
 use \PropelPDO;
-use Costo\SystemBundle\Model\Cuenta;
-use Costo\SystemBundle\Model\CuentaPeer;
-use Costo\SystemBundle\Model\CuentaQuery;
-use Costo\SystemBundle\Model\Gasto;
-use Costo\SystemBundle\Model\GastoQuery;
+use Costo\SystemBundle\Model\DetalleVenta;
+use Costo\SystemBundle\Model\DetalleVentaQuery;
+use Costo\SystemBundle\Model\EventosDetalle;
+use Costo\SystemBundle\Model\EventosDetallePeer;
+use Costo\SystemBundle\Model\EventosDetalleQuery;
 
 /**
- * Base class that represents a row from the 'cuenta' table.
+ * Base class that represents a row from the 'eventos_detalle' table.
  *
  *
  *
  * @package    propel.generator.src.Costo.SystemBundle.Model.om
  */
-abstract class BaseCuenta extends BaseObject implements Persistent
+abstract class BaseEventosDetalle extends BaseObject implements Persistent
 {
     /**
      * Peer class name
      */
-    const PEER = 'Costo\\SystemBundle\\Model\\CuentaPeer';
+    const PEER = 'Costo\\SystemBundle\\Model\\EventosDetallePeer';
 
     /**
      * The Peer class.
      * Instance provides a convenient way of calling static methods on a class
      * that calling code may not be able to identify.
-     * @var        CuentaPeer
+     * @var        EventosDetallePeer
      */
     protected static $peer;
 
@@ -50,54 +48,57 @@ abstract class BaseCuenta extends BaseObject implements Persistent
     protected $startCopy = false;
 
     /**
-     * The value for the id_cuenta field.
+     * The value for the id_evento field.
      * @var        int
      */
-    protected $id_cuenta;
+    protected $id_evento;
 
     /**
-     * The value for the nombre_cuenta field.
+     * The value for the id_detalle field.
+     * @var        int
+     */
+    protected $id_detalle;
+
+    /**
+     * The value for the etiqueta_evento field.
      * @var        string
      */
-    protected $nombre_cuenta;
+    protected $etiqueta_evento;
 
     /**
-     * The value for the valor_cuenta field.
-     * Note: this column has a database default value of: 0
-     * @var        double
-     */
-    protected $valor_cuenta;
-
-    /**
-     * The value for the tipo_cuenta field.
-     * Note: this column has a database default value of: 'FORMAL'
+     * The value for the fecha_evento field.
      * @var        string
      */
-    protected $tipo_cuenta;
+    protected $fecha_evento;
 
     /**
-     * The value for the user_crea_cuenta field.
+     * The value for the color_evento field.
      * @var        string
      */
-    protected $user_crea_cuenta;
+    protected $color_evento;
 
     /**
-     * The value for the fecha_creacion_cuenta field.
+     * The value for the email_notificacion field.
      * @var        string
      */
-    protected $fecha_creacion_cuenta;
+    protected $email_notificacion;
 
     /**
-     * The value for the fecha_modificacion_cuenta field.
+     * The value for the fecha_creacion_evento field.
      * @var        string
      */
-    protected $fecha_modificacion_cuenta;
+    protected $fecha_creacion_evento;
 
     /**
-     * @var        PropelObjectCollection|Gasto[] Collection to store aggregation of Gasto objects.
+     * The value for the fecha_modificacion_evento field.
+     * @var        string
      */
-    protected $collGastos;
-    protected $collGastosPartial;
+    protected $fecha_modificacion_evento;
+
+    /**
+     * @var        DetalleVenta
+     */
+    protected $aDetalleVenta;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -120,85 +121,37 @@ abstract class BaseCuenta extends BaseObject implements Persistent
     protected $alreadyInClearAllReferencesDeep = false;
 
     /**
-     * An array of objects scheduled for deletion.
-     * @var		PropelObjectCollection
-     */
-    protected $gastosScheduledForDeletion = null;
-
-    /**
-     * Applies default values to this object.
-     * This method should be called from the object's constructor (or
-     * equivalent initialization method).
-     * @see        __construct()
-     */
-    public function applyDefaultValues()
-    {
-        $this->valor_cuenta = 0;
-        $this->tipo_cuenta = 'FORMAL';
-    }
-
-    /**
-     * Initializes internal state of BaseCuenta object.
-     * @see        applyDefaults()
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->applyDefaultValues();
-    }
-
-    /**
-     * Get the [id_cuenta] column value.
+     * Get the [id_evento] column value.
      *
      * @return int
      */
-    public function getIdCuenta()
+    public function getIdEvento()
     {
-        return $this->id_cuenta;
+        return $this->id_evento;
     }
 
     /**
-     * Get the [nombre_cuenta] column value.
+     * Get the [id_detalle] column value.
+     *
+     * @return int
+     */
+    public function getIdDetalle()
+    {
+        return $this->id_detalle;
+    }
+
+    /**
+     * Get the [etiqueta_evento] column value.
      *
      * @return string
      */
-    public function getNombreCuenta()
+    public function getEtiquetaEvento()
     {
-        return $this->nombre_cuenta;
+        return $this->etiqueta_evento;
     }
 
     /**
-     * Get the [valor_cuenta] column value.
-     *
-     * @return double
-     */
-    public function getValorCuenta()
-    {
-        return $this->valor_cuenta;
-    }
-
-    /**
-     * Get the [tipo_cuenta] column value.
-     *
-     * @return string
-     */
-    public function getTipoCuenta()
-    {
-        return $this->tipo_cuenta;
-    }
-
-    /**
-     * Get the [user_crea_cuenta] column value.
-     *
-     * @return string
-     */
-    public function getUserCreaCuenta()
-    {
-        return $this->user_crea_cuenta;
-    }
-
-    /**
-     * Get the [optionally formatted] temporal [fecha_creacion_cuenta] column value.
+     * Get the [optionally formatted] temporal [fecha_evento] column value.
      *
      *
      * @param string $format The date/time format string (either date()-style or strftime()-style).
@@ -206,22 +159,22 @@ abstract class BaseCuenta extends BaseObject implements Persistent
      * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getFechaCreacionCuenta($format = null)
+    public function getFechaEvento($format = null)
     {
-        if ($this->fecha_creacion_cuenta === null) {
+        if ($this->fecha_evento === null) {
             return null;
         }
 
-        if ($this->fecha_creacion_cuenta === '0000-00-00 00:00:00') {
+        if ($this->fecha_evento === '0000-00-00 00:00:00') {
             // while technically this is not a default value of null,
             // this seems to be closest in meaning.
             return null;
         }
 
         try {
-            $dt = new DateTime($this->fecha_creacion_cuenta);
+            $dt = new DateTime($this->fecha_evento);
         } catch (Exception $x) {
-            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->fecha_creacion_cuenta, true), $x);
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->fecha_evento, true), $x);
         }
 
         if ($format === null) {
@@ -238,7 +191,27 @@ abstract class BaseCuenta extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [optionally formatted] temporal [fecha_modificacion_cuenta] column value.
+     * Get the [color_evento] column value.
+     *
+     * @return string
+     */
+    public function getColorEvento()
+    {
+        return $this->color_evento;
+    }
+
+    /**
+     * Get the [email_notificacion] column value.
+     *
+     * @return string
+     */
+    public function getEmailNotificacion()
+    {
+        return $this->email_notificacion;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [fecha_creacion_evento] column value.
      *
      *
      * @param string $format The date/time format string (either date()-style or strftime()-style).
@@ -246,22 +219,22 @@ abstract class BaseCuenta extends BaseObject implements Persistent
      * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getFechaModificacionCuenta($format = null)
+    public function getFechaCreacionEvento($format = null)
     {
-        if ($this->fecha_modificacion_cuenta === null) {
+        if ($this->fecha_creacion_evento === null) {
             return null;
         }
 
-        if ($this->fecha_modificacion_cuenta === '0000-00-00 00:00:00') {
+        if ($this->fecha_creacion_evento === '0000-00-00 00:00:00') {
             // while technically this is not a default value of null,
             // this seems to be closest in meaning.
             return null;
         }
 
         try {
-            $dt = new DateTime($this->fecha_modificacion_cuenta);
+            $dt = new DateTime($this->fecha_creacion_evento);
         } catch (Exception $x) {
-            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->fecha_modificacion_cuenta, true), $x);
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->fecha_creacion_evento, true), $x);
         }
 
         if ($format === null) {
@@ -278,155 +251,222 @@ abstract class BaseCuenta extends BaseObject implements Persistent
     }
 
     /**
-     * Set the value of [id_cuenta] column.
+     * Get the [optionally formatted] temporal [fecha_modificacion_evento] column value.
+     *
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getFechaModificacionEvento($format = null)
+    {
+        if ($this->fecha_modificacion_evento === null) {
+            return null;
+        }
+
+        if ($this->fecha_modificacion_evento === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->fecha_modificacion_evento);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->fecha_modificacion_evento, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
+    }
+
+    /**
+     * Set the value of [id_evento] column.
      *
      * @param int $v new value
-     * @return Cuenta The current object (for fluent API support)
+     * @return EventosDetalle The current object (for fluent API support)
      */
-    public function setIdCuenta($v)
+    public function setIdEvento($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->id_cuenta !== $v) {
-            $this->id_cuenta = $v;
-            $this->modifiedColumns[] = CuentaPeer::ID_CUENTA;
+        if ($this->id_evento !== $v) {
+            $this->id_evento = $v;
+            $this->modifiedColumns[] = EventosDetallePeer::ID_EVENTO;
         }
 
 
         return $this;
-    } // setIdCuenta()
+    } // setIdEvento()
 
     /**
-     * Set the value of [nombre_cuenta] column.
+     * Set the value of [id_detalle] column.
+     *
+     * @param int $v new value
+     * @return EventosDetalle The current object (for fluent API support)
+     */
+    public function setIdDetalle($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->id_detalle !== $v) {
+            $this->id_detalle = $v;
+            $this->modifiedColumns[] = EventosDetallePeer::ID_DETALLE;
+        }
+
+        if ($this->aDetalleVenta !== null && $this->aDetalleVenta->getIdDetalle() !== $v) {
+            $this->aDetalleVenta = null;
+        }
+
+
+        return $this;
+    } // setIdDetalle()
+
+    /**
+     * Set the value of [etiqueta_evento] column.
      *
      * @param string $v new value
-     * @return Cuenta The current object (for fluent API support)
+     * @return EventosDetalle The current object (for fluent API support)
      */
-    public function setNombreCuenta($v)
+    public function setEtiquetaEvento($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (string) $v;
         }
 
-        if ($this->nombre_cuenta !== $v) {
-            $this->nombre_cuenta = $v;
-            $this->modifiedColumns[] = CuentaPeer::NOMBRE_CUENTA;
+        if ($this->etiqueta_evento !== $v) {
+            $this->etiqueta_evento = $v;
+            $this->modifiedColumns[] = EventosDetallePeer::ETIQUETA_EVENTO;
         }
 
 
         return $this;
-    } // setNombreCuenta()
+    } // setEtiquetaEvento()
 
     /**
-     * Set the value of [valor_cuenta] column.
-     *
-     * @param double $v new value
-     * @return Cuenta The current object (for fluent API support)
-     */
-    public function setValorCuenta($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (double) $v;
-        }
-
-        if ($this->valor_cuenta !== $v) {
-            $this->valor_cuenta = $v;
-            $this->modifiedColumns[] = CuentaPeer::VALOR_CUENTA;
-        }
-
-
-        return $this;
-    } // setValorCuenta()
-
-    /**
-     * Set the value of [tipo_cuenta] column.
-     *
-     * @param string $v new value
-     * @return Cuenta The current object (for fluent API support)
-     */
-    public function setTipoCuenta($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (string) $v;
-        }
-
-        if ($this->tipo_cuenta !== $v) {
-            $this->tipo_cuenta = $v;
-            $this->modifiedColumns[] = CuentaPeer::TIPO_CUENTA;
-        }
-
-
-        return $this;
-    } // setTipoCuenta()
-
-    /**
-     * Set the value of [user_crea_cuenta] column.
-     *
-     * @param string $v new value
-     * @return Cuenta The current object (for fluent API support)
-     */
-    public function setUserCreaCuenta($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (string) $v;
-        }
-
-        if ($this->user_crea_cuenta !== $v) {
-            $this->user_crea_cuenta = $v;
-            $this->modifiedColumns[] = CuentaPeer::USER_CREA_CUENTA;
-        }
-
-
-        return $this;
-    } // setUserCreaCuenta()
-
-    /**
-     * Sets the value of [fecha_creacion_cuenta] column to a normalized version of the date/time value specified.
+     * Sets the value of [fecha_evento] column to a normalized version of the date/time value specified.
      *
      * @param mixed $v string, integer (timestamp), or DateTime value.
      *               Empty strings are treated as null.
-     * @return Cuenta The current object (for fluent API support)
+     * @return EventosDetalle The current object (for fluent API support)
      */
-    public function setFechaCreacionCuenta($v)
+    public function setFechaEvento($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->fecha_creacion_cuenta !== null || $dt !== null) {
-            $currentDateAsString = ($this->fecha_creacion_cuenta !== null && $tmpDt = new DateTime($this->fecha_creacion_cuenta)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+        if ($this->fecha_evento !== null || $dt !== null) {
+            $currentDateAsString = ($this->fecha_evento !== null && $tmpDt = new DateTime($this->fecha_evento)) ? $tmpDt->format('Y-m-d H:i:s') : null;
             $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
             if ($currentDateAsString !== $newDateAsString) {
-                $this->fecha_creacion_cuenta = $newDateAsString;
-                $this->modifiedColumns[] = CuentaPeer::FECHA_CREACION_CUENTA;
+                $this->fecha_evento = $newDateAsString;
+                $this->modifiedColumns[] = EventosDetallePeer::FECHA_EVENTO;
             }
         } // if either are not null
 
 
         return $this;
-    } // setFechaCreacionCuenta()
+    } // setFechaEvento()
 
     /**
-     * Sets the value of [fecha_modificacion_cuenta] column to a normalized version of the date/time value specified.
+     * Set the value of [color_evento] column.
+     *
+     * @param string $v new value
+     * @return EventosDetalle The current object (for fluent API support)
+     */
+    public function setColorEvento($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->color_evento !== $v) {
+            $this->color_evento = $v;
+            $this->modifiedColumns[] = EventosDetallePeer::COLOR_EVENTO;
+        }
+
+
+        return $this;
+    } // setColorEvento()
+
+    /**
+     * Set the value of [email_notificacion] column.
+     *
+     * @param string $v new value
+     * @return EventosDetalle The current object (for fluent API support)
+     */
+    public function setEmailNotificacion($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->email_notificacion !== $v) {
+            $this->email_notificacion = $v;
+            $this->modifiedColumns[] = EventosDetallePeer::EMAIL_NOTIFICACION;
+        }
+
+
+        return $this;
+    } // setEmailNotificacion()
+
+    /**
+     * Sets the value of [fecha_creacion_evento] column to a normalized version of the date/time value specified.
      *
      * @param mixed $v string, integer (timestamp), or DateTime value.
      *               Empty strings are treated as null.
-     * @return Cuenta The current object (for fluent API support)
+     * @return EventosDetalle The current object (for fluent API support)
      */
-    public function setFechaModificacionCuenta($v)
+    public function setFechaCreacionEvento($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->fecha_modificacion_cuenta !== null || $dt !== null) {
-            $currentDateAsString = ($this->fecha_modificacion_cuenta !== null && $tmpDt = new DateTime($this->fecha_modificacion_cuenta)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+        if ($this->fecha_creacion_evento !== null || $dt !== null) {
+            $currentDateAsString = ($this->fecha_creacion_evento !== null && $tmpDt = new DateTime($this->fecha_creacion_evento)) ? $tmpDt->format('Y-m-d H:i:s') : null;
             $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
             if ($currentDateAsString !== $newDateAsString) {
-                $this->fecha_modificacion_cuenta = $newDateAsString;
-                $this->modifiedColumns[] = CuentaPeer::FECHA_MODIFICACION_CUENTA;
+                $this->fecha_creacion_evento = $newDateAsString;
+                $this->modifiedColumns[] = EventosDetallePeer::FECHA_CREACION_EVENTO;
             }
         } // if either are not null
 
 
         return $this;
-    } // setFechaModificacionCuenta()
+    } // setFechaCreacionEvento()
+
+    /**
+     * Sets the value of [fecha_modificacion_evento] column to a normalized version of the date/time value specified.
+     *
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
+     * @return EventosDetalle The current object (for fluent API support)
+     */
+    public function setFechaModificacionEvento($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->fecha_modificacion_evento !== null || $dt !== null) {
+            $currentDateAsString = ($this->fecha_modificacion_evento !== null && $tmpDt = new DateTime($this->fecha_modificacion_evento)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->fecha_modificacion_evento = $newDateAsString;
+                $this->modifiedColumns[] = EventosDetallePeer::FECHA_MODIFICACION_EVENTO;
+            }
+        } // if either are not null
+
+
+        return $this;
+    } // setFechaModificacionEvento()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -438,14 +478,6 @@ abstract class BaseCuenta extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
-            if ($this->valor_cuenta !== 0) {
-                return false;
-            }
-
-            if ($this->tipo_cuenta !== 'FORMAL') {
-                return false;
-            }
-
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -468,13 +500,14 @@ abstract class BaseCuenta extends BaseObject implements Persistent
     {
         try {
 
-            $this->id_cuenta = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->nombre_cuenta = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->valor_cuenta = ($row[$startcol + 2] !== null) ? (double) $row[$startcol + 2] : null;
-            $this->tipo_cuenta = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->user_crea_cuenta = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-            $this->fecha_creacion_cuenta = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-            $this->fecha_modificacion_cuenta = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+            $this->id_evento = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
+            $this->id_detalle = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+            $this->etiqueta_evento = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->fecha_evento = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->color_evento = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->email_notificacion = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+            $this->fecha_creacion_evento = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+            $this->fecha_modificacion_evento = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -483,10 +516,10 @@ abstract class BaseCuenta extends BaseObject implements Persistent
                 $this->ensureConsistency();
             }
             $this->postHydrate($row, $startcol, $rehydrate);
-            return $startcol + 7; // 7 = CuentaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = EventosDetallePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException("Error populating Cuenta object", $e);
+            throw new PropelException("Error populating EventosDetalle object", $e);
         }
     }
 
@@ -506,6 +539,9 @@ abstract class BaseCuenta extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
+        if ($this->aDetalleVenta !== null && $this->id_detalle !== $this->aDetalleVenta->getIdDetalle()) {
+            $this->aDetalleVenta = null;
+        }
     } // ensureConsistency
 
     /**
@@ -529,13 +565,13 @@ abstract class BaseCuenta extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(CuentaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(EventosDetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $stmt = CuentaPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
+        $stmt = EventosDetallePeer::doSelectStmt($this->buildPkeyCriteria(), $con);
         $row = $stmt->fetch(PDO::FETCH_NUM);
         $stmt->closeCursor();
         if (!$row) {
@@ -545,8 +581,7 @@ abstract class BaseCuenta extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->collGastos = null;
-
+            $this->aDetalleVenta = null;
         } // if (deep)
     }
 
@@ -567,12 +602,12 @@ abstract class BaseCuenta extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(CuentaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(EventosDetallePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
         try {
-            $deleteQuery = CuentaQuery::create()
+            $deleteQuery = EventosDetalleQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -610,7 +645,7 @@ abstract class BaseCuenta extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(CuentaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(EventosDetallePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
@@ -620,17 +655,17 @@ abstract class BaseCuenta extends BaseObject implements Persistent
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
                 // timestampable behavior
-                if (!$this->isColumnModified(CuentaPeer::FECHA_CREACION_CUENTA)) {
-                    $this->setFechaCreacionCuenta(time());
+                if (!$this->isColumnModified(EventosDetallePeer::FECHA_CREACION_EVENTO)) {
+                    $this->setFechaCreacionEvento(time());
                 }
-                if (!$this->isColumnModified(CuentaPeer::FECHA_MODIFICACION_CUENTA)) {
-                    $this->setFechaModificacionCuenta(time());
+                if (!$this->isColumnModified(EventosDetallePeer::FECHA_MODIFICACION_EVENTO)) {
+                    $this->setFechaModificacionEvento(time());
                 }
             } else {
                 $ret = $ret && $this->preUpdate($con);
                 // timestampable behavior
-                if ($this->isModified() && !$this->isColumnModified(CuentaPeer::FECHA_MODIFICACION_CUENTA)) {
-                    $this->setFechaModificacionCuenta(time());
+                if ($this->isModified() && !$this->isColumnModified(EventosDetallePeer::FECHA_MODIFICACION_EVENTO)) {
+                    $this->setFechaModificacionEvento(time());
                 }
             }
             if ($ret) {
@@ -641,7 +676,7 @@ abstract class BaseCuenta extends BaseObject implements Persistent
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                CuentaPeer::addInstanceToPool($this);
+                EventosDetallePeer::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -671,6 +706,18 @@ abstract class BaseCuenta extends BaseObject implements Persistent
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their coresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aDetalleVenta !== null) {
+                if ($this->aDetalleVenta->isModified() || $this->aDetalleVenta->isNew()) {
+                    $affectedRows += $this->aDetalleVenta->save($con);
+                }
+                $this->setDetalleVenta($this->aDetalleVenta);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -680,24 +727,6 @@ abstract class BaseCuenta extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
-            }
-
-            if ($this->gastosScheduledForDeletion !== null) {
-                if (!$this->gastosScheduledForDeletion->isEmpty()) {
-                    foreach ($this->gastosScheduledForDeletion as $gasto) {
-                        // need to save related object because we set the relation to null
-                        $gasto->save($con);
-                    }
-                    $this->gastosScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collGastos !== null) {
-                foreach ($this->collGastos as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
             }
 
             $this->alreadyInSave = false;
@@ -720,36 +749,39 @@ abstract class BaseCuenta extends BaseObject implements Persistent
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[] = CuentaPeer::ID_CUENTA;
-        if (null !== $this->id_cuenta) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . CuentaPeer::ID_CUENTA . ')');
+        $this->modifiedColumns[] = EventosDetallePeer::ID_EVENTO;
+        if (null !== $this->id_evento) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . EventosDetallePeer::ID_EVENTO . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(CuentaPeer::ID_CUENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`id_cuenta`';
+        if ($this->isColumnModified(EventosDetallePeer::ID_EVENTO)) {
+            $modifiedColumns[':p' . $index++]  = '`id_evento`';
         }
-        if ($this->isColumnModified(CuentaPeer::NOMBRE_CUENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`nombre_cuenta`';
+        if ($this->isColumnModified(EventosDetallePeer::ID_DETALLE)) {
+            $modifiedColumns[':p' . $index++]  = '`id_detalle`';
         }
-        if ($this->isColumnModified(CuentaPeer::VALOR_CUENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`valor_cuenta`';
+        if ($this->isColumnModified(EventosDetallePeer::ETIQUETA_EVENTO)) {
+            $modifiedColumns[':p' . $index++]  = '`etiqueta_evento`';
         }
-        if ($this->isColumnModified(CuentaPeer::TIPO_CUENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`tipo_cuenta`';
+        if ($this->isColumnModified(EventosDetallePeer::FECHA_EVENTO)) {
+            $modifiedColumns[':p' . $index++]  = '`fecha_evento`';
         }
-        if ($this->isColumnModified(CuentaPeer::USER_CREA_CUENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`user_crea_cuenta`';
+        if ($this->isColumnModified(EventosDetallePeer::COLOR_EVENTO)) {
+            $modifiedColumns[':p' . $index++]  = '`color_evento`';
         }
-        if ($this->isColumnModified(CuentaPeer::FECHA_CREACION_CUENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`fecha_creacion_cuenta`';
+        if ($this->isColumnModified(EventosDetallePeer::EMAIL_NOTIFICACION)) {
+            $modifiedColumns[':p' . $index++]  = '`email_notificacion`';
         }
-        if ($this->isColumnModified(CuentaPeer::FECHA_MODIFICACION_CUENTA)) {
-            $modifiedColumns[':p' . $index++]  = '`fecha_modificacion_cuenta`';
+        if ($this->isColumnModified(EventosDetallePeer::FECHA_CREACION_EVENTO)) {
+            $modifiedColumns[':p' . $index++]  = '`fecha_creacion_evento`';
+        }
+        if ($this->isColumnModified(EventosDetallePeer::FECHA_MODIFICACION_EVENTO)) {
+            $modifiedColumns[':p' . $index++]  = '`fecha_modificacion_evento`';
         }
 
         $sql = sprintf(
-            'INSERT INTO `cuenta` (%s) VALUES (%s)',
+            'INSERT INTO `eventos_detalle` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -758,26 +790,29 @@ abstract class BaseCuenta extends BaseObject implements Persistent
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`id_cuenta`':
-                        $stmt->bindValue($identifier, $this->id_cuenta, PDO::PARAM_INT);
+                    case '`id_evento`':
+                        $stmt->bindValue($identifier, $this->id_evento, PDO::PARAM_INT);
                         break;
-                    case '`nombre_cuenta`':
-                        $stmt->bindValue($identifier, $this->nombre_cuenta, PDO::PARAM_STR);
+                    case '`id_detalle`':
+                        $stmt->bindValue($identifier, $this->id_detalle, PDO::PARAM_INT);
                         break;
-                    case '`valor_cuenta`':
-                        $stmt->bindValue($identifier, $this->valor_cuenta, PDO::PARAM_STR);
+                    case '`etiqueta_evento`':
+                        $stmt->bindValue($identifier, $this->etiqueta_evento, PDO::PARAM_STR);
                         break;
-                    case '`tipo_cuenta`':
-                        $stmt->bindValue($identifier, $this->tipo_cuenta, PDO::PARAM_STR);
+                    case '`fecha_evento`':
+                        $stmt->bindValue($identifier, $this->fecha_evento, PDO::PARAM_STR);
                         break;
-                    case '`user_crea_cuenta`':
-                        $stmt->bindValue($identifier, $this->user_crea_cuenta, PDO::PARAM_STR);
+                    case '`color_evento`':
+                        $stmt->bindValue($identifier, $this->color_evento, PDO::PARAM_STR);
                         break;
-                    case '`fecha_creacion_cuenta`':
-                        $stmt->bindValue($identifier, $this->fecha_creacion_cuenta, PDO::PARAM_STR);
+                    case '`email_notificacion`':
+                        $stmt->bindValue($identifier, $this->email_notificacion, PDO::PARAM_STR);
                         break;
-                    case '`fecha_modificacion_cuenta`':
-                        $stmt->bindValue($identifier, $this->fecha_modificacion_cuenta, PDO::PARAM_STR);
+                    case '`fecha_creacion_evento`':
+                        $stmt->bindValue($identifier, $this->fecha_creacion_evento, PDO::PARAM_STR);
+                        break;
+                    case '`fecha_modificacion_evento`':
+                        $stmt->bindValue($identifier, $this->fecha_modificacion_evento, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -792,7 +827,7 @@ abstract class BaseCuenta extends BaseObject implements Persistent
         } catch (Exception $e) {
             throw new PropelException('Unable to get autoincrement id.', $e);
         }
-        $this->setIdCuenta($pk);
+        $this->setIdEvento($pk);
 
         $this->setNew(false);
     }
@@ -873,18 +908,22 @@ abstract class BaseCuenta extends BaseObject implements Persistent
             $failureMap = array();
 
 
-            if (($retval = CuentaPeer::doValidate($this, $columns)) !== true) {
-                $failureMap = array_merge($failureMap, $retval);
+            // We call the validate method on the following object(s) if they
+            // were passed to this object by their coresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aDetalleVenta !== null) {
+                if (!$this->aDetalleVenta->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aDetalleVenta->getValidationFailures());
+                }
             }
 
 
-                if ($this->collGastos !== null) {
-                    foreach ($this->collGastos as $referrerFK) {
-                        if (!$referrerFK->validate($columns)) {
-                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
-                        }
-                    }
-                }
+            if (($retval = EventosDetallePeer::doValidate($this, $columns)) !== true) {
+                $failureMap = array_merge($failureMap, $retval);
+            }
+
 
 
             $this->alreadyInValidation = false;
@@ -905,7 +944,7 @@ abstract class BaseCuenta extends BaseObject implements Persistent
      */
     public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = CuentaPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = EventosDetallePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -922,25 +961,28 @@ abstract class BaseCuenta extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                return $this->getIdCuenta();
+                return $this->getIdEvento();
                 break;
             case 1:
-                return $this->getNombreCuenta();
+                return $this->getIdDetalle();
                 break;
             case 2:
-                return $this->getValorCuenta();
+                return $this->getEtiquetaEvento();
                 break;
             case 3:
-                return $this->getTipoCuenta();
+                return $this->getFechaEvento();
                 break;
             case 4:
-                return $this->getUserCreaCuenta();
+                return $this->getColorEvento();
                 break;
             case 5:
-                return $this->getFechaCreacionCuenta();
+                return $this->getEmailNotificacion();
                 break;
             case 6:
-                return $this->getFechaModificacionCuenta();
+                return $this->getFechaCreacionEvento();
+                break;
+            case 7:
+                return $this->getFechaModificacionEvento();
                 break;
             default:
                 return null;
@@ -965,23 +1007,24 @@ abstract class BaseCuenta extends BaseObject implements Persistent
      */
     public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
-        if (isset($alreadyDumpedObjects['Cuenta'][$this->getPrimaryKey()])) {
+        if (isset($alreadyDumpedObjects['EventosDetalle'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Cuenta'][$this->getPrimaryKey()] = true;
-        $keys = CuentaPeer::getFieldNames($keyType);
+        $alreadyDumpedObjects['EventosDetalle'][$this->getPrimaryKey()] = true;
+        $keys = EventosDetallePeer::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getIdCuenta(),
-            $keys[1] => $this->getNombreCuenta(),
-            $keys[2] => $this->getValorCuenta(),
-            $keys[3] => $this->getTipoCuenta(),
-            $keys[4] => $this->getUserCreaCuenta(),
-            $keys[5] => $this->getFechaCreacionCuenta(),
-            $keys[6] => $this->getFechaModificacionCuenta(),
+            $keys[0] => $this->getIdEvento(),
+            $keys[1] => $this->getIdDetalle(),
+            $keys[2] => $this->getEtiquetaEvento(),
+            $keys[3] => $this->getFechaEvento(),
+            $keys[4] => $this->getColorEvento(),
+            $keys[5] => $this->getEmailNotificacion(),
+            $keys[6] => $this->getFechaCreacionEvento(),
+            $keys[7] => $this->getFechaModificacionEvento(),
         );
         if ($includeForeignObjects) {
-            if (null !== $this->collGastos) {
-                $result['Gastos'] = $this->collGastos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            if (null !== $this->aDetalleVenta) {
+                $result['DetalleVenta'] = $this->aDetalleVenta->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -1001,7 +1044,7 @@ abstract class BaseCuenta extends BaseObject implements Persistent
      */
     public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = CuentaPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = EventosDetallePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 
         $this->setByPosition($pos, $value);
     }
@@ -1018,25 +1061,28 @@ abstract class BaseCuenta extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                $this->setIdCuenta($value);
+                $this->setIdEvento($value);
                 break;
             case 1:
-                $this->setNombreCuenta($value);
+                $this->setIdDetalle($value);
                 break;
             case 2:
-                $this->setValorCuenta($value);
+                $this->setEtiquetaEvento($value);
                 break;
             case 3:
-                $this->setTipoCuenta($value);
+                $this->setFechaEvento($value);
                 break;
             case 4:
-                $this->setUserCreaCuenta($value);
+                $this->setColorEvento($value);
                 break;
             case 5:
-                $this->setFechaCreacionCuenta($value);
+                $this->setEmailNotificacion($value);
                 break;
             case 6:
-                $this->setFechaModificacionCuenta($value);
+                $this->setFechaCreacionEvento($value);
+                break;
+            case 7:
+                $this->setFechaModificacionEvento($value);
                 break;
         } // switch()
     }
@@ -1060,15 +1106,16 @@ abstract class BaseCuenta extends BaseObject implements Persistent
      */
     public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
     {
-        $keys = CuentaPeer::getFieldNames($keyType);
+        $keys = EventosDetallePeer::getFieldNames($keyType);
 
-        if (array_key_exists($keys[0], $arr)) $this->setIdCuenta($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setNombreCuenta($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setValorCuenta($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setTipoCuenta($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setUserCreaCuenta($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setFechaCreacionCuenta($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setFechaModificacionCuenta($arr[$keys[6]]);
+        if (array_key_exists($keys[0], $arr)) $this->setIdEvento($arr[$keys[0]]);
+        if (array_key_exists($keys[1], $arr)) $this->setIdDetalle($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setEtiquetaEvento($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setFechaEvento($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setColorEvento($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setEmailNotificacion($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setFechaCreacionEvento($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setFechaModificacionEvento($arr[$keys[7]]);
     }
 
     /**
@@ -1078,15 +1125,16 @@ abstract class BaseCuenta extends BaseObject implements Persistent
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(CuentaPeer::DATABASE_NAME);
+        $criteria = new Criteria(EventosDetallePeer::DATABASE_NAME);
 
-        if ($this->isColumnModified(CuentaPeer::ID_CUENTA)) $criteria->add(CuentaPeer::ID_CUENTA, $this->id_cuenta);
-        if ($this->isColumnModified(CuentaPeer::NOMBRE_CUENTA)) $criteria->add(CuentaPeer::NOMBRE_CUENTA, $this->nombre_cuenta);
-        if ($this->isColumnModified(CuentaPeer::VALOR_CUENTA)) $criteria->add(CuentaPeer::VALOR_CUENTA, $this->valor_cuenta);
-        if ($this->isColumnModified(CuentaPeer::TIPO_CUENTA)) $criteria->add(CuentaPeer::TIPO_CUENTA, $this->tipo_cuenta);
-        if ($this->isColumnModified(CuentaPeer::USER_CREA_CUENTA)) $criteria->add(CuentaPeer::USER_CREA_CUENTA, $this->user_crea_cuenta);
-        if ($this->isColumnModified(CuentaPeer::FECHA_CREACION_CUENTA)) $criteria->add(CuentaPeer::FECHA_CREACION_CUENTA, $this->fecha_creacion_cuenta);
-        if ($this->isColumnModified(CuentaPeer::FECHA_MODIFICACION_CUENTA)) $criteria->add(CuentaPeer::FECHA_MODIFICACION_CUENTA, $this->fecha_modificacion_cuenta);
+        if ($this->isColumnModified(EventosDetallePeer::ID_EVENTO)) $criteria->add(EventosDetallePeer::ID_EVENTO, $this->id_evento);
+        if ($this->isColumnModified(EventosDetallePeer::ID_DETALLE)) $criteria->add(EventosDetallePeer::ID_DETALLE, $this->id_detalle);
+        if ($this->isColumnModified(EventosDetallePeer::ETIQUETA_EVENTO)) $criteria->add(EventosDetallePeer::ETIQUETA_EVENTO, $this->etiqueta_evento);
+        if ($this->isColumnModified(EventosDetallePeer::FECHA_EVENTO)) $criteria->add(EventosDetallePeer::FECHA_EVENTO, $this->fecha_evento);
+        if ($this->isColumnModified(EventosDetallePeer::COLOR_EVENTO)) $criteria->add(EventosDetallePeer::COLOR_EVENTO, $this->color_evento);
+        if ($this->isColumnModified(EventosDetallePeer::EMAIL_NOTIFICACION)) $criteria->add(EventosDetallePeer::EMAIL_NOTIFICACION, $this->email_notificacion);
+        if ($this->isColumnModified(EventosDetallePeer::FECHA_CREACION_EVENTO)) $criteria->add(EventosDetallePeer::FECHA_CREACION_EVENTO, $this->fecha_creacion_evento);
+        if ($this->isColumnModified(EventosDetallePeer::FECHA_MODIFICACION_EVENTO)) $criteria->add(EventosDetallePeer::FECHA_MODIFICACION_EVENTO, $this->fecha_modificacion_evento);
 
         return $criteria;
     }
@@ -1101,8 +1149,8 @@ abstract class BaseCuenta extends BaseObject implements Persistent
      */
     public function buildPkeyCriteria()
     {
-        $criteria = new Criteria(CuentaPeer::DATABASE_NAME);
-        $criteria->add(CuentaPeer::ID_CUENTA, $this->id_cuenta);
+        $criteria = new Criteria(EventosDetallePeer::DATABASE_NAME);
+        $criteria->add(EventosDetallePeer::ID_EVENTO, $this->id_evento);
 
         return $criteria;
     }
@@ -1113,18 +1161,18 @@ abstract class BaseCuenta extends BaseObject implements Persistent
      */
     public function getPrimaryKey()
     {
-        return $this->getIdCuenta();
+        return $this->getIdEvento();
     }
 
     /**
-     * Generic method to set the primary key (id_cuenta column).
+     * Generic method to set the primary key (id_evento column).
      *
      * @param  int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
     {
-        $this->setIdCuenta($key);
+        $this->setIdEvento($key);
     }
 
     /**
@@ -1134,7 +1182,7 @@ abstract class BaseCuenta extends BaseObject implements Persistent
     public function isPrimaryKeyNull()
     {
 
-        return null === $this->getIdCuenta();
+        return null === $this->getIdEvento();
     }
 
     /**
@@ -1143,19 +1191,20 @@ abstract class BaseCuenta extends BaseObject implements Persistent
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param object $copyObj An object of Cuenta (or compatible) type.
+     * @param object $copyObj An object of EventosDetalle (or compatible) type.
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setNombreCuenta($this->getNombreCuenta());
-        $copyObj->setValorCuenta($this->getValorCuenta());
-        $copyObj->setTipoCuenta($this->getTipoCuenta());
-        $copyObj->setUserCreaCuenta($this->getUserCreaCuenta());
-        $copyObj->setFechaCreacionCuenta($this->getFechaCreacionCuenta());
-        $copyObj->setFechaModificacionCuenta($this->getFechaModificacionCuenta());
+        $copyObj->setIdDetalle($this->getIdDetalle());
+        $copyObj->setEtiquetaEvento($this->getEtiquetaEvento());
+        $copyObj->setFechaEvento($this->getFechaEvento());
+        $copyObj->setColorEvento($this->getColorEvento());
+        $copyObj->setEmailNotificacion($this->getEmailNotificacion());
+        $copyObj->setFechaCreacionEvento($this->getFechaCreacionEvento());
+        $copyObj->setFechaModificacionEvento($this->getFechaModificacionEvento());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1164,19 +1213,13 @@ abstract class BaseCuenta extends BaseObject implements Persistent
             // store object hash to prevent cycle
             $this->startCopy = true;
 
-            foreach ($this->getGastos() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addGasto($relObj->copy($deepCopy));
-                }
-            }
-
             //unflag object copy
             $this->startCopy = false;
         } // if ($deepCopy)
 
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setIdCuenta(NULL); // this is a auto-increment column, so set to default value
+            $copyObj->setIdEvento(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1189,7 +1232,7 @@ abstract class BaseCuenta extends BaseObject implements Persistent
      * objects.
      *
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return Cuenta Clone of current object.
+     * @return EventosDetalle Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1209,250 +1252,67 @@ abstract class BaseCuenta extends BaseObject implements Persistent
      * same instance for all member of this class. The method could therefore
      * be static, but this would prevent one from overriding the behavior.
      *
-     * @return CuentaPeer
+     * @return EventosDetallePeer
      */
     public function getPeer()
     {
         if (self::$peer === null) {
-            self::$peer = new CuentaPeer();
+            self::$peer = new EventosDetallePeer();
         }
 
         return self::$peer;
     }
 
-
     /**
-     * Initializes a collection based on the name of a relation.
-     * Avoids crafting an 'init[$relationName]s' method name
-     * that wouldn't work when StandardEnglishPluralizer is used.
+     * Declares an association between this object and a DetalleVenta object.
      *
-     * @param string $relationName The name of the relation to initialize
-     * @return void
-     */
-    public function initRelation($relationName)
-    {
-        if ('Gasto' == $relationName) {
-            $this->initGastos();
-        }
-    }
-
-    /**
-     * Clears out the collGastos collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return Cuenta The current object (for fluent API support)
-     * @see        addGastos()
-     */
-    public function clearGastos()
-    {
-        $this->collGastos = null; // important to set this to null since that means it is uninitialized
-        $this->collGastosPartial = null;
-
-        return $this;
-    }
-
-    /**
-     * reset is the collGastos collection loaded partially
-     *
-     * @return void
-     */
-    public function resetPartialGastos($v = true)
-    {
-        $this->collGastosPartial = $v;
-    }
-
-    /**
-     * Initializes the collGastos collection.
-     *
-     * By default this just sets the collGastos collection to an empty array (like clearcollGastos());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initGastos($overrideExisting = true)
-    {
-        if (null !== $this->collGastos && !$overrideExisting) {
-            return;
-        }
-        $this->collGastos = new PropelObjectCollection();
-        $this->collGastos->setModel('Gasto');
-    }
-
-    /**
-     * Gets an array of Gasto objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this Cuenta is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @return PropelObjectCollection|Gasto[] List of Gasto objects
+     * @param             DetalleVenta $v
+     * @return EventosDetalle The current object (for fluent API support)
      * @throws PropelException
      */
-    public function getGastos($criteria = null, PropelPDO $con = null)
+    public function setDetalleVenta(DetalleVenta $v = null)
     {
-        $partial = $this->collGastosPartial && !$this->isNew();
-        if (null === $this->collGastos || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collGastos) {
-                // return empty collection
-                $this->initGastos();
-            } else {
-                $collGastos = GastoQuery::create(null, $criteria)
-                    ->filterByCuenta($this)
-                    ->find($con);
-                if (null !== $criteria) {
-                    if (false !== $this->collGastosPartial && count($collGastos)) {
-                      $this->initGastos(false);
-
-                      foreach($collGastos as $obj) {
-                        if (false == $this->collGastos->contains($obj)) {
-                          $this->collGastos->append($obj);
-                        }
-                      }
-
-                      $this->collGastosPartial = true;
-                    }
-
-                    $collGastos->getInternalIterator()->rewind();
-                    return $collGastos;
-                }
-
-                if($partial && $this->collGastos) {
-                    foreach($this->collGastos as $obj) {
-                        if($obj->isNew()) {
-                            $collGastos[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collGastos = $collGastos;
-                $this->collGastosPartial = false;
-            }
+        if ($v === null) {
+            $this->setIdDetalle(NULL);
+        } else {
+            $this->setIdDetalle($v->getIdDetalle());
         }
 
-        return $this->collGastos;
-    }
+        $this->aDetalleVenta = $v;
 
-    /**
-     * Sets a collection of Gasto objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param PropelCollection $gastos A Propel collection.
-     * @param PropelPDO $con Optional connection object
-     * @return Cuenta The current object (for fluent API support)
-     */
-    public function setGastos(PropelCollection $gastos, PropelPDO $con = null)
-    {
-        $gastosToDelete = $this->getGastos(new Criteria(), $con)->diff($gastos);
-
-
-        $this->gastosScheduledForDeletion = $gastosToDelete;
-
-        foreach ($gastosToDelete as $gastoRemoved) {
-            $gastoRemoved->setCuenta(null);
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the DetalleVenta object, it will not be re-added.
+        if ($v !== null) {
+            $v->addEventosDetalle($this);
         }
 
-        $this->collGastos = null;
-        foreach ($gastos as $gasto) {
-            $this->addGasto($gasto);
-        }
-
-        $this->collGastos = $gastos;
-        $this->collGastosPartial = false;
 
         return $this;
     }
 
+
     /**
-     * Returns the number of related Gasto objects.
+     * Get the associated DetalleVenta object
      *
-     * @param Criteria $criteria
-     * @param boolean $distinct
-     * @param PropelPDO $con
-     * @return int             Count of related Gasto objects.
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return DetalleVenta The associated DetalleVenta object.
      * @throws PropelException
      */
-    public function countGastos(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    public function getDetalleVenta(PropelPDO $con = null, $doQuery = true)
     {
-        $partial = $this->collGastosPartial && !$this->isNew();
-        if (null === $this->collGastos || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collGastos) {
-                return 0;
-            }
-
-            if($partial && !$criteria) {
-                return count($this->getGastos());
-            }
-            $query = GastoQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByCuenta($this)
-                ->count($con);
+        if ($this->aDetalleVenta === null && ($this->id_detalle !== null) && $doQuery) {
+            $this->aDetalleVenta = DetalleVentaQuery::create()->findPk($this->id_detalle, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aDetalleVenta->addEventosDetalles($this);
+             */
         }
 
-        return count($this->collGastos);
-    }
-
-    /**
-     * Method called to associate a Gasto object to this object
-     * through the Gasto foreign key attribute.
-     *
-     * @param    Gasto $l Gasto
-     * @return Cuenta The current object (for fluent API support)
-     */
-    public function addGasto(Gasto $l)
-    {
-        if ($this->collGastos === null) {
-            $this->initGastos();
-            $this->collGastosPartial = true;
-        }
-        if (!in_array($l, $this->collGastos->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
-            $this->doAddGasto($l);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param	Gasto $gasto The gasto object to add.
-     */
-    protected function doAddGasto($gasto)
-    {
-        $this->collGastos[]= $gasto;
-        $gasto->setCuenta($this);
-    }
-
-    /**
-     * @param	Gasto $gasto The gasto object to remove.
-     * @return Cuenta The current object (for fluent API support)
-     */
-    public function removeGasto($gasto)
-    {
-        if ($this->getGastos()->contains($gasto)) {
-            $this->collGastos->remove($this->collGastos->search($gasto));
-            if (null === $this->gastosScheduledForDeletion) {
-                $this->gastosScheduledForDeletion = clone $this->collGastos;
-                $this->gastosScheduledForDeletion->clear();
-            }
-            $this->gastosScheduledForDeletion[]= clone $gasto;
-            $gasto->setCuenta(null);
-        }
-
-        return $this;
+        return $this->aDetalleVenta;
     }
 
     /**
@@ -1460,18 +1320,18 @@ abstract class BaseCuenta extends BaseObject implements Persistent
      */
     public function clear()
     {
-        $this->id_cuenta = null;
-        $this->nombre_cuenta = null;
-        $this->valor_cuenta = null;
-        $this->tipo_cuenta = null;
-        $this->user_crea_cuenta = null;
-        $this->fecha_creacion_cuenta = null;
-        $this->fecha_modificacion_cuenta = null;
+        $this->id_evento = null;
+        $this->id_detalle = null;
+        $this->etiqueta_evento = null;
+        $this->fecha_evento = null;
+        $this->color_evento = null;
+        $this->email_notificacion = null;
+        $this->fecha_creacion_evento = null;
+        $this->fecha_modificacion_evento = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
-        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);
@@ -1490,19 +1350,14 @@ abstract class BaseCuenta extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
-            if ($this->collGastos) {
-                foreach ($this->collGastos as $o) {
-                    $o->clearAllReferences($deep);
-                }
+            if ($this->aDetalleVenta instanceof Persistent) {
+              $this->aDetalleVenta->clearAllReferences($deep);
             }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
-        if ($this->collGastos instanceof PropelCollection) {
-            $this->collGastos->clearIterator();
-        }
-        $this->collGastos = null;
+        $this->aDetalleVenta = null;
     }
 
     /**
@@ -1512,7 +1367,7 @@ abstract class BaseCuenta extends BaseObject implements Persistent
      */
     public function __toString()
     {
-        return (string) $this->exportTo(CuentaPeer::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(EventosDetallePeer::DEFAULT_STRING_FORMAT);
     }
 
     /**
@@ -1530,11 +1385,11 @@ abstract class BaseCuenta extends BaseObject implements Persistent
     /**
      * Mark the current object so that the update date doesn't get updated during next save
      *
-     * @return     Cuenta The current object (for fluent API support)
+     * @return     EventosDetalle The current object (for fluent API support)
      */
     public function keepUpdateDateUnchanged()
     {
-        $this->modifiedColumns[] = CuentaPeer::FECHA_MODIFICACION_CUENTA;
+        $this->modifiedColumns[] = EventosDetallePeer::FECHA_MODIFICACION_EVENTO;
 
         return $this;
     }

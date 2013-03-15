@@ -9,6 +9,9 @@ index_venta:
 show_venta:
     pattern:  /{id}/show
     defaults: { _controller: "CostoSystemBundle:Venta:show" }
+show_ventados:
+    pattern:  /{id}/show
+    defaults: { _controller: "CostoSystemBundle:Venta:show2" }
 
 new_venta:
     pattern:  /new

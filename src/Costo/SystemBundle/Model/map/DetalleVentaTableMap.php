@@ -43,6 +43,7 @@ class DetalleVentaTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id_detalle', 'IdDetalle', 'INTEGER', true, 20, null);
+        $this->addForeignKey('id_venta', 'IdVenta', 'INTEGER', 'venta', 'id', true, 20, null);
         $this->addForeignKey('id_venta_forma', 'IdVentaForma', 'INTEGER', 'venta_forma', 'id_venta_forma', true, 20, null);
         $this->addForeignKey('id_lugar_venta', 'IdLugarVenta', 'INTEGER', 'lugar_venta', 'id_lugar_venta', true, 20, null);
         $this->addForeignKey('id_forma_pago', 'IdFormaPago', 'INTEGER', 'forma_pago', 'id_forma_pago', true, 20, null);
@@ -61,9 +62,11 @@ class DetalleVentaTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Venta', 'Costo\\SystemBundle\\Model\\Venta', RelationMap::MANY_TO_ONE, array('id_venta' => 'id', ), null, null);
         $this->addRelation('VentaForma', 'Costo\\SystemBundle\\Model\\VentaForma', RelationMap::MANY_TO_ONE, array('id_venta_forma' => 'id_venta_forma', ), null, null);
         $this->addRelation('LugarVenta', 'Costo\\SystemBundle\\Model\\LugarVenta', RelationMap::MANY_TO_ONE, array('id_lugar_venta' => 'id_lugar_venta', ), null, null);
         $this->addRelation('FormaPago', 'Costo\\SystemBundle\\Model\\FormaPago', RelationMap::MANY_TO_ONE, array('id_forma_pago' => 'id_forma_pago', ), null, null);
+        $this->addRelation('EventosDetalle', 'Costo\\SystemBundle\\Model\\EventosDetalle', RelationMap::ONE_TO_MANY, array('id_detalle' => 'id_detalle', ), null, null, 'EventosDetalles');
     } // buildRelations()
 
     /**

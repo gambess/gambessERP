@@ -10,18 +10,24 @@ use \Exception;
 use \PDO;
 use \Persistent;
 use \Propel;
+use \PropelCollection;
 use \PropelDateTime;
 use \PropelException;
+use \PropelObjectCollection;
 use \PropelPDO;
 use Costo\SystemBundle\Model\DetalleVenta;
 use Costo\SystemBundle\Model\DetalleVentaPeer;
 use Costo\SystemBundle\Model\DetalleVentaQuery;
+use Costo\SystemBundle\Model\EventosDetalle;
+use Costo\SystemBundle\Model\EventosDetalleQuery;
 use Costo\SystemBundle\Model\FormaPago;
 use Costo\SystemBundle\Model\FormaPagoQuery;
 use Costo\SystemBundle\Model\LugarVenta;
 use Costo\SystemBundle\Model\LugarVentaQuery;
+use Costo\SystemBundle\Model\Venta;
 use Costo\SystemBundle\Model\VentaForma;
 use Costo\SystemBundle\Model\VentaFormaQuery;
+use Costo\SystemBundle\Model\VentaQuery;
 
 /**
  * Base class that represents a row from the 'detalle_venta' table.
@@ -56,6 +62,12 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
      * @var        int
      */
     protected $id_detalle;
+
+    /**
+     * The value for the id_venta field.
+     * @var        int
+     */
+    protected $id_venta;
 
     /**
      * The value for the id_venta_forma field.
@@ -121,6 +133,11 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
     protected $fecha_modificacion_detalle;
 
     /**
+     * @var        Venta
+     */
+    protected $aVenta;
+
+    /**
      * @var        VentaForma
      */
     protected $aVentaForma;
@@ -134,6 +151,12 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
      * @var        FormaPago
      */
     protected $aFormaPago;
+
+    /**
+     * @var        PropelObjectCollection|EventosDetalle[] Collection to store aggregation of EventosDetalle objects.
+     */
+    protected $collEventosDetalles;
+    protected $collEventosDetallesPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -154,6 +177,12 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $eventosDetallesScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -186,6 +215,16 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
     public function getIdDetalle()
     {
         return $this->id_detalle;
+    }
+
+    /**
+     * Get the [id_venta] column value.
+     *
+     * @return int
+     */
+    public function getIdVenta()
+    {
+        return $this->id_venta;
     }
 
     /**
@@ -398,6 +437,31 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
 
         return $this;
     } // setIdDetalle()
+
+    /**
+     * Set the value of [id_venta] column.
+     *
+     * @param int $v new value
+     * @return DetalleVenta The current object (for fluent API support)
+     */
+    public function setIdVenta($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->id_venta !== $v) {
+            $this->id_venta = $v;
+            $this->modifiedColumns[] = DetalleVentaPeer::ID_VENTA;
+        }
+
+        if ($this->aVenta !== null && $this->aVenta->getId() !== $v) {
+            $this->aVenta = null;
+        }
+
+
+        return $this;
+    } // setIdVenta()
 
     /**
      * Set the value of [id_venta_forma] column.
@@ -672,16 +736,17 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
         try {
 
             $this->id_detalle = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->id_venta_forma = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-            $this->id_lugar_venta = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-            $this->id_forma_pago = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
-            $this->fecha_venta = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-            $this->total_neto_venta = ($row[$startcol + 5] !== null) ? (double) $row[$startcol + 5] : null;
-            $this->total_iva_venta = ($row[$startcol + 6] !== null) ? (double) $row[$startcol + 6] : null;
-            $this->total_venta = ($row[$startcol + 7] !== null) ? (double) $row[$startcol + 7] : null;
-            $this->descripcion_venta = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
-            $this->fecha_creacion_detalle = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
-            $this->fecha_modificacion_detalle = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
+            $this->id_venta = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+            $this->id_venta_forma = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->id_lugar_venta = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+            $this->id_forma_pago = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
+            $this->fecha_venta = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+            $this->total_neto_venta = ($row[$startcol + 6] !== null) ? (double) $row[$startcol + 6] : null;
+            $this->total_iva_venta = ($row[$startcol + 7] !== null) ? (double) $row[$startcol + 7] : null;
+            $this->total_venta = ($row[$startcol + 8] !== null) ? (double) $row[$startcol + 8] : null;
+            $this->descripcion_venta = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+            $this->fecha_creacion_detalle = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
+            $this->fecha_modificacion_detalle = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -690,7 +755,7 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
                 $this->ensureConsistency();
             }
             $this->postHydrate($row, $startcol, $rehydrate);
-            return $startcol + 11; // 11 = DetalleVentaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 12; // 12 = DetalleVentaPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating DetalleVenta object", $e);
@@ -713,6 +778,9 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
+        if ($this->aVenta !== null && $this->id_venta !== $this->aVenta->getId()) {
+            $this->aVenta = null;
+        }
         if ($this->aVentaForma !== null && $this->id_venta_forma !== $this->aVentaForma->getIdVentaForma()) {
             $this->aVentaForma = null;
         }
@@ -761,9 +829,12 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aVenta = null;
             $this->aVentaForma = null;
             $this->aLugarVenta = null;
             $this->aFormaPago = null;
+            $this->collEventosDetalles = null;
+
         } // if (deep)
     }
 
@@ -893,6 +964,13 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
+            if ($this->aVenta !== null) {
+                if ($this->aVenta->isModified() || $this->aVenta->isNew()) {
+                    $affectedRows += $this->aVenta->save($con);
+                }
+                $this->setVenta($this->aVenta);
+            }
+
             if ($this->aVentaForma !== null) {
                 if ($this->aVentaForma->isModified() || $this->aVentaForma->isNew()) {
                     $affectedRows += $this->aVentaForma->save($con);
@@ -925,6 +1003,24 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
                 $this->resetModified();
             }
 
+            if ($this->eventosDetallesScheduledForDeletion !== null) {
+                if (!$this->eventosDetallesScheduledForDeletion->isEmpty()) {
+                    foreach ($this->eventosDetallesScheduledForDeletion as $eventosDetalle) {
+                        // need to save related object because we set the relation to null
+                        $eventosDetalle->save($con);
+                    }
+                    $this->eventosDetallesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collEventosDetalles !== null) {
+                foreach ($this->collEventosDetalles as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             $this->alreadyInSave = false;
 
         }
@@ -953,6 +1049,9 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(DetalleVentaPeer::ID_DETALLE)) {
             $modifiedColumns[':p' . $index++]  = '`id_detalle`';
+        }
+        if ($this->isColumnModified(DetalleVentaPeer::ID_VENTA)) {
+            $modifiedColumns[':p' . $index++]  = '`id_venta`';
         }
         if ($this->isColumnModified(DetalleVentaPeer::ID_VENTA_FORMA)) {
             $modifiedColumns[':p' . $index++]  = '`id_venta_forma`';
@@ -997,6 +1096,9 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
                 switch ($columnName) {
                     case '`id_detalle`':
                         $stmt->bindValue($identifier, $this->id_detalle, PDO::PARAM_INT);
+                        break;
+                    case '`id_venta`':
+                        $stmt->bindValue($identifier, $this->id_venta, PDO::PARAM_INT);
                         break;
                     case '`id_venta_forma`':
                         $stmt->bindValue($identifier, $this->id_venta_forma, PDO::PARAM_INT);
@@ -1127,6 +1229,12 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
+            if ($this->aVenta !== null) {
+                if (!$this->aVenta->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aVenta->getValidationFailures());
+                }
+            }
+
             if ($this->aVentaForma !== null) {
                 if (!$this->aVentaForma->validate($columns)) {
                     $failureMap = array_merge($failureMap, $this->aVentaForma->getValidationFailures());
@@ -1150,6 +1258,14 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
                 $failureMap = array_merge($failureMap, $retval);
             }
 
+
+                if ($this->collEventosDetalles !== null) {
+                    foreach ($this->collEventosDetalles as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
 
 
             $this->alreadyInValidation = false;
@@ -1190,33 +1306,36 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
                 return $this->getIdDetalle();
                 break;
             case 1:
-                return $this->getIdVentaForma();
+                return $this->getIdVenta();
                 break;
             case 2:
-                return $this->getIdLugarVenta();
+                return $this->getIdVentaForma();
                 break;
             case 3:
-                return $this->getIdFormaPago();
+                return $this->getIdLugarVenta();
                 break;
             case 4:
-                return $this->getFechaVenta();
+                return $this->getIdFormaPago();
                 break;
             case 5:
-                return $this->getTotalNetoVenta();
+                return $this->getFechaVenta();
                 break;
             case 6:
-                return $this->getTotalIvaVenta();
+                return $this->getTotalNetoVenta();
                 break;
             case 7:
-                return $this->getTotalVenta();
+                return $this->getTotalIvaVenta();
                 break;
             case 8:
-                return $this->getDescripcionVenta();
+                return $this->getTotalVenta();
                 break;
             case 9:
-                return $this->getFechaCreacionDetalle();
+                return $this->getDescripcionVenta();
                 break;
             case 10:
+                return $this->getFechaCreacionDetalle();
+                break;
+            case 11:
                 return $this->getFechaModificacionDetalle();
                 break;
             default:
@@ -1249,18 +1368,22 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
         $keys = DetalleVentaPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getIdDetalle(),
-            $keys[1] => $this->getIdVentaForma(),
-            $keys[2] => $this->getIdLugarVenta(),
-            $keys[3] => $this->getIdFormaPago(),
-            $keys[4] => $this->getFechaVenta(),
-            $keys[5] => $this->getTotalNetoVenta(),
-            $keys[6] => $this->getTotalIvaVenta(),
-            $keys[7] => $this->getTotalVenta(),
-            $keys[8] => $this->getDescripcionVenta(),
-            $keys[9] => $this->getFechaCreacionDetalle(),
-            $keys[10] => $this->getFechaModificacionDetalle(),
+            $keys[1] => $this->getIdVenta(),
+            $keys[2] => $this->getIdVentaForma(),
+            $keys[3] => $this->getIdLugarVenta(),
+            $keys[4] => $this->getIdFormaPago(),
+            $keys[5] => $this->getFechaVenta(),
+            $keys[6] => $this->getTotalNetoVenta(),
+            $keys[7] => $this->getTotalIvaVenta(),
+            $keys[8] => $this->getTotalVenta(),
+            $keys[9] => $this->getDescripcionVenta(),
+            $keys[10] => $this->getFechaCreacionDetalle(),
+            $keys[11] => $this->getFechaModificacionDetalle(),
         );
         if ($includeForeignObjects) {
+            if (null !== $this->aVenta) {
+                $result['Venta'] = $this->aVenta->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->aVentaForma) {
                 $result['VentaForma'] = $this->aVentaForma->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
@@ -1269,6 +1392,9 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
             }
             if (null !== $this->aFormaPago) {
                 $result['FormaPago'] = $this->aFormaPago->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collEventosDetalles) {
+                $result['EventosDetalles'] = $this->collEventosDetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1308,33 +1434,36 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
                 $this->setIdDetalle($value);
                 break;
             case 1:
-                $this->setIdVentaForma($value);
+                $this->setIdVenta($value);
                 break;
             case 2:
-                $this->setIdLugarVenta($value);
+                $this->setIdVentaForma($value);
                 break;
             case 3:
-                $this->setIdFormaPago($value);
+                $this->setIdLugarVenta($value);
                 break;
             case 4:
-                $this->setFechaVenta($value);
+                $this->setIdFormaPago($value);
                 break;
             case 5:
-                $this->setTotalNetoVenta($value);
+                $this->setFechaVenta($value);
                 break;
             case 6:
-                $this->setTotalIvaVenta($value);
+                $this->setTotalNetoVenta($value);
                 break;
             case 7:
-                $this->setTotalVenta($value);
+                $this->setTotalIvaVenta($value);
                 break;
             case 8:
-                $this->setDescripcionVenta($value);
+                $this->setTotalVenta($value);
                 break;
             case 9:
-                $this->setFechaCreacionDetalle($value);
+                $this->setDescripcionVenta($value);
                 break;
             case 10:
+                $this->setFechaCreacionDetalle($value);
+                break;
+            case 11:
                 $this->setFechaModificacionDetalle($value);
                 break;
         } // switch()
@@ -1362,16 +1491,17 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
         $keys = DetalleVentaPeer::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) $this->setIdDetalle($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setIdVentaForma($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setIdLugarVenta($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setIdFormaPago($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setFechaVenta($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setTotalNetoVenta($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setTotalIvaVenta($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setTotalVenta($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setDescripcionVenta($arr[$keys[8]]);
-        if (array_key_exists($keys[9], $arr)) $this->setFechaCreacionDetalle($arr[$keys[9]]);
-        if (array_key_exists($keys[10], $arr)) $this->setFechaModificacionDetalle($arr[$keys[10]]);
+        if (array_key_exists($keys[1], $arr)) $this->setIdVenta($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setIdVentaForma($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setIdLugarVenta($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setIdFormaPago($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setFechaVenta($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setTotalNetoVenta($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setTotalIvaVenta($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setTotalVenta($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setDescripcionVenta($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setFechaCreacionDetalle($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setFechaModificacionDetalle($arr[$keys[11]]);
     }
 
     /**
@@ -1384,6 +1514,7 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
         $criteria = new Criteria(DetalleVentaPeer::DATABASE_NAME);
 
         if ($this->isColumnModified(DetalleVentaPeer::ID_DETALLE)) $criteria->add(DetalleVentaPeer::ID_DETALLE, $this->id_detalle);
+        if ($this->isColumnModified(DetalleVentaPeer::ID_VENTA)) $criteria->add(DetalleVentaPeer::ID_VENTA, $this->id_venta);
         if ($this->isColumnModified(DetalleVentaPeer::ID_VENTA_FORMA)) $criteria->add(DetalleVentaPeer::ID_VENTA_FORMA, $this->id_venta_forma);
         if ($this->isColumnModified(DetalleVentaPeer::ID_LUGAR_VENTA)) $criteria->add(DetalleVentaPeer::ID_LUGAR_VENTA, $this->id_lugar_venta);
         if ($this->isColumnModified(DetalleVentaPeer::ID_FORMA_PAGO)) $criteria->add(DetalleVentaPeer::ID_FORMA_PAGO, $this->id_forma_pago);
@@ -1457,6 +1588,7 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
+        $copyObj->setIdVenta($this->getIdVenta());
         $copyObj->setIdVentaForma($this->getIdVentaForma());
         $copyObj->setIdLugarVenta($this->getIdLugarVenta());
         $copyObj->setIdFormaPago($this->getIdFormaPago());
@@ -1474,6 +1606,12 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
             $copyObj->setNew(false);
             // store object hash to prevent cycle
             $this->startCopy = true;
+
+            foreach ($this->getEventosDetalles() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addEventosDetalle($relObj->copy($deepCopy));
+                }
+            }
 
             //unflag object copy
             $this->startCopy = false;
@@ -1523,6 +1661,58 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
         }
 
         return self::$peer;
+    }
+
+    /**
+     * Declares an association between this object and a Venta object.
+     *
+     * @param             Venta $v
+     * @return DetalleVenta The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setVenta(Venta $v = null)
+    {
+        if ($v === null) {
+            $this->setIdVenta(NULL);
+        } else {
+            $this->setIdVenta($v->getId());
+        }
+
+        $this->aVenta = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Venta object, it will not be re-added.
+        if ($v !== null) {
+            $v->addDetalleVenta($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Venta object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Venta The associated Venta object.
+     * @throws PropelException
+     */
+    public function getVenta(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aVenta === null && ($this->id_venta !== null) && $doQuery) {
+            $this->aVenta = VentaQuery::create()->findPk($this->id_venta, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aVenta->addDetalleVentas($this);
+             */
+        }
+
+        return $this->aVenta;
     }
 
     /**
@@ -1681,12 +1871,248 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
         return $this->aFormaPago;
     }
 
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('EventosDetalle' == $relationName) {
+            $this->initEventosDetalles();
+        }
+    }
+
+    /**
+     * Clears out the collEventosDetalles collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return DetalleVenta The current object (for fluent API support)
+     * @see        addEventosDetalles()
+     */
+    public function clearEventosDetalles()
+    {
+        $this->collEventosDetalles = null; // important to set this to null since that means it is uninitialized
+        $this->collEventosDetallesPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collEventosDetalles collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialEventosDetalles($v = true)
+    {
+        $this->collEventosDetallesPartial = $v;
+    }
+
+    /**
+     * Initializes the collEventosDetalles collection.
+     *
+     * By default this just sets the collEventosDetalles collection to an empty array (like clearcollEventosDetalles());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initEventosDetalles($overrideExisting = true)
+    {
+        if (null !== $this->collEventosDetalles && !$overrideExisting) {
+            return;
+        }
+        $this->collEventosDetalles = new PropelObjectCollection();
+        $this->collEventosDetalles->setModel('EventosDetalle');
+    }
+
+    /**
+     * Gets an array of EventosDetalle objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this DetalleVenta is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|EventosDetalle[] List of EventosDetalle objects
+     * @throws PropelException
+     */
+    public function getEventosDetalles($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collEventosDetallesPartial && !$this->isNew();
+        if (null === $this->collEventosDetalles || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collEventosDetalles) {
+                // return empty collection
+                $this->initEventosDetalles();
+            } else {
+                $collEventosDetalles = EventosDetalleQuery::create(null, $criteria)
+                    ->filterByDetalleVenta($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collEventosDetallesPartial && count($collEventosDetalles)) {
+                      $this->initEventosDetalles(false);
+
+                      foreach($collEventosDetalles as $obj) {
+                        if (false == $this->collEventosDetalles->contains($obj)) {
+                          $this->collEventosDetalles->append($obj);
+                        }
+                      }
+
+                      $this->collEventosDetallesPartial = true;
+                    }
+
+                    $collEventosDetalles->getInternalIterator()->rewind();
+                    return $collEventosDetalles;
+                }
+
+                if($partial && $this->collEventosDetalles) {
+                    foreach($this->collEventosDetalles as $obj) {
+                        if($obj->isNew()) {
+                            $collEventosDetalles[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collEventosDetalles = $collEventosDetalles;
+                $this->collEventosDetallesPartial = false;
+            }
+        }
+
+        return $this->collEventosDetalles;
+    }
+
+    /**
+     * Sets a collection of EventosDetalle objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $eventosDetalles A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return DetalleVenta The current object (for fluent API support)
+     */
+    public function setEventosDetalles(PropelCollection $eventosDetalles, PropelPDO $con = null)
+    {
+        $eventosDetallesToDelete = $this->getEventosDetalles(new Criteria(), $con)->diff($eventosDetalles);
+
+
+        $this->eventosDetallesScheduledForDeletion = $eventosDetallesToDelete;
+
+        foreach ($eventosDetallesToDelete as $eventosDetalleRemoved) {
+            $eventosDetalleRemoved->setDetalleVenta(null);
+        }
+
+        $this->collEventosDetalles = null;
+        foreach ($eventosDetalles as $eventosDetalle) {
+            $this->addEventosDetalle($eventosDetalle);
+        }
+
+        $this->collEventosDetalles = $eventosDetalles;
+        $this->collEventosDetallesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related EventosDetalle objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related EventosDetalle objects.
+     * @throws PropelException
+     */
+    public function countEventosDetalles(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collEventosDetallesPartial && !$this->isNew();
+        if (null === $this->collEventosDetalles || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collEventosDetalles) {
+                return 0;
+            }
+
+            if($partial && !$criteria) {
+                return count($this->getEventosDetalles());
+            }
+            $query = EventosDetalleQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByDetalleVenta($this)
+                ->count($con);
+        }
+
+        return count($this->collEventosDetalles);
+    }
+
+    /**
+     * Method called to associate a EventosDetalle object to this object
+     * through the EventosDetalle foreign key attribute.
+     *
+     * @param    EventosDetalle $l EventosDetalle
+     * @return DetalleVenta The current object (for fluent API support)
+     */
+    public function addEventosDetalle(EventosDetalle $l)
+    {
+        if ($this->collEventosDetalles === null) {
+            $this->initEventosDetalles();
+            $this->collEventosDetallesPartial = true;
+        }
+        if (!in_array($l, $this->collEventosDetalles->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddEventosDetalle($l);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	EventosDetalle $eventosDetalle The eventosDetalle object to add.
+     */
+    protected function doAddEventosDetalle($eventosDetalle)
+    {
+        $this->collEventosDetalles[]= $eventosDetalle;
+        $eventosDetalle->setDetalleVenta($this);
+    }
+
+    /**
+     * @param	EventosDetalle $eventosDetalle The eventosDetalle object to remove.
+     * @return DetalleVenta The current object (for fluent API support)
+     */
+    public function removeEventosDetalle($eventosDetalle)
+    {
+        if ($this->getEventosDetalles()->contains($eventosDetalle)) {
+            $this->collEventosDetalles->remove($this->collEventosDetalles->search($eventosDetalle));
+            if (null === $this->eventosDetallesScheduledForDeletion) {
+                $this->eventosDetallesScheduledForDeletion = clone $this->collEventosDetalles;
+                $this->eventosDetallesScheduledForDeletion->clear();
+            }
+            $this->eventosDetallesScheduledForDeletion[]= clone $eventosDetalle;
+            $eventosDetalle->setDetalleVenta(null);
+        }
+
+        return $this;
+    }
+
     /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
     {
         $this->id_detalle = null;
+        $this->id_venta = null;
         $this->id_venta_forma = null;
         $this->id_lugar_venta = null;
         $this->id_forma_pago = null;
@@ -1720,6 +2146,14 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collEventosDetalles) {
+                foreach ($this->collEventosDetalles as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->aVenta instanceof Persistent) {
+              $this->aVenta->clearAllReferences($deep);
+            }
             if ($this->aVentaForma instanceof Persistent) {
               $this->aVentaForma->clearAllReferences($deep);
             }
@@ -1733,6 +2167,11 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collEventosDetalles instanceof PropelCollection) {
+            $this->collEventosDetalles->clearIterator();
+        }
+        $this->collEventosDetalles = null;
+        $this->aVenta = null;
         $this->aVentaForma = null;
         $this->aLugarVenta = null;
         $this->aFormaPago = null;

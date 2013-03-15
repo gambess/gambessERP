@@ -9,6 +9,7 @@ use Costo\SystemBundle\Model\DetalleVentaQuery;
 use Costo\SystemBundle\Model\Venta;
 use Costo\SystemBundle\Model\VentaQuery;
 use Costo\SystemBundle\Form\Type\DetalleVentaType;
+use Costo\SystemBundle\Form\Type\VentaType;
 use Symfony\Component\Form\FormError;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\PropelAdapter;
@@ -83,10 +84,10 @@ class VentaController extends Controller {
      * @return Response view
      */
     public function newAction() {
-        $venta = new DetalleVenta();
-        $form = $this->createForm(new DetalleVentaType(), $venta);
+        $venta = new Venta();
+        $form = $this->createForm(new VentaType(), $venta);
 
-        return $this->render('CostoSystemBundle:Venta:new.html.twig', array(
+        return $this->render('CostoSystemBundle:Venta:new2.html.twig', array(
             'errors' => null,
             'venta' => $venta,
             'form' => $form->createView()
@@ -100,18 +101,22 @@ class VentaController extends Controller {
      * @return mixed, Si es valido se muestra la venta creada en caso contrario exije validacion
      */
     public function createAction() {
-        $venta = new DetalleVenta();
+        $venta = new Venta();
         $request = $this->getRequest();
-        $form = $this->createForm(new DetalleVentaType(), $venta);
+        $form = $this->createForm(new VentaType(), $venta);
         $form->bindRequest($request);
-
+        $datas =  $form->getData();
+        echo "<pre>";
+        print_r($datas);
+        echo "</pre>";
+        
         //no es valido completamente hasta validar que la fecha no este ingresada
-        if ($form->isValid()) {
+//        if ($form->isValid()) {
             //$venta_in = $form->get('fecha_venta')->getData();
             //$exist = VentaQuery::create()->findOneByFechaVenta($venta_in);
             //if (null === $exist) {
                 $venta->save();
-                return $this->redirect($this->generateUrl('show_venta', array('id' => $venta->getIdDetalle())));
+                return $this->redirect($this->generateUrl('show_ventados', array('id' => $venta->getId())));
             //}
 //            if ($exist instanceof Venta) {
 //                $form->addError(new FormError('¡EXISTE VENTA! Seleccione otro día por favor y grabe.'));
@@ -121,7 +126,7 @@ class VentaController extends Controller {
 //                    'form' => $form->createView()
 //                ));
 //            }
-        }
+//        }
     }
 
     /**

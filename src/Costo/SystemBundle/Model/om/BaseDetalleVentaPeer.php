@@ -14,6 +14,7 @@ use Costo\SystemBundle\Model\DetalleVentaPeer;
 use Costo\SystemBundle\Model\FormaPagoPeer;
 use Costo\SystemBundle\Model\LugarVentaPeer;
 use Costo\SystemBundle\Model\VentaFormaPeer;
+use Costo\SystemBundle\Model\VentaPeer;
 use Costo\SystemBundle\Model\map\DetalleVentaTableMap;
 
 /**
@@ -39,16 +40,19 @@ abstract class BaseDetalleVentaPeer
     const TM_CLASS = 'DetalleVentaTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 11;
+    const NUM_COLUMNS = 12;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 11;
+    const NUM_HYDRATE_COLUMNS = 12;
 
     /** the column name for the id_detalle field */
     const ID_DETALLE = 'detalle_venta.id_detalle';
+
+    /** the column name for the id_venta field */
+    const ID_VENTA = 'detalle_venta.id_venta';
 
     /** the column name for the id_venta_forma field */
     const ID_VENTA_FORMA = 'detalle_venta.id_venta_forma';
@@ -99,12 +103,12 @@ abstract class BaseDetalleVentaPeer
      * e.g. DetalleVentaPeer::$fieldNames[DetalleVentaPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('IdDetalle', 'IdVentaForma', 'IdLugarVenta', 'IdFormaPago', 'FechaVenta', 'TotalNetoVenta', 'TotalIvaVenta', 'TotalVenta', 'DescripcionVenta', 'FechaCreacionDetalle', 'FechaModificacionDetalle', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idDetalle', 'idVentaForma', 'idLugarVenta', 'idFormaPago', 'fechaVenta', 'totalNetoVenta', 'totalIvaVenta', 'totalVenta', 'descripcionVenta', 'fechaCreacionDetalle', 'fechaModificacionDetalle', ),
-        BasePeer::TYPE_COLNAME => array (DetalleVentaPeer::ID_DETALLE, DetalleVentaPeer::ID_VENTA_FORMA, DetalleVentaPeer::ID_LUGAR_VENTA, DetalleVentaPeer::ID_FORMA_PAGO, DetalleVentaPeer::FECHA_VENTA, DetalleVentaPeer::TOTAL_NETO_VENTA, DetalleVentaPeer::TOTAL_IVA_VENTA, DetalleVentaPeer::TOTAL_VENTA, DetalleVentaPeer::DESCRIPCION_VENTA, DetalleVentaPeer::FECHA_CREACION_DETALLE, DetalleVentaPeer::FECHA_MODIFICACION_DETALLE, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID_DETALLE', 'ID_VENTA_FORMA', 'ID_LUGAR_VENTA', 'ID_FORMA_PAGO', 'FECHA_VENTA', 'TOTAL_NETO_VENTA', 'TOTAL_IVA_VENTA', 'TOTAL_VENTA', 'DESCRIPCION_VENTA', 'FECHA_CREACION_DETALLE', 'FECHA_MODIFICACION_DETALLE', ),
-        BasePeer::TYPE_FIELDNAME => array ('id_detalle', 'id_venta_forma', 'id_lugar_venta', 'id_forma_pago', 'fecha_venta', 'total_neto_venta', 'total_iva_venta', 'total_venta', 'descripcion_venta', 'fecha_creacion_detalle', 'fecha_modificacion_detalle', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        BasePeer::TYPE_PHPNAME => array ('IdDetalle', 'IdVenta', 'IdVentaForma', 'IdLugarVenta', 'IdFormaPago', 'FechaVenta', 'TotalNetoVenta', 'TotalIvaVenta', 'TotalVenta', 'DescripcionVenta', 'FechaCreacionDetalle', 'FechaModificacionDetalle', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idDetalle', 'idVenta', 'idVentaForma', 'idLugarVenta', 'idFormaPago', 'fechaVenta', 'totalNetoVenta', 'totalIvaVenta', 'totalVenta', 'descripcionVenta', 'fechaCreacionDetalle', 'fechaModificacionDetalle', ),
+        BasePeer::TYPE_COLNAME => array (DetalleVentaPeer::ID_DETALLE, DetalleVentaPeer::ID_VENTA, DetalleVentaPeer::ID_VENTA_FORMA, DetalleVentaPeer::ID_LUGAR_VENTA, DetalleVentaPeer::ID_FORMA_PAGO, DetalleVentaPeer::FECHA_VENTA, DetalleVentaPeer::TOTAL_NETO_VENTA, DetalleVentaPeer::TOTAL_IVA_VENTA, DetalleVentaPeer::TOTAL_VENTA, DetalleVentaPeer::DESCRIPCION_VENTA, DetalleVentaPeer::FECHA_CREACION_DETALLE, DetalleVentaPeer::FECHA_MODIFICACION_DETALLE, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID_DETALLE', 'ID_VENTA', 'ID_VENTA_FORMA', 'ID_LUGAR_VENTA', 'ID_FORMA_PAGO', 'FECHA_VENTA', 'TOTAL_NETO_VENTA', 'TOTAL_IVA_VENTA', 'TOTAL_VENTA', 'DESCRIPCION_VENTA', 'FECHA_CREACION_DETALLE', 'FECHA_MODIFICACION_DETALLE', ),
+        BasePeer::TYPE_FIELDNAME => array ('id_detalle', 'id_venta', 'id_venta_forma', 'id_lugar_venta', 'id_forma_pago', 'fecha_venta', 'total_neto_venta', 'total_iva_venta', 'total_venta', 'descripcion_venta', 'fecha_creacion_detalle', 'fecha_modificacion_detalle', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
     );
 
     /**
@@ -114,12 +118,12 @@ abstract class BaseDetalleVentaPeer
      * e.g. DetalleVentaPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('IdDetalle' => 0, 'IdVentaForma' => 1, 'IdLugarVenta' => 2, 'IdFormaPago' => 3, 'FechaVenta' => 4, 'TotalNetoVenta' => 5, 'TotalIvaVenta' => 6, 'TotalVenta' => 7, 'DescripcionVenta' => 8, 'FechaCreacionDetalle' => 9, 'FechaModificacionDetalle' => 10, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idDetalle' => 0, 'idVentaForma' => 1, 'idLugarVenta' => 2, 'idFormaPago' => 3, 'fechaVenta' => 4, 'totalNetoVenta' => 5, 'totalIvaVenta' => 6, 'totalVenta' => 7, 'descripcionVenta' => 8, 'fechaCreacionDetalle' => 9, 'fechaModificacionDetalle' => 10, ),
-        BasePeer::TYPE_COLNAME => array (DetalleVentaPeer::ID_DETALLE => 0, DetalleVentaPeer::ID_VENTA_FORMA => 1, DetalleVentaPeer::ID_LUGAR_VENTA => 2, DetalleVentaPeer::ID_FORMA_PAGO => 3, DetalleVentaPeer::FECHA_VENTA => 4, DetalleVentaPeer::TOTAL_NETO_VENTA => 5, DetalleVentaPeer::TOTAL_IVA_VENTA => 6, DetalleVentaPeer::TOTAL_VENTA => 7, DetalleVentaPeer::DESCRIPCION_VENTA => 8, DetalleVentaPeer::FECHA_CREACION_DETALLE => 9, DetalleVentaPeer::FECHA_MODIFICACION_DETALLE => 10, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID_DETALLE' => 0, 'ID_VENTA_FORMA' => 1, 'ID_LUGAR_VENTA' => 2, 'ID_FORMA_PAGO' => 3, 'FECHA_VENTA' => 4, 'TOTAL_NETO_VENTA' => 5, 'TOTAL_IVA_VENTA' => 6, 'TOTAL_VENTA' => 7, 'DESCRIPCION_VENTA' => 8, 'FECHA_CREACION_DETALLE' => 9, 'FECHA_MODIFICACION_DETALLE' => 10, ),
-        BasePeer::TYPE_FIELDNAME => array ('id_detalle' => 0, 'id_venta_forma' => 1, 'id_lugar_venta' => 2, 'id_forma_pago' => 3, 'fecha_venta' => 4, 'total_neto_venta' => 5, 'total_iva_venta' => 6, 'total_venta' => 7, 'descripcion_venta' => 8, 'fecha_creacion_detalle' => 9, 'fecha_modificacion_detalle' => 10, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        BasePeer::TYPE_PHPNAME => array ('IdDetalle' => 0, 'IdVenta' => 1, 'IdVentaForma' => 2, 'IdLugarVenta' => 3, 'IdFormaPago' => 4, 'FechaVenta' => 5, 'TotalNetoVenta' => 6, 'TotalIvaVenta' => 7, 'TotalVenta' => 8, 'DescripcionVenta' => 9, 'FechaCreacionDetalle' => 10, 'FechaModificacionDetalle' => 11, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idDetalle' => 0, 'idVenta' => 1, 'idVentaForma' => 2, 'idLugarVenta' => 3, 'idFormaPago' => 4, 'fechaVenta' => 5, 'totalNetoVenta' => 6, 'totalIvaVenta' => 7, 'totalVenta' => 8, 'descripcionVenta' => 9, 'fechaCreacionDetalle' => 10, 'fechaModificacionDetalle' => 11, ),
+        BasePeer::TYPE_COLNAME => array (DetalleVentaPeer::ID_DETALLE => 0, DetalleVentaPeer::ID_VENTA => 1, DetalleVentaPeer::ID_VENTA_FORMA => 2, DetalleVentaPeer::ID_LUGAR_VENTA => 3, DetalleVentaPeer::ID_FORMA_PAGO => 4, DetalleVentaPeer::FECHA_VENTA => 5, DetalleVentaPeer::TOTAL_NETO_VENTA => 6, DetalleVentaPeer::TOTAL_IVA_VENTA => 7, DetalleVentaPeer::TOTAL_VENTA => 8, DetalleVentaPeer::DESCRIPCION_VENTA => 9, DetalleVentaPeer::FECHA_CREACION_DETALLE => 10, DetalleVentaPeer::FECHA_MODIFICACION_DETALLE => 11, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID_DETALLE' => 0, 'ID_VENTA' => 1, 'ID_VENTA_FORMA' => 2, 'ID_LUGAR_VENTA' => 3, 'ID_FORMA_PAGO' => 4, 'FECHA_VENTA' => 5, 'TOTAL_NETO_VENTA' => 6, 'TOTAL_IVA_VENTA' => 7, 'TOTAL_VENTA' => 8, 'DESCRIPCION_VENTA' => 9, 'FECHA_CREACION_DETALLE' => 10, 'FECHA_MODIFICACION_DETALLE' => 11, ),
+        BasePeer::TYPE_FIELDNAME => array ('id_detalle' => 0, 'id_venta' => 1, 'id_venta_forma' => 2, 'id_lugar_venta' => 3, 'id_forma_pago' => 4, 'fecha_venta' => 5, 'total_neto_venta' => 6, 'total_iva_venta' => 7, 'total_venta' => 8, 'descripcion_venta' => 9, 'fecha_creacion_detalle' => 10, 'fecha_modificacion_detalle' => 11, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
     );
 
     /**
@@ -194,6 +198,7 @@ abstract class BaseDetalleVentaPeer
     {
         if (null === $alias) {
             $criteria->addSelectColumn(DetalleVentaPeer::ID_DETALLE);
+            $criteria->addSelectColumn(DetalleVentaPeer::ID_VENTA);
             $criteria->addSelectColumn(DetalleVentaPeer::ID_VENTA_FORMA);
             $criteria->addSelectColumn(DetalleVentaPeer::ID_LUGAR_VENTA);
             $criteria->addSelectColumn(DetalleVentaPeer::ID_FORMA_PAGO);
@@ -206,6 +211,7 @@ abstract class BaseDetalleVentaPeer
             $criteria->addSelectColumn(DetalleVentaPeer::FECHA_MODIFICACION_DETALLE);
         } else {
             $criteria->addSelectColumn($alias . '.id_detalle');
+            $criteria->addSelectColumn($alias . '.id_venta');
             $criteria->addSelectColumn($alias . '.id_venta_forma');
             $criteria->addSelectColumn($alias . '.id_lugar_venta');
             $criteria->addSelectColumn($alias . '.id_forma_pago');
@@ -520,6 +526,57 @@ abstract class BaseDetalleVentaPeer
 
 
     /**
+     * Returns the number of rows matching criteria, joining the related Venta table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinVenta(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(DetalleVentaPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            DetalleVentaPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(DetalleVentaPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(DetalleVentaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(DetalleVentaPeer::ID_VENTA, VentaPeer::ID, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
      * Returns the number of rows matching criteria, joining the related VentaForma table
      *
      * @param      Criteria $criteria
@@ -669,6 +726,73 @@ abstract class BaseDetalleVentaPeer
         $stmt->closeCursor();
 
         return $count;
+    }
+
+
+    /**
+     * Selects a collection of DetalleVenta objects pre-filled with their Venta objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of DetalleVenta objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinVenta(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(DetalleVentaPeer::DATABASE_NAME);
+        }
+
+        DetalleVentaPeer::addSelectColumns($criteria);
+        $startcol = DetalleVentaPeer::NUM_HYDRATE_COLUMNS;
+        VentaPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(DetalleVentaPeer::ID_VENTA, VentaPeer::ID, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = DetalleVentaPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = DetalleVentaPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = DetalleVentaPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                DetalleVentaPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = VentaPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = VentaPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = VentaPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    VentaPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (DetalleVenta) to $obj2 (Venta)
+                $obj2->addDetalleVenta($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
     }
 
 
@@ -909,6 +1033,8 @@ abstract class BaseDetalleVentaPeer
             $con = Propel::getConnection(DetalleVentaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
+        $criteria->addJoin(DetalleVentaPeer::ID_VENTA, VentaPeer::ID, $join_behavior);
+
         $criteria->addJoin(DetalleVentaPeer::ID_VENTA_FORMA, VentaFormaPeer::ID_VENTA_FORMA, $join_behavior);
 
         $criteria->addJoin(DetalleVentaPeer::ID_LUGAR_VENTA, LugarVentaPeer::ID_LUGAR_VENTA, $join_behavior);
@@ -949,14 +1075,19 @@ abstract class BaseDetalleVentaPeer
         DetalleVentaPeer::addSelectColumns($criteria);
         $startcol2 = DetalleVentaPeer::NUM_HYDRATE_COLUMNS;
 
+        VentaPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + VentaPeer::NUM_HYDRATE_COLUMNS;
+
         VentaFormaPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + VentaFormaPeer::NUM_HYDRATE_COLUMNS;
+        $startcol4 = $startcol3 + VentaFormaPeer::NUM_HYDRATE_COLUMNS;
 
         LugarVentaPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + LugarVentaPeer::NUM_HYDRATE_COLUMNS;
+        $startcol5 = $startcol4 + LugarVentaPeer::NUM_HYDRATE_COLUMNS;
 
         FormaPagoPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + FormaPagoPeer::NUM_HYDRATE_COLUMNS;
+        $startcol6 = $startcol5 + FormaPagoPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(DetalleVentaPeer::ID_VENTA, VentaPeer::ID, $join_behavior);
 
         $criteria->addJoin(DetalleVentaPeer::ID_VENTA_FORMA, VentaFormaPeer::ID_VENTA_FORMA, $join_behavior);
 
@@ -981,58 +1112,76 @@ abstract class BaseDetalleVentaPeer
                 DetalleVentaPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
-            // Add objects for joined VentaForma rows
+            // Add objects for joined Venta rows
 
-            $key2 = VentaFormaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+            $key2 = VentaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
             if ($key2 !== null) {
-                $obj2 = VentaFormaPeer::getInstanceFromPool($key2);
+                $obj2 = VentaPeer::getInstanceFromPool($key2);
                 if (!$obj2) {
 
-                    $cls = VentaFormaPeer::getOMClass();
+                    $cls = VentaPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol2);
-                    VentaFormaPeer::addInstanceToPool($obj2, $key2);
+                    VentaPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 loaded
 
-                // Add the $obj1 (DetalleVenta) to the collection in $obj2 (VentaForma)
+                // Add the $obj1 (DetalleVenta) to the collection in $obj2 (Venta)
                 $obj2->addDetalleVenta($obj1);
+            } // if joined row not null
+
+            // Add objects for joined VentaForma rows
+
+            $key3 = VentaFormaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+            if ($key3 !== null) {
+                $obj3 = VentaFormaPeer::getInstanceFromPool($key3);
+                if (!$obj3) {
+
+                    $cls = VentaFormaPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    VentaFormaPeer::addInstanceToPool($obj3, $key3);
+                } // if obj3 loaded
+
+                // Add the $obj1 (DetalleVenta) to the collection in $obj3 (VentaForma)
+                $obj3->addDetalleVenta($obj1);
             } // if joined row not null
 
             // Add objects for joined LugarVenta rows
 
-            $key3 = LugarVentaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-            if ($key3 !== null) {
-                $obj3 = LugarVentaPeer::getInstanceFromPool($key3);
-                if (!$obj3) {
+            $key4 = LugarVentaPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+            if ($key4 !== null) {
+                $obj4 = LugarVentaPeer::getInstanceFromPool($key4);
+                if (!$obj4) {
 
                     $cls = LugarVentaPeer::getOMClass();
 
-                    $obj3 = new $cls();
-                    $obj3->hydrate($row, $startcol3);
-                    LugarVentaPeer::addInstanceToPool($obj3, $key3);
-                } // if obj3 loaded
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    LugarVentaPeer::addInstanceToPool($obj4, $key4);
+                } // if obj4 loaded
 
-                // Add the $obj1 (DetalleVenta) to the collection in $obj3 (LugarVenta)
-                $obj3->addDetalleVenta($obj1);
+                // Add the $obj1 (DetalleVenta) to the collection in $obj4 (LugarVenta)
+                $obj4->addDetalleVenta($obj1);
             } // if joined row not null
 
             // Add objects for joined FormaPago rows
 
-            $key4 = FormaPagoPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-            if ($key4 !== null) {
-                $obj4 = FormaPagoPeer::getInstanceFromPool($key4);
-                if (!$obj4) {
+            $key5 = FormaPagoPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+            if ($key5 !== null) {
+                $obj5 = FormaPagoPeer::getInstanceFromPool($key5);
+                if (!$obj5) {
 
                     $cls = FormaPagoPeer::getOMClass();
 
-                    $obj4 = new $cls();
-                    $obj4->hydrate($row, $startcol4);
-                    FormaPagoPeer::addInstanceToPool($obj4, $key4);
-                } // if obj4 loaded
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    FormaPagoPeer::addInstanceToPool($obj5, $key5);
+                } // if obj5 loaded
 
-                // Add the $obj1 (DetalleVenta) to the collection in $obj4 (FormaPago)
-                $obj4->addDetalleVenta($obj1);
+                // Add the $obj1 (DetalleVenta) to the collection in $obj5 (FormaPago)
+                $obj5->addDetalleVenta($obj1);
             } // if joined row not null
 
             $results[] = $obj1;
@@ -1040,6 +1189,61 @@ abstract class BaseDetalleVentaPeer
         $stmt->closeCursor();
 
         return $results;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Venta table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptVenta(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(DetalleVentaPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            DetalleVentaPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(DetalleVentaPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(DetalleVentaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(DetalleVentaPeer::ID_VENTA_FORMA, VentaFormaPeer::ID_VENTA_FORMA, $join_behavior);
+
+        $criteria->addJoin(DetalleVentaPeer::ID_LUGAR_VENTA, LugarVentaPeer::ID_LUGAR_VENTA, $join_behavior);
+
+        $criteria->addJoin(DetalleVentaPeer::ID_FORMA_PAGO, FormaPagoPeer::ID_FORMA_PAGO, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
     }
 
 
@@ -1078,6 +1282,8 @@ abstract class BaseDetalleVentaPeer
         if ($con === null) {
             $con = Propel::getConnection(DetalleVentaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
+
+        $criteria->addJoin(DetalleVentaPeer::ID_VENTA, VentaPeer::ID, $join_behavior);
 
         $criteria->addJoin(DetalleVentaPeer::ID_LUGAR_VENTA, LugarVentaPeer::ID_LUGAR_VENTA, $join_behavior);
 
@@ -1132,6 +1338,8 @@ abstract class BaseDetalleVentaPeer
             $con = Propel::getConnection(DetalleVentaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
+        $criteria->addJoin(DetalleVentaPeer::ID_VENTA, VentaPeer::ID, $join_behavior);
+
         $criteria->addJoin(DetalleVentaPeer::ID_VENTA_FORMA, VentaFormaPeer::ID_VENTA_FORMA, $join_behavior);
 
         $criteria->addJoin(DetalleVentaPeer::ID_FORMA_PAGO, FormaPagoPeer::ID_FORMA_PAGO, $join_behavior);
@@ -1185,6 +1393,8 @@ abstract class BaseDetalleVentaPeer
             $con = Propel::getConnection(DetalleVentaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
+        $criteria->addJoin(DetalleVentaPeer::ID_VENTA, VentaPeer::ID, $join_behavior);
+
         $criteria->addJoin(DetalleVentaPeer::ID_VENTA_FORMA, VentaFormaPeer::ID_VENTA_FORMA, $join_behavior);
 
         $criteria->addJoin(DetalleVentaPeer::ID_LUGAR_VENTA, LugarVentaPeer::ID_LUGAR_VENTA, $join_behavior);
@@ -1203,7 +1413,7 @@ abstract class BaseDetalleVentaPeer
 
 
     /**
-     * Selects a collection of DetalleVenta objects pre-filled with all related objects except VentaForma.
+     * Selects a collection of DetalleVenta objects pre-filled with all related objects except Venta.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
@@ -1212,203 +1422,7 @@ abstract class BaseDetalleVentaPeer
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
-    public static function doSelectJoinAllExceptVentaForma(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $criteria = clone $criteria;
-
-        // Set the correct dbName if it has not been overridden
-        // $criteria->getDbName() will return the same object if not set to another value
-        // so == check is okay and faster
-        if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(DetalleVentaPeer::DATABASE_NAME);
-        }
-
-        DetalleVentaPeer::addSelectColumns($criteria);
-        $startcol2 = DetalleVentaPeer::NUM_HYDRATE_COLUMNS;
-
-        LugarVentaPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + LugarVentaPeer::NUM_HYDRATE_COLUMNS;
-
-        FormaPagoPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + FormaPagoPeer::NUM_HYDRATE_COLUMNS;
-
-        $criteria->addJoin(DetalleVentaPeer::ID_LUGAR_VENTA, LugarVentaPeer::ID_LUGAR_VENTA, $join_behavior);
-
-        $criteria->addJoin(DetalleVentaPeer::ID_FORMA_PAGO, FormaPagoPeer::ID_FORMA_PAGO, $join_behavior);
-
-
-        $stmt = BasePeer::doSelect($criteria, $con);
-        $results = array();
-
-        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = DetalleVentaPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = DetalleVentaPeer::getInstanceFromPool($key1))) {
-                // We no longer rehydrate the object, since this can cause data loss.
-                // See http://www.propelorm.org/ticket/509
-                // $obj1->hydrate($row, 0, true); // rehydrate
-            } else {
-                $cls = DetalleVentaPeer::getOMClass();
-
-                $obj1 = new $cls();
-                $obj1->hydrate($row);
-                DetalleVentaPeer::addInstanceToPool($obj1, $key1);
-            } // if obj1 already loaded
-
-                // Add objects for joined LugarVenta rows
-
-                $key2 = LugarVentaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-                if ($key2 !== null) {
-                    $obj2 = LugarVentaPeer::getInstanceFromPool($key2);
-                    if (!$obj2) {
-
-                        $cls = LugarVentaPeer::getOMClass();
-
-                    $obj2 = new $cls();
-                    $obj2->hydrate($row, $startcol2);
-                    LugarVentaPeer::addInstanceToPool($obj2, $key2);
-                } // if $obj2 already loaded
-
-                // Add the $obj1 (DetalleVenta) to the collection in $obj2 (LugarVenta)
-                $obj2->addDetalleVenta($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined FormaPago rows
-
-                $key3 = FormaPagoPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-                if ($key3 !== null) {
-                    $obj3 = FormaPagoPeer::getInstanceFromPool($key3);
-                    if (!$obj3) {
-
-                        $cls = FormaPagoPeer::getOMClass();
-
-                    $obj3 = new $cls();
-                    $obj3->hydrate($row, $startcol3);
-                    FormaPagoPeer::addInstanceToPool($obj3, $key3);
-                } // if $obj3 already loaded
-
-                // Add the $obj1 (DetalleVenta) to the collection in $obj3 (FormaPago)
-                $obj3->addDetalleVenta($obj1);
-
-            } // if joined row is not null
-
-            $results[] = $obj1;
-        }
-        $stmt->closeCursor();
-
-        return $results;
-    }
-
-
-    /**
-     * Selects a collection of DetalleVenta objects pre-filled with all related objects except LugarVenta.
-     *
-     * @param      Criteria  $criteria
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of DetalleVenta objects.
-     * @throws PropelException Any exceptions caught during processing will be
-     *		 rethrown wrapped into a PropelException.
-     */
-    public static function doSelectJoinAllExceptLugarVenta(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $criteria = clone $criteria;
-
-        // Set the correct dbName if it has not been overridden
-        // $criteria->getDbName() will return the same object if not set to another value
-        // so == check is okay and faster
-        if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(DetalleVentaPeer::DATABASE_NAME);
-        }
-
-        DetalleVentaPeer::addSelectColumns($criteria);
-        $startcol2 = DetalleVentaPeer::NUM_HYDRATE_COLUMNS;
-
-        VentaFormaPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + VentaFormaPeer::NUM_HYDRATE_COLUMNS;
-
-        FormaPagoPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + FormaPagoPeer::NUM_HYDRATE_COLUMNS;
-
-        $criteria->addJoin(DetalleVentaPeer::ID_VENTA_FORMA, VentaFormaPeer::ID_VENTA_FORMA, $join_behavior);
-
-        $criteria->addJoin(DetalleVentaPeer::ID_FORMA_PAGO, FormaPagoPeer::ID_FORMA_PAGO, $join_behavior);
-
-
-        $stmt = BasePeer::doSelect($criteria, $con);
-        $results = array();
-
-        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = DetalleVentaPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = DetalleVentaPeer::getInstanceFromPool($key1))) {
-                // We no longer rehydrate the object, since this can cause data loss.
-                // See http://www.propelorm.org/ticket/509
-                // $obj1->hydrate($row, 0, true); // rehydrate
-            } else {
-                $cls = DetalleVentaPeer::getOMClass();
-
-                $obj1 = new $cls();
-                $obj1->hydrate($row);
-                DetalleVentaPeer::addInstanceToPool($obj1, $key1);
-            } // if obj1 already loaded
-
-                // Add objects for joined VentaForma rows
-
-                $key2 = VentaFormaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-                if ($key2 !== null) {
-                    $obj2 = VentaFormaPeer::getInstanceFromPool($key2);
-                    if (!$obj2) {
-
-                        $cls = VentaFormaPeer::getOMClass();
-
-                    $obj2 = new $cls();
-                    $obj2->hydrate($row, $startcol2);
-                    VentaFormaPeer::addInstanceToPool($obj2, $key2);
-                } // if $obj2 already loaded
-
-                // Add the $obj1 (DetalleVenta) to the collection in $obj2 (VentaForma)
-                $obj2->addDetalleVenta($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined FormaPago rows
-
-                $key3 = FormaPagoPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-                if ($key3 !== null) {
-                    $obj3 = FormaPagoPeer::getInstanceFromPool($key3);
-                    if (!$obj3) {
-
-                        $cls = FormaPagoPeer::getOMClass();
-
-                    $obj3 = new $cls();
-                    $obj3->hydrate($row, $startcol3);
-                    FormaPagoPeer::addInstanceToPool($obj3, $key3);
-                } // if $obj3 already loaded
-
-                // Add the $obj1 (DetalleVenta) to the collection in $obj3 (FormaPago)
-                $obj3->addDetalleVenta($obj1);
-
-            } // if joined row is not null
-
-            $results[] = $obj1;
-        }
-        $stmt->closeCursor();
-
-        return $results;
-    }
-
-
-    /**
-     * Selects a collection of DetalleVenta objects pre-filled with all related objects except FormaPago.
-     *
-     * @param      Criteria  $criteria
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of DetalleVenta objects.
-     * @throws PropelException Any exceptions caught during processing will be
-     *		 rethrown wrapped into a PropelException.
-     */
-    public static function doSelectJoinAllExceptFormaPago(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doSelectJoinAllExceptVenta(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $criteria = clone $criteria;
 
@@ -1428,9 +1442,14 @@ abstract class BaseDetalleVentaPeer
         LugarVentaPeer::addSelectColumns($criteria);
         $startcol4 = $startcol3 + LugarVentaPeer::NUM_HYDRATE_COLUMNS;
 
+        FormaPagoPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + FormaPagoPeer::NUM_HYDRATE_COLUMNS;
+
         $criteria->addJoin(DetalleVentaPeer::ID_VENTA_FORMA, VentaFormaPeer::ID_VENTA_FORMA, $join_behavior);
 
         $criteria->addJoin(DetalleVentaPeer::ID_LUGAR_VENTA, LugarVentaPeer::ID_LUGAR_VENTA, $join_behavior);
+
+        $criteria->addJoin(DetalleVentaPeer::ID_FORMA_PAGO, FormaPagoPeer::ID_FORMA_PAGO, $join_behavior);
 
 
         $stmt = BasePeer::doSelect($criteria, $con);
@@ -1485,6 +1504,391 @@ abstract class BaseDetalleVentaPeer
 
                 // Add the $obj1 (DetalleVenta) to the collection in $obj3 (LugarVenta)
                 $obj3->addDetalleVenta($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined FormaPago rows
+
+                $key4 = FormaPagoPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = FormaPagoPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = FormaPagoPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    FormaPagoPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (DetalleVenta) to the collection in $obj4 (FormaPago)
+                $obj4->addDetalleVenta($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of DetalleVenta objects pre-filled with all related objects except VentaForma.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of DetalleVenta objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptVentaForma(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(DetalleVentaPeer::DATABASE_NAME);
+        }
+
+        DetalleVentaPeer::addSelectColumns($criteria);
+        $startcol2 = DetalleVentaPeer::NUM_HYDRATE_COLUMNS;
+
+        VentaPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + VentaPeer::NUM_HYDRATE_COLUMNS;
+
+        LugarVentaPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + LugarVentaPeer::NUM_HYDRATE_COLUMNS;
+
+        FormaPagoPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + FormaPagoPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(DetalleVentaPeer::ID_VENTA, VentaPeer::ID, $join_behavior);
+
+        $criteria->addJoin(DetalleVentaPeer::ID_LUGAR_VENTA, LugarVentaPeer::ID_LUGAR_VENTA, $join_behavior);
+
+        $criteria->addJoin(DetalleVentaPeer::ID_FORMA_PAGO, FormaPagoPeer::ID_FORMA_PAGO, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = DetalleVentaPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = DetalleVentaPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = DetalleVentaPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                DetalleVentaPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Venta rows
+
+                $key2 = VentaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = VentaPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = VentaPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    VentaPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (DetalleVenta) to the collection in $obj2 (Venta)
+                $obj2->addDetalleVenta($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined LugarVenta rows
+
+                $key3 = LugarVentaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = LugarVentaPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = LugarVentaPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    LugarVentaPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (DetalleVenta) to the collection in $obj3 (LugarVenta)
+                $obj3->addDetalleVenta($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined FormaPago rows
+
+                $key4 = FormaPagoPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = FormaPagoPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = FormaPagoPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    FormaPagoPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (DetalleVenta) to the collection in $obj4 (FormaPago)
+                $obj4->addDetalleVenta($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of DetalleVenta objects pre-filled with all related objects except LugarVenta.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of DetalleVenta objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptLugarVenta(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(DetalleVentaPeer::DATABASE_NAME);
+        }
+
+        DetalleVentaPeer::addSelectColumns($criteria);
+        $startcol2 = DetalleVentaPeer::NUM_HYDRATE_COLUMNS;
+
+        VentaPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + VentaPeer::NUM_HYDRATE_COLUMNS;
+
+        VentaFormaPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + VentaFormaPeer::NUM_HYDRATE_COLUMNS;
+
+        FormaPagoPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + FormaPagoPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(DetalleVentaPeer::ID_VENTA, VentaPeer::ID, $join_behavior);
+
+        $criteria->addJoin(DetalleVentaPeer::ID_VENTA_FORMA, VentaFormaPeer::ID_VENTA_FORMA, $join_behavior);
+
+        $criteria->addJoin(DetalleVentaPeer::ID_FORMA_PAGO, FormaPagoPeer::ID_FORMA_PAGO, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = DetalleVentaPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = DetalleVentaPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = DetalleVentaPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                DetalleVentaPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Venta rows
+
+                $key2 = VentaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = VentaPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = VentaPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    VentaPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (DetalleVenta) to the collection in $obj2 (Venta)
+                $obj2->addDetalleVenta($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined VentaForma rows
+
+                $key3 = VentaFormaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = VentaFormaPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = VentaFormaPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    VentaFormaPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (DetalleVenta) to the collection in $obj3 (VentaForma)
+                $obj3->addDetalleVenta($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined FormaPago rows
+
+                $key4 = FormaPagoPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = FormaPagoPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = FormaPagoPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    FormaPagoPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (DetalleVenta) to the collection in $obj4 (FormaPago)
+                $obj4->addDetalleVenta($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of DetalleVenta objects pre-filled with all related objects except FormaPago.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of DetalleVenta objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptFormaPago(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(DetalleVentaPeer::DATABASE_NAME);
+        }
+
+        DetalleVentaPeer::addSelectColumns($criteria);
+        $startcol2 = DetalleVentaPeer::NUM_HYDRATE_COLUMNS;
+
+        VentaPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + VentaPeer::NUM_HYDRATE_COLUMNS;
+
+        VentaFormaPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + VentaFormaPeer::NUM_HYDRATE_COLUMNS;
+
+        LugarVentaPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + LugarVentaPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(DetalleVentaPeer::ID_VENTA, VentaPeer::ID, $join_behavior);
+
+        $criteria->addJoin(DetalleVentaPeer::ID_VENTA_FORMA, VentaFormaPeer::ID_VENTA_FORMA, $join_behavior);
+
+        $criteria->addJoin(DetalleVentaPeer::ID_LUGAR_VENTA, LugarVentaPeer::ID_LUGAR_VENTA, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = DetalleVentaPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = DetalleVentaPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = DetalleVentaPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                DetalleVentaPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Venta rows
+
+                $key2 = VentaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = VentaPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = VentaPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    VentaPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (DetalleVenta) to the collection in $obj2 (Venta)
+                $obj2->addDetalleVenta($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined VentaForma rows
+
+                $key3 = VentaFormaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = VentaFormaPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = VentaFormaPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    VentaFormaPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (DetalleVenta) to the collection in $obj3 (VentaForma)
+                $obj3->addDetalleVenta($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined LugarVenta rows
+
+                $key4 = LugarVentaPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = LugarVentaPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = LugarVentaPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    LugarVentaPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (DetalleVenta) to the collection in $obj4 (LugarVenta)
+                $obj4->addDetalleVenta($obj1);
 
             } // if joined row is not null
 
