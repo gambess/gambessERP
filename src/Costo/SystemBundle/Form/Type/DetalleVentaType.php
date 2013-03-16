@@ -34,28 +34,27 @@ class DetalleVentaType extends AbstractType
                     'property' => 'NombreFormaPago',
             )
                     )
-            ->add('fecha_venta', 'hidden'
-//                    , array(
-//                    'label' => 'Fecha Venta',
-//                    'widget' => 'single_text',
-//                    'input' => 'datetime',
-//                    'format' => 'dd/MM/yyyy'
-//                        )
+            ->add('fecha_venta', 'date', array(
+                    'label' => 'Fecha Venta',
+                    'widget' => 'single_text',
+                    'input' => 'datetime',
+                    'format' => 'dd/MM/yyyy'
+                        )
                 )
-            ->add('total_venta', 'hidden'
+            ->add('total_venta', 'hidden' 
 //                    'money', array(
 //                    'label' => 'Neto',
 //                    'currency' => 'CLP',
 //                    'precision' => 0,
-//                    'grouping' => true
+////                    'grouping' => true
 //                        )
                     )
-            ->add('total_iva_venta', 'hidden'
+            ->add('total_iva_venta','hidden'
 //                    'money', array(
 //                    'label' => 'I.V.A',
 //                    'currency' => 'CLP',
 //                    'precision' => 0,
-//                    'grouping' => true
+////                    'grouping' => true
 //                        )
                     )
             ->add('total_neto_venta', 'money', array(

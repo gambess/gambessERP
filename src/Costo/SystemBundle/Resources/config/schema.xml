@@ -19,7 +19,7 @@
     <column name="id_venta_forma" phpName="IdVentaForma" type="INTEGER" size="20" required="true"/>
     <column name="id_lugar_venta" phpName="IdLugarVenta" type="INTEGER" size="20" required="true"/>
     <column name="id_forma_pago" phpName="IdFormaPago" type="INTEGER" size="20" required="true"/>
-    <column name="fecha_venta" phpName="FechaVenta" type="DATE" required="true"/>
+    <column name="fecha_venta" phpName="FechaVenta" type="TIMESTAMP" required="true"/>
     <column name="total_neto_venta" phpName="TotalNetoVenta" type="FLOAT" size="11" scale="2" required="true" defaultValue="0.00"/>
     <column name="total_iva_venta" phpName="TotalIvaVenta" type="FLOAT" size="11" scale="2" required="true" defaultValue="0.00"/>
     <column name="total_venta" phpName="TotalVenta" type="FLOAT" size="11" scale="2" required="true" defaultValue="0.00"/>

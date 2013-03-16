@@ -263,7 +263,7 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
      *
      * @param string $format The date/time format string (either date()-style or strftime()-style).
      *				 If format is null, then the raw DateTime object will be returned.
-     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
     public function getFechaVenta($format = null)
@@ -272,7 +272,7 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
             return null;
         }
 
-        if ($this->fecha_venta === '0000-00-00') {
+        if ($this->fecha_venta === '0000-00-00 00:00:00') {
             // while technically this is not a default value of null,
             // this seems to be closest in meaning.
             return null;
@@ -549,8 +549,8 @@ abstract class BaseDetalleVenta extends BaseObject implements Persistent
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
         if ($this->fecha_venta !== null || $dt !== null) {
-            $currentDateAsString = ($this->fecha_venta !== null && $tmpDt = new DateTime($this->fecha_venta)) ? $tmpDt->format('Y-m-d') : null;
-            $newDateAsString = $dt ? $dt->format('Y-m-d') : null;
+            $currentDateAsString = ($this->fecha_venta !== null && $tmpDt = new DateTime($this->fecha_venta)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
             if ($currentDateAsString !== $newDateAsString) {
                 $this->fecha_venta = $newDateAsString;
                 $this->modifiedColumns[] = DetalleVentaPeer::FECHA_VENTA;

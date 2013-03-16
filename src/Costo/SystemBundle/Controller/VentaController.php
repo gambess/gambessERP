@@ -106,9 +106,9 @@ class VentaController extends Controller {
         $form = $this->createForm(new VentaType(), $venta);
         $form->bindRequest($request);
         $datas =  $form->getData();
-        echo "<pre>";
-        print_r($datas);
-        echo "</pre>";
+//        echo "<pre>";
+//        print_r($datas);
+//        echo "</pre>";
         
         //no es valido completamente hasta validar que la fecha no este ingresada
 //        if ($form->isValid()) {

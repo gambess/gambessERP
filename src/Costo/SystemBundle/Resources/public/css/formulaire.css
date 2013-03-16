@@ -179,3 +179,8 @@ a.submit:focus{
         border: 1px solid #CCCCCC;
         height:47px;
 }
+
+.add_detalle{
+        border: 1px solid #CCCCCC;
+        height:27px;
+}

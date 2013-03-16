@@ -34,7 +34,7 @@ CREATE TABLE `detalle_venta`
     `id_venta_forma` INTEGER(20) NOT NULL,
     `id_lugar_venta` INTEGER(20) NOT NULL,
     `id_forma_pago` INTEGER(20) NOT NULL,
-    `fecha_venta` DATE NOT NULL,
+    `fecha_venta` DATETIME NOT NULL,
     `total_neto_venta` FLOAT(11,2) DEFAULT 0.00 NOT NULL,
     `total_iva_venta` FLOAT(11,2) DEFAULT 0.00 NOT NULL,
     `total_venta` FLOAT(11,2) DEFAULT 0.00 NOT NULL,

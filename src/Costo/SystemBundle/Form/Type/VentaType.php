@@ -23,6 +23,20 @@ class VentaType extends AbstractType {
                     'by_reference'  => false
                      )
                         )
+                ->add('total_neto_documentada', 'money', array(
+                    'label' => 'Documentado',
+                    'currency' => 'CLP',
+                    'precision' => 0,
+//                    'grouping' => true
+                        )
+                )
+                ->add('total_iva_documentada', 'money', array(
+                    'label' => 'Documentado',
+                    'currency' => 'CLP',
+                    'precision' => 0,
+//                    'grouping' => true
+                        )
+                )
                 ->add('total_documentada', 'money', array(
                     'label' => 'Documentado',
                     'currency' => 'CLP',
@@ -30,8 +44,29 @@ class VentaType extends AbstractType {
 //                    'grouping' => true
                         )
                 )
+                ->add('total_neto_no_documentada', 'money', array(
+                    'label' => 'No Documentado',
+                    'currency' => 'CLP',
+                    'precision' => 0,
+//                    'grouping' => true
+                        )
+                )
+                ->add('total_iva_no_documentada', 'money', array(
+                    'label' => 'No Documentado',
+                    'currency' => 'CLP',
+                    'precision' => 0,
+//                    'grouping' => true
+                        )
+                )
                 ->add('total_no_documentada', 'money', array(
                     'label' => 'No Documentado',
+                    'currency' => 'CLP',
+                    'precision' => 0,
+//                    'grouping' => true
+                        )
+                )
+                ->add('total_neto', 'money', array(
+                    'label' => 'I.V.A.',
                     'currency' => 'CLP',
                     'precision' => 0,
 //                    'grouping' => true
@@ -46,6 +81,13 @@ class VentaType extends AbstractType {
                 )
                 ->add('total', 'money', array(
                     'label' => 'Total',
+                    'currency' => 'CLP',
+                    'precision' => 0,
+//                    'grouping' => true
+                        )
+                )
+                ->add('total_neto_real', 'money', array(
+                    'label' => 'I.V.A.',
                     'currency' => 'CLP',
                     'precision' => 0,
 //                    'grouping' => true

@@ -2,88 +2,11 @@
 {% block content_header %}
 {% javascripts
             '@CostoSystemBundle/Resources/public/js/ui/i18n/*'
+            '@CostoSystemBundle/Resources/public/js/*'
          %}
         <script type="text/javascript" src="{{ asset( asset_url) }}"></script>
 {% endjavascripts %}
 <script type="text/javascript">
-
-//collection with the prototype data
-//var collectionHolder = $('div.detalle');
-// setup an "add a detail" link
-var $addDetailLink = $('<a href="#" class="add_detail">Añadir un detalle</a>');
-var $newLinkp = $('<p></p>').append($addDetailLink); 
-
-function addDivForm(collectionHolder, $newLinkp) {
-    // Get the data-prototype explained earlier
-    var prototype = collectionHolder.data('prototype');
-
-    // get the new index
-    var index = collectionHolder.data('index');
-
-    // Replace '$$name$$' in the prototype's HTML to
-    // instead be a number based on how many items we have
-    var newForm = prototype.replace(/\$\$name\$\$/g, index);
-
-    // increase the index with one for the next item
-    collectionHolder.data('index', index + 1);
-
-    // Display the form in the page in an li, before the "Add a tag" link li
-    var $newFormLi = $('<div class="new_detalle"></div>').append(newForm);
-    $newLinkp.before($newFormLi);
-}
-//Las funcionalidades se ejecutan una vez que el documento DOM isReady
-    $(document).ready(function() {
-        
-                        $('div.detalle').append($newLinkp);
-                        $('div.detalle').data('index', $('div.detalle').find(':input').length);
-                        $addDetailLink.on('click', function(e) {
-                        // prevent the link from creating a "#" on the URL
-                            e.preventDefault();
-
-                        // add a new tag form (see next code block)
-                        addDivForm($('div.detalle'), $newLinkp);
-                        });
-//Jquery -ui datepicker setaeado a spain lang y formateado se le asocia al id venta_fecha_venta
-			$(function(){
-                                $.datepicker.setDefaults( $.datepicker.regional[ "es" ] );
-				// Datepicker
-				$('#venta_fecha').datepicker({
-                                        altFormat: "dd/mm/yyyy"
-				});
-			});
-                        //Este bloque se ejecuta si aparece el mensaje de error de fecha utilizada
-                        if ($('.error_list').length > 0){
-                            var error = $('.error_list');
-                            //all  dar el foco al elemento se borra el mensaje y se borra la fecha
-                            $('#venta_fecha').focus(function(){
-                                error.remove();
-                                $('#venta_fecha').val("");
-                            });
-                        }else {
-                        var Input = $('input[name*="total"]');
-                        Input.focus(function() {
-                            if($(this).val() == 0) $(this).val("");
-                        });
-                        $('').show();
-                        }
-                        $('#venta_total').focusout(function(){
-                            var neto = $(this).val();
-                            var iva = $('#venta_total_iva');
-                            if( iva.val() != 0){
-                                $('#venta_total_iva').val(0);
-                            }
-                            var i = parseFloat(Number(neto))*.19;
-                            $('#venta_total_iva').val(i.toFixed(0));
-                            
-                            var total = $('#venta_total').val();
-                            if (total == 0){
-                                $('#venta_total').val(Number(iva.val())+Number(neto));
-                            }if(total === "")
-                                $('#venta_total').val("");
-                        });
-                        
-                        
-});
 </script>
                 <ul id="menu">
                     {% block content_header_more %}
@@ -122,27 +45,29 @@ function addDivForm(collectionHolder, $newLinkp) {
         </div>
     </center>
     </p>
-
+    <div id="detalles">
     <div class="detalle" data-prototype="{{ form_widget(form.detalleVentas.vars.prototype.fecha_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.lugarVenta)|e}}{{ form_widget(form.detalleVentas.vars.prototype.ventaForma)|e }}{{ form_widget(form.detalleVentas.vars.prototype.total_neto_venta)|e}}{{ form_widget(form.detalleVentas.vars.prototype.total_iva_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.total_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.formaPago)|e }}{{ form_widget (form.detalleVentas.vars.prototype.descripcion_venta)|e}}">
-      
     </div>
-    <div class="new_detalle"></div>
     <p>
-    <div class="symfony-form-row">
-        {{ form_label (form.total_iva) }}
-            <div class="symfony-form-field">
-                {{ form_widget (form.total_iva) }}
-                    <div class="symfony-form-errors">
-                        {{ form_errors (form.total_iva) }}
-                    </div>
-            </div>
-        {{ form_label (form.total) }}
-            <div class="symfony-form-field">
-                {{ form_widget (form.total) }}
-                    <div class="symfony-form-errors">
-                        {{ form_errors (form.total) }}
-                    </div>
-            </div>
+    <div class="documentada">
+        {{ form_widget (form.total_neto_documentada) }}
+        {{ form_widget (form.total_iva_documentada) }}
+        {{ form_widget (form.total_documentada) }}
+    </div>
+    <div class="no_documentada">
+        {{ form_widget (form.total_neto_no_documentada) }}
+        {{ form_widget (form.total_iva_no_documentada) }}
+        {{ form_widget (form.total_no_documentada) }}
+    </div>
+    <div class="total">
+        {{ form_widget (form.total_neto) }}
+        {{ form_widget (form.total_iva) }}
+        {{ form_widget (form.total) }}
+    </div>
+    <div class="real">
+        {{ form_widget (form.total_neto_real) }}
+        {{ form_widget (form.total_iva_real) }}
+        {{ form_widget (form.total_real) }}
     </div>
     </p>
     
@@ -150,5 +75,6 @@ function addDivForm(collectionHolder, $newLinkp) {
     <p align="right">
         <button class="symfony-button-green" type="submit">Grabar</button>
     </p>
+    </div>
 </form>
 {% endblock %}
