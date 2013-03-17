@@ -71,30 +71,6 @@ class DetalleVentaType extends AbstractType
         ;
     }
 
-//    public function getName()
-//    {
-//        return 'testing_milibundle_detalleventatype';
-//    }
-
-//    public function buildForm(FormBuilder $builder, array $options) {
-//        $builder
-//
-//
-//                ->add('formal_total_venta', 'money', array(
-//                    'label' => 'V. Formal',
-//                    'currency' => 'CLP',
-//                    'precision' => 0,
-////                    'grouping' => true
-//                        )
-//                )
-//                ->add('informal_total_venta'
-//                )
-//                ->add('total_iva_venta_formal'
-//                )
-//                ->add('detalle_venta', 'textarea', array('label' => 'Detalle'))
-//        ;
-//    }
-
     public function getDefaultOptions(array $options) {
         return array(
             'data_class' => 'Costo\SystemBundle\Model\DetalleVenta',

@@ -34,7 +34,7 @@ CREATE TABLE `detalle_venta`
     `id_venta_forma` INTEGER(20) NOT NULL,
     `id_lugar_venta` INTEGER(20) NOT NULL,
     `id_forma_pago` INTEGER(20) NOT NULL,
-    `fecha_venta` DATETIME NOT NULL,
+    `fecha_venta` DATE NOT NULL,
     `total_neto_venta` FLOAT(11,2) DEFAULT 0.00 NOT NULL,
     `total_iva_venta` FLOAT(11,2) DEFAULT 0.00 NOT NULL,
     `total_venta` FLOAT(11,2) DEFAULT 0.00 NOT NULL,
@@ -165,7 +165,7 @@ DROP TABLE IF EXISTS `venta`;
 CREATE TABLE `venta`
 (
     `id` INTEGER(20) NOT NULL AUTO_INCREMENT,
-    `fecha` DATETIME NOT NULL,
+    `fecha` DATE NOT NULL,
     `total_neto_documentada` FLOAT(11,2) DEFAULT 0.00 NOT NULL,
     `total_iva_documentada` FLOAT(11,2) DEFAULT 0.00 NOT NULL,
     `total_documentada` FLOAT(11,2) DEFAULT 0.00 NOT NULL,
@@ -181,8 +181,7 @@ CREATE TABLE `venta`
     `descripcion` TEXT,
     `fecha_creacion` DATETIME,
     `fecha_modificacion` DATETIME,
-    PRIMARY KEY (`id`),
-    UNIQUE INDEX `fecha_venta_UNIQUE` (`fecha`)
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------

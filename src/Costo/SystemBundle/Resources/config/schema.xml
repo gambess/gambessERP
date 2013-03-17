@@ -19,7 +19,7 @@
     <column name="id_venta_forma" phpName="IdVentaForma" type="INTEGER" size="20" required="true"/>
     <column name="id_lugar_venta" phpName="IdLugarVenta" type="INTEGER" size="20" required="true"/>
     <column name="id_forma_pago" phpName="IdFormaPago" type="INTEGER" size="20" required="true"/>
-    <column name="fecha_venta" phpName="FechaVenta" type="TIMESTAMP" required="true"/>
+    <column name="fecha_venta" phpName="FechaVenta" type="DATE" required="true"/>
     <column name="total_neto_venta" phpName="TotalNetoVenta" type="FLOAT" size="11" scale="2" required="true" defaultValue="0.00"/>
     <column name="total_iva_venta" phpName="TotalIvaVenta" type="FLOAT" size="11" scale="2" required="true" defaultValue="0.00"/>
     <column name="total_venta" phpName="TotalVenta" type="FLOAT" size="11" scale="2" required="true" defaultValue="0.00"/>
@@ -114,7 +114,7 @@
   </table>
   <table name="venta" phpName="Venta" idMethod="native">
     <column name="id" phpName="Id" type="INTEGER" size="20" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="fecha" phpName="Fecha" type="TIMESTAMP" required="true"/>
+    <column name="fecha" phpName="Fecha" type="DATE" required="true"/>
     <column name="total_neto_documentada" phpName="TotalNetoDocumentada" type="FLOAT" size="11" scale="2" required="true" defaultValue="0.00"/>
     <column name="total_iva_documentada" phpName="TotalIvaDocumentada" type="FLOAT" size="11" scale="2" required="true" defaultValue="0.00"/>
     <column name="total_documentada" phpName="TotalDocumentada" type="FLOAT" size="11" scale="2" required="true" defaultValue="0.00"/>
@@ -130,9 +130,6 @@
     <column name="descripcion" phpName="Descripcion" type="LONGVARCHAR" required="false"/>
     <column name="fecha_creacion" phpName="FechaCreacion" type="TIMESTAMP" required="false"/>
     <column name="fecha_modificacion" phpName="FechaModificacion" type="TIMESTAMP" required="false"/>
-    <unique name="fecha_venta_UNIQUE">
-      <unique-column name="fecha"/>
-    </unique>
  <behavior name="timestampable">
         <parameter name="create_column" value="fecha_creacion" />
         <parameter name="update_column" value="fecha_modificacion" />

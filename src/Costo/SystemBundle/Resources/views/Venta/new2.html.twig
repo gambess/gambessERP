@@ -1,13 +1,12 @@
 {% extends 'CostoSystemBundle::layout.html.twig' %}
 {% block content_header %}
 {% javascripts
-            '@CostoSystemBundle/Resources/public/js/ui/i18n/*'
             '@CostoSystemBundle/Resources/public/js/*'
+            '@CostoSystemBundle/Resources/public/js/ui/i18n/*'
+            
          %}
         <script type="text/javascript" src="{{ asset( asset_url) }}"></script>
 {% endjavascripts %}
-<script type="text/javascript">
-</script>
                 <ul id="menu">
                     {% block content_header_more %}
                         IR A:
@@ -27,7 +26,7 @@
     <center>
         <div class="symfony-form-row">
                 <div class="symfony-form-field">
-                {{ form_widget (form.fecha) }}
+                {{ form_widget (form.fecha)}}
                 {% if errors != null %}
                         {% block field_errors %}
                         {% spaceless %}

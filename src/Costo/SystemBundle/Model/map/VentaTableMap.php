@@ -43,7 +43,7 @@ class VentaTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, 20, null);
-        $this->addColumn('fecha', 'Fecha', 'TIMESTAMP', true, null, null);
+        $this->addColumn('fecha', 'Fecha', 'DATE', true, null, null);
         $this->addColumn('total_neto_documentada', 'TotalNetoDocumentada', 'FLOAT', true, 11, 0);
         $this->addColumn('total_iva_documentada', 'TotalIvaDocumentada', 'FLOAT', true, 11, 0);
         $this->addColumn('total_documentada', 'TotalDocumentada', 'FLOAT', true, 11, 0);

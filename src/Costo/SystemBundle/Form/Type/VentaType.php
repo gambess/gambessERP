@@ -15,7 +15,7 @@ class VentaType extends AbstractType {
                     'input' => 'datetime',
                     'format' => 'dd/MM/yyyy'
                         )
-                )
+                    )
                 ->add('detalleVentas', 'collection', array(
                     'type'          => new \Costo\SystemBundle\Form\Type\DetalleVentaType(),
                     'allow_add'     => true,

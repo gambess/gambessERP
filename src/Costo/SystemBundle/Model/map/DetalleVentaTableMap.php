@@ -47,7 +47,7 @@ class DetalleVentaTableMap extends TableMap
         $this->addForeignKey('id_venta_forma', 'IdVentaForma', 'INTEGER', 'venta_forma', 'id_venta_forma', true, 20, null);
         $this->addForeignKey('id_lugar_venta', 'IdLugarVenta', 'INTEGER', 'lugar_venta', 'id_lugar_venta', true, 20, null);
         $this->addForeignKey('id_forma_pago', 'IdFormaPago', 'INTEGER', 'forma_pago', 'id_forma_pago', true, 20, null);
-        $this->addColumn('fecha_venta', 'FechaVenta', 'TIMESTAMP', true, null, null);
+        $this->addColumn('fecha_venta', 'FechaVenta', 'DATE', true, null, null);
         $this->addColumn('total_neto_venta', 'TotalNetoVenta', 'FLOAT', true, 11, 0);
         $this->addColumn('total_iva_venta', 'TotalIvaVenta', 'FLOAT', true, 11, 0);
         $this->addColumn('total_venta', 'TotalVenta', 'FLOAT', true, 11, 0);

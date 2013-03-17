@@ -104,12 +104,10 @@ class VentaController extends Controller {
         $venta = new Venta();
         $request = $this->getRequest();
         $form = $this->createForm(new VentaType(), $venta);
-        $form->bindRequest($request);
-        $datas =  $form->getData();
-//        echo "<pre>";
-//        print_r($datas);
-//        echo "</pre>";
         
+        $form->bindRequest($request);
+        
+        $datas =  $form->getData();
         //no es valido completamente hasta validar que la fecha no este ingresada
 //        if ($form->isValid()) {
             //$venta_in = $form->get('fecha_venta')->getData();
