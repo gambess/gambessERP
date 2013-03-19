@@ -47,33 +47,42 @@
     <div id="detalles">
     <div class="detalle" data-prototype="{{ form_widget(form.detalleVentas.vars.prototype.fecha_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.lugarVenta)|e}}{{ form_widget(form.detalleVentas.vars.prototype.ventaForma)|e }}{{ form_widget(form.detalleVentas.vars.prototype.total_neto_venta)|e}}{{ form_widget(form.detalleVentas.vars.prototype.total_iva_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.total_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.formaPago)|e }}{{ form_widget (form.detalleVentas.vars.prototype.descripcion_venta)|e}}">
     </div>
+   </div>
+   <div id="totales"> 
     <p>
     <div class="documentada">
+        Total Documentada  :
         {{ form_widget (form.total_neto_documentada) }}
         {{ form_widget (form.total_iva_documentada) }}
         {{ form_widget (form.total_documentada) }}
     </div>
+    <br />
     <div class="no_documentada">
+        Total No Documentado
         {{ form_widget (form.total_neto_no_documentada) }}
         {{ form_widget (form.total_iva_no_documentada) }}
         {{ form_widget (form.total_no_documentada) }}
     </div>
+    <br />
     <div class="total">
+        Total (Doc. + No Doc.)
         {{ form_widget (form.total_neto) }}
         {{ form_widget (form.total_iva) }}
         {{ form_widget (form.total) }}
     </div>
+    <br />
     <div class="real">
+        Total Real (en Caja)
         {{ form_widget (form.total_neto_real) }}
         {{ form_widget (form.total_iva_real) }}
         {{ form_widget (form.total_real) }}
     </div>
     </p>
-    
+</div>
 <br />
     <p align="right">
         <button class="symfony-button-green" type="submit">Grabar</button>
     </p>
-    </div>
+    
 </form>
 {% endblock %}
