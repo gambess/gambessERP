@@ -91,7 +91,7 @@ var doc = ['BOLETA', 'FACTURA', 'GUIA DESPACHO'];
 //var real = ['REAL'];
 
 //calcular el iva y total de cada detalle
-$(document).on('change', 'input[name$="total_neto_venta]"], select[name$="][ventaForma]"] div.new_detalle', function() {
+$(document).on('change', 'input[name$="total_neto_venta]"], select[name$="][ventaForma]"]', function() {
 //                            $("div.new_detalle").on(change,'select[name$="ventaForma]"]',function(){
 //                                alert ("Select change");
 //                            });
