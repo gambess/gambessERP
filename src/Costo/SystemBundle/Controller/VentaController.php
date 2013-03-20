@@ -32,28 +32,58 @@ class VentaController extends Controller {
         $request = $this->getRequest();
         if ('GET' === $request->getMethod()) {
             if ($page == 0) {
-                $ventas = DetalleVentaQuery::create()->orderByFechaVenta('ASC')->find();
-                return $this->render('CostoSystemBundle:Venta:index.html.twig', array(
+                $ventas = VentaQuery::create()
+                        ->orderByFecha('ASC')
+                ->find();
+                return $this->render('CostoSystemBundle:Venta:list.html.twig', array(
                     'ventas' => $ventas,
                     'page' => $page,
                 ));
             } else {
-                $query = DetalleVentaQuery::create()->orderByFechaVenta('ASC');
+                $query = VentaQuery::create()
+                        ->orderByFecha('ASC')
+                        ;
                 $pagerfanta = new Pagerfanta(new PropelAdapter($query));
                 $pagerfanta->setMaxPerPage(7);
                 $pagerfanta->setCurrentPage($request->get('page')); // 1 by default
                 $collection = $pagerfanta->getCurrentPageResults();
 
-                return $this->render('CostoSystemBundle:Venta:index.html.twig', array(
+                return $this->render('CostoSystemBundle:Venta:list.html.twig', array(
                     'ventas' => $collection,
-                    'end' => $collection->getFirst()->getFechaVenta(),
-                    'begin' => $collection->getLast()->getFechaVenta(),
+                    'end' => $collection->getFirst()->getFecha(),
+                    'begin' => $collection->getLast()->getFecha(),
                     'page' => $page,
                     'paginate' => $pagerfanta,
                 ));
             }
         }
     }
+//    public function indexAction($page) {
+//        $request = $this->getRequest();
+//        if ('GET' === $request->getMethod()) {
+//            if ($page == 0) {
+//                $ventas = DetalleVentaQuery::create()->orderByFechaVenta('ASC')->find();
+//                return $this->render('CostoSystemBundle:Venta:index.html.twig', array(
+//                    'ventas' => $ventas,
+//                    'page' => $page,
+//                ));
+//            } else {
+//                $query = DetalleVentaQuery::create()->orderByFechaVenta('ASC');
+//                $pagerfanta = new Pagerfanta(new PropelAdapter($query));
+//                $pagerfanta->setMaxPerPage(7);
+//                $pagerfanta->setCurrentPage($request->get('page')); // 1 by default
+//                $collection = $pagerfanta->getCurrentPageResults();
+//
+//                return $this->render('CostoSystemBundle:Venta:index.html.twig', array(
+//                    'ventas' => $collection,
+//                    'end' => $collection->getFirst()->getFechaVenta(),
+//                    'begin' => $collection->getLast()->getFechaVenta(),
+//                    'page' => $page,
+//                    'paginate' => $pagerfanta,
+//                ));
+//            }
+//        }
+//    }
 
     /**
      * Se busca y muestra una venta

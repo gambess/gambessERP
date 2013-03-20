@@ -48,7 +48,14 @@ class DetalleVentaType extends AbstractType
                     'format' => 'dd/MM/yyyy'
                         )
                 )
-            ->add('total_venta', 'hidden' 
+            ->add('total_venta', 'money', array(
+                    'label' => 'Total',
+                    'currency' => 'CLP',
+                    'precision' => 0,
+//                    'grouping' => true
+                        )
+                )
+            ->add('total_neto_venta', 'hidden' 
 //                    'money', array(
 //                    'label' => 'Neto',
 //                    'currency' => 'CLP',
@@ -64,13 +71,6 @@ class DetalleVentaType extends AbstractType
 ////                    'grouping' => true
 //                        )
                     )
-            ->add('total_neto_venta', 'money', array(
-                    'label' => 'Total',
-                    'currency' => 'CLP',
-                    'precision' => 0,
-//                    'grouping' => true
-                        )
-                )
             ->add('descripcion_venta', 'textarea', array(
                 'label' => 'Detalle',
                 'required' => false,

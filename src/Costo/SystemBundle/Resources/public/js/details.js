@@ -91,19 +91,19 @@ var doc = ['BOLETA', 'FACTURA', 'GUIA DESPACHO'];
 //var real = ['REAL'];
 
 //calcular el iva y total de cada detalle
-$(document).on('change', 'input[name$="total_neto_venta]"], select[name$="][ventaForma]"]', function() {
+$(document).on('change', 'input[name$="total_venta]"], select[name$="][ventaForma]"]', function() {
 //                            $("div.new_detalle").on(change,'select[name$="ventaForma]"]',function(){
 //                                alert ("Select change");
 //                            });
 //alert("Cambio: " + $(this).attr('name'));
     var id = $(this).parent().attr("id");
     var indix = id.replace('new_detalle_', '');
-    var iv = parseFloat(Number($(this).val()) * .19);
-    var tot = parseFloat(Number($(this).val()) + iv);
+    var iva = parseFloat(Number(($(this).val()) / 1.19)* .19);
+    var neto = parseFloat(Number($(this).val()) / 1.19);
 
     //Input ocultos
-    $('input[id$="' + indix + '_total_iva_venta"]').val(iv.toFixed(0));
-    $('input[id$="' + indix + '_total_venta"]').val(tot.toFixed(0));
+    $('input[id$="' + indix + '_total_iva_venta"]').val(iva.toFixed(0));
+    $('input[id$="' + indix + '_total_neto_venta"]').val(neto.toFixed(0));
 
     //Suma los netos cada vez que cambian
     var total_neto = 0;
@@ -111,8 +111,7 @@ $(document).on('change', 'input[name$="total_neto_venta]"], select[name$="][vent
     var total_no_doc = 0;
     var total_real = 0;
     
-    $('input[name$="total_neto_venta]"]').each(function() {
-        
+    $('input[name$="total_venta]"]').each(function() {
         if ($.inArray($(this).prev().find('option:selected').text(), doc) > -1) {
             total_doc += parseFloat(Number($(this).val()));
         }
@@ -127,23 +126,24 @@ $(document).on('change', 'input[name$="total_neto_venta]"], select[name$="][vent
     });
     
 //    total_neto += parseFloat(Number($(this).val()));
+//    total_neto = total_doc + total_no_doc;
     total_neto = total_doc + total_no_doc;
     
-    $('input[name="venta[total_neto_documentada]"]').val(total_doc.toFixed(0));
-    $('input[name="venta[total_iva_documentada]"]').val((total_doc * .19).toFixed(0));
-    $('input[name="venta[total_documentada]"]').val((total_doc + (total_doc * .19)).toFixed(0));
+    $('input[name="venta[total_neto_documentada]"]').val((total_doc / 1.19).toFixed(0));
+    $('input[name="venta[total_iva_documentada]"]').val((((total_doc)/1.19) * .19).toFixed(0));
+    $('input[name="venta[total_documentada]"]').val((total_doc).toFixed(0));
     
-    $('input[name="venta[total_neto_no_documentada]"]').val(total_no_doc.toFixed(0));
-    $('input[name="venta[total_iva_no_documentada]"]').val((total_no_doc * .19).toFixed(0));
-    $('input[name="venta[total_no_documentada]"]').val((total_no_doc + (total_no_doc * .19)).toFixed(0));
+    $('input[name="venta[total_neto_no_documentada]"]').val((total_no_doc / 1.19).toFixed(0));
+    $('input[name="venta[total_iva_no_documentada]"]').val((((total_no_doc) /1.19) * .19).toFixed(0));
+    $('input[name="venta[total_no_documentada]"]').val((total_no_doc).toFixed(0));
     
-    $('input[name="venta[total_neto]"]').val(total_neto.toFixed(0));
-    $('input[name="venta[total_iva]"]').val((total_neto*.19).toFixed(0));
-    $('input[name="venta[total]"]').val((total_neto + (total_neto * .19)).toFixed(0));
+    $('input[name="venta[total_neto]"]').val(((total_doc / 1.19) + total_no_doc ).toFixed(0));
+    $('input[name="venta[total_iva]"]').val((((total_doc)/1.19) * .19).toFixed(0));
+    $('input[name="venta[total]"]').val((total_neto).toFixed(0));
     
-    $('input[name="venta[total_neto_real]"]').val(total_real.toFixed(0));
-    $('input[name="venta[total_iva_real]"]').val((total_real * .19).toFixed(0));
-    $('input[name="venta[total_real]"]').val((total_real + (total_real * .19)).toFixed(0));
+    $('input[name="venta[total_neto_real]"]').val((total_real / 1.19).toFixed(0));
+    $('input[name="venta[total_iva_real]"]').val((((total_real) /1.19 )* .19).toFixed(0));
+    $('input[name="venta[total_real]"]').val((total_real).toFixed(0));
 
 
     
