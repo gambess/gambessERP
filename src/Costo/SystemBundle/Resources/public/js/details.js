@@ -19,14 +19,30 @@ function addDivForm(collectionHolder, $newLinkp) {
     // increase the index with one for the next item
     collectionHolder.data('index', index + 1);
     // Display the form in the page in an li, before the "Add a tag" link li
-    var $newFormLi = $('<div id="new_detalle_' + index + '" class="new_detalle"></div>').append(newForm);
-    $newLinkp.before($newFormLi);
+    var $newFormDiv = $('<div id="new_detalle_' + index + '" class="new_detalle"></div>');
+    addDetailFormDeleteDiv($newFormDiv);
+    $newFormDiv.append(newForm);
+    $newLinkp.before($newFormDiv);
+}
+
+function addDetailFormDeleteDiv($divForm) {
+    var $removeFormA = $('<a href="#" class="remove">X</a>');
+//    var $removeFormA = $('<p><a href="#" class="remove">X</a></p>');
+    $divForm.append($removeFormA);
+
+    $removeFormA.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // remove the li for the tag form
+        $divForm.remove();
+    });
 }
 
 //Las funcionalidades se ejecutan una vez que el documento DOM isReady
 $(document).ready(function() {
     $('#detalles').hide();
-    $('#totales').hide();
+//    $('#totales').hide();
 //Jquery -ui datepicker setaeado a spain lang y formateado se le asocia al id venta_fecha_venta
     $(function() {
         $.datepicker.setDefaults($.datepicker.regional[ "es" ]);
@@ -51,6 +67,7 @@ $(document).ready(function() {
         //$("input [name~='fecha_venta']").val($(this).val());  
     });
 
+    //Collection Handler
     $('div.detalle').append($newLinkp);
     $('div.detalle').data('index', $('div.detalle').find(':input').length);
     $addDetailLink.on('click', function(e) {
@@ -74,7 +91,7 @@ var doc = ['BOLETA', 'FACTURA', 'GUIA DESPACHO'];
 //var real = ['REAL'];
 
 //calcular el iva y total de cada detalle
-$(document).on('change', 'input[name$="total_neto_venta]"], select[name$="][ventaForma]"]', function() {
+$(document).on('change', 'input[name$="total_neto_venta]"], select[name$="][ventaForma]"] div.new_detalle', function() {
 //                            $("div.new_detalle").on(change,'select[name$="ventaForma]"]',function(){
 //                                alert ("Select change");
 //                            });

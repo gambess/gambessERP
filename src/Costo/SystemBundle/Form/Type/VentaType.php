@@ -107,7 +107,11 @@ class VentaType extends AbstractType {
 //                    'grouping' => true
                         )
                 )
-                ->add('descripcion', 'textarea', array('label' => 'Detalles de la Venta del día'))
+                ->add('descripcion', 'textarea', array(
+                    'label' => 'Detalles',
+                    'required' => false,
+                        )
+                    )
         ;
     }
 

@@ -16,13 +16,19 @@ class DetalleVentaType extends AbstractType
             ->add('ventaForma', 'model',
                 array(
                     'label' => 'Forma de Venta',
+                    'empty_value' => 'Forma de Venta...',
                     'class' => 'Costo\SystemBundle\Model\VentaForma',
                     'property' => 'NombreVentaForma',
+                    'query' => VentaFormaQuery::create()
+                ->orderByIdTipoVentaForma('ASC')
+                ->orderByNombreVentaForma('ASC')
+                ,
             )
                     )
             ->add('lugarVenta', 'model',
                 array(
                     'label' => 'Lugar de Venta',
+                    'empty_value' => 'Lugar de Venta...',
                     'class' => 'Costo\SystemBundle\Model\LugarVenta',
                     'property' => 'NombreLugarVenta',
             )
@@ -30,6 +36,7 @@ class DetalleVentaType extends AbstractType
             ->add('formaPago', 'model',
                 array(
                     'label' => 'Forma de Pago',
+                    'empty_value' => 'Forma de Pago...',
                     'class' => 'Costo\SystemBundle\Model\FormaPago',
                     'property' => 'NombreFormaPago',
             )
@@ -65,7 +72,8 @@ class DetalleVentaType extends AbstractType
                         )
                 )
             ->add('descripcion_venta', 'textarea', array(
-                'label' => 'Detalle'
+                'label' => 'Detalle',
+                'required' => false,
                     )
                 )
         ;
@@ -81,3 +89,31 @@ class DetalleVentaType extends AbstractType
         return 'detalleventa';
     }
 }
+/**
+* ModelType class.
+*
+* @author William Durand <william.durand1@gmail.com>
+* @author Toni Uebernickel <tuebernickel@gmail.com>
+*
+* Example using the preferred_choices option.
+*
+* <code>
+* public function buildForm(FormBuilderInterface $builder, array $options)
+* {
+* $builder
+* ->add('product', 'model', array(
+*   'class' => 'Model\Product',
+*   'query' => ProductQuery::create()
+*       ->filterIsActive(true)
+*       ->useI18nQuery($options['locale'])
+*           ->orderByName()
+*       ->endUse()
+*   ,
+*   'preferred_choices' => ProductQuery::create()
+*       ->filterByIsTopProduct(true)
+*   ,
+* ))
+* ;
+* }
+* </code>
+*/

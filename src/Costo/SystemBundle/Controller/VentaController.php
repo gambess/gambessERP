@@ -63,7 +63,7 @@ class VentaController extends Controller {
      * @return Response view
      */
     public function showAction($id) {
-        $venta = DetalleVentaQuery::create()->findPk($id);
+        $venta = VentaQuery::create()->findPk($id);
 
         if (!$venta) {
             throw $this->createNotFoundException('No se ha encontrado la venta solicitada');
@@ -71,7 +71,7 @@ class VentaController extends Controller {
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('CostoSystemBundle:Venta:show.html.twig', array(
+        return $this->render('CostoSystemBundle:Venta:show2.html.twig', array(
             'venta' => $venta,
             'delete_form' => $deleteForm->createView(),
         ));
@@ -104,18 +104,70 @@ class VentaController extends Controller {
         $venta = new Venta();
         $request = $this->getRequest();
         $form = $this->createForm(new VentaType(), $venta);
-        
+//        $ds = new DetalleVenta();
         $form->bindRequest($request);
         
-        $datas =  $form->getData();
+//        $datas =  $form->getData();
         //no es valido completamente hasta validar que la fecha no este ingresada
-//        if ($form->isValid()) {
+     if ($form->isValid()) {
             //$venta_in = $form->get('fecha_venta')->getData();
             //$exist = VentaQuery::create()->findOneByFechaVenta($venta_in);
             //if (null === $exist) {
                 $venta->save();
+
                 return $this->redirect($this->generateUrl('show_ventados', array('id' => $venta->getId())));
-            //}
+//                echo "<pre>";
+//
+//                print_r(get_class_methods($d));
+//                print_r($d->getData());
+//                echo "</pre>";
+                
+//                $detalles = array();
+//                $new_detalle = array();
+//                if($venta->countDetalleVentas() > 0){
+//                    $d = $venta->getDetalleVentas();
+//                
+//                    foreach ($d as $name => $value){
+//                        
+//                        $new_detalle['id'] = $value->getIdDetalle();
+//                        $new_detalle['fecha_venta'] = $value->getFechaVenta();
+//                        $new_detalle['lugarVenta'] = $value->getLugarVenta()->getNombreLugarVenta();
+//                        $new_detalle['ventaForma'] = $value->getVentaForma()->getNombreVentaForma();
+//                        $new_detalle['total_neto_venta'] = $value->getTotalNetoVenta();
+//                        $new_detalle['total_iva_venta'] = $value->getTotalIvaVenta();
+//                        $new_detalle['total_venta'] = $value->getTotalVenta();
+//                        $new_detalle['formaPago'] = $value->getFormaPago()->getNombreFormaPago();
+//                        $new_detalle['descripcion_venta'] = $value;
+//
+//                        $detalles[$name] =  $new_detalle;
+//                        unset($new_detalle);
+//                    }
+//                }
+              
+//                if($dVentascount() > 0 ){
+//                    
+//                    foreach($dVentas as $key => $val){
+//                      $detalles[$key] = $val->toJSon();  
+//                    }
+//                    
+//                    print_r($detalles);
+//                    
+//                }
+            return $this->render('CostoSystemBundle:Venta:createmod.html.twig', array(
+//            'detalles' => $detalles,    
+            'errors' => null,
+            'venta' => $venta,
+            'form' => $form->createView()
+            ));
+        }
+//        else{
+//            print_r($form->getErrors());
+//            return $this->render('CostoSystemBundle:Venta:new2.html.twig', array(
+//            'errors' => null,
+//            'venta' => $venta,
+//            'form' => $form->createView()
+//            ));
+//        }
 //            if ($exist instanceof Venta) {
 //                $form->addError(new FormError('¡EXISTE VENTA! Seleccione otro día por favor y grabe.'));
 //                return $this->render('CostoSystemBundle:Venta:new.html.twig', array(

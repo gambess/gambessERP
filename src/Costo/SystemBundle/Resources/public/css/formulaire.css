@@ -184,3 +184,15 @@ a.submit:focus{
         border: 1px solid #CCCCCC;
         height:27px;
 }
+
+#totales  {
+    display:none;
+}
+
+.remove {
+ /*position: relative;*/
+ float: right;
+ /*top:0;*/
+ /*right:0;*/
+ /*width: 450px;*/
+}

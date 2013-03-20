@@ -38,6 +38,11 @@
 {% endblock %}
 {% block title %}Detalle de Venta {% endblock %}
 {% block content %}
+<p align="center">
+        <a class="symfony-button-green" href="{{ path('new_venta') }}">
+            Crear Nueva
+        </a>
+</p>
 <h1><center>{{ block('title') }}</center></h1>
 <div id="deletion_venta" title="Confirmar para borrar Venta">
 {% include 'CostoSystemBundle:Venta:delete.html.twig' with {'venta': venta} %}
@@ -72,7 +77,7 @@
 </table>
 <br />
 <p align="center">
-        <a class="symfony-button-green"  href="{{ path('edit_venta', { 'id': venta.IdDetalle }) }}">Modificar Venta</a>
+        <a class="symfony-button-green"  href="{{ path('edit_venta', { 'id': venta.Id }) }}">Modificar Venta</a>
         <a id="open_deletion" class="symfony-button-green"  href="#">Borrar</a>
         </p>
 {% endblock %}
