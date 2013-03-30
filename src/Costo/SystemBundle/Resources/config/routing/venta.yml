@@ -12,9 +12,11 @@ index_venta:
     requirements:
       page: \d+
       _method: GET
+      
 show_venta:
     pattern:  /{id}/show
     defaults: { _controller: "CostoSystemBundle:Venta:show" }
+    
 show_ventados:
     pattern:  /{id}/show
     defaults: { _controller: "CostoSystemBundle:Venta:show2" }
@@ -22,6 +24,14 @@ show_ventados:
 new_venta:
     pattern:  /new
     defaults: { _controller: "CostoSystemBundle:Venta:new" }
+
+primera_venta:
+    pattern:  /fecha
+    defaults: { _controller: "CostoSystemBundle:Venta:primera" }
+
+dispatch_venta:
+    pattern:  /dispatch
+    defaults: { _controller: "CostoSystemBundle:Venta:dispatch" }
 
 create_venta:
     pattern:  /create

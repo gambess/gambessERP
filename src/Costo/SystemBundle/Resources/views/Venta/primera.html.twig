@@ -9,6 +9,18 @@
          %}
         <script type="text/javascript" src="{{ asset( asset_url) }}"></script>
 {% endjavascripts %}
+        <script type="text/javascript">
+                     $(document).ready(function() {
+                                $.datepicker.setDefaults( $.datepicker.regional[ "es" ] );
+				// Datepicker
+				$('#form_fecha').datepicker({
+				});
+                                $('#form_fecha').on('change', function(event){
+                                    
+                                    $('form').submit();
+                                });
+			});
+		</script>
                 <ul id="menu">
                     {% block content_header_more %}
                         IR A:
@@ -23,7 +35,7 @@
 {% block title %}Agregar Desgloce de Ventas del día{% endblock %}
 {% block content %}
 <h1><center>{{ block('title') }}</center></h1>
-<form action="{{ path('create_venta') }}" method="post" {{ form_enctype(form) }}>
+<form action="{{ path('dispatch_venta') }}" method="post" {{ form_enctype(form) }}>
     <p>
     <center>
         <div class="symfony-form-row">
@@ -45,49 +57,6 @@
             </div>
         </div>
     </center>
-    </p>
-    <div id="detalles">
-    <div class="detalle" data-prototype="{{ form_widget(form.detalleVentas.vars.prototype.fecha_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.lugarVenta)|e}}{{ form_widget(form.detalleVentas.vars.prototype.ventaForma)|e }}{{ form_widget(form.detalleVentas.vars.prototype.total_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.total_neto_venta)|e}}{{ form_widget(form.detalleVentas.vars.prototype.total_iva_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.formaPago)|e }}{{ form_widget (form.detalleVentas.vars.prototype.descripcion_venta)|e}}">
-    </div>
-   </div>
-   <div id="totales"> 
-    <p>
-    <div style="clear: both"></div>
-   _______________________________________________________________________________________________________________
-    <p>---Totales ------- Neto ------------- IVA ------------ Totales -----</p>
-    <div class="documentada">
-        Docum.  :
-        {{ form_widget (form.total_neto_documentada) }}
-        {{ form_widget (form.total_iva_documentada) }}
-        {{ form_widget (form.total_documentada) }}
-    </div>
-    <br />
-    <div class="no_documentada">
-        No Doc  :
-        {{ form_widget (form.total_neto_no_documentada) }}
-        {{ form_widget (form.total_iva_no_documentada) }}
-        {{ form_widget (form.total_no_documentada) }}
-    </div>
-    <br />
-    <div class="total">
-        Total.  :
-        {{ form_widget (form.total_neto) }}
-        {{ form_widget (form.total_iva) }}
-        {{ form_widget (form.total) }}
-    </div>
-    <br />
-    <div class="real">
-        Real.  :
-        {{ form_widget (form.total_neto_real) }}
-        {{ form_widget (form.total_iva_real) }}
-        {{ form_widget (form.total_real) }}
-    </div>
-    </p>
-    <div>{{ form_widget(form._token) }}</div>
-<br />
-    <p align="right">
-        <button class="symfony-button-green" type="submit">Grabar</button>
-    </p>
-</div>    
+</p>    
 </form>
 {% endblock %}

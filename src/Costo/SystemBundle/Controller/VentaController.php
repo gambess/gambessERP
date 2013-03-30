@@ -21,7 +21,7 @@ use Pagerfanta\Exception\NotValidCurrentPageException;
  * Este controlador controla las acciones request de la pagina web
  */
 class VentaController extends Controller {
-
+    
     /**
      * Lanza la pagina de inicio
      * No necesita parametros y muestra un listado de las ventas existentes en base de datos
@@ -58,32 +58,60 @@ class VentaController extends Controller {
             }
         }
     }
-//    public function indexAction($page) {
-//        $request = $this->getRequest();
-//        if ('GET' === $request->getMethod()) {
-//            if ($page == 0) {
-//                $ventas = DetalleVentaQuery::create()->orderByFechaVenta('ASC')->find();
-//                return $this->render('CostoSystemBundle:Venta:index.html.twig', array(
-//                    'ventas' => $ventas,
-//                    'page' => $page,
-//                ));
-//            } else {
-//                $query = DetalleVentaQuery::create()->orderByFechaVenta('ASC');
-//                $pagerfanta = new Pagerfanta(new PropelAdapter($query));
-//                $pagerfanta->setMaxPerPage(7);
-//                $pagerfanta->setCurrentPage($request->get('page')); // 1 by default
-//                $collection = $pagerfanta->getCurrentPageResults();
-//
-//                return $this->render('CostoSystemBundle:Venta:index.html.twig', array(
-//                    'ventas' => $collection,
-//                    'end' => $collection->getFirst()->getFechaVenta(),
-//                    'begin' => $collection->getLast()->getFechaVenta(),
-//                    'page' => $page,
-//                    'paginate' => $pagerfanta,
-//                ));
-//            }
-//        }
-//    }
+    
+    /**
+     * Lanza la pagina con la fecha
+     * No necesita parametros 
+     * @method GET route: "/" name="index_primera"
+     * @return Response view
+     */
+    
+    public function primeraAction(){
+       
+        $form = $this->showVentaForm();
+        return $this->render('CostoSystemBundle:Venta:primera.html.twig', array(
+            'errors' => null,
+            'form' => $form->createView(),
+        ));
+    }
+    
+    public function dispatchAction(){
+        
+        $request = $this->getRequest();
+
+        if ('POST' === $request->getMethod()) {
+
+            // Se recupera la fecha
+            $dateArray = $request->request->get('form');
+            //Se convierte a Datetime Class
+            $date = \DateTime::createFromFormat('d/m/Y', $dateArray['fecha']);
+//            $date = $form->get('fecha')->getData();
+            $venta = VentaQuery::create()->findOneByFecha($date);
+            
+            if(null === $venta)
+            {
+                 $venta = new Venta();
+                 $venta->setFecha($date);
+                 $form = $this->createForm(new VentaType(), $venta);
+                return $this->render('CostoSystemBundle:Venta:new2.html.twig', array(
+                    'errors' => null,
+                    'venta' => $venta,
+                    'form' => $form->createView()
+        ));
+            }
+            if($venta instanceof Venta){
+              
+                $editForm = $this->createForm(new VentaType(), $venta);
+                $deleteForm = $this->createDeleteForm($venta->getPrimaryKey());
+                return $this->render('CostoSystemBundle:Venta:createmod.html.twig', array(
+                    'venta' => $venta,
+                    'errors' => null,
+                    'form'=> $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
+                ));  
+            }
+        }
+    }
 
     /**
      * Se busca y muestra una venta
@@ -98,11 +126,16 @@ class VentaController extends Controller {
         if (!$venta) {
             throw $this->createNotFoundException('No se ha encontrado la venta solicitada');
         }
-
+        $editForm = $this->createForm(new VentaType(), $venta);
         $deleteForm = $this->createDeleteForm($id);
+//        echo "<pre>";
+//        print_r($editForm->createView());
+//        echo "</pre>";
 
-        return $this->render('CostoSystemBundle:Venta:show2.html.twig', array(
+        return $this->render('CostoSystemBundle:Venta:createmod.html.twig', array(
             'venta' => $venta,
+            'errors' => null,
+            'form'=> $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -146,67 +179,14 @@ class VentaController extends Controller {
                 $venta->save();
 
                 return $this->redirect($this->generateUrl('show_ventados', array('id' => $venta->getId())));
-//                echo "<pre>";
-//
-//                print_r(get_class_methods($d));
-//                print_r($d->getData());
-//                echo "</pre>";
-                
-//                $detalles = array();
-//                $new_detalle = array();
-//                if($venta->countDetalleVentas() > 0){
-//                    $d = $venta->getDetalleVentas();
-//                
-//                    foreach ($d as $name => $value){
-//                        
-//                        $new_detalle['id'] = $value->getIdDetalle();
-//                        $new_detalle['fecha_venta'] = $value->getFechaVenta();
-//                        $new_detalle['lugarVenta'] = $value->getLugarVenta()->getNombreLugarVenta();
-//                        $new_detalle['ventaForma'] = $value->getVentaForma()->getNombreVentaForma();
-//                        $new_detalle['total_neto_venta'] = $value->getTotalNetoVenta();
-//                        $new_detalle['total_iva_venta'] = $value->getTotalIvaVenta();
-//                        $new_detalle['total_venta'] = $value->getTotalVenta();
-//                        $new_detalle['formaPago'] = $value->getFormaPago()->getNombreFormaPago();
-//                        $new_detalle['descripcion_venta'] = $value;
-//
-//                        $detalles[$name] =  $new_detalle;
-//                        unset($new_detalle);
-//                    }
-//                }
-              
-//                if($dVentascount() > 0 ){
-//                    
-//                    foreach($dVentas as $key => $val){
-//                      $detalles[$key] = $val->toJSon();  
-//                    }
-//                    
-//                    print_r($detalles);
-//                    
-//                }
+     }
+     else{
             return $this->render('CostoSystemBundle:Venta:createmod.html.twig', array(
-//            'detalles' => $detalles,    
             'errors' => null,
             'venta' => $venta,
             'form' => $form->createView()
             ));
         }
-//        else{
-//            print_r($form->getErrors());
-//            return $this->render('CostoSystemBundle:Venta:new2.html.twig', array(
-//            'errors' => null,
-//            'venta' => $venta,
-//            'form' => $form->createView()
-//            ));
-//        }
-//            if ($exist instanceof Venta) {
-//                $form->addError(new FormError('¡EXISTE VENTA! Seleccione otro día por favor y grabe.'));
-//                return $this->render('CostoSystemBundle:Venta:new.html.twig', array(
-//                    'venta' => $venta,
-//                    'errors' => $form->getErrors(),
-//                    'form' => $form->createView()
-//                ));
-//            }
-//        }
     }
 
     /**
@@ -291,13 +271,25 @@ class VentaController extends Controller {
 
         return $this->redirect($this->generateUrl('index_venta'));
     }
+    
+    /**
+     * Formulario que redirecciona a crear o actualizar
+     * @return Form
+     */
+    private function showVentaForm(){
 
-
+        return $this->createFormBuilder(null, array())
+                ->add('fecha', 'date', array('label' => 'Fecha Venta', 'widget' => 'single_text', 'input' => 'datetime', 'format' => 'dd/MM/yyyy'))
+                ->getForm()
+        ;
+    }
+        
     private function createDeleteForm($id) {
         return $this->createFormBuilder(array('id' => $id))
                 ->add('id', 'hidden')
                 ->getForm()
         ;
     }
-
+    
+    
 }
