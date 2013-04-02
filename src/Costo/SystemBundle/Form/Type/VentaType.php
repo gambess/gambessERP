@@ -112,6 +112,7 @@ class VentaType extends AbstractType {
                     'required' => false,
                         )
                     )
+                ->add('id','hidden')
         ;
     }
 

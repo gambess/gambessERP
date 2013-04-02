@@ -210,11 +210,11 @@ input[type=text], input[type=password]
 
     color: white;
 
-    border:     solid 1px #a7da39;
-    background: #a7da39;
-    background: -webkit-gradient(linear, left top, left bottom, from(#a7da39), to(#6a9211));
-    background: -moz-linear-gradient(top,  #a7da39,  #6a9211);
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#a7da39', endColorstr='#6a9211');
+    border:     solid 1px #1F9572;
+    background: #1F9572;
+    background: -webkit-gradient(linear, left top, left bottom, from(#1F9572), to(#1F9570));
+    background: -moz-linear-gradient(top,  #1F9572,  #1F9570);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#1F9572', endColorstr='#1F9570');
 }
 
 .symfony-blocks-welcome

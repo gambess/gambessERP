@@ -52,6 +52,11 @@ delete_venta:
     defaults: { _controller: "CostoSystemBundle:Venta:delete" }
     requirements: { _method: post }
 
+delete_dos:
+    pattern:  /{id}/ddetalle
+    defaults: { _controller: "CostoSystemBundle:Venta:deletedos" }
+    requirements: { _method: post }
+
 paginate_venta:
     pattern:  /{page}
     defaults: { _controller: "CostoSystemBundle:Venta:index", page: 1 }

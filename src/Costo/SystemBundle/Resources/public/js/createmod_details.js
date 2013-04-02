@@ -12,7 +12,7 @@ function addDivForm(collectionHolder, $newLinkp) {
     var newForm = prototype.replace(/\$\$name\$\$/g, index);
     // increase the index with one for the next item
     collectionHolder.data('index', index + 1);
-     // Display the form in the page in an li, before the "Add a tag" link li
+    // Display the form in the page in an li, before the "Add a tag" link li
     var $newFormDiv = $('<div id="new_detalle_' + index + '" class="new_detalle"></div>');
     addDetailFormDeleteDiv($newFormDiv);
     $newFormDiv.append(newForm);
@@ -34,36 +34,36 @@ function addDetailFormDeleteDiv($divForm) {
 //    });
 }
 
-function updateTotales(total_doc, total_no_doc, total_neto, total_real){
+function updateTotales(total_doc, total_no_doc, total_neto, total_real) {
     $('input[name="venta[total_neto_documentada]"]').val((total_doc / 1.19).toFixed(0));
-    $('input[name="venta[total_iva_documentada]"]').val((((total_doc)/1.19) * .19).toFixed(0));
+    $('input[name="venta[total_iva_documentada]"]').val((((total_doc) / 1.19) * .19).toFixed(0));
     $('input[name="venta[total_documentada]"]').val((total_doc).toFixed(0));
-    
+
     $('input[name="venta[total_neto_no_documentada]"]').val((total_no_doc / 1.19).toFixed(0));
-    $('input[name="venta[total_iva_no_documentada]"]').val((((total_no_doc) /1.19) * .19).toFixed(0));
+    $('input[name="venta[total_iva_no_documentada]"]').val((((total_no_doc) / 1.19) * .19).toFixed(0));
     $('input[name="venta[total_no_documentada]"]').val((total_no_doc).toFixed(0));
-    
-    $('input[name="venta[total_neto]"]').val(((total_doc / 1.19) + total_no_doc ).toFixed(0));
-    $('input[name="venta[total_iva]"]').val((((total_doc)/1.19) * .19).toFixed(0));
+
+    $('input[name="venta[total_neto]"]').val(((total_doc / 1.19) + total_no_doc).toFixed(0));
+    $('input[name="venta[total_iva]"]').val((((total_doc) / 1.19) * .19).toFixed(0));
     $('input[name="venta[total]"]').val((total_neto).toFixed(0));
-    
+
     $('input[name="venta[total_neto_real]"]').val((total_real / 1.19).toFixed(0));
-    $('input[name="venta[total_iva_real]"]').val((((total_real) /1.19 )* .19).toFixed(0));
+    $('input[name="venta[total_iva_real]"]').val((((total_real) / 1.19) * .19).toFixed(0));
     $('input[name="venta[total_real]"]').val((total_real).toFixed(0));
 }
 
 
 
 $(document).ready(function() {
- 
+
 //collection with the prototype data
 //var collectionHolder = $('div.detalle');
 
 
-var $addDetailLink = $('<a href="#" class="add_detail">Nuevo</a>');
-var $newLinkp = $('<p></p>').append($addDetailLink);    
+    var $addDetailLink = $('<a href="#" class="add_detail">Nuevo</a>');
+    var $newLinkp = $('<p></p>').append($addDetailLink);
 
-$('input[name$="fecha_venta]"]').hide();
+    $('input[name$="fecha_venta]"]').hide();
 //Jquery -ui datepicker setaeado a spain lang y formateado se le asocia al id venta_fecha_venta
     $(function() {
         $.datepicker.setDefaults($.datepicker.regional[ "es" ]);
@@ -105,74 +105,110 @@ $('input[name$="fecha_venta]"]').hide();
         if ($(this).val() === 0)
             $(this).val("");
     });
-                      
 });
 
 
 
 //Se recalculan los valores en el evento change
-    $('body').on('change', 'input[name$="total_venta]"], select[name$="][ventaForma]"]', function(){
+$('body').on('change', 'input[name$="total_venta]"], select[name$="][ventaForma]"]', function() {
 
-        var id = $(this).parent().attr("id");
-        var indix = id.replace('new_detalle_', '');
-        var iva = parseFloat(Number(($(this).val()) / 1.19)* .19);
-        var neto = parseFloat(Number($(this).val()) / 1.19);
+    var id = $(this).parent().attr("id");
+    var indix = id.replace('new_detalle_', '');
+    var iva = parseFloat(Number(($(this).val()) / 1.19) * .19);
+    var neto = parseFloat(Number($(this).val()) / 1.19);
 
-            //Input ocultos
-        $('input[id$="' + indix + '_total_iva_venta"]').val(iva.toFixed(0));
-        $('input[id$="' + indix + '_total_neto_venta"]').val(neto.toFixed(0));
+    //Input ocultos
+    $('input[id$="' + indix + '_total_iva_venta"]').val(iva.toFixed(0));
+    $('input[id$="' + indix + '_total_neto_venta"]').val(neto.toFixed(0));
 
-        //Suma los netos cada vez que cambian
-        var total_neto = 0;
-        var total_doc = 0;
-        var total_no_doc = 0;
-        var total_real = 0;
+    //Suma los netos cada vez que cambian
+    var total_neto = 0;
+    var total_doc = 0;
+    var total_no_doc = 0;
+    var total_real = 0;
 
-        $('input[name$="total_venta]"]').each(function() {
-            if ($.inArray($(this).prev().find('option:selected').text(), doc) > -1) {
-                total_doc += parseFloat(Number($(this).val()));
-            }
+    $('input[name$="total_venta]"]').each(function() {
+        if ($.inArray($(this).prev().find('option:selected').text(), doc) > -1) {
+            total_doc += parseFloat(Number($(this).val()));
+        }
 
-            if ($(this).prev().find('option:selected').text() === "NO DOC.") {
-                total_no_doc += parseFloat(Number($(this).val()));
-            }
+        if ($(this).prev().find('option:selected').text() === "NO DOC.") {
+            total_no_doc += parseFloat(Number($(this).val()));
+        }
 
-            if ($(this).prev().find('option:selected').text() === "REAL") {
-                total_real += parseFloat(Number($(this).val()));
-            }
-        });
-
-        total_neto = total_doc + total_no_doc;
-
-        updateTotales(total_doc, total_no_doc, total_neto, total_real);
-
-
+        if ($(this).prev().find('option:selected').text() === "REAL") {
+            total_real += parseFloat(Number($(this).val()));
+        }
     });
+
+    total_neto = total_doc + total_no_doc;
+
+    updateTotales(total_doc, total_no_doc, total_neto, total_real);
+
+
+});
 //Se recalculan los valores en el evento click
-    $(document).on('click', '.remove' ,function(e){
-      //Suma los netos cada vez que cambian
-        e.preventDefault();
-        $(this).parent('div').remove();
-        var total_neto = 0;
-        var total_doc = 0;
-        var total_no_doc = 0;
-        var total_real = 0;
+$(document).on('click', '.remove', function(e) {
+    e.preventDefault();
+    var divToDel = $(this).parent('div');
 
-        $('input[name$="total_venta]"]').each(function() {
-            if ($.inArray($(this).prev().find('option:selected').text(), doc) > -1) {
-                total_doc += parseFloat(Number($(this).val()));
+    $('#deletion_venta').dialog({
+        autoOpen: false,
+        position: 'center',
+        modal: true,
+        width: 270,
+        height: 240,
+        buttons: {
+            "Borrar": function() {
+                $(this).data('divToDel').remove();
+                $("form", $(this)).submit();
+                return true;
+
+            },
+            "Cancelar": function() {
+                $(this).dialog("close");
+                return false;
             }
-
-            if ($(this).prev().find('option:selected').text() === "NO DOC.") {
-                total_no_doc += parseFloat(Number($(this).val()));
-            }
-
-            if ($(this).prev().find('option:selected').text() === "REAL") {
-                total_real += parseFloat(Number($(this).val()));
-            }
-        });
-        total_neto = total_doc + total_no_doc;
-        updateTotales(total_doc, total_no_doc, total_neto, total_real);
-
-
+        }
     });
+    // Dialog Link
+
+    //Suma los netos cada vez que cambian
+    if ($(this).attr('dbid'))
+    {
+        var valToDel = $(this).attr('dbid');
+
+        $('#deletion_venta form.invisible').attr('action', '/aricagua/web/app_dev.php/venta/' + valToDel + '/ddetalle');
+        $('#form_id').val(valToDel);
+
+        $('#deletion_venta').data('divToDel', divToDel).dialog('open');
+        
+    }
+    else
+    {
+        divToDel.remove();
+    }
+
+    var total_neto = 0;
+    var total_doc = 0;
+    var total_no_doc = 0;
+    var total_real = 0;
+
+    $('input[name$="total_venta]"]').each(function() {
+        if ($.inArray($(this).prev().find('option:selected').text(), doc) > -1) {
+            total_doc += parseFloat(Number($(this).val()));
+        }
+
+        if ($(this).prev().find('option:selected').text() === "NO DOC.") {
+            total_no_doc += parseFloat(Number($(this).val()));
+        }
+
+        if ($(this).prev().find('option:selected').text() === "REAL") {
+            total_real += parseFloat(Number($(this).val()));
+        }
+    });
+    total_neto = total_doc + total_no_doc;
+    updateTotales(total_doc, total_no_doc, total_neto, total_real);
+
+
+});

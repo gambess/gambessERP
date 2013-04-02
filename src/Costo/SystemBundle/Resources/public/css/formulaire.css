@@ -189,6 +189,14 @@ a.submit:focus{
     display:none;
 }*/
 
+.invisible  {
+    display:none;
+}
+
+#deletion_venta {
+    display:none;
+}
+
 .remove {
  /*position: relative;*/
  float: right;

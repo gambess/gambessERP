@@ -76,6 +76,7 @@ class DetalleVentaType extends AbstractType
                 'required' => false,
                     )
                 )
+            ->add('id_detalle','hidden')
         ;
     }
 

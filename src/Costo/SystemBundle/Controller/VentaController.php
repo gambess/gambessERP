@@ -102,7 +102,7 @@ class VentaController extends Controller {
             if($venta instanceof Venta){
               
                 $editForm = $this->createForm(new VentaType(), $venta);
-                $deleteForm = $this->createDeleteForm($venta->getPrimaryKey());
+                $deleteForm = $this->createDeleteDetalleForm();
                 return $this->render('CostoSystemBundle:Venta:createmod.html.twig', array(
                     'venta' => $venta,
                     'errors' => null,
@@ -167,17 +167,13 @@ class VentaController extends Controller {
         $venta = new Venta();
         $request = $this->getRequest();
         $form = $this->createForm(new VentaType(), $venta);
-//        $ds = new DetalleVenta();
+
         $form->bindRequest($request);
         
-//        $datas =  $form->getData();
-        //no es valido completamente hasta validar que la fecha no este ingresada
-     if ($form->isValid()) {
-            //$venta_in = $form->get('fecha_venta')->getData();
-            //$exist = VentaQuery::create()->findOneByFechaVenta($venta_in);
-            //if (null === $exist) {
-                $venta->save();
 
+     if ($form->isValid()) {
+
+                $venta->save();
                 return $this->redirect($this->generateUrl('show_ventados', array('id' => $venta->getId())));
      }
      else{
@@ -260,16 +256,56 @@ class VentaController extends Controller {
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $venta = VentaQuery::create()->findPk($id);
+            $venta = DetalleVentaQuery::create()->findPk($id);
 
             if (!$venta) {
-                throw $this->createNotFoundException('No se ha encontrado la venta solicitada');
+                throw $this->createNotFoundException('No se ha encontrado el detalle de venta solicitada');
             }
 
             $venta->delete();
         }
-
+        
         return $this->redirect($this->generateUrl('index_venta'));
+    }
+    
+    /**
+     * Borra una Venta
+     * Necesita el id de la venta a borrar
+     * @method GET route: "/{id}/delete" name="delete_venta"
+     * @param int $id
+     * @return mixed
+     */
+    public function deletedosAction($id) {
+        $form = $this->createDeleteDetalleForm($id);
+        $request = $this->getRequest();
+        $form->bindRequest($request);
+
+        if ($form->isValid()) {
+            $detalleVenta = DetalleVentaQuery::create()->findPk($id);
+
+            if (!$detalleVenta) {
+                throw $this->createNotFoundException('No se ha encontrado la venta solicitada');
+            }
+            $venta = $detalleVenta->getVenta();
+            $detalleVenta->delete();
+        }
+
+        if (!$venta) {
+            throw $this->createNotFoundException('No se ha encontrado la venta solicitada');
+        }
+        $editForm = $this->createForm(new VentaType(), $venta);
+        $deleteForm = $this->createDeleteDetalleForm($id);
+//        echo "<pre>";
+//        print_r($editForm->createView());
+//        echo "</pre>";
+
+        return $this->render('CostoSystemBundle:Venta:createmod.html.twig', array(
+            'venta' => $venta,
+            'errors' => null,
+            'form'=> $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+        ));
+//        return $this->redirect($this->generateUrl('index_venta'));
     }
     
     /**
@@ -285,6 +321,13 @@ class VentaController extends Controller {
     }
         
     private function createDeleteForm($id) {
+        return $this->createFormBuilder(array('id' => $id))
+                ->add('id', 'hidden')
+                ->getForm()
+        ;
+    }
+    
+    private function createDeleteDetalleForm($id = null) {
         return $this->createFormBuilder(array('id' => $id))
                 ->add('id', 'hidden')
                 ->getForm()

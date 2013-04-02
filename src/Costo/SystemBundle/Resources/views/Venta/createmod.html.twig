@@ -23,6 +23,7 @@
 {% block content %}
 <h1><center>{{ block('title') }}</center></h1>
 <form action="{{ path('create_venta') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget (form.id)}}
     <p>
     <center>
         <div class="symfony-form-row">
@@ -46,10 +47,10 @@
     </center>
     </p>
     <div id="detalles">
-        <div class="detalle" data-prototype="{{ form_widget(form.detalleVentas.vars.prototype.fecha_venta)|escape }}{{ form_widget(form.detalleVentas.vars.prototype.lugarVenta)|escape}}{{ form_widget(form.detalleVentas.vars.prototype.ventaForma)|escape }}{{ form_widget(form.detalleVentas.vars.prototype.total_venta)|escape }}{{ form_widget(form.detalleVentas.vars.prototype.total_neto_venta)|escape}}{{ form_widget(form.detalleVentas.vars.prototype.total_iva_venta)|escape }}{{ form_widget(form.detalleVentas.vars.prototype.formaPago)|escape }}{{ form_widget (form.detalleVentas.vars.prototype.descripcion_venta)|escape}}">
+        <div class="detalle" data-prototype="{{ form_widget(form.detalleVentas.vars.prototype.fecha_venta)|escape }}{{ form_widget(form.detalleVentas.vars.prototype.lugarVenta)|escape}}{{ form_widget(form.detalleVentas.vars.prototype.ventaForma)|escape }}{{ form_widget(form.detalleVentas.vars.prototype.total_venta)|escape }}{{ form_widget(form.detalleVentas.vars.prototype.total_neto_venta)|escape}}{{ form_widget(form.detalleVentas.vars.prototype.total_iva_venta)|escape }}{{ form_widget(form.detalleVentas.vars.prototype.formaPago)|escape }}{{ form_widget (form.detalleVentas.vars.prototype.descripcion_venta)|escape}}{{ form_widget (form.detalleVentas.vars.prototype.id_detalle)|escape}}">
            {% for detail in form.detalleVentas %}
                 <div id="new_detalle_{{loop.index0}}" class="new_detalle">
-                    <a class="remove" href="#">X</a>
+                    <a class="remove" href="#" dbid="{{ detail.vars.value.IdDetalle}}">X</a>
                     {{ form_widget(detail.fecha_venta) }}
                     {{ form_widget(detail.lugarVenta) }}
                     {{ form_widget(detail.ventaForma) }}
@@ -58,6 +59,7 @@
                     {{ form_widget(detail.total_iva_venta) }}
                     {{ form_widget(detail.formaPago) }}
                     {{ form_widget(detail.descripcion_venta) }}
+                    {{ form_widget(detail.id_detalle) }}
                 </div>
                 {% endfor %} 
                      
@@ -99,4 +101,7 @@
     </p>
     
 </form>
+<div id="deletion_venta" title="Confirmar para borrar Venta">
+{% include 'CostoSystemBundle:Venta:delete2.html.twig' with {'delete_form': delete_form } %}
+</div>
 {% endblock %}
