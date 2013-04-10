@@ -90,12 +90,10 @@ class VentaController extends Controller {
             
             if(null === $venta)
             {
-//                 return $this->redirect($this->generateUrl('create_venta'));
                  $venta = new Venta();
                  $venta->setFecha($date);
                  $form = $this->createForm(new VentaType(), $venta);
-//                return $this->render('CostoSystemBundle:Venta:new2.html.twig', array(
-                    return $this->forward('CostoSystemBundle:Venta:create', array(
+                return $this->render('CostoSystemBundle:Venta:new2.html.twig', array(
                     'errors' => null,
                     'venta' => $venta,
                     'form' => $form->createView()
@@ -166,16 +164,12 @@ class VentaController extends Controller {
      * @return mixed, Si es valido se muestra la venta creada en caso contrario exije validacion
      */
     public function createAction() {
-
         $venta = new Venta();
         $request = $this->getRequest();
-//        echo "<pre>";
-//print_r($request);
-//        echo "</pre>";
         $form = $this->createForm(new VentaType(), $venta);
 
         $form->bindRequest($request);
-        $deleteForm = $this->createDeleteForm(null);
+        
 
      if ($form->isValid()) {
 
@@ -186,8 +180,7 @@ class VentaController extends Controller {
             return $this->render('CostoSystemBundle:Venta:createmod.html.twig', array(
             'errors' => null,
             'venta' => $venta,
-            'form' => $form->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'form' => $form->createView()
             ));
         }
     }
