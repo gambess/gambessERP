@@ -22,7 +22,7 @@
 {% block title %}Agregar Desgloce de Ventas del día{% endblock %}
 {% block content %}
 <h1><center>{{ block('title') }}</center></h1>
-<form action="{{ path('create_venta') }}" method="post" {{ form_enctype(form) }}>
+<form action="{{ path('update_venta', { 'id': form.vars.value.id }) }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget (form.id)}}
     <p>
     <center>
@@ -95,6 +95,7 @@
     </div>
     </p>
 </div>
+            <div>{{ form_widget(form._token) }}</div>
 <br />
     <p align="right">
         <button class="symfony-button-green" type="submit">Modificar</button>

@@ -29,20 +29,13 @@ class VentaController extends Controller {
      * @return Response view
      */
     public function indexAction($page) {
+        
         $request = $this->getRequest();
+        
         if ('GET' === $request->getMethod()) {
-            if ($page == 0) {
-                $ventas = VentaQuery::create()
-                        ->orderByFecha('ASC')
-                ->find();
-                return $this->render('CostoSystemBundle:Venta:list.html.twig', array(
-                    'ventas' => $ventas,
-                    'page' => $page,
-                ));
-            } else {
                 $query = VentaQuery::create()
-                        ->orderByFecha('ASC')
-                        ;
+                            ->orderByFecha('ASC');
+                            
                 $pagerfanta = new Pagerfanta(new PropelAdapter($query));
                 $pagerfanta->setMaxPerPage(7);
                 $pagerfanta->setCurrentPage($request->get('page')); // 1 by default
@@ -55,8 +48,9 @@ class VentaController extends Controller {
                     'page' => $page,
                     'paginate' => $pagerfanta,
                 ));
-            }
-        }
+            
+        }//end GET method request
+        
     }
     
     /**
@@ -121,16 +115,15 @@ class VentaController extends Controller {
      * @return Response view
      */
     public function showAction($id) {
-        $venta = VentaQuery::create()->findPk($id);
+        $venta = VentaQuery::create()
+                ->findPk($id);
 
         if (!$venta) {
             throw $this->createNotFoundException('No se ha encontrado la venta solicitada');
         }
+        
         $editForm = $this->createForm(new VentaType(), $venta);
         $deleteForm = $this->createDeleteForm($id);
-//        echo "<pre>";
-//        print_r($editForm->createView());
-//        echo "</pre>";
 
         return $this->render('CostoSystemBundle:Venta:createmod.html.twig', array(
             'venta' => $venta,
@@ -164,25 +157,29 @@ class VentaController extends Controller {
      * @return mixed, Si es valido se muestra la venta creada en caso contrario exije validacion
      */
     public function createAction() {
+        
         $venta = new Venta();
         $request = $this->getRequest();
         $form = $this->createForm(new VentaType(), $venta);
 
         $form->bindRequest($request);
         $deleteForm = $this->createDeleteForm(null);
-
      if ($form->isValid()) {
+         
 
                 $venta->save();
+                
                 return $this->redirect($this->generateUrl('show_ventados', array('id' => $venta->getId())));
      }
      else{
-            return $this->render('CostoSystemBundle:Venta:createmod.html.twig', array(
-            'errors' => null,
-            'venta' => $venta,
-            'form' => $form->createView(),
-            'delete_form' => $deleteForm->createView(),
-            ));
+         print_r($form->getErrors());
+//         echo "IMPRIME ALGO AQUI";
+//            return $this->render('CostoSystemBundle:Venta:createmod.html.twig', array(
+//            'errors' => null,
+//            'venta' => $venta,
+//            'form' => $form->createView(),
+//            'delete_form' => $deleteForm->createView(),
+//            ));
         }
     }
 
