@@ -44,7 +44,7 @@
             <td>${{ venta.Total | number_format(0,',','.') }}</td>
             <td>${{ venta.TotalReal | number_format(0,',','.') }}</td>
             <td>
-                        <a class="symfony-button-green" href="{{ path('show_venta', { 'id': venta.Id }) }}">Mostrar/Modificar Venta</a>
+                        <a class="symfony-button-green" href="{{ path('show_venta', { 'id': venta.Id }) }}">Ver ó Modificar Venta</a>
             </td>
             <td>
                         <a class="symfony-button-green" href="{{ path('delete_venta', { 'id': venta.Id }) }}">Eliminar Venta</a>

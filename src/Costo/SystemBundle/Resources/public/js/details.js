@@ -154,10 +154,19 @@ $('body').on('click', '.remove' ,function(e){
         height: 240,
         buttons: {
             "Borrar": function() {
-                $(this).data('divToDel').remove();
-                $("form", $(this)).submit();
-                return true;
-
+                
+                $.ajax({
+                    type: "GET",
+                    url: '/aricagua/web/app_dev.php/venta/' + $('#deletion_venta').data('IdToDel') + '/deletedet',
+                    dataType: "json"
+                }).done(function(msj){
+                    if(msj.codeResponse==200 && msj.success==true){
+                        $('#deletion_venta').data('divToDel').remove(); 
+                        update();
+                        $('#deletion_venta').dialog('close');
+                    }
+                });
+                return false;
             },
             "Cancelar": function() {
                 $(this).dialog("close");
@@ -170,19 +179,11 @@ $('body').on('click', '.remove' ,function(e){
     //Suma los netos cada vez que cambian
     if ($(this).attr('dbid'))
     {
-        var valToDel = $(this).attr('dbid');
-
-        $('#deletion_venta form.invisible').attr('action', '/aricagua/web/app_dev.php/venta/' + valToDel + '/ddetalle');
-        $('#form_id').val(valToDel);
-
-        $('#deletion_venta').data('divToDel', divToDel).dialog('open');
-        
+        $('#deletion_venta').data('divToDel', divToDel).data('IdToDel', $(this).attr('dbid')).dialog('open');
     }
     else
     {
         divToDel.remove();
         update();
     }
-    
-    
 });

@@ -118,6 +118,63 @@ class VentaController extends Controller {
         ));
     }
     else{
-            
+          throw $this->createNotFoundException('No se ha encontrado la venta solicitada');  
         }
+    }
+    
+    /**
+     * Actualiza y guarda un venta
+     * Necesita un parametro el id del venta a actualizar
+     * @method GET route: "/{id}/update" name="update_venta"
+     * @param int $id
+     * @return mixed, muestra un error o el formulario de ventas en caso de que no sea valido
+     */
+    public function updateAction($id) {
+        
+        if(!is_null($id)){
+            $venta = VentaQuery::create()->findPk($id);
+
+            if (!$venta) {
+                throw $this->createNotFoundException('No se ha encontrado la venta solicitada');
+            }
+
+            $editForm = $this->createForm(new VentaType(), $venta);
+            $request = $this->getRequest();
+            $editForm->bindRequest($request);
+            if ($editForm->isValid()) {
+                $venta->save();
+                return $this->redirect($this->generateUrl('show_venta', array('id' => $id)));
+            }else{
+            print_r($editForm->getErrors());
+        }
+        }else{
+            throw $this->createNotFoundException('Se necesita un ');
+        }
+    }
+    
+    /**
+     * Borra una Venta
+     * Necesita el id de la venta a borrar
+     * @method GET route: "/{id}/deletedet" name="delete_detalle"
+     * @param int $id
+     * @return void and redirects
+     */
+    public function deletedetAction($id) {
+        
+        if(!is_null($id)){
+                    $dventa = DetalleVentaQuery::create()->findPk($id);
+
+                    if (!$dventa) {
+                        throw $this->createNotFoundException('No se ha encontrado el detalle de venta solicitado');
+                    }
+
+                    $dventa->delete();
+                    $data = array('codeResponse'=>200, 'success'=> true);
+                    $response = new Response(json_encode($data));
+                    return $response;
+        }
+        else {
+           throw $this->createNotFoundException('No se ha encontrado el detalle de venta solicitada'); 
+        }
+    }
 }
