@@ -26,9 +26,8 @@
                                             dataType: "json"
                                         }).done(function(msj){
                                             if(msj.codeResponse == 200 && msj.success == true){
-                                                alert("entro");
                                                 $('#borrar_venta').dialog('close');
-                                                window.location.href="{{path('index_venta')}}/1";
+                                                window.location.href="{{path('index_venta')}}";
                                             }
                                         });
                                         return false;
@@ -41,7 +40,8 @@
                         }
                     });
                     // Dialog Link
-                    $('.delete').click(function(){
+                    $('.delete').click(function(event){
+                            event.preventDefault();
                             $('#borrar_venta').data('dir', $(this).attr('href')).dialog('open');
                     });
 			
