@@ -54,7 +54,70 @@ class VentaController extends Controller {
         
     }
     
+    /**
+     * Muestra el Formulario de Creación de una nueva venta
+     * No necesita parametros
+     * @method GET route: "/new" name="new_venta"
+     * @return Response view
+     */
+    public function newAction() {
+        $venta = new Venta();
+        $form = $this->createForm(new VentaType(), $venta);
+
+        return $this->render('CostoSystemBundle:Venta:new.html.twig', array(
+            'errors' => null,
+            'venta' => $venta,
+            'form' => $form->createView()
+        ));
+    }
     
+    /**
+     * Guarda una venta y redirije o espera validacion del formulario
+     * No necesita parametros
+     * @method GET route: "/create" name="create_venta"
+     * @return mixed, Si es valido se muestra la venta creada en caso contrario exije validacion
+     */
+    public function createAction() {
+        
+        $venta = new Venta();
+        $request = $this->getRequest();
+        $form = $this->createForm(new VentaType(), $venta);
+
+        $form->bindRequest($request);
+        if ($form->isValid()) {
+                   $venta->save();
+                   return $this->redirect($this->generateUrl('show_venta', array('id' => $venta->getId())));
+        }
+        else{
+            print_r($form->getErrors());
+        }
+    }
     
-    
+    /**
+     * Se busca y muestra una venta
+     * Necesita el id de la venta a mostrar
+     * @param int $id
+     * @method GET route: "/{id}/show", name="show_venta"
+     * @return Response view
+     */
+    public function showAction($id) {
+        
+        if(!is_null($id)){
+        $venta = VentaQuery::create()
+                ->findPk($id);
+        if (!$venta) {
+            throw $this->createNotFoundException('No se ha encontrado la venta solicitada');
+        }
+        
+        $editForm = $this->createForm(new VentaType(), $venta);
+
+        return $this->render('CostoSystemBundle:Venta:showupdate.html.twig', array(
+            'venta' => $venta,
+            'errors' => null,
+            'form'=> $editForm->createView(),
+        ));
+    }
+    else{
+            
+        }
 }

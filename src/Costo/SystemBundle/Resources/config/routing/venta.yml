@@ -16,31 +16,17 @@ index_venta:
 show_venta:
     pattern:  /{id}/show
     defaults: { _controller: "CostoSystemBundle:Venta:show" }
-    
-show_ventados:
-    pattern:  /{id}/mostrar
-    defaults: { _controller: "CostoSystemBundle:Venta:show2" }
 
 new_venta:
     pattern:  /new
     defaults: { _controller: "CostoSystemBundle:Venta:new" }
 
-primera_venta:
-    pattern:  /fecha
-    defaults: { _controller: "CostoSystemBundle:Venta:primera" }
-
-dispatch_venta:
-    pattern:  /dispatch
-    defaults: { _controller: "CostoSystemBundle:Venta:dispatch" }
 
 create_venta:
     pattern:  /create
     defaults: { _controller: "CostoSystemBundle:Venta:create" }
     requirements: { _method: post }
 
-edit_venta:
-    pattern:  /{id}/edit
-    defaults: { _controller: "CostoSystemBundle:Venta:edit" }
 
 update_venta:
     pattern:  /{id}/update
@@ -50,12 +36,12 @@ update_venta:
 delete_venta:
     pattern:  /{id}/delete
     defaults: { _controller: "CostoSystemBundle:Venta:delete" }
-    requirements: { _method: post }
+    requirements: { _method: get }
 
-delete_dos:
-    pattern:  /{id}/ddetalle
-    defaults: { _controller: "CostoSystemBundle:Venta:deletedos" }
-    requirements: { _method: post }
+delete_detalle:
+    pattern:  /{id}/deletedet
+    defaults: { _controller: "CostoSystemBundle:Venta:deletedet" }
+    requirements: { _method: get }
 
 paginate_venta:
     pattern:  /{page}
