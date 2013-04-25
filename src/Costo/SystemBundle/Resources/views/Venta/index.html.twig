@@ -1,0 +1,81 @@
+{% extends 'CostoSystemBundle::layout.html.twig' %}
+{% block content_header %}
+<script type="text/javascript"></script>
+                <ul id="menu">
+                    {% block content_header_more %}
+                        IR A:
+                        <li><a class="symfony-button-green" href="{{ path('_homepage') }}">Principal</a></li>
+                        <li><a class="symfony-button-green" href="{{ path('index_cuenta') }}">Cuentas</a></li>
+                        <li><a class="symfony-button-green"  href="{{ path('index_gasto') }}">Gastos</a></li>
+                        <li><a class="symfony-button-green" href="{{ path('index_venta') }}">Ventas</a></li>
+                    {% endblock %}
+                </ul>
+                <div style="clear: both"></div>
+{% endblock %}
+{% block title %}Listado de Ventas{% endblock %}
+{% block content %}
+
+<h1><center>{{ block('title') }}</center></h1>
+<table align="center">
+    <thead>
+        <tr>
+            <th><h1><center>Fecha<center></h1></th>
+            <th><h1><center>No Doc<center></h1></th>
+            <th><h1><center>Doc<center></h1></th>
+            <th><h1><center>IVA<center></h1></th>
+            <th><h1><center>Total<center></h1></th>
+            <th><h1><center>Real<center></h1></th>
+            <th colspan="2"><h1><center>Acciones</center></h1></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% set NoDoc = 0 %}
+    {% set Doc = 0 %}
+    {% set Iva = 0 %}
+    {% set Total = 0 %}
+    {% set Real = 0 %}
+            
+    {% for venta in ventas %}
+        <tr>
+            <td>{% if venta.Fecha %}{{ venta.Fecha|date('d/m/Y') }}{% endif %}</td>
+            <td>${{ venta.TotalNoDocumentada | number_format(0,',','.')}}</td>
+            <td>${{ venta.TotalNetoDocumentada | number_format(0,',','.') }}</td>
+            <td>${{ venta.TotalIvaDocumentada | number_format(0,',','.') }}</td>
+            <td>${{ venta.Total | number_format(0,',','.') }}</td>
+            <td>${{ venta.TotalReal | number_format(0,',','.') }}</td>
+            <td>
+                        <a class="symfony-button-green" href="{{ path('show_venta', { 'id': venta.Id }) }}">Mostrar/Modificar Venta</a>
+            </td>
+            <td>
+                        <a class="symfony-button-green" href="{{ path('delete_venta', { 'id': venta.Id }) }}">Eliminar Venta</a>
+            </td>
+        </tr>
+        {% set NoDoc = "#{NoDoc + venta.TotalNoDocumentada}" %}
+        {% set Doc = "#{Doc + venta.TotalNetoDocumentada}" %}
+        {% set Iva = "#{Iva + venta.TotalIvaDocumentada}" %}
+        {% set Total = "#{Total + venta.Total}" %}
+        {% set Real = "#{Real + venta.TotalReal}" %}
+    {% endfor %}
+    </tbody>
+    <tfoot>
+    	<tr>
+            <td align="center"><b>Totales</b></td>
+        	<td align="center"><b>${{ NoDoc | number_format(0,',','.')}}</b></td>
+        	<td align="center"><b>${{ Doc | number_format(0,',','.')}}</b></td>
+        	<td align="center"><b>${{ Iva | number_format(0,',','.')}}</b></td>
+        	<td align="center"><b>${{ Total | number_format(0,',','.')}}</b></td>
+        	<td align="center"><b>${{ Real | number_format(0,',','.')}}</b></td>
+        </tr>
+    </tfoot>
+</table>
+<br />
+<center><em>{{ pagerfanta(paginate , 'default_translated', pagerfanta_opts) }}</em></center>
+<br />
+<p align="center">
+        <a class="symfony-button-green" href="{{ path('new_venta') }}">
+            Crear Nueva
+        </a>
+</p>
+
+{% endblock %}
+
