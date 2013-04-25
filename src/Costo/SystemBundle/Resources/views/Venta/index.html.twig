@@ -1,6 +1,52 @@
 {% extends 'CostoSystemBundle::layout.html.twig' %}
 {% block content_header %}
-<script type="text/javascript"></script>
+{% javascripts
+            '@CostoSystemBundle/Resources/public/js/jquery-1.7.2.min.js'
+            '@CostoSystemBundle/Resources/public/js/jquery-ui-1.8.21.custom.min.js'
+         %}
+        <script type="text/javascript" src="{{ asset( asset_url) }}"></script>
+{% endjavascripts %}
+<script type="text/javascript">
+//Las funcionalidades se ejecutan una vez que el documento DOM isReady
+    $(document).ready(function() {
+        
+        $('#borrar_venta').dialog({
+                    autoOpen: false,
+                    position: 'center',
+                    modal: true,
+                    width: 270,
+                    height: 240,
+                    buttons: {
+                                "Borrar": function(){
+                                 var dir = $('#borrar_venta').data('dir');   
+                                
+                                        $.ajax({
+                                            //type: "GET",
+                                            url: dir,
+                                            dataType: "json"
+                                        }).done(function(msj){
+                                            if(msj.codeResponse == 200 && msj.success == true){
+                                                alert("entro");
+                                                $('#borrar_venta').dialog('close');
+                                                window.location.href="{{path('index_venta')}}/1";
+                                            }
+                                        });
+                                        return false;
+
+                                },
+                                "Cancelar": function(){
+                                        $( this ).dialog( "close" );
+                                        return false;
+                                }
+                        }
+                    });
+                    // Dialog Link
+                    $('.delete').click(function(){
+                            $('#borrar_venta').data('dir', $(this).attr('href')).dialog('open');
+                    });
+			
+    });
+</script>
                 <ul id="menu">
                     {% block content_header_more %}
                         IR A:
@@ -47,7 +93,7 @@
                         <a class="symfony-button-green" href="{{ path('show_venta', { 'id': venta.Id }) }}">Ver ó Modificar Venta</a>
             </td>
             <td>
-                        <a class="symfony-button-green" href="{{ path('delete_venta', { 'id': venta.Id }) }}">Eliminar Venta</a>
+                        <a class="delete symfony-button-green" href="{{ path('delete_venta', { 'id': venta.Id }) }}">Eliminar Venta</a>
             </td>
         </tr>
         {% set NoDoc = "#{NoDoc + venta.TotalNoDocumentada}" %}
@@ -76,6 +122,8 @@
             Crear Nueva
         </a>
 </p>
-
+<div id="borrar_venta" title="Confirmación borrar Venta">
+{% include 'CostoSystemBundle:Venta:delete.html.twig'%}
+</div>
 {% endblock %}
 

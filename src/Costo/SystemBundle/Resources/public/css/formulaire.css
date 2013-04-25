@@ -197,6 +197,10 @@ a.submit:focus{
     display:none;
 }
 
+#borrar_venta{
+    display:none;
+}
+
 .remove {
  /*position: relative;*/
  float: right;

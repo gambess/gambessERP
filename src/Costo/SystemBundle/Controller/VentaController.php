@@ -155,9 +155,42 @@ class VentaController extends Controller {
     /**
      * Borra una Venta
      * Necesita el id de la venta a borrar
+     * @method GET route: "/{id}/delete" name="delete_venta"
+     * @param int $id
+     * @return mixed
+     */
+    public function deleteAction($id) {
+        
+        if(!is_null($id)){
+                    $venta = VentaQuery::create()->findPk($id);
+
+                    if (!$venta) {
+                        throw $this->createNotFoundException('No se ha encontrado el detalle de venta solicitado');
+                    }
+                    
+                    if($venta->countDetalleVentas() > 0){
+                        
+                        $detalles =  $venta->getDetalleVentas();
+                        foreach ($detalles as $detalle){
+                            $detalle->delete();
+                        }
+                        
+                    }
+                    $venta->delete();
+                    return new Response(json_encode(array('codeResponse'=> 200, 'success'=> true)));
+                     
+        }
+        else {
+           throw $this->createNotFoundException('Se debe enviar el identificador de la venta a borrar'); 
+        }
+    }
+    
+    /**
+     * Borra un Detalle de Venta
+     * Necesita el id del detalle a borrar
      * @method GET route: "/{id}/deletedet" name="delete_detalle"
      * @param int $id
-     * @return void and redirects
+     * @return mixed
      */
     public function deletedetAction($id) {
         
@@ -169,12 +202,10 @@ class VentaController extends Controller {
                     }
 
                     $dventa->delete();
-                    $data = array('codeResponse'=>200, 'success'=> true);
-                    $response = new Response(json_encode($data));
-                    return $response;
+                    return new Response(json_encode(array('codeResponse'=>200, 'success'=> true)));
         }
         else {
-           throw $this->createNotFoundException('No se ha encontrado el detalle de venta solicitada'); 
+           throw $this->createNotFoundException('Se debe enviar el identificador del detalle de venta a borrar'); 
         }
     }
 }
