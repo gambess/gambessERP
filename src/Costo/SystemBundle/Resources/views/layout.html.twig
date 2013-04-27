@@ -2,18 +2,10 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" href="{{ asset('bundles/costosystem/css/demo.css') }}" type="text/css" media="all" />
-        {% stylesheets
-            '@CostoSystemBundle/Resources/public/css/*'
-         %}
-        <link rel="stylesheet" href="{{ asset( asset_url) }}"/>
+        {% stylesheets 'bundles/costosystem/css/*' filter='cssrewrite' %}
+            <link rel="stylesheet" href="{{ asset( asset_url) }}"/>
         {% endstylesheets %}
-        {% javascripts
-            '@CostoSystemBundle/Resources/public/js/*'
-         %}
-        <script type="text/javascript" src="{{ asset( asset_url) }}"></script>
-        {% endjavascripts %}
-        <title>{% block title %}Demo Bundle{% endblock %}</title>
+        <title>{% block title %}Arica Guau Sistema de Ventas{% endblock %}</title>
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>

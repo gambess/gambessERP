@@ -1,63 +1,51 @@
-/*table, th, td
-{
-        background:#f7f7f7;
-	background:-moz-linear-gradient(90deg, #ccc, #fff);  Firefox 
-	background:-webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc));  Webkit 
-	border:1px solid #aaa;
-	-moz-border-radius:10px;
-	-webkit-border-radius:10px;
-	-moz-box-shadow:0 0 15px #aaa;
-	-webkit-box-shadow:0 0 15px #aaa;
-	margin:60px auto 0;
-	padding:20px;
-	width:440px;
-}*/
-
-
 /* tutorial */
-table,th,td
+table
 {
     background:#f7f7f7;
     background:-moz-linear-gradient(90deg, #ccc, #fff); /* Firefox */
     background:-webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc)); /* Webkit */
-/*    font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;*/
-    margin:60px auto 0;
-    padding:20px;
-    width:440px;
-/*    width:67%;*/
-/*    border-collapse:collapse;*/
+    font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+    margin:20px auto 0;
+    padding:15px;
+    width:650px;
     border:1px solid #aaa;
-/*    border: 2px solid #90c100;*/
-/*    border-spacing:1;*/
-    -moz-border-radius:10px;
-    -webkit-border-radius:10px;
     -moz-box-shadow:0 0 15px #aaa;
     -webkit-box-shadow:0 0 15px #aaa;
-}
-th
-{
-    background-color: #90c100;
-    color: #FFFFFF;
-/*    border-bottom: 1px solid #CCCCCC;  */
-    font-size:1.5em;
-    text-align:left;
-    font-weight: bold;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
-    padding-top: 5px;
-    padding-bottom: 4px;
-    text-transform: uppercase;
 
 }
-
-td, th
+#table_left, #table_right
 {
-font-size:1em;
-border:1px solid #024321;
-padding:3px 7px 2px 7px;
+    margin:25px auto 0;
 }
-tr.par td
+#titlereport
 {
-color:#000000;
-background-color:#EAF2D3;
+    margin:35px auto 0;
+    padding:5px;
+}
+td
+{
+    padding:10px;
+/*    border:1px solid #aaa;*/
+    border-right: 1px solid #aaa;
+    border-left: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+}
+th h1, .title
+{
+    margin-bottom: 3px;
+    padding: 1px;
+}
+#ingresos
+{
+    position: relative;
+    float: left;
+    height: 40%;
+    width: 49.5%;
+}
+#gastos
+{
+    position: relative;
+    float: right;
+    height: 40%;
+    width: 49.5%;
 }

@@ -74,6 +74,7 @@ class DetalleVentaType extends AbstractType
             ->add('descripcion_venta', 'textarea', array(
                 'label' => 'Detalle',
                 'required' => false,
+                'attr' => array('class' => 'editor'),
                     )
                 )
             ->add('id_detalle','hidden')

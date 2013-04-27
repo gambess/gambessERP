@@ -1,14 +1,14 @@
 {% extends 'CostoSystemBundle::layout.html.twig' %}
 {% block content_header %}
-{% javascripts
+        {% javascripts
             '@CostoSystemBundle/Resources/public/js/jquery-1.7.2.min.js'
             '@CostoSystemBundle/Resources/public/js/jquery-ui-1.8.21.custom.min.js'
-            '@CostoSystemBundle/Resources/public/js/details.js'
             '@CostoSystemBundle/Resources/public/js/ui/i18n/jquery.ui.datepicker-es.js'
-            
+            '@CostoSystemBundle/Resources/public/js/jquery-te-1.3.5.min.js'
+            '@CostoSystemBundle/Resources/public/js/details.js'
          %}
         <script type="text/javascript" src="{{ asset( asset_url) }}"></script>
-{% endjavascripts %}
+        {% endjavascripts %}
                 <ul id="menu">
                     {% block content_header_more %}
                         IR A:
@@ -48,7 +48,7 @@
     </center>
     </p>
     <div id="detalles">
-    <div class="detalle" data-prototype="{{ form_widget(form.detalleVentas.vars.prototype.fecha_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.lugarVenta)|e}}{{ form_widget(form.detalleVentas.vars.prototype.ventaForma)|e }}{{ form_widget(form.detalleVentas.vars.prototype.total_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.total_neto_venta)|e}}{{ form_widget(form.detalleVentas.vars.prototype.total_iva_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.formaPago)|e }}{{ form_widget (form.detalleVentas.vars.prototype.descripcion_venta)|e}}{{ form_widget (form.detalleVentas.vars.prototype.id_detalle)|e}}">
+        <div class="detalle" data-prototype="{{ form_widget(form.detalleVentas.vars.prototype.fecha_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.lugarVenta)|e}}{{ form_widget(form.detalleVentas.vars.prototype.ventaForma)|e }}{{ form_widget(form.detalleVentas.vars.prototype.total_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.total_neto_venta)|e}}{{ form_widget(form.detalleVentas.vars.prototype.total_iva_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.formaPago)|e }}{% autoescape %}<a href='#' class='open_detail' data-id='venta_detalleVentas_$$name$$_descripcion_venta'>Añadir Detalle</a>{% endautoescape %}{{ form_widget (form.detalleVentas.vars.prototype.descripcion_venta)|e}}{{ form_widget (form.detalleVentas.vars.prototype.id_detalle)|e}}">
     </div>
    </div>
    <div id="totales"> 
@@ -91,4 +91,5 @@
     </p>
 </div>    
 </form>
+        <div id="dialog" title="Añadir Detalle"></div>
 {% endblock %}

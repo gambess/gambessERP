@@ -5,14 +5,11 @@ var doc = ['BOLETA', 'FACTURA', 'GUIA DESPACHO'];
 function addDivForm(collectionHolder, $newLinkp) {
     // Get the data-prototype explained earlier
     var prototype = collectionHolder.data('prototype');
-
     // get the new index
     var index = collectionHolder.data('index');
-
     // Replace '$$name$$' in the prototype's HTML to
     // instead be a number based on how many items we have
     var newForm = prototype.replace(/\$\$name\$\$/g, index);
-
     // increase the index with one for the next item
     collectionHolder.data('index', index + 1);
     // Display the form in the page in an li, before the "Add a tag" link li
@@ -27,11 +24,9 @@ function addDetailFormDeleteDiv($divForm) {
     var $removeFormA = $('<a href="#" class="remove">X</a>');
 //    var $removeFormA = $('<p><a href="#" class="remove">X</a></p>');
     $divForm.append($removeFormA);
-
     $removeFormA.on('click', function(e) {
         // prevent the link from creating a "#" on the URL
         e.preventDefault();
-
         // remove the li for the tag form
         $divForm.remove();
     });
@@ -65,25 +60,22 @@ function update(){
         if ($.inArray($(this).prev().find('option:selected').text(), doc) > -1) {
             total_doc += parseFloat(Number($(this).val()));
         }
-        
         if ($(this).prev().find('option:selected').text() === "NO DOC.") {
             total_no_doc += parseFloat(Number($(this).val()));
         }
-        
         if ($(this).prev().find('option:selected').text() === "REAL") {
             total_real += parseFloat(Number($(this).val()));
         }
     });
-
     total_neto = total_doc + total_no_doc;
-    
     updateTotales(total_doc, total_no_doc, total_neto, total_real);
 }
 //Las funcionalidades se ejecutan una vez que el documento DOM isReady
+
 $(document).ready(function() {
     var $addDetailLink = $('<a href="#" class="add_detail">Nuevo</a>');
     var $newLinkp = $('<p></p>').append($addDetailLink);
-
+    
     $('input[name$="fecha_venta]"]').hide();
 //Jquery -ui datepicker setaeado a spain lang y formateado se le asocia al id venta_fecha_venta
     $(function() {
@@ -92,7 +84,6 @@ $(document).ready(function() {
         $('#venta_fecha').datepicker();
     });
     //Este bloque se ejecuta si aparece el mensaje de error de fecha utilizada
-
     if ($('.error_list').length > 0) {
         var error = $('.error_list');
         //all  dar el foco al elemento se borra el mensaje y se borra la fecha
@@ -101,6 +92,7 @@ $(document).ready(function() {
             $('#venta_fecha').val("");
         });
     }
+    $('.editor').jqte();
     //Collection Handler
     $('div.detalle').append($newLinkp);
     $('div.detalle').data('index', $('.new_detalle').length);
@@ -118,9 +110,41 @@ $(document).ready(function() {
         if ($(this).val() === 0)
             $(this).val("");
     });
-    
+});
+//Añadir el editor de texto
+//$('body').on('click','a.add_detail', function(){
+//    $('.editor').jqte();
+//    $('.jqte').hide();
+//});
 
-                     
+//Convertirlo en Dialog
+$('body').on('click','a.open_detail', function(){
+    
+      var textarea = $(this).data('id');
+//    $('.editor').jqte();
+        $('#dialog').dialog({
+        autoOpen: false,
+        position: 'center',
+        modal: true,
+        width: 270,
+        height: 240,
+        buttons: {
+            "Añadir": function() {
+                $('textarea#'+textarea).html($('.jqte_editor').html());
+                $(this).dialog("close");
+                return false;
+            },
+            "Cancelar": function() {
+                $('textarea#'+textarea).val('');
+                $(this).dialog("close");
+                return false;
+            }
+        }
+    });
+    $('#'+textarea).appendTo('#dialog');
+    $('#'+textarea).jqte();
+    $('#dialog').dialog('open');
+    
 });
 
 

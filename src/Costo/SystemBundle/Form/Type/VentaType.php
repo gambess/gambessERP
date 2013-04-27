@@ -110,6 +110,7 @@ class VentaType extends AbstractType {
                 ->add('descripcion', 'textarea', array(
                     'label' => 'Detalles',
                     'required' => false,
+                    'attr' => array('class' => 'editor'),
                         )
                     )
                 ->add('id','hidden')
