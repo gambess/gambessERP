@@ -127,6 +127,14 @@ $('body').on('change', 'input[name$="total_venta]"], select[name$="][ventaForma]
 
     
 });
+
+$('body').on('click', 'a.open_detail', function(){
+    
+    var id = $(this).data('id');
+    if($('textarea#'+id).length){
+                $('textarea#'+id).jqte();
+    }
+});
 //Se recalculan los valores en el evento click
 $('body').on('click', '.remove' ,function(e){
     e.preventDefault();
