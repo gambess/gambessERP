@@ -254,7 +254,6 @@ $('body').on('focusout', 'input[id^="venta_total"]', function(){
 });
 
 $('body').on('change', 'input[id^="venta_total"]', function(){
-    
     if($(this).val()== 0) {
         return false;
     }else{
@@ -265,6 +264,4 @@ $('body').on('change', 'input[id^="venta_total"]', function(){
         }else
             return false;
     }
-    
-    
 });

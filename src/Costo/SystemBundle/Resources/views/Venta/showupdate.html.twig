@@ -26,6 +26,16 @@
 {% block title %}Agregar Desgloce de Ventas del día{% endblock %}
 {% block content %}
 <h1><center>{{ block('title') }}</center></h1>
+<br />
+<p align="center">
+        <a class="symfony-button-green" href="{{ path('new_venta') }}">
+            Crear Nueva Venta
+        </a>
+        <a class="symfony-button-green" href="{{ path('index_venta') }}">
+            Volver al Listado de Ventas
+        </a>
+</p>
+<br />
 <form action="{{ path('update_venta', { 'id': form.vars.value.id }) }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget (form.id)}}
     <p>

@@ -3,6 +3,7 @@
 {% javascripts
             '@CostoSystemBundle/Resources/public/js/jquery-1.7.2.min.js'
             '@CostoSystemBundle/Resources/public/js/jquery-ui-1.8.21.custom.min.js'
+            '@CostoSystemBundle/Resources/public/js/ui/i18n/jquery.ui.datepicker-es.js'
              output='js/compiled/index.js'  
          %}
         <script type="text/javascript" src="{{ asset( asset_url) }}"></script>
@@ -47,6 +48,37 @@
                     });
 			
     });
+    $('body').on('click', '#link_search_venta', function(evt){
+    evt.preventDefault();
+    //Jquery -ui datepicker setaeado a spain lang y formateado se le asocia al id venta_fecha_venta
+    $(function() {
+        $.datepicker.setDefaults($.datepicker.regional[ "es" ]);
+        // Datepicker
+        $('#search_venta').datepicker();
+    });
+    $('#search_venta').show();
+    });
+    $('body').on('change', '#search_venta', function(){
+        $.ajax({
+                    type: "GET",
+                    url: '/aricagua/web/app_dev.php/venta/' + $(this).val() + '/exists',
+                    dataType: "json"
+                }).done(function(data){
+                    if (data.exists == 1){
+                        $('#search_venta').hide();
+                        var route = "{{path('show_venta', { 'id': "PLACEHOLDER" }) }}";
+                        window.location.href= route.replace("PLACEHOLDER", data.id);
+                        return true;
+                    }
+                    if(data.exists == 0){
+                        alert('No existen datos de ventas para la fecha seleccionada');
+                        $('#search_venta').val("");
+                        $('#search_venta').hide();
+                        return false;
+                    }
+                    
+                });
+    });
 </script>
                 <ul id="menu">
                     {% block content_header_more %}
@@ -67,6 +99,10 @@
         <a class="symfony-button-green" href="{{ path('new_venta') }}">
             Crear Nueva Venta
         </a>
+        <a id="link_search_venta" class="symfony-button-green" href="">
+            Buscar e Ir a Venta
+        </a>
+        <input id="search_venta" type="text" style="display:none" />
 </p>
 <br />
 <center><em>{{ pagerfanta(paginate , 'default_translated', pagerfanta_opts) }}</em></center>

@@ -227,7 +227,7 @@ class VentaController extends Controller {
             if (is_null($venta)) {
                     return new Response(json_encode(array('exists'=> 0)));
             } else{
-                    return new Response(json_encode(array('exists'=> 1)));
+                    return new Response(json_encode(array('exists'=> 1, 'id' => $venta->getPrimaryKey())));
             }
         }
         else {
