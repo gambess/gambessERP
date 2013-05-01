@@ -61,16 +61,24 @@
 {% endblock %}
 {% block title %}Listado de Ventas{% endblock %}
 {% block content %}
-
 <h1><center>{{ block('title') }}</center></h1>
+<br />
+<p align="center">
+        <a class="symfony-button-green" href="{{ path('new_venta') }}">
+            Crear Nueva Venta
+        </a>
+</p>
+<br />
+<center><em>{{ pagerfanta(paginate , 'default_translated', pagerfanta_opts) }}</em></center>
+<br />
 <p align="center">
 {% if end is not empty and begin is not empty %}
 Mostrado ventas desde el día:
 <input id="desde" type="text" style="width: 83px;" value="{{end|date('d/m/Y')}}" disabled="disabled" />
 hasta el día:
 <input id="hasta" type="text" style="width: 83px;" value="{{begin|date('d/m/Y')}}" disabled="disabled" />
-{% endif %}
 </p>
+{% endif %}
 <table align="center">
     <thead>
         <tr>
@@ -128,7 +136,7 @@ hasta el día:
 <br />
 <p align="center">
         <a class="symfony-button-green" href="{{ path('new_venta') }}">
-            Crear Nueva
+            Crear Nueva Venta
         </a>
 </p>
 <div id="borrar_venta" title="Confirmación borrar Venta">
