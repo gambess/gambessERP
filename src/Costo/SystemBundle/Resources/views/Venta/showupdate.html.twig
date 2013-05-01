@@ -12,6 +12,56 @@
          %}
         <script type="text/javascript" src="{{ asset( asset_url) }}"></script>
         {% endjavascripts %}
+        <script type="text/javascript">
+        
+        //Se recalculan los valores en el evento click
+        $('body').on('click', '.remove' ,function(e){
+            e.preventDefault();
+            var divToDel = $(this).parent('div');
+
+            $('#deletion_venta').dialog({
+                autoOpen: false,
+                position: 'center',
+                modal: true,
+                width: 270,
+                height: 240,
+                buttons: {
+                    "Borrar": function() {
+                        var dir = "{{path('delete_detalle', { 'id': "PLACEHOLDER" }) }}";
+                        $.ajax({
+                            type: "GET",
+                            url: dir.replace("PLACEHOLDER",$('#deletion_venta').data('IdToDel')),
+                            dataType: "json"
+                        }).done(function(msj){
+                            if(msj.codeResponse==200 && msj.success==true){
+                                $('#deletion_venta').data('divToDel').remove(); 
+                                update();
+                                $('#deletion_venta').dialog('close');
+                            }
+                        });
+                        return false;
+                    },
+                    "Cancelar": function() {
+                        $(this).dialog("close");
+                        return false;
+                    }
+                }
+            });
+            // Dialog Link
+
+            //Suma los netos cada vez que cambian
+            if ($(this).attr('dbid'))
+            {
+                $('#deletion_venta').data('divToDel', divToDel).data('IdToDel', $(this).attr('dbid')).dialog('open');
+            }
+            else
+            {
+                divToDel.remove();
+                update();
+            }
+        });
+        
+        </script>
                 <ul id="menu">
                     {% block content_header_more %}
                         IR A:
