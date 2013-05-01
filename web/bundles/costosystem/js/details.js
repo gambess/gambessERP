@@ -110,6 +110,27 @@ $(document).ready(function() {
             $(this).val("");
     });
 });
+
+//Validacion de la fecha
+
+$('body').on('change','#venta_fecha' , function(){
+                $.ajax({
+                    type: "GET",
+                    url: '/aricagua/web/app_dev.php/venta/' + $(this).val() + '/exists',
+                    dataType: "json"
+                }).done(function(msj){
+                    if (msj.exists === 0){
+                        alert('La fecha ya se encuentra en la base de datos debe seleccionar otra fecha');
+                        return false;
+                    }
+                    if(msj.exists === 1){
+                        return true;
+                    }
+                    
+                });
+    
+});
+
 //Se recalculan los valores en el evento change
 $('body').on('change', 'input[name$="total_venta]"], select[name$="][ventaForma]"]', function(){
     
@@ -126,6 +147,14 @@ $('body').on('change', 'input[name$="total_venta]"], select[name$="][ventaForma]
     update();
 
     
+});
+
+$('body').on('click', 'a.open_detail', function(){
+    
+    var id = $(this).data('id');
+    if($('textarea#'+id).length){
+                $('textarea#'+id).jqte();
+    }
 });
 //Se recalculan los valores en el evento click
 $('body').on('click', '.remove' ,function(e){

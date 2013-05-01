@@ -201,6 +201,9 @@ a.submit:focus{
     display:none;
 }
 
+#send_date{
+    display:none;
+}
 
 .remove {
  /*position: relative;*/

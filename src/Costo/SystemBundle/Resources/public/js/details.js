@@ -81,7 +81,13 @@ $(document).ready(function() {
     $(function() {
         $.datepicker.setDefaults($.datepicker.regional[ "es" ]);
         // Datepicker
-        $('#venta_fecha').datepicker();
+        $('#venta_fecha').datepicker({
+//            numberOfMonths: 2
+//            changeMonth: true,
+//            changeYear: true,
+//            showOtherMonths: true,
+//            selectOtherMonths: true
+});
     });
     //Este bloque se ejecuta si aparece el mensaje de error de fecha utilizada
     if ($('.error_list').length > 0) {
@@ -98,6 +104,11 @@ $(document).ready(function() {
     $addDetailLink.on('click', function(e) {
         // prevent the link from creating a "#" on the URL
         e.preventDefault();
+        var fecha = $('#venta_fecha').val()
+        if (fecha == ""){
+            alert('Se debe ingresar la fecha de venta previamente');
+        return false;
+        }
         // add a new tag form (see next code block)
         addDivForm($('div.detalle'), $newLinkp);
         $('input[name$="fecha_venta]"]').hide();
@@ -110,6 +121,28 @@ $(document).ready(function() {
             $(this).val("");
     });
 });
+
+//Validacion de la fecha
+
+$('body').on('change','#venta_fecha' , function(){
+                $.ajax({
+                    type: "GET",
+                    url: '/aricagua/web/app_dev.php/venta/' + $(this).val() + '/exists',
+                    dataType: "json"
+                }).done(function(data){
+                    if (data.exists == 1){
+                        alert('La fecha ya se encuentra en la base de datos debe seleccionar otra fecha');
+                        $('#venta_fecha').val('');
+                        return false;
+                    }
+                    if(data.exists == 0){
+                        return true;
+                    }
+                    
+                });
+    
+});
+
 //Se recalculan los valores en el evento change
 $('body').on('change', 'input[name$="total_venta]"], select[name$="][ventaForma]"]', function(){
     
@@ -128,8 +161,8 @@ $('body').on('change', 'input[name$="total_venta]"], select[name$="][ventaForma]
     
 });
 
-$('body').on('click', 'a.open_detail', function(){
-    
+$('body').on('click', 'a.open_detail', function(event){
+    event.preventDefault();
     var id = $(this).data('id');
     if($('textarea#'+id).length){
                 $('textarea#'+id).jqte();
@@ -180,4 +213,58 @@ $('body').on('click', '.remove' ,function(e){
         divToDel.remove();
         update();
     }
+});
+// forceNumeric() plug-in implementation
+jQuery.fn.forceNumeric = function () {
+
+    return this.each(function () {
+        $(this).keydown(function (e) {
+            var key = e.which || e.keyCode;
+
+            if (!e.shiftKey && !e.altKey && !e.ctrlKey &&
+            // numbers   
+                key >= 48 && key <= 57 ||
+            // Numeric keypad
+                key >= 96 && key <= 105 ||
+            // comma, period and minus, . on keypad
+               key == 190 || key == 188 || key == 109 || key == 110 ||
+            // Backspace and Tab and Enter
+               key == 8 || key == 9 || key == 13 ||
+            // Home and End
+               key == 35 || key == 36 ||
+            // left and right arrows
+               key == 37 || key == 39 ||
+            // Del and Ins
+               key == 46 || key == 45)
+                return true;
+
+            return false;
+        });
+    });
+}
+
+var back_value;
+$('body').on('focus', 'input[id^="venta_total"]', function(){
+   back_value = $(this).val();
+   $(this).val("");
+   $(this).forceNumeric();
+});
+$('body').on('focusout', 'input[id^="venta_total"]', function(){
+   if($(this).val() == "") $(this).val(back_value);
+});
+
+$('body').on('change', 'input[id^="venta_total"]', function(){
+    
+    if($(this).val()== 0) {
+        return false;
+    }else{
+        if($($('.new_detalle').length == 0)){
+            alert("Aun no se ha ingresado ningun degloce de ventas\nNo se pueden modificar");
+            $(this).val("0");
+            return false;
+        }else
+            return false;
+    }
+    
+    
 });

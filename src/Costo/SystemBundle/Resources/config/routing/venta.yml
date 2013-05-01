@@ -21,12 +21,10 @@ new_venta:
     pattern:  /new
     defaults: { _controller: "CostoSystemBundle:Venta:new" }
 
-
 create_venta:
     pattern:  /create
     defaults: { _controller: "CostoSystemBundle:Venta:create" }
     requirements: { _method: post }
-
 
 update_venta:
     pattern:  /{id}/update
@@ -48,3 +46,10 @@ paginate_venta:
     defaults: { _controller: "CostoSystemBundle:Venta:index", page: 1 }
     requirements:
       page: \d+
+      
+validate_date:
+    pattern:  /{day}/{month}/{year}/exists
+    defaults: { _controller: "CostoSystemBundle:Venta:validatedate"}
+    requirements:
+      year: \d+
+      _method: GET 

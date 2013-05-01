@@ -44,8 +44,8 @@ class VentaController extends Controller {
 
                 return $this->render('CostoSystemBundle:Venta:index.html.twig', array(
                     'ventas' => $collection,
-                    'end' => $collection->count() > 0 ? $collection->getFirst()->getFecha(): 0,
-                    'begin' => $collection->count() > 0 ? $collection->getLast()->getFecha(): 0,
+                    'end' => $collection->count() > 0 ? $collection->getFirst()->getFecha(): "",
+                    'begin' => $collection->count() > 0 ? $collection->getLast()->getFecha(): "",
                     'page' => $page,
                     'paginate' => $pagerfanta,
                 ));
@@ -206,6 +206,32 @@ class VentaController extends Controller {
         }
         else {
            throw $this->createNotFoundException('Se debe enviar el identificador del detalle de venta a borrar'); 
+        }
+    }
+    /**
+     * Verifica si ya existe una Venta en la fecha indicada
+     * Necesita el id del detalle a borrar
+     * @method GET route: "/{day}/{month}/{year}/exists" name="delete_detalle"
+     * @param int $id
+     * @return mixed
+     */
+    public function validatedateAction($day, $month, $year) {
+        
+
+        
+        if(!is_null($day) && !is_null($month) && !is_null($year)){
+
+            $date = $day."/".$month."/".$year;
+            $valDate =\DateTime::createFromFormat('d/m/Y', $date);
+            $venta = VentaQuery::create()->findOneByFecha($valDate);
+            if (is_null($venta)) {
+                    return new Response(json_encode(array('exists'=> 0)));
+            } else{
+                    return new Response(json_encode(array('exists'=> 1)));
+            }
+        }
+        else {
+           throw $this->createNotFoundException('Se debe enviar la fecha en el formato correcto day/month/year'); 
         }
     }
 }

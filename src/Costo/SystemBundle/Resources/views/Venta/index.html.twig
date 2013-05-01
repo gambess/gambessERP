@@ -63,6 +63,14 @@
 {% block content %}
 
 <h1><center>{{ block('title') }}</center></h1>
+<p align="center">
+{% if end is not empty and begin is not empty %}
+Mostrado ventas desde el día:
+<input id="desde" type="text" style="width: 83px;" value="{{end|date('d/m/Y')}}" disabled="disabled" />
+hasta el día:
+<input id="hasta" type="text" style="width: 83px;" value="{{begin|date('d/m/Y')}}" disabled="disabled" />
+{% endif %}
+</p>
 <table align="center">
     <thead>
         <tr>
