@@ -23,7 +23,7 @@ class DetalleVentaType extends AbstractType
                 ->orderByIdTipoVentaForma('ASC')
                 ->orderByNombreVentaForma('ASC')
                 ,   
-                    'attr' => array('class' => 'detail_widget ui-widget ui-state-default ui-corner-all'),
+                    'attr' => array('class' => 'detail_widget ui-widget ui-state-default'),
             )
                     )
             ->add('lugarVenta', 'model',
@@ -32,7 +32,7 @@ class DetalleVentaType extends AbstractType
                     'empty_value' => 'Lugar de Venta...',
                     'class' => 'Costo\SystemBundle\Model\LugarVenta',
                     'property' => 'NombreLugarVenta',
-                    'attr' => array('class' => 'detail_widget ui-widget ui-state-default ui-corner-all'),
+                    'attr' => array('class' => 'detail_widget ui-widget ui-state-default'),
             )
                     )
             ->add('formaPago', 'model',
@@ -41,7 +41,7 @@ class DetalleVentaType extends AbstractType
                     'empty_value' => 'Forma de Pago...',
                     'class' => 'Costo\SystemBundle\Model\FormaPago',
                     'property' => 'NombreFormaPago',
-                    'attr' => array('class' => 'detail_widget ui-widget ui-state-default ui-corner-all'),
+                    'attr' => array('class' => 'detail_widget ui-widget ui-state-default'),
             )
                     )
             ->add('fecha_venta', 'date', array(
