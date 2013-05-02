@@ -22,7 +22,8 @@ class DetalleVentaType extends AbstractType
                     'query' => VentaFormaQuery::create()
                 ->orderByIdTipoVentaForma('ASC')
                 ->orderByNombreVentaForma('ASC')
-                ,
+                ,   
+                    'attr' => array('class' => 'detail_widget ui-widget ui-state-default ui-corner-all'),
             )
                     )
             ->add('lugarVenta', 'model',
@@ -31,6 +32,7 @@ class DetalleVentaType extends AbstractType
                     'empty_value' => 'Lugar de Venta...',
                     'class' => 'Costo\SystemBundle\Model\LugarVenta',
                     'property' => 'NombreLugarVenta',
+                    'attr' => array('class' => 'detail_widget ui-widget ui-state-default ui-corner-all'),
             )
                     )
             ->add('formaPago', 'model',
@@ -39,6 +41,7 @@ class DetalleVentaType extends AbstractType
                     'empty_value' => 'Forma de Pago...',
                     'class' => 'Costo\SystemBundle\Model\FormaPago',
                     'property' => 'NombreFormaPago',
+                    'attr' => array('class' => 'detail_widget ui-widget ui-state-default ui-corner-all'),
             )
                     )
             ->add('fecha_venta', 'date', array(
@@ -52,6 +55,7 @@ class DetalleVentaType extends AbstractType
                     'label' => 'Total',
                     'currency' => 'CLP',
                     'precision' => 0,
+                    'attr' => array('class' => 'detail_widget'),
 //                    'grouping' => true
                         )
                 )
