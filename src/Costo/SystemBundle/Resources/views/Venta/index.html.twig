@@ -59,9 +59,16 @@
     $('#search_venta').show();
     });
     $('body').on('change', '#search_venta', function(){
+        if($(this).val() != ""){
+           var p = $(this).val().split("/");      
+           var r = "{{path('validate_date', {'day': "DAY", 'month': "MONTH", 'year':"0000"})}}";
+           r = r.replace("DAY", p[0]); 
+           r = r.replace("MONTH", p[1]); 
+           r = r.replace("0000/", p[2]+"/");
+        }
         $.ajax({
                     type: "GET",
-                    url: '/aricagua/web/app_dev.php/venta/' + $(this).val() + '/exists',
+                    url: r,
                     dataType: "json"
                 }).done(function(data){
                     if (data.exists == 1){
@@ -124,7 +131,7 @@ hasta el día:
             <th><h1><center>IVA<center></h1></th>
             <th><h1><center>Total<center></h1></th>
             <th><h1><center>Real<center></h1></th>
-            <th colspan="2"><h1><center>Acciones</center></h1></th>
+            <th colspan="3"><h1><center>Acciones</center></h1></th>
         </tr>
     </thead>
     <tbody>
@@ -147,6 +154,13 @@ hasta el día:
             </td>
             <td>
                         <a class="delete symfony-button-green" href="{{ path('delete_venta', { 'id': venta.Id }) }}">Eliminar Venta</a>
+            </td>
+            <td>
+                <div class="update_date">
+                    <span>
+                        Última Modificación {{venta.FechaModificacion|date("d/m/Y \\a \\l\\a\\s G:i", "America/Santiago")}}
+                    </span>
+                </div>
             </td>
         </tr>
         {% set NoDoc = "#{NoDoc + venta.TotalNoDocumentada}" %}
