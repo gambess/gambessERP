@@ -38,7 +38,7 @@ class VentaController extends Controller {
                             ->orderByFecha('ASC');
                             
                 $pagerfanta = new Pagerfanta(new PropelAdapter($query));
-                $pagerfanta->setMaxPerPage(7);
+                $pagerfanta->setMaxPerPage(15);
                 $pagerfanta->setCurrentPage($request->get('page')); // 1 by default
                 $collection = $pagerfanta->getCurrentPageResults();
 
