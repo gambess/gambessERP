@@ -2,6 +2,7 @@
 var indice = 0;
 var doc = ['BOLETA', 'FACTURA', 'GUIA DESPACHO'];
 
+//Agrega el div detalle al body
 function addDivForm(collectionHolder, $newLinkp) {
     // Get the data-prototype explained earlier
     var prototype = collectionHolder.data('prototype');
@@ -21,7 +22,7 @@ function addDivForm(collectionHolder, $newLinkp) {
 
 //añadir la x para borrar el elemento
 function addDetailFormDeleteDiv($divForm) {
-    var $removeFormA = $('<a href="#" class="remove">X</a>');
+    var $removeFormA = $('<span class="remove ui-icon ui-icon-closethick" style="display:inline-block"></span>');
 //    var $removeFormA = $('<p><a href="#" class="remove">X</a></p>');
     $divForm.append($removeFormA);
     $removeFormA.on('click', function(e) {
@@ -32,6 +33,7 @@ function addDetailFormDeleteDiv($divForm) {
     });
 }
 
+//Actualiza los tototales de acuerdo a cada cambio
 function updateTotales(total_doc, total_no_doc, total_neto, total_real){
     $('input[name="venta[total_neto_documentada]"]').val((total_doc / 1.19).toFixed(0));
     $('input[name="venta[total_iva_documentada]"]').val((((total_doc)/1.19) * .19).toFixed(0));
@@ -50,6 +52,7 @@ function updateTotales(total_doc, total_no_doc, total_neto, total_real){
     $('input[name="venta[total_real]"]').val((total_real).toFixed(0));
 }
 
+//Realiza una llamada a la actualizacion de los montos
 function update(){
     var total_neto = 0;
     var total_doc = 0;
@@ -70,25 +73,22 @@ function update(){
     total_neto = total_doc + total_no_doc;
     updateTotales(total_doc, total_no_doc, total_neto, total_real);
 }
-//Las funcionalidades se ejecutan una vez que el documento DOM isReady
 
+//Las funcionalidades se ejecutan una vez que el documento DOM isReady
 $(document).ready(function() {
     var $addDetailLink = $('<a href="#" class="add_detail">Nuevo</a>');
     var $newLinkp = $('<p></p>').append($addDetailLink);
-    
     $('input[name$="fecha_venta]"]').hide();
-//Jquery -ui datepicker setaeado a spain lang y formateado se le asocia al id venta_fecha_venta
-    $(function() {
-        $.datepicker.setDefaults($.datepicker.regional[ "es" ]);
-        // Datepicker
-        $('#venta_fecha').datepicker({
-//            numberOfMonths: 2
-//            changeMonth: true,
-//            changeYear: true,
-//            showOtherMonths: true,
-//            selectOtherMonths: true
-});
-    });
+    if($('#venta_fecha').attr('view')!== 'showupdate'){
+        //Jquery -ui datepicker setaeado a spain lang y formateado se le asocia al id venta_fecha_venta
+        $(function() {$.datepicker.setDefaults($.datepicker.regional[ "es" ]);
+            // Datepicker
+            $('#venta_fecha').datepicker({});
+    //            numberOfMonths: 2
+    //            changeMonth: true,
+    //    });
+        });
+    }
     //Este bloque se ejecuta si aparece el mensaje de error de fecha utilizada
     if ($('.error_list').length > 0) {
         var error = $('.error_list');
@@ -121,44 +121,18 @@ $(document).ready(function() {
             $(this).val("");
     });
 });
-
-//Validacion de la fecha
-
-$('body').on('change','#venta_fecha' , function(){
-                $.ajax({
-                    type: "GET",
-                    url: '/aricagua/web/app_dev.php/venta/' + $(this).val() + '/exists',
-                    dataType: "json"
-                }).done(function(data){
-                    if (data.exists == 1){
-                        alert('La fecha ya se encuentra en la base de datos debe seleccionar otra fecha');
-                        $('#venta_fecha').val('');
-                        return false;
-                    }
-                    if(data.exists == 0){
-                        return true;
-                    }
-                    
-                });
-    
-});
-
 //Se recalculan los valores en el evento change
 $('body').on('change', 'input[name$="total_venta]"], select[name$="][ventaForma]"]', function(){
-    
     var id = $(this).parent().attr("id");
     var indix = id.replace('new_detalle_', '');
     var iva = parseFloat(Number(($(this).val()) / 1.19)* .19);
     var neto = parseFloat(Number($(this).val()) / 1.19);
-
         //Input ocultos
     $('input[id$="' + indix + '_total_iva_venta"]').val(iva.toFixed(0));
     $('input[id$="' + indix + '_total_neto_venta"]').val(neto.toFixed(0));
     
     //Suma los netos cada vez que cambian
     update();
-
-    
 });
 
 $('body').on('click', 'a.open_detail', function(event){
@@ -166,52 +140,6 @@ $('body').on('click', 'a.open_detail', function(event){
     var id = $(this).data('id');
     if($('textarea#'+id).length){
                 $('textarea#'+id).jqte();
-    }
-});
-//Se recalculan los valores en el evento click
-$('body').on('click', '.remove' ,function(e){
-    e.preventDefault();
-    var divToDel = $(this).parent('div');
-
-    $('#deletion_venta').dialog({
-        autoOpen: false,
-        position: 'center',
-        modal: true,
-        width: 270,
-        height: 240,
-        buttons: {
-            "Borrar": function() {
-                
-                $.ajax({
-                    type: "GET",
-                    url: '/aricagua/web/app_dev.php/venta/' + $('#deletion_venta').data('IdToDel') + '/deletedet',
-                    dataType: "json"
-                }).done(function(msj){
-                    if(msj.codeResponse==200 && msj.success==true){
-                        $('#deletion_venta').data('divToDel').remove(); 
-                        update();
-                        $('#deletion_venta').dialog('close');
-                    }
-                });
-                return false;
-            },
-            "Cancelar": function() {
-                $(this).dialog("close");
-                return false;
-            }
-        }
-    });
-    // Dialog Link
-
-    //Suma los netos cada vez que cambian
-    if ($(this).attr('dbid'))
-    {
-        $('#deletion_venta').data('divToDel', divToDel).data('IdToDel', $(this).attr('dbid')).dialog('open');
-    }
-    else
-    {
-        divToDel.remove();
-        update();
     }
 });
 // forceNumeric() plug-in implementation
@@ -263,5 +191,12 @@ $('body').on('change', 'input[id^="venta_total"]', function(){
             return false;
         }else
             return false;
+    }
+});
+$('body').on('focus', '#venta_fecha', function(e){
+    e.preventDefault();
+    if($(this).attr('view') === 'showupdate'){
+        $(this).attr('title','No se puede modificar la fecha\nSeleccione Buscar e Ir');
+        alert($(this).attr('title'));      
     }
 });

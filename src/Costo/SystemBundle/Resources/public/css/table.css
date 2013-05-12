@@ -6,9 +6,9 @@ table
     background:-webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc)); /* Webkit */
     font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
     margin:20px auto 0;
-    padding:15px;
-    width:650px;
-    border:1px solid #aaa;
+    padding:5px;
+    width:700px;
+    border:2px solid #4CA20B;
     -moz-box-shadow:0 0 15px #aaa;
     -webkit-box-shadow:0 0 15px #aaa;
 
@@ -25,14 +25,15 @@ table
 td
 {
     padding:10px;
-/*    border:1px solid #aaa;*/
-    border-right: 1px solid #aaa;
+    border:1px solid #4CA20B;
+/*    border-right: 1px solid #aaa;
     border-left: 1px solid #aaa;
-    border-bottom: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;*/
 }
 th h1, .title
 {
-    margin-bottom: 3px;
+    border-right: 1px solid #4CA20B;
+    /*margin-bottom: 3px;*/
     padding: 1px;
 }
 #ingresos
@@ -48,4 +49,7 @@ th h1, .title
     float: right;
     height: 40%;
     width: 49.5%;
+}
+#desde, #hasta, #search_venta, #venta_fecha, #fecha_a_crear{
+    border: 1px solid #4CA20B;
 }

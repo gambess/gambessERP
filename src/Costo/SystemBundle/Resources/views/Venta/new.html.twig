@@ -12,13 +12,46 @@
          %}
         <script type="text/javascript" src="{{ asset( asset_url) }}"></script>
         {% endjavascripts %}
+        <script type="text/javascript">
+        //Validacion de la fecha
+        $('body').on('change','#venta_fecha' , function(){
+        if($(this).val() != ""){
+                   var p = $(this).val().split("/");      
+                   var r = "{{path('validate_date', {'day': "DAY", 'month': "MONTH", 'year':"0000"})}}";
+                   r = r.replace("DAY", p[0]); 
+                   r = r.replace("MONTH", p[1]); 
+                   r = r.replace("0000/", p[2]+"/");
+        }
+                        $.ajax({
+                            type: "GET",
+                            url: r,
+                            dataType: "json"
+                        }).done(function(data){
+                            if (data.exists == 1){
+                                alert('La fecha ya se encuentra en la base de datos debe seleccionar otra fecha');
+                                $('#venta_fecha').val('');
+                                return false;
+                            }
+                            if(data.exists == 0){
+                                return true;
+                            }
+
+                        });
+
+        });
+        </script>
                 <ul id="menu">
                     {% block content_header_more %}
                         IR A:
                         <li><a class="symfony-button-green" href="{{ path('_homepage') }}">Principal</a></li>
                         <li><a class="symfony-button-green" href="{{ path('index_cuenta') }}">Cuentas</a></li>
                         <li><a class="symfony-button-green"  href="{{ path('index_gasto') }}">Gastos</a></li>
-                        <li><a class="symfony-button-green" href="{{ path('index_venta') }}">Ventas</a></li>
+                        <li>
+                            <a class="ui-button ui-widget ui-state-default ui-button-text-icon-secondary" href="{{ path('index_venta') }}">
+                                <span class="ui-button-text">Ventas</span>
+                                <span class="ui-button-icon-secondary ui-icon ui-icon-clipboard"></span>
+                            </a>
+                        </li>
                     {% endblock %}
                 </ul>
                 <div style="clear: both"></div>
@@ -54,34 +87,31 @@
         <div class="detalle" data-prototype="{{ form_widget(form.detalleVentas.vars.prototype.fecha_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.lugarVenta)|e}}{{ form_widget(form.detalleVentas.vars.prototype.ventaForma)|e }}{{ form_widget(form.detalleVentas.vars.prototype.total_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.total_neto_venta)|e}}{{ form_widget(form.detalleVentas.vars.prototype.total_iva_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.formaPago)|e }}{% autoescape %}<a href='#modal_$$name$$' class='open_detail' data-id='venta_detalleVentas_$$name$$_descripcion_venta' rel='modal:open'>Añadir Detalle</a><div id='modal_$$name$$' class='modal'>{% endautoescape %}{{ form_widget (form.detalleVentas.vars.prototype.descripcion_venta)|e}}{% autoescape %}</div>{% endautoescape %}{{ form_widget (form.detalleVentas.vars.prototype.id_detalle)|e}}">
     </div>
    </div>
+        <p align="right">
+            <button class="b ui-button ui-widget ui-state-default ui-button-text-icon-secondary" type="submit"><span class="ui-button-text">Grabar</span><span class="ui-button-icon-secondary ui-icon ui-icon-disk"></span></button>
+        </p>
    <div id="totales"> 
     <p>
     <div style="clear: both"></div>
-   _______________________________________________________________________________________________________________
-    <p>---Totales ------- Neto ------------- IVA ------------ Totales -----</p>
     <div class="documentada">
-        Docum.  :
         {{ form_widget (form.total_neto_documentada) }}
         {{ form_widget (form.total_iva_documentada) }}
         {{ form_widget (form.total_documentada) }}
     </div>
     <br />
     <div class="no_documentada">
-        No Doc  :
         {{ form_widget (form.total_neto_no_documentada) }}
         {{ form_widget (form.total_iva_no_documentada) }}
         {{ form_widget (form.total_no_documentada) }}
     </div>
     <br />
     <div class="total">
-        Total.  :
         {{ form_widget (form.total_neto) }}
         {{ form_widget (form.total_iva) }}
         {{ form_widget (form.total) }}
     </div>
     <br />
     <div class="real">
-        Real.  :
         {{ form_widget (form.total_neto_real) }}
         {{ form_widget (form.total_iva_real) }}
         {{ form_widget (form.total_real) }}
@@ -89,9 +119,6 @@
     </p>
     <div>{{ form_widget(form._token) }}</div>
 <br />
-    <p align="right">
-        <button class="symfony-button-green" type="submit">Grabar</button>
-    </p>
 </div>    
 </form>
 <div id ="borrar_venta"></div>

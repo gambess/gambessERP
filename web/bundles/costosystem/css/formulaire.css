@@ -37,11 +37,11 @@ form{
 	width:800px;
 }
 h1{
-	border-bottom:1px solid #ccc;
+	/*border-bottom:1px solid #ccc;*/
 	font-size:11px;
 	font-weight:bold;
-	letter-spacing:2px;
-	margin-bottom:20px;
+	letter-spacing:1px;
+	/*margin-bottom:20px;*/
 	text-transform:uppercase;
 }
 form p{
@@ -199,7 +199,7 @@ a.submit:focus{
     display:none;
 }
 
-#borrar_venta{
+#crear_venta{
     display:none;
 }
 
@@ -212,6 +212,7 @@ a.submit:focus{
  float: right;
  margin-right: 2px;
  color: #1F9570;
+ cursor: pointer;
  /*top:0;*/
  /*right:0;*/
  /*width: 450px;*/
@@ -219,4 +220,18 @@ a.submit:focus{
 
 .detail_widget{
     margin: 10px 10px 5px 0;
+}
+.b{
+    top: -15px;
+}
+.add_detail{
+    color: #4CA20B;
+}
+
+.action{
+   color: #4CA20B; 
+}
+
+.open_detail{
+   color: #4CA20B; 
 }

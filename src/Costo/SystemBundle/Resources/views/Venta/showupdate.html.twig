@@ -4,6 +4,7 @@
             '@CostoSystemBundle/Resources/public/js/jquery-1.7.2.min.js'
             '@CostoSystemBundle/Resources/public/js/jquery-ui-1.8.21.custom.min.js'
             '@CostoSystemBundle/Resources/public/js/ui/i18n/jquery.ui.datepicker-es.js'
+            '@CostoSystemBundle/Resources/public/js/jquery.redirect.min.js'
             '@CostoSystemBundle/Resources/public/js/details.js'
             '@CostoSystemBundle/Resources/public/js/jquery-te-1.3.5.min.js'
             '@CostoSystemBundle/Resources/public/js/jquery.snippet.min.js'
@@ -13,46 +14,30 @@
         <script type="text/javascript" src="{{ asset( asset_url) }}"></script>
         {% endjavascripts %}
         <script type="text/javascript">
-        
         //Se recalculan los valores en el evento click
         $('body').on('click', '.remove' ,function(e){
             e.preventDefault();
             var divToDel = $(this).parent('div');
-
-            $('#deletion_venta').dialog({
-                autoOpen: false,
-                position: 'center',
-                modal: true,
-                width: 270,
-                height: 240,
-                buttons: {
-                    "Borrar": function() {
-                        var dir = "{{path('delete_detalle', { 'id': "PLACEHOLDER" }) }}";
-                        $.ajax({
-                            type: "GET",
-                            url: dir.replace("PLACEHOLDER",$('#deletion_venta').data('IdToDel')),
-                            dataType: "json"
-                        }).done(function(msj){
-                            if(msj.codeResponse==200 && msj.success==true){
-                                $('#deletion_venta').data('divToDel').remove(); 
-                                update();
-                                $('#deletion_venta').dialog('close');
-                            }
-                        });
-                        return false;
-                    },
-                    "Cancelar": function() {
-                        $(this).dialog("close");
-                        return false;
-                    }
-                }
-            });
+            var dir = "{{path('delete_detalle', { 'id': "PLACEHOLDER" }) }}";
+            
             // Dialog Link
-
             //Suma los netos cada vez que cambian
             if ($(this).attr('dbid'))
             {
-                $('#deletion_venta').data('divToDel', divToDel).data('IdToDel', $(this).attr('dbid')).dialog('open');
+                $.ajax({
+                            type: "GET",
+                            url: dir.replace("PLACEHOLDER",$(this).attr('dbid')),
+                            dataType: "json"
+                        }).done(function(msj){
+                            if(msj.codeResponse==200 && msj.success==true){
+                                divToDel.remove(); 
+                                update();
+                            }else
+                                {
+                                    return false;
+                                }
+                        });
+            return false;
             }
             else
             {
@@ -60,15 +45,84 @@
                 update();
             }
         });
+        $('body').on('click', '#link_search_venta', function(evt){
+        evt.preventDefault();
+        //Jquery -ui datepicker setaeado a spain lang y formateado se le asocia al id venta_fecha_venta
+        $(function() {
+            $.datepicker.setDefaults($.datepicker.regional[ "es" ]);
+            // Datepicker
+            $('#search_venta').datepicker();
+        });
+        $('<span id="close_search" class="ui-icon ui-icon-closethick" style="display:inline-block"></span>').insertAfter('#search_venta');
+        $('#search_venta').show();
+    });
+    $('body').on('change', '#search_venta', function(){
+        if($(this).val() != ""){
+           var p = $(this).val().split("/");      
+           var r = "{{path('validate_date', {'day': "DAY", 'month': "MONTH", 'year':"0000"})}}";
+           r = r.replace("DAY", p[0]); 
+           r = r.replace("MONTH", p[1]); 
+           r = r.replace("0000/", p[2]+"/");
+        }
+        $.ajax({
+                    type: "GET",
+                    url: r,
+                    dataType: "json"
+                }).done(function(data){
+                    if (data.exists == 1){
+                        $('#search_venta').hide();
+                        $('#close_search').hide();
+                        var route = "{{path('show_venta', { 'id': "PLACEHOLDER" }) }}";
+                        window.location.href= route.replace("PLACEHOLDER", data.id);
+                        return true;
+                    }
+                    if(data.exists == 0){
+                        $( "#crear_venta" ).dialog({
+                            resizable: false,
+                            height:240,
+                            modal: true,
+                            buttons: {
+                                    "Crear Venta": function() {
+                                    $().redirect('{{path('newp_venta')}}', {'fecha': $(this).data('fecha')});  
+                                        $( this ).dialog( "close" );
+                                        $('#fecha_a_crear').val("");
+                                        return true;
+                                    },
+                                    "Cancelar": function() {
+                                        $( this ).dialog( "close" );
+                                        $('#fecha_a_crear').val("");
+
+                                    }
+                                }
+                        });
+                        $('#fecha_a_crear').val($('#search_venta').val());
+                        $('#search_venta').val("");
+                        $('#search_venta').hide();
+                        $('#close_search').hide();
+                        $('#crear_venta').data('fecha', $('#fecha_a_crear').val()).dialog('open');
+                        return false;
+                    }
+                    
+                });
+    });
+    $('body').on('click', '#close_search', function(){
+        $('#search_venta').hide();
+        $(this).hide();
+    });
         
         </script>
-                <ul id="menu">
+                 <ul id="menu">
                     {% block content_header_more %}
                         IR A:
                         <li><a class="symfony-button-green" href="{{ path('_homepage') }}">Principal</a></li>
                         <li><a class="symfony-button-green" href="{{ path('index_cuenta') }}">Cuentas</a></li>
                         <li><a class="symfony-button-green"  href="{{ path('index_gasto') }}">Gastos</a></li>
-                        <li><a class="symfony-button-green" href="{{ path('index_venta') }}">Ventas</a></li>
+                        <li>
+                            <a class="ui-button ui-widget ui-state-default ui-button-text-icon-secondary" href="{{ path('index_venta') }}">
+                                <span class="ui-button-text">Ventas</span>
+                                <span class="ui-button-icon-secondary ui-icon ui-icon-clipboard"></span>
+                            </a>
+                        </li>
                     {% endblock %}
                 </ul>
                 <div style="clear: both"></div>
@@ -77,22 +131,31 @@
 {% block content %}
 <h1><center>{{ block('title') }}</center></h1>
 <br />
-<p align="center">
-        <a class="symfony-button-green" href="{{ path('new_venta') }}">
-            Crear Nueva Venta
+<div align="center">
+        <a class="ui-button ui-widget ui-state-default ui-button-text-icon-secondary" href="{{ path('new_venta') }}">
+            <span class="ui-button-text">Crear Nueva Venta</span>
+            <span class="ui-button-icon-secondary ui-icon ui-icon-newwin"></span>
         </a>
-        <a class="symfony-button-green" href="{{ path('index_venta') }}">
-            Volver al Listado de Ventas
+        <a class="ui-button ui-widget ui-state-default ui-button-text-icon-secondary" href="{{ path('index_venta') }}">
+            <span class="ui-button-text">Ir al Listado de Ventas</span>
+            <span class="ui-button-icon-secondary ui-icon ui-icon-clipboard"></span>
         </a>
-</p>
+        <a id="link_search_venta" class="ui-button ui-widget ui-state-default ui-button-text-icon-secondary" href="">
+            <span class="ui-button-text">Buscar e Ir a Venta</span>
+            <span class="ui-button-icon-secondary ui-icon ui-icon-search"></span>
+        </a>
+    <div style="display:inline-block">
+        <input id="search_venta" type="text" style="display:none" />
+    </div>
+</div>
 <br />
-<form action="{{ path('update_venta', { 'id': form.vars.value.id }) }}" method="post" {{ form_enctype(form) }}>
+<form id="update_form" action="{{ path('update_venta', { 'id': form.vars.value.id }) }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget (form.id)}}
     <p>
     <center>
         <div class="symfony-form-row">
                 <div class="symfony-form-field">
-                {{ form_widget (form.fecha)}}
+                {{ form_widget (form.fecha , { 'attr': { 'view': 'showupdate' } })}}
                 {% if errors != null %}
                         {% block field_errors %}
                         {% spaceless %}
@@ -114,7 +177,7 @@
         <div class="detalle" data-prototype="{{ form_widget(form.detalleVentas.vars.prototype.fecha_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.lugarVenta)|e}}{{ form_widget(form.detalleVentas.vars.prototype.ventaForma)|e }}{{ form_widget(form.detalleVentas.vars.prototype.total_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.total_neto_venta)|e}}{{ form_widget(form.detalleVentas.vars.prototype.total_iva_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.formaPago)|e }}{% autoescape %}<a href='#modal_$$name$$' class='open_detail' data-id='venta_detalleVentas_$$name$$_descripcion_venta' rel='modal:open'>Añadir Detalle</a><div id='modal_$$name$$' class='modal'>{% endautoescape %}{{ form_widget (form.detalleVentas.vars.prototype.descripcion_venta)|e}}{% autoescape %}</div>{% endautoescape %}{{ form_widget (form.detalleVentas.vars.prototype.id_detalle)|e}}">
            {% for detail in form.detalleVentas %}
                 <div id="new_detalle_{{loop.index0}}" class="new_detalle">
-                    <a class="remove" href="#" dbid="{{ detail.vars.value.IdDetalle}}">X</a>
+                    <span class="remove ui-icon ui-icon-closethick" dbid="{{ detail.vars.value.IdDetalle}}"></span>
                     {{ form_widget(detail.fecha_venta) }}
                     {{ form_widget(detail.lugarVenta) }}
                     {{ form_widget(detail.ventaForma) }}
@@ -137,34 +200,31 @@
                 {% endfor %} 
                      
         </div>
+            <p align="right">
+                <button class="b ui-button ui-widget ui-state-default ui-button-text-icon-secondary" type="submit"><span class="ui-button-text">Modificar</span><span class="ui-button-icon-secondary ui-icon ui-icon-disk"></span></button>
+            </p>
    <div id="totales"> 
     <p>
     <div style="clear: both"></div>
-   _______________________________________________________________________________________________________________
-    <p>---Totales ------- Neto ------------- IVA ------------ Totales -----</p>
     <div class="documentada">
-        Docum.  :
         {{ form_widget (form.total_neto_documentada) }}
         {{ form_widget (form.total_iva_documentada) }}
         {{ form_widget (form.total_documentada) }}
     </div>
     <br />
     <div class="no_documentada">
-        No Doc  :
         {{ form_widget (form.total_neto_no_documentada) }}
         {{ form_widget (form.total_iva_no_documentada) }}
         {{ form_widget (form.total_no_documentada) }}
     </div>
     <br />
     <div class="total">
-        Total.  :
         {{ form_widget (form.total_neto) }}
         {{ form_widget (form.total_iva) }}
         {{ form_widget (form.total) }}
     </div>
     <br />
     <div class="real">
-        Real.  :
         {{ form_widget (form.total_neto_real) }}
         {{ form_widget (form.total_iva_real) }}
         {{ form_widget (form.total_real) }}
@@ -173,12 +233,12 @@
 </div>
             <div>{{ form_widget(form._token) }}</div>
 <br />
-    <p align="right">
-        <button class="symfony-button-green" type="submit">Modificar</button>
-    </p>
-    
 </form>
-<div id="deletion_venta" title="Confirmación borrar Detalle Venta">
-{% include 'CostoSystemBundle:Venta:delete.html.twig'%}
+<div id="crear_venta" title="Mensaje de Confirmación">
+    <span>
+        <p>No existe Venta para el día: <input id="fecha_a_crear" type="text"/><br />Si desea crear la Venta haga click en <b>"Crear Venta"</b>.
+        <br />En caso contrario, haga click en <b>"Cancelar"</b> para continuar</p>
+    </span>
+    
 </div>
 {% endblock %}

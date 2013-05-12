@@ -30,18 +30,14 @@ class VentaController extends Controller {
      * @return Response view
      */
     public function indexAction($page) {
-        
         $request = $this->getRequest();
-        
         if ('GET' === $request->getMethod()) {
                 $query = VentaQuery::create()
-                            ->orderByFecha('ASC');
-                            
+                            ->orderByFecha('DESC');
                 $pagerfanta = new Pagerfanta(new PropelAdapter($query));
-                $pagerfanta->setMaxPerPage(15);
+                $pagerfanta->setMaxPerPage(30);
                 $pagerfanta->setCurrentPage($request->get('page')); // 1 by default
                 $collection = $pagerfanta->getCurrentPageResults();
-
                 return $this->render('CostoSystemBundle:Venta:index.html.twig', array(
                     'ventas' => $collection,
                     'end' => $collection->count() > 0 ? $collection->getFirst()->getFecha(): "",
@@ -49,9 +45,7 @@ class VentaController extends Controller {
                     'page' => $page,
                     'paginate' => $pagerfanta,
                 ));
-            
         }//end GET method request
-        
     }
     
     /**
@@ -63,12 +57,30 @@ class VentaController extends Controller {
     public function newAction() {
         $venta = new Venta();
         $form = $this->createForm(new VentaType(), $venta);
-
         return $this->render('CostoSystemBundle:Venta:new.html.twig', array(
             'errors' => null,
             'venta' => $venta,
             'form' => $form->createView()
         ));
+    }
+    /**
+     * Muestra el Formulario de Creación de una nueva venta
+     * No necesita parametros
+     * @method POST route: "/new" name="newp_venta"
+     * @return Response view
+     */
+    public function newpAction() {
+     $request = $this->getRequest();
+             if('POST' === $request->getMethod()){
+                $venta = new Venta();
+                $venta->setFecha(\DateTime::createFromFormat('d/m/Y', $request->get('fecha')));
+                $form = $this->createForm(new VentaType(), $venta);
+                return $this->render('CostoSystemBundle:Venta:new.html.twig', array(
+                    'errors' => null,
+                    'venta' => $venta,
+                    'form' => $form->createView()
+                    ));  
+             }
     }
     
     /**
@@ -82,7 +94,6 @@ class VentaController extends Controller {
         $venta = new Venta();
         $request = $this->getRequest();
         $form = $this->createForm(new VentaType(), $venta);
-
         $form->bindRequest($request);
         if ($form->isValid()) {
                    $venta->save();
@@ -108,9 +119,7 @@ class VentaController extends Controller {
         if (!$venta) {
             throw $this->createNotFoundException('No se ha encontrado la venta solicitada');
         }
-        
         $editForm = $this->createForm(new VentaType(), $venta);
-
         return $this->render('CostoSystemBundle:Venta:showupdate.html.twig', array(
             'venta' => $venta,
             'errors' => null,
@@ -137,7 +146,6 @@ class VentaController extends Controller {
             if (!$venta) {
                 throw $this->createNotFoundException('No se ha encontrado la venta solicitada');
             }
-
             $editForm = $this->createForm(new VentaType(), $venta);
             $request = $this->getRequest();
             $editForm->bindRequest($request);
@@ -163,22 +171,17 @@ class VentaController extends Controller {
         
         if(!is_null($id)){
                     $venta = VentaQuery::create()->findPk($id);
-
                     if (!$venta) {
                         throw $this->createNotFoundException('No se ha encontrado el detalle de venta solicitado');
                     }
-                    
                     if($venta->countDetalleVentas() > 0){
-                        
                         $detalles =  $venta->getDetalleVentas();
                         foreach ($detalles as $detalle){
                             $detalle->delete();
                         }
-                        
                     }
                     $venta->delete();
                     return new Response(json_encode(array('codeResponse'=> 200, 'success'=> true)));
-                     
         }
         else {
            throw $this->createNotFoundException('Se debe enviar el identificador de la venta a borrar'); 
@@ -196,11 +199,9 @@ class VentaController extends Controller {
         
         if(!is_null($id)){
                     $dventa = DetalleVentaQuery::create()->findPk($id);
-
                     if (!$dventa) {
                         throw $this->createNotFoundException('No se ha encontrado el detalle de venta solicitado');
                     }
-
                     $dventa->delete();
                     return new Response(json_encode(array('codeResponse'=>200, 'success'=> true)));
         }
@@ -216,11 +217,7 @@ class VentaController extends Controller {
      * @return mixed
      */
     public function validatedateAction($day, $month, $year) {
-        
-
-        
         if(!is_null($day) && !is_null($month) && !is_null($year)){
-
             $date = $day."/".$month."/".$year;
             $valDate =\DateTime::createFromFormat('d/m/Y', $date);
             $venta = VentaQuery::create()->findOneByFecha($valDate);

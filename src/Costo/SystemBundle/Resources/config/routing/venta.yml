@@ -20,6 +20,11 @@ show_venta:
 new_venta:
     pattern:  /new
     defaults: { _controller: "CostoSystemBundle:Venta:new" }
+    
+newp_venta:
+    pattern:  /newp
+    defaults: { _controller: "CostoSystemBundle:Venta:newp" }
+    requirements: { _method: post }
 
 create_venta:
     pattern:  /create
