@@ -18,7 +18,7 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 	border:#000 1px solid;
 	border-radius:5px; -webkit-border-radius:5px; -moz-border-radius:5px;
 	box-shadow:0 3px 3px #999; -webkit-box-shadow:0 3px 3px #999; -moz-box-shadow:0 3px 3px #999;
-	margin:30px 0
+	margin:3px 0
 }
 .jqte * {
 	color:#333;

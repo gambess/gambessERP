@@ -182,7 +182,7 @@ $('body').on('click', 'a.open_detail', function(event){
     event.preventDefault();
     var id = $(this).data('id');
     if($('textarea#'+id).length){
-                $('textarea#'+id).jqte();
+                $('textarea#'+id).jqte({css:"jqte_green"});
     }
 });
 
