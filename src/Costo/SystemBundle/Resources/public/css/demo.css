@@ -330,6 +330,70 @@ ul#menu
      height: 1px;
 }
 
+/*PagerFanta Style*/
+.pagerfanta {
+}
+
+.pagerfanta a{
+    display: inline-block;
+    border: 2px solid #4CA20B;
+    color: white;
+    margin-right: .2em;
+    padding: .25em .35em;
+}
+.pagerfanta span {
+    display: inline-block;
+    color: #4CA20B;
+    margin-right: .2em;
+}
+
+.pagerfanta a {
+    text-decoration: none;
+}
+
+.pagerfanta a:hover {
+    background: #ccf;
+}
+
+.pagerfanta .dots {
+    border-width: 0;
+}
+
+.pagerfanta .current {
+    background: #4CA20B;
+    /*font-weight: bold;*/
+}
+
+.pagerfanta .disabled {
+    border-color: #ccf;
+    color: #ccf;
+}
+.pagerfanta a{
+    border-color: #4CA20B;
+    color: #4CA20B;
+}
+.pagerfanta span {
+    border-color: #4CA20B;
+    color: #4CA20B;
+}
+
+.pagerfanta a:hover {
+    background: #ccf;
+}
+
+.pagerfanta .current {
+    border: 2px solid grey;
+    background: #4CA20B;
+    color: white;
+    margin-right: .2em;
+    padding: .25em .35em;
+}
+
+.pagerfanta .disabled {
+    border-color: #ccf;
+    color: #cf;
+}
+
 @page {
     size: A4 portrait; /* can use also 'landscape' for orientation */
     margin-top: 3.0in;

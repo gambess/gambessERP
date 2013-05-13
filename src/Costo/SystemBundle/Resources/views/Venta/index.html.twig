@@ -128,7 +128,9 @@ $(document).ready(function() {
     </div>
 </div>
 <br />
-<center><em>{{ pagerfanta(paginate , 'default_translated', pagerfanta_opts) }}</em></center>
+<div class="pagerfanta">
+        <center><em>{{ pagerfanta(paginate , 'default_translated', pagerfanta_opts) }}</em></center>
+</div>
 <br />
 <p align="center">
 {% if end is not empty and begin is not empty %}
@@ -203,7 +205,9 @@ hasta el día:
     </tfoot>
 </table>
 <br />
-<center><em>{{ pagerfanta(paginate , 'default_translated', pagerfanta_opts) }}</em></center>
+<div class="pagerfanta">
+        <center><em>{{ pagerfanta(paginate , 'default_translated', pagerfanta_opts) }}</em></center>
+</div>
 <br />
 <p align="center">
         <a class="ui-button ui-widget ui-state-default ui-button-text-icon-secondary" href="{{ path('new_venta') }}">

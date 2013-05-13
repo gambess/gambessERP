@@ -25,7 +25,7 @@ twig:
             previous_message: '&laquo;  Anterior  '
             next_message:     'Siguiente   &raquo; '
             proximity: 4
-            css_current_class: symfony-button-green
+#            css_current_class: symfony-button-green
 
 
 # Assetic Configuration
