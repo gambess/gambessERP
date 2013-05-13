@@ -73,7 +73,6 @@ function update(){
     total_neto = total_doc + total_no_doc;
     updateTotales(total_doc, total_no_doc, total_neto, total_real);
 }
-
 //Las funcionalidades se ejecutan una vez que el documento DOM isReady
 $(document).ready(function() {
     var $addDetailLink = $('<a href="#" class="add_detail">Nuevo</a>');
@@ -84,9 +83,6 @@ $(document).ready(function() {
         $(function() {$.datepicker.setDefaults($.datepicker.regional[ "es" ]);
             // Datepicker
             $('#venta_fecha').datepicker({});
-    //            numberOfMonths: 2
-    //            changeMonth: true,
-    //    });
         });
     }
     //Este bloque se ejecuta si aparece el mensaje de error de fecha utilizada
@@ -104,6 +100,7 @@ $(document).ready(function() {
     $addDetailLink.on('click', function(e) {
         // prevent the link from creating a "#" on the URL
         e.preventDefault();
+        
         var fecha = $('#venta_fecha').val()
         if (fecha == ""){
             alert('Se debe ingresar la fecha de venta previamente');
@@ -113,35 +110,18 @@ $(document).ready(function() {
         addDivForm($('div.detalle'), $newLinkp);
         $('input[name$="fecha_venta]"]').hide();
         $('input[name$="fecha_venta]"]').val($('#venta_fecha').val());
+        var id = parseInt($('div.detalle').data('index')) - 1;
+        $('input#venta_detalleVentas_'+id+'_total_venta').val(0);
 
     });
-    var Input = $('input[name*="total"]');
+    var Input = $('input[name$="][total_venta]"]');
     Input.focus(function() {
         if ($(this).val() === 0)
             $(this).val("");
     });
 });
-//Se recalculan los valores en el evento change
-$('body').on('change', 'input[name$="total_venta]"], select[name$="][ventaForma]"]', function(){
-    var id = $(this).parent().attr("id");
-    var indix = id.replace('new_detalle_', '');
-    var iva = parseFloat(Number(($(this).val()) / 1.19)* .19);
-    var neto = parseFloat(Number($(this).val()) / 1.19);
-        //Input ocultos
-    $('input[id$="' + indix + '_total_iva_venta"]').val(iva.toFixed(0));
-    $('input[id$="' + indix + '_total_neto_venta"]').val(neto.toFixed(0));
-    
-    //Suma los netos cada vez que cambian
-    update();
-});
 
-$('body').on('click', 'a.open_detail', function(event){
-    event.preventDefault();
-    var id = $(this).data('id');
-    if($('textarea#'+id).length){
-                $('textarea#'+id).jqte();
-    }
-});
+
 // forceNumeric() plug-in implementation
 jQuery.fn.forceNumeric = function () {
 
@@ -171,28 +151,42 @@ jQuery.fn.forceNumeric = function () {
     });
 }
 
-var back_value;
-$('body').on('focus', 'input[id^="venta_total"]', function(){
-   back_value = $(this).val();
+var back_value = 0;
+$('body').on('click', 'input[name$="][total_venta]"]', function(){
+   if($(this).val() != ""){
+       back_value = $(this).val();
+   }
    $(this).val("");
    $(this).forceNumeric();
 });
-$('body').on('focusout', 'input[id^="venta_total"]', function(){
-   if($(this).val() == "") $(this).val(back_value);
+$('body').on('focusout', 'input[name$="][total_venta]"]', function(){
+    if($(this).val() != "") return false;
+    if($(this).val() == "") $(this).val(back_value);
+    return false;
+});
+//Se recalculan los valores en el evento change
+$('body').on('change', 'input[name$="total_venta]"], select[name$="][ventaForma]"]', function(){
+    var id = $(this).parent().attr("id");
+    var indix = id.replace('new_detalle_', '');
+    var iva = parseFloat(Number(($(this).val()) / 1.19)* .19);
+    var neto = parseFloat(Number($(this).val()) / 1.19);
+        //Input ocultos
+    $('input[id$="' + indix + '_total_iva_venta"]').val(iva.toFixed(0));
+    $('input[id$="' + indix + '_total_neto_venta"]').val(neto.toFixed(0));
+    
+    //Suma los netos cada vez que cambian
+    update();
 });
 
-$('body').on('change', 'input[id^="venta_total"]', function(){
-    if($(this).val()== 0) {
-        return false;
-    }else{
-        if($($('.new_detalle').length == 0)){
-            alert("Aun no se ha ingresado ningun degloce de ventas\nNo se pueden modificar");
-            $(this).val("0");
-            return false;
-        }else
-            return false;
+$('body').on('click', 'a.open_detail', function(event){
+    event.preventDefault();
+    var id = $(this).data('id');
+    if($('textarea#'+id).length){
+                $('textarea#'+id).jqte();
     }
 });
+
+
 $('body').on('focus', '#venta_fecha', function(e){
     e.preventDefault();
     if($(this).attr('view') === 'showupdate'){
@@ -200,3 +194,4 @@ $('body').on('focus', '#venta_fecha', function(e){
         alert($(this).attr('title'));      
     }
 });
+
