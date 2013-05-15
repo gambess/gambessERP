@@ -57,4 +57,10 @@ validate_date:
     defaults: { _controller: "CostoSystemBundle:Venta:validatedate"}
     requirements:
       year: \d+
-      _method: GET 
+      _method: GET
+
+summary_venta:
+    pattern:  /{id}/summary
+    defaults: { _controller: "CostoSystemBundle:Venta:summary" }
+    requirements:
+      _method: GET

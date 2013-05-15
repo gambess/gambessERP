@@ -231,4 +231,14 @@ class VentaController extends Controller {
            throw $this->createNotFoundException('Se debe enviar la fecha en el formato correcto day/month/year'); 
         }
     }
+    
+    /**
+     * Muestra el Resumen de una venta
+     * No necesita parametros
+     * @method GET route: "/new" name="new_venta"
+     * @return Response view
+     */
+    public function summaryAction($id) {
+        return $this->render('CostoSystemBundle:Venta:summary.html.twig');
+    }
 }
