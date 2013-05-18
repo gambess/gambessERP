@@ -13,7 +13,73 @@
          %}
         <script type="text/javascript" src="{{ asset( asset_url) }}"></script>
         {% endjavascripts %}
+        <script type="text/javascript">
+        $('body').on('click', 'a.link_search_resumen', function(evt){
+            evt.preventDefault();
+        //Jquery -ui datepicker setaeado a spain lang y formateado se le asocia al id venta_fecha_venta
+            $(function() {
+                $.datepicker.setDefaults($.datepicker.regional[ "es" ]);
+            // Datepicker
+                $('.search_resumen').datepicker();
+            });
+            $('<span class="close_search ui-icon ui-icon-closethick" style="display:inline-block"></span>').insertAfter('.search_resumen');
+            $('.search_resumen').show();
+        });
+    $('body').on('change', '.search_resumen', function(){
+        if($(this).val() != ""){
+           var p = $(this).val().split("/");      
+           var r = "{{path('validate_date', {'day': "DAY", 'month': "MONTH", 'year':"0000"})}}";
+           r = r.replace("DAY", p[0]); 
+           r = r.replace("MONTH", p[1]); 
+           r = r.replace("0000/", p[2]+"/");
+        }
+        $.ajax({
+                    type: "GET",
+                    url: r,
+                    dataType: "json"
+                }).done(function(data){
+                    if (data.exists == 1){
+                        $('.search_resumen').hide();
+                        $('.close_search').hide();
+                        var route = "{{path('show_venta', { 'id': "PLACEHOLDER" }) }}";
+                        window.location.href= route.replace("PLACEHOLDER", data.id);
+                        return true;
+                    }
+                    if(data.exists == 0){
+                        $( "#crear_venta" ).dialog({
+                            resizable: false,
+                            height:240,
+                            modal: true,
+                            buttons: {
+                                    "Crear Venta": function() {
+                                    $().redirect('{{path('newp_venta')}}', {'fecha': $(this).data('fecha')});  
+                                        $( this ).dialog( "close" );
+                                        $('#fecha_a_crear').val("");
+                                        return true;
+                                    },
+                                    "Cancelar": function() {
+                                        $( this ).dialog( "close" );
+                                        $('#fecha_a_crear').val("");
 
+                                    }
+                                }
+                        });
+                        $('#fecha_a_crear').val($('.search_venta').val());
+                        $('.search_resumen').val("");
+                        $('.search_resumen').hide();
+                        $('.close_search').hide();
+                        $('#crear_venta').data('fecha', $('#fecha_a_crear').val()).dialog('open');
+                        return false;
+                    }
+                    
+                });
+    });
+    $('body').on('click', '.close_search', function(){
+        $('.search_resumen').hide();
+        $(this).hide();
+    });
+        
+        </script>
 {% endblock %}
 {% block title %}Resumen Ventas del día{% endblock %}
 {% block content %}
@@ -21,134 +87,141 @@
 <br />
 <div align="center">
     <a class="ant" style="float: left;" href="#"><< día anterior</a>
-        <a id="link_search_venta" class="ui-button ui-widget ui-state-default ui-button-text-icon-secondary" href="">
-            <span class="ui-button-text">Buscar e Ir a Venta</span>
-            <span class="ui-button-icon-secondary ui-icon ui-icon-search"></span>
-        </a>
     <a class="ui-button ui-widget ui-state-default ui-button-text-icon-secondary" href="{{ path('index_venta') }}">
             <span class="ui-button-text">Ir al Listado de Ventas</span>
             <span class="ui-button-icon-secondary ui-icon ui-icon-clipboard"></span>
-        </a>
+    </a>
+    <a class="link_search_resumen ui-button ui-widget ui-state-default ui-button-text-icon-secondary" href="#">
+            <span class="ui-button-text">Buscar e Ir a Resumen del día</span>
+            <span class="ui-button-icon-secondary ui-icon ui-icon-search"></span>
+    </a>
+    <div style="display:inline-block">
+        <input class="search_resumen" type="text" style="display:none" />
+    </div>
     <a class="sig" style="float: right;" href="#">día siguiente >></a>
 </div>
 <br />
 <center>Totales Lugar de Venta</center>
 <table>
-    <thead>
-        <tr>
-            <th><center>Sala de Ventas<center></th>
-            <th><center>Bodega</center></th>
-            <th><center>Fono Pedido<center></th>
-            <th><center>Reparto</center></th>
-            <th><center>Internet</center></th>
-        </tr>
-    </thead>
+    {%for key, arreglo in data %}
+            {% if key == 'LugarVenta' %}
+            <thead>
+                <tr>
+                    {%for lugar in arreglo %}
+                        <th><center>{{lugar|title}}<center></th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            {%endif%}
+            {% if key != 'LugarVenta' and key != 'Totales'%}
+                {%for forma in arreglo %}
+                    {% if loop.first %}
+                        <tr>    
+                    {%endif%}
+                                <td><b>$ {{forma|number_format('0',',','.')}}</b> <i style="float:right;">{{key|title}}</i></td>
+                    {% if loop.last %}
+                        <tr>    
+                    {%endif%}
+                {% endfor %}
+            {%endif%}
+            {% if key == 'Totales'%}
+                {%for total in arreglo %}
+                    {% if loop.first %}
+                        <tr>    
+                    {%endif%}
+                                <td><b>$ {{total|number_format('0',',','.')}}</b></td>
+                    {% if loop.last %}
+                        <tr>    
+                    {%endif%}
+                {% endfor %}
+            {%endif%}
+            
+    {% endfor %}
     <tr>    
-        <td>$ 1.000 Efectivo</td>
-        <td>$ 2.000 Transbank</td>
-        <td>$ 3.000 Cheque</td>
-        <td>$ 4.000 Efectivo</td>
-        <td>$ 4.000 Transbank</td>
-    </tr>
-    <tr>
-        <td>$ 1.000 Cheque</td>
-        <td>$ 2.000 Cheque</td>
-        <td>$ 3.000 Transbank</td>
-        <td>$ 4.000 Efectivo</td>
-        <td>$ 4.000 Credito</td>
-    </tr>
-    <tr>
-        <td>$ 1.000 Transbank</td>
-        <td>$ 2.000 Credito</td>
-        <td>$ 3.000 efectivo</td>
-        <td>$ 4.000 Cheque</td> 
-        <td>$ 4.000 Efectivo</td>
-    </tr>
-    <tr>
-        <td>$ 1.000 Credito</td>
-        <td>$ 2.000 Cheque</td>
-        <td>$ 3.000 efectivo</td>
-        <td>$ 4.000 Credito</td>
-        <td>$ 4.000 cheque</td>
-    </tr>
-    <tr>
-        <td><b><center>$ 4.000</center></b></td>
-        <td><b><center>$ 8.000</center></b></td>
-        <td><b><center>$ 12.000</center></b></td>
-        <td><b><center>$ 16.000</center></b></td>
-        <td><b><center>$ 16.000</center></b></td>
-    </tr>
-    <tr>    
-        <td colspan="4"><b><center>Total Venta del Día</center></b></td>
-        <td><b><center>$ 56.000</center></b></td>
+        <td colspan="4"><b><center>Total Venta del Día Documentada</center></b></td>
+        <td><b>$ {{totales|number_format('0',',','.')}}</b></td>
     </tr>
 </table>
     <br />
 <center>Totales Forma de Venta</center>
 <table>
-    <tr>    
-        <td>Boleta</td>
-        <td><center>$ 1.000</center></td>
-    </tr>
-    <tr>    
-        <td>Guia de despacho</td>
-        <td><center>$ 2.000</center></td>
-    </tr>
-    <tr>    
-        <td>Factua</td>
-        <td><center>$ 3.000</center></td>
-    </tr>
+    <thead>
+        <tr>
+            <th><center>Forma de Venta</center></th>
+            <th><center>Total Venta</center></th>
+        </tr>
+    </thead>
+    {% for vf, ar in documents %}
+        <tr>
+            <td><b>{{vf}}</b></td>
+            {% for totdoc in ar %}
+            <td>$ {{totdoc|number_format('0',',','.')}}</td>
+            {%endfor %}
+        </tr>
+    {%endfor %}
     <tr>
         <td><b><center>Totales Documentado</center></b></td>
-        <td><center><b>$ 5.000</b></center></td>
+        <td><b>$ {{totaldoc|number_format('0',',','.')}}</b></td>
     </tr>
+    {% set differ = 0 %}
+    {% for k, v in real %}
+        <tr>
+            <td><b>{{k}}</b></td>
+            {% for r in v %}
+                <td>$ {{r|number_format('0',',','.')}}</td>
+                {% set differ = "#{differ + r}" %}
+            {%endfor %}
+        </tr>
+    {%endfor %}
+    {% set differ = "#{differ - totaldoc }" %}  
     <tr>    
-        <td>No Documentada</td>
-        <td><center>$ 1.000</center></td>
-    </tr>
-    <tr>    
-        <td>Real</td>
-        <td><center>$ 5.000</center></td>
-    </tr>
- 
+        <td><b><center>Diferencia (Real - Totales Doc.)</center></b></td>
+        <td><b>$ {{differ|number_format('0',',','.')}}</b></td>
+    </tr> 
 </table>
 <br />
 <center>Totales Forma de Pago</center>
 <table>
     <thead>
         <tr>
-            <th><center>Efectivo<center></th>
-            <th><center>Transbank</center></th>
-            <th><center>Cheque<center></th>
-            <th><center>Credito</center></th>
+    {%for pf in payforms %}
+            <th><center>{{pf|title}}<center></th>
+    {%endfor%}
+
         </tr>
     </thead>
+    <tr>
+    {%for tpf in total_payform %}
+            <td><b><center>$ {{tpf|number_format('0',',','.')}}</center></b></td>
+    {%endfor%}
+    </tr>
     <tr>    
-        <td><b><center>$ 19.000</center></b></td>
-        <td><b><center>$ 10.000</center></b></td>
-        <td><b><center>$ 12.000</center></b></td>
-        <td><b><center>$ 16.000</center></b></td>
+        <td colspan="3"><b><center>Total Venta del Día por formas de Pago Documentadas</center></b></td>
+        <td><b><center>$ {{totales|number_format('0',',','.')}}</center></b></td>
     </tr>
 </table>
 <br />
 <br />
 <div align="center">
 <a class="ant" style="float: left;" href="#"><< día anterior</a>
-        <a id="link_search_venta" class="ui-button ui-widget ui-state-default ui-button-text-icon-secondary" href="">
-            <span class="ui-button-text">Buscar e Ir a Venta</span>
-            <span class="ui-button-icon-secondary ui-icon ui-icon-search"></span>
-        </a>
 <a class="ui-button ui-widget ui-state-default ui-button-text-icon-secondary" href="{{ path('index_venta') }}">
             <span class="ui-button-text">Ir al Listado de Ventas</span>
             <span class="ui-button-icon-secondary ui-icon ui-icon-clipboard"></span>
         </a>
+<a class="link_search_resumen ui-button ui-widget ui-state-default ui-button-text-icon-secondary" href="">
+            <span class="ui-button-text">Buscar e Ir a Resumen del día</span>
+            <span class="ui-button-icon-secondary ui-icon ui-icon-search"></span>
+    </a>
+<div style="display:inline-block">
+        <input class="search_resumen" type="text" style="display:none" />
+    </div>
 <a class="sig" style="float: right;" href="#">día siguiente >></a>
 </div>
 <br />
-<div id="dialog" title="A lo mejor se necesita">
+<div id="crear_venta" title="Mensaje de Confirmación">
     <span>
-
+        <p>No existe Venta para el día: <input id="fecha_a_crear" type="text"/><br />Si desea crear la Venta haga click en <b>"Crear Venta"</b>.
+        <br />En caso contrario, haga click en <b>"Cancelar"</b> para continuar</p>
     </span>
-    
 </div>
 {% endblock %}

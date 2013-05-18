@@ -232,6 +232,10 @@ a.submit:focus{
    color: #4CA20B; 
 }
 
+.delete{
+   color: #E4000E; 
+}
+
 .open_detail{
    color: #4CA20B; 
 }

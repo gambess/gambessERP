@@ -3,17 +3,16 @@
 namespace Costo\SystemBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Costo\SystemBundle\Model\DetalleVenta;
 use Costo\SystemBundle\Model\DetalleVentaQuery;
 use Costo\SystemBundle\Model\Venta;
 use Costo\SystemBundle\Model\VentaQuery;
-use Costo\SystemBundle\Form\Type\DetalleVentaType;
+use \Costo\SystemBundle\Model\LugarVentaQuery;
+use Costo\SystemBundle\Model\FormaPagoQuery;
+use Costo\SystemBundle\Model\VentaFormaQuery;
+use Costo\SystemBundle\Model\TipoVentaFormaQuery;
 use Costo\SystemBundle\Form\Type\VentaType;
-use Symfony\Component\Form\FormError;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\PropelAdapter;
-use Pagerfanta\Exception\NotValidCurrentPageException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -235,10 +234,178 @@ class VentaController extends Controller {
     /**
      * Muestra el Resumen de una venta
      * No necesita parametros
-     * @method GET route: "/new" name="new_venta"
+     * @method GET route: "/new" name="summary_venta"
      * @return Response view
      */
     public function summaryAction($id) {
-        return $this->render('CostoSystemBundle:Venta:summary.html.twig');
+        
+        if(!is_null($id) and is_numeric($id) and $id != 0){
+            //Buscar la venta
+            $venta = VentaQuery::create()->findPk($id);
+            
+            if($venta instanceof Venta){
+                $data = array();
+                $date = $venta->getFecha();
+                $data['LugarVenta']= $this->getAllPlaces();
+                $payforms = $this->getAllPayForm();
+                
+                $tipoVF = $this->getDocType('DOCUMENTADA');
+                $tipoR = $this->getDocType('REAL');
+                $docs = $this->getWayPays($tipoVF->getPrimaryKey());
+                $real = $this->getWayPays($tipoR->getPrimaryKey());
+                
+                    $i = 0;
+                    foreach ($docs as $doc){
+                        
+                        $result = $this->getSalesDocByDateAndForma($date, $doc);
+                        if(is_array($result) and count($result) > 0){
+                                $d[$doc] = array_slice($result, 0, 1);
+                                $a[$i] = $d[$doc][0];
+                                $i++;
+                        }else {
+                            $d[$doc] = Array('0' => '0');
+                            $a[0]=0;
+                        }
+                    }
+                 
+                foreach ($real as $r){
+                        $resultado = $this->getSalesDocByDateAndForma($date, $r);
+                        if(is_array($resultado) and count($result) > 0){
+                                $re[$r] =  $resultado;
+                        }else {
+                            $re[$r] = Array('0' => '0');
+                        }
+                }
+                $totaldoc = array_sum($a);
+                foreach($payforms as $payform)
+                {
+                    $temp = $this->getPlacesSalesByDate($date,$payform);
+                    $dat = Array('1' => 0, '2' => 0, '3' => 0, '4' => 0, '5' => 0);
+                        foreach ($temp as $t){
+                            $total = array_slice($t, 0, 1);
+                            $order = array_slice($t, 1, 1);
+                            $dat[$order['IdLugarVenta']]= $total['TotalVenta'];
+                        }
+                        $data[$payform] = $dat;
+                }
+                $t1 = $t2 = $t3 = $t4 = $t5 = 0;
+                foreach($data as $key => $arr){
+                    if($key == 'LugarVenta' and $key == 'TotalVenta')
+                                continue;
+                    if($key == 'EFECTIVO' or $key == 'CHEQUE' or $key == 'TRANSBANK' or $key == 'CREDITO')
+                        $total_payform[$key] = array_sum ($arr);
+                    foreach($arr as $k => $tot){
+                        if($k == '1') $t1 += $tot; if($k == '2') $t2 += $tot; if($k == '3') $t3 += $tot;
+                        if($k == '4') $t4 += $tot; if($k == '5') $t5 += $tot;
+
+                    }
+                }
+                $data['Totales']= Array('1' => $t1, '2' => $t2, '3' => $t3, '4' => $t4, '5' => $t5);
+                $totalizimo = array_sum($data['Totales']);
+        
+                return $this->render('CostoSystemBundle:Venta:summary.html.twig', array(
+                        'data' => $data,
+                        'totales' => $totalizimo,
+                        'total_payform' => $total_payform,
+                        'payforms' => $payforms,
+                        'real' => $re,
+                        'totaldoc' => $totaldoc,
+                        'documents' => $d,
+                        
+                        )
+                );
+            }
+        }
+    }
+    
+    private function getAllPayForm(){
+        return FormaPagoQuery::create('fp')
+                    ->select(array('fp.NombreFormaPago'))
+                    ->orderByIdFormaPago('ASC')
+                ->find()
+                ->toArray()
+                ;
+    }
+    
+    private function getAllPlaces(){
+        return LugarVentaQuery::create('lv')
+                    ->select(array('lv.NombreLugarVenta'))
+                    ->orderByIdLugarVenta('ASC')
+                ->find()
+                ->toArray()
+                ;
+                
+    }
+    
+    private function getWayPays($tipo){
+        return VentaFormaQuery::create('vf')
+                ->filterByIdTipoVentaForma($tipo)
+                    ->select(array('vf.NombreVentaForma'))
+                    ->orderByIdVentaForma('ASC')
+                ->find()
+                ->toArray()
+                ;
+                
+    }
+    
+    private function getDocType($string){
+        return TipoVentaFormaQuery::create('tvf')
+                ->filterByNombreTipoVentaForma($string)
+            ->findOne()
+        ;
+    }
+    
+    private function getPlacesSalesByDate($date,$fp){
+        /* Query encapsulada
+         SELECT dv.fecha_venta, lv.nombre_lugar_venta AS lugarventa, sum( dv.total_venta ) AS total, fp.nombre_forma_pago AS "formapago"
+            FROM detalle_venta AS dv
+            INNER JOIN lugar_venta AS lv ON dv.id_lugar_venta = lv.id_lugar_venta
+            INNER JOIN forma_pago AS fp ON dv.id_forma_pago = fp.id_forma_pago
+            GROUP BY dv.fecha_venta, dv.id_lugar_venta, dv.id_forma_pago
+            HAVING MIN( dv.fecha_venta ) >= '2013-05-02'
+            AND MAX( dv.fecha_venta ) <= '2013-05-02
+         */
+        return DetalleVentaQuery::create('dv')
+              ->useFormaPagoQuery('fp','INNER JOIN')
+                ->where('fp.NombreFormaPago LIKE ?', $fp)
+              ->endUse()
+              ->useLugarVentaQuery('lv', 'INNER JOIN')
+//                ->filterByNombreLugarVenta($lv)
+              ->endUse()
+            ->groupByFechaVenta()
+            ->groupByIdLugarVenta()
+            ->groupByIdFormaPago()
+                ->orderByIdFormaPago('ASC')
+                ->orderByIdLugarVenta('ASC')
+//                ->withColumn('fp.NombreFormaPago','NombreFormaPago')                
+//                ->withColumn('dv.IdFormaPago','IdFormaPago')                
+                ->withColumn('dv.IdLugarVenta','IdLugarVenta')                
+                ->withColumn('SUM(dv.TotalVenta)','TotalVenta')
+            ->condition('cond1', 'MAX(dv.FechaVenta) = ?', $date)
+            ->condition('cond2', 'MIN(dv.FechaVenta) = ?', $date)
+                ->having(array('cond1', 'cond2'), 'and')
+          ->select(array(/*'lv.NombreLugarVenta',*/'TotalVenta'/*, 'IdFormaPago'*/))
+                ->where('dv.IdVentaForma != ?', 5)
+    ->find()->toArray();
+    }
+    private function getSalesDocByDateAndForma($date, $forma){
+        
+        return DetalleVentaQuery::create('dv')
+                ->useVentaFormaQuery('vf', 'INNER JOIN')
+                    ->filterByNombreVentaForma($forma)
+                ->endUse()
+            ->groupByFechaVenta()
+            ->groupByIdVentaForma()
+                ->orderByIdFormaPago('ASC')
+                ->orderByIdLugarVenta('ASC')
+                ->withColumn('SUM(dv.TotalVenta)','TotalVenta')
+            ->condition('cond1', 'MAX(dv.FechaVenta) = ?', $date)
+            ->condition('cond2', 'MIN(dv.FechaVenta) = ?', $date)
+                ->having(array('cond1', 'cond2'), 'and')
+          ->select(array('TotalVenta'))
+    ->find()
+                ->toArray()
+                ;
+        
     }
 }
