@@ -16,14 +16,15 @@ class DetalleVentaType extends AbstractType
             ->add('ventaForma', 'model',
                 array(
                     'label' => 'Forma de Venta',
-                    'empty_value' => 'Forma de Venta...',
                     'class' => 'Costo\SystemBundle\Model\VentaForma',
                     'property' => 'NombreVentaForma',
                     'query' => VentaFormaQuery::create()
                 ->orderByIdTipoVentaForma('ASC')
                 ->orderByNombreVentaForma('ASC')
-                ,   
-                    'attr' => array('class' => 'detail_widget ui-widget ui-state-default'),
+                ,
+                    'preferred_choices'=> array ('5')
+                    ,
+                    'attr' => array('class' => 'detail_widget ui-widget ui-state-default formaventa'),
             )
                     )
             ->add('lugarVenta', 'model',

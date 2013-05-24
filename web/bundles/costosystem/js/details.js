@@ -1,6 +1,6 @@
 //Las funcionalidades se ejecutan una vez que el documento DOM isReady
 var indice = 0;
-var doc = ['BOLETA', 'FACTURA', 'GUIA DESPACHO'];
+var doc = ['1','2','4'];
 
 //Agrega el div detalle al body
 function addDivForm(collectionHolder, $newLinkp) {
@@ -60,7 +60,7 @@ function update(){
     var total_real = 0;
     
     $('input[name$="total_venta]"]').each(function() {
-        if ($.inArray($(this).prev().find('option:selected').text(), doc) > -1) {
+        if ($.inArray($(this).prev().attr('idvf'), doc) > -1) {
             total_doc += parseFloat(Number($(this).val()));
         }
         if ($(this).prev().find('option:selected').text() === "NO DOC.") {
@@ -151,8 +151,21 @@ jQuery.fn.forceNumeric = function () {
     });
 }
 
+$('body').on('click', 'select[name$="][lugarVenta]"]', function(){
+    if($(this + "option[value='6']").length){
+        $(this + "option[value='6']").hide();
+    }
+});
+$('body').on('click', 'select[name$="][formaPago]"]', function(){
+ if($(this + "option[value='5']").length){
+        $(this + "option[value='5']").hide();
+    }
+});
 var back_value = 0;
 $('body').on('click', 'input[name$="][total_venta]"]', function(){
+   if($('#venta_fecha').val() == ""){
+       alert('Primero se debe seleccionar la fecha de Venta');
+   }
    if($(this).val() != ""){
        back_value = $(this).val();
    }
@@ -165,9 +178,15 @@ $('body').on('focusout', 'input[name$="][total_venta]"]', function(){
     return false;
 });
 //Se recalculan los valores en el evento change
-$('body').on('change', 'input[name$="total_venta]"], select[name$="][ventaForma]"]', function(){
-    var id = $(this).parent().attr("id");
-    var indix = id.replace('new_detalle_', '');
+$('body').on('change', 'input[name$="total_venta]"]', function(){   
+    var parent = $(this).parent('div').attr("class");
+    if(parent == 'new_detalle'){
+            var indix = $(this).parent('div').attr("id").replace('new_detalle_', '');
+    }
+    if(parent == 'detalle_doc'){
+            var indix = $(this).parent('div').attr("id").replace('detalle_', '');
+
+    }
     var iva = parseFloat(Number(($(this).val()) / 1.19)* .19);
     var neto = parseFloat(Number($(this).val()) / 1.19);
         //Input ocultos
@@ -178,6 +197,19 @@ $('body').on('change', 'input[name$="total_venta]"], select[name$="][ventaForma]
     update();
 });
 
+$('body').on('change', 'select[name$="][formaPago]"]', function(){
+    var id = $(this).parent().attr("id");
+    var indix = id.replace('new_detalle_', '');
+    
+    var iva = parseFloat(Number(($(this).val()) / 1.19)* .19);
+    var neto = parseFloat(Number($(this).val()) / 1.19);
+        //Input ocultos
+    $('input[id$="' + indix + '_total_iva_venta"]').val(iva.toFixed(0));
+    $('input[id$="' + indix + '_total_neto_venta"]').val(neto.toFixed(0));
+    
+    //Suma los netos cada vez que cambian
+    update();
+});
 $('body').on('click', 'a.open_detail', function(event){
     event.preventDefault();
     var id = $(this).data('id');

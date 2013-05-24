@@ -34,7 +34,7 @@ form{
 	-webkit-box-shadow:0 0 15px #aaa;
 	margin:20px auto 0;
 	padding:20px;
-	width:800px;
+	width:600px;
 }
 h1{
 	/*border-bottom:1px solid #ccc;*/
@@ -180,6 +180,17 @@ a.submit:focus{
         height:47px;
         padding-left: 10px;
         margin-top: 3px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 584px;
+}
+.detalle_doc{
+        border: 1px solid blueviolet;
+        height:47px;
+        padding-left: 10px;
+        margin-top: 2px;
+        margin-right: auto;
+        width: 384px;
 }
 
 .add_detalle{
@@ -204,6 +215,10 @@ a.submit:focus{
 }
 
 #send_date{
+    display:none;
+}
+
+.formaventa{
     display:none;
 }
 
