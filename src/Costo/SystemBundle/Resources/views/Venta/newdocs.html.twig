@@ -1,0 +1,23 @@
+{# empty Twig template #}
+{% set docs = {'1001':'Boletas','1002':'Facturas','1004':'Guías D.'} %}
+<div id="detalle_docs">
+{% for key, val in docs %}
+    <div id="new_detalle_{{key}}" class="detalle_doc">
+             <input type="text" id="venta_detalleVentas_{{key}}_fecha_venta" name="venta[detalleVentas][{{key}}][fecha_venta]" required="required" />
+            <input id="venta_detalleVentas_{{key}}_lugarVenta" name="venta[detalleVentas][{{key}}][lugarVenta]" required="required" value="6" style="display: none;"/>
+            <input id="venta_detalleVentas_{{key}}_ventaForma" name="venta[detalleVentas][{{key}}][ventaForma]" required="required" value="{{key-1000}}" style="display: none;" />
+            <span  idvf ="{{key-1000}}" class="dtls ui-button ui-widget ui-state-default ui-button-text-only">
+                <span class="dtls ui-button-text">{{val}}</span>
+            </span>
+          $ <input id="venta_detalleVentas_{{key}}_total_venta" type="text" required="required" name="venta[detalleVentas][{{key}}][total_venta]" value="0" class="detail_widget" />
+            <input id="venta_detalleVentas_{{key}}_total_neto_venta" type="hidden" name="venta[detalleVentas][{{key}}][total_neto_venta]" value="0" />
+            <input id="venta_detalleVentas_{{key}}_total_iva_venta" type="hidden" name="venta[detalleVentas][{{key}}][total_iva_venta]" value="0" />
+            <input id="venta_detalleVentas_{{key}}_formaPago" name="venta[detalleVentas][{{key}}][formaPago]" required="required" value="5" style="display: none;"/>
+            <a class='open_detail' rel='modal:open' data-id='venta_detalleVentas_{{key}}_descripcion_venta' href='#modal_{{key}}'>Añadir Detalle</a>
+            <div id='modal_{{key}}' class='modal'>
+                <textarea id="venta_detalleVentas_{{key}}_descripcion_venta" name="venta[detalleVentas][{{key}}][descripcion_venta]" class="editor"></textarea>
+            </div>
+                <input type="hidden" id="venta_detalleVentas_{{key}}_id_detalle" name="venta[detalleVentas][{{key}}][id_detalle]" />
+    </div>
+{% endfor %}
+</div>

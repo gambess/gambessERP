@@ -255,7 +255,7 @@ class VentaController extends Controller {
                 $real = $this->getWayPays($tipoR->getPrimaryKey());
                 
                     $i = 0;
-                    foreach ($docs as $doc){
+                    foreach ($real as $doc){
                         
                         $result = $this->getSalesDocByDateAndForma($date, $doc);
                         if(is_array($result) and count($result) > 0){
@@ -268,7 +268,7 @@ class VentaController extends Controller {
                         }
                     }
                  
-                foreach ($real as $r){
+                foreach ($docs as $r){
                         $resultado = $this->getSalesDocByDateAndForma($date, $r);
                         if(is_array($resultado) and count($result) > 0){
                                 $re[$r] =  $resultado;
@@ -321,6 +321,7 @@ class VentaController extends Controller {
     private function getAllPayForm(){
         return FormaPagoQuery::create('fp')
                     ->select(array('fp.NombreFormaPago'))
+                    ->where('fp.NombreFormaPago != ?', "TODAS")
                     ->orderByIdFormaPago('ASC')
                 ->find()
                 ->toArray()
@@ -330,6 +331,7 @@ class VentaController extends Controller {
     private function getAllPlaces(){
         return LugarVentaQuery::create('lv')
                     ->select(array('lv.NombreLugarVenta'))
+                    ->where('lv.NombreLugarVenta != ?', "TODOS")
                     ->orderByIdLugarVenta('ASC')
                 ->find()
                 ->toArray()
@@ -385,7 +387,7 @@ class VentaController extends Controller {
             ->condition('cond2', 'MIN(dv.FechaVenta) = ?', $date)
                 ->having(array('cond1', 'cond2'), 'and')
           ->select(array(/*'lv.NombreLugarVenta',*/'TotalVenta'/*, 'IdFormaPago'*/))
-                ->where('dv.IdVentaForma != ?', 5)
+                ->where('dv.IdVentaForma = ?', 5)
     ->find()->toArray();
     }
     private function getSalesDocByDateAndForma($date, $forma){
