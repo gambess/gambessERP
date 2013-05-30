@@ -151,13 +151,15 @@ jQuery.fn.forceNumeric = function () {
 }
 
 $('body').on('click', 'select[name$="][lugarVenta]"]', function(){
-    if($(this + "option[value='6']").length){
-        $(this + "option[value='6']").hide();
+    if($('option:contains("TODOS")').length){
+//        $('option:contains("TODOS")').hide();
+        $('option:contains("TODOS")').css("display", "none"); 
     }
 });
 $('body').on('click', 'select[name$="][formaPago]"]', function(){
- if($(this + "option[value='5']").length){
-        $(this + "option[value='5']").hide();
+ if($('option:contains("TODAS")').length){
+//        $('option:contains("TODAS")').hide();
+        $('option:contains("TODAS")').css("display", "none"); 
     }
 });
 var back_value = 0;
@@ -273,8 +275,6 @@ $('body').on('change', 'select[name$="][formaPago]"]', function(event){
     }
     
 });
-
-
 
 $('body').on('click', 'a.open_detail', function(event){
     event.preventDefault();

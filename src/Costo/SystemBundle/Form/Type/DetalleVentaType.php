@@ -30,7 +30,7 @@ class DetalleVentaType extends AbstractType
             ->add('lugarVenta', 'model',
                 array(
                     'label' => 'Lugar de Venta',
-                    'empty_value' => 'Lugar de Venta...',
+                    'empty_value' => 'Seleccione Lugar',
                     'class' => 'Costo\SystemBundle\Model\LugarVenta',
                     'property' => 'NombreLugarVenta',
                     'attr' => array('class' => 'detail_widget ui-widget ui-state-default'),
@@ -38,8 +38,8 @@ class DetalleVentaType extends AbstractType
                     )
             ->add('formaPago', 'model',
                 array(
-                    'label' => 'Forma de Pago',
-                    'empty_value' => 'Forma de Pago...',
+                    'label' => 'Método de Pago',
+                    'empty_value' => 'Seleccione Método Pago',
                     'class' => 'Costo\SystemBundle\Model\FormaPago',
                     'property' => 'NombreFormaPago',
                     'attr' => array('class' => 'detail_widget ui-widget ui-state-default'),

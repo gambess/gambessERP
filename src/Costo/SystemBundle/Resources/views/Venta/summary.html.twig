@@ -86,7 +86,7 @@
 <h1><center>{{ block('title') }}</center></h1>
 <br />
 <div align="center">
-    <a class="ant" style="float: left;" href="#"><< día anterior</a>
+    
     <a class="ui-button ui-widget ui-state-default ui-button-text-icon-secondary" href="{{ path('index_venta') }}">
             <span class="ui-button-text">Ir al Listado de Ventas</span>
             <span class="ui-button-icon-secondary ui-icon ui-icon-clipboard"></span>
@@ -98,11 +98,13 @@
     <div style="display:inline-block">
         <input class="search_resumen" type="text" style="display:none" />
     </div>
-    <a class="sig" style="float: right;" href="#">día siguiente >></a>
+    <a class="sig" style="float: right;" href="#">></a>
+    <a class="ant" style="float: right;" href="#"><</a>
 </div>
 <br />
-<center>Totales Lugar de Venta</center>
+<center><b>Venta con Forma de Pago en Lugar de Venta</b></center>
 <table>
+    {% set counter = 0 %}
     {%for key, arreglo in data %}
             {% if key == 'LugarVenta' %}
             <thead>
@@ -118,7 +120,7 @@
                     {% if loop.first %}
                         <tr>    
                     {%endif%}
-                                <td><b>$ {{forma|number_format('0',',','.')}}</b> <i style="float:right;">{{key|title}}</i></td>
+                                <td><b>$ {{forma|number_format('0',',','.')}}</b><i style="float:right;color: darkgreen;">{{key|title}}</i></td>
                     {% if loop.last %}
                         <tr>    
                     {%endif%}
@@ -129,7 +131,7 @@
                     {% if loop.first %}
                         <tr>    
                     {%endif%}
-                                <td><b>$ {{total|number_format('0',',','.')}}</b></td>
+                                <td style="border: 2px double red;"><b><center>$ {{total|number_format('0',',','.')}}</center></b></td>
                     {% if loop.last %}
                         <tr>    
                     {%endif%}
@@ -138,49 +140,59 @@
             
     {% endfor %}
     <tr>    
-        <td colspan="4"><b><center>Total Venta del Día Documentada</center></b></td>
-        <td><b>$ {{totales|number_format('0',',','.')}}</b></td>
+        <td colspan="4" style="border: 2px solid red;"><b><center>Venta Total Formas de Pago</center></b></td>
+        <td style="border: 2px solid red;"><b><center>$ {{totales|number_format('0',',','.')}}</center></b></td>
     </tr>
 </table>
     <br />
-<center>Totales Forma de Venta</center>
+    <center><b>Venta Documentada y Real</b></center>
 <table>
     <thead>
         <tr>
             <th><center>Forma de Venta</center></th>
-            <th><center>Total Venta</center></th>
+            <th><center>Venta</center></th>
         </tr>
     </thead>
-    {% for vf, ar in documents %}
+    <tr>
+            <td colspan="5" ><center><b>Documentos</b></center></th>
+    </tr>
+    {% set tdo = 0 %}
+    {% for vf, ar in real %}
         <tr>
             <td><b>{{vf}}</b></td>
             {% for totdoc in ar %}
-            <td>$ {{totdoc|number_format('0',',','.')}}</td>
+            <td><center>$ {{totdoc|number_format('0',',','.')}}</center></td>
+                {% set tdo =  "#{tdo + totdoc}" %}
+
             {%endfor %}
         </tr>
     {%endfor %}
     <tr>
-        <td><b><center>Totales Documentado</center></b></td>
-        <td><b>$ {{totaldoc|number_format('0',',','.')}}</b></td>
+        <td><b><span style="float:right;">Total Venta Documentos</span></b></td>
+        <td style="border: 2px double red;"><b><center>$ {{tdo|number_format('0',',','.')}}</center></b></td>
+    </tr>
+    <tr>
+            <td colspan="5" ><center><b>Real</b></center></th>
+           
     </tr>
     {% set differ = 0 %}
-    {% for k, v in real %}
+    {% for k, v in documents %}
         <tr>
             <td><b>{{k}}</b></td>
             {% for r in v %}
-                <td>$ {{r|number_format('0',',','.')}}</td>
+            <td><center>$ {{r|number_format('0',',','.')}}</center></td>
                 {% set differ = "#{differ + r}" %}
             {%endfor %}
         </tr>
     {%endfor %}
-    {% set differ = "#{differ - totaldoc }" %}  
+    {% set differ = "#{differ - tdo }" %}  
     <tr>    
-        <td><b><center>Diferencia (Real - Totales Doc.)</center></b></td>
-        <td><b>$ {{differ|number_format('0',',','.')}}</b></td>
+        <td style="border: 2px solid red;"><b style="float:right;">Diferencia (Real - Total Venta Documentos)</b></td>
+        <td style="border: 2px solid red;"><b><center>$ {{differ|number_format('0',',','.')}}</center></b></td>
     </tr> 
 </table>
 <br />
-<center>Totales Forma de Pago</center>
+<center><b>Totales Forma de Pago</b></center>
 <table>
     <thead>
         <tr>
@@ -196,27 +208,11 @@
     {%endfor%}
     </tr>
     <tr>    
-        <td colspan="3"><b><center>Total Venta del Día por formas de Pago Documentadas</center></b></td>
-        <td><b><center>$ {{totales|number_format('0',',','.')}}</center></b></td>
+        <td colspan="3" style="border: 2px solid red;"><b style="float:right;">Venta Total Formas de Pago</b></td>
+        <td style="border: 2px solid red;"><b><center>$ {{totales|number_format('0',',','.')}}</center></b></td>
     </tr>
 </table>
 <br />
-<br />
-<div align="center">
-<a class="ant" style="float: left;" href="#"><< día anterior</a>
-<a class="ui-button ui-widget ui-state-default ui-button-text-icon-secondary" href="{{ path('index_venta') }}">
-            <span class="ui-button-text">Ir al Listado de Ventas</span>
-            <span class="ui-button-icon-secondary ui-icon ui-icon-clipboard"></span>
-        </a>
-<a class="link_search_resumen ui-button ui-widget ui-state-default ui-button-text-icon-secondary" href="">
-            <span class="ui-button-text">Buscar e Ir a Resumen del día</span>
-            <span class="ui-button-icon-secondary ui-icon ui-icon-search"></span>
-    </a>
-<div style="display:inline-block">
-        <input class="search_resumen" type="text" style="display:none" />
-    </div>
-<a class="sig" style="float: right;" href="#">día siguiente >></a>
-</div>
 <br />
 <div id="crear_venta" title="Mensaje de Confirmación">
     <span>
