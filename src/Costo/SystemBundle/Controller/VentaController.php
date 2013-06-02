@@ -311,6 +311,7 @@ class VentaController extends Controller {
                         'real' => $re,
                         'totaldoc' => $totaldoc,
                         'documents' => $d,
+                        'id'=> $id,
                         
                         )
                 );

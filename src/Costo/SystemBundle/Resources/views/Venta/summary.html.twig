@@ -88,18 +88,22 @@
 <div align="center">
     
     <a class="ui-button ui-widget ui-state-default ui-button-text-icon-secondary" href="{{ path('index_venta') }}">
-            <span class="ui-button-text">Ir al Listado de Ventas</span>
+            <span class="ui-button-text">Volver al Listado</span>
+            <span class="ui-button-icon-secondary ui-icon ui-icon-clipboard"></span>
+    </a>
+    <a class="ui-button ui-widget ui-state-default ui-button-text-icon-secondary" href="{{ path('show_venta', { 'id': id }) }}">
+            <span class="ui-button-text">Modificar Venta</span>
             <span class="ui-button-icon-secondary ui-icon ui-icon-clipboard"></span>
     </a>
     <a class="link_search_resumen ui-button ui-widget ui-state-default ui-button-text-icon-secondary" href="#">
-            <span class="ui-button-text">Buscar e Ir a Resumen del día</span>
+            <span class="ui-button-text">Buscar Resumen</span>
             <span class="ui-button-icon-secondary ui-icon ui-icon-search"></span>
     </a>
     <div style="display:inline-block">
         <input class="search_resumen" type="text" style="display:none" />
     </div>
-    <a class="sig" style="float: right;" href="#">></a>
-    <a class="ant" style="float: right;" href="#"><</a>
+    <!--<a class="sig" style="float: right;" href="#">></a>
+    <a class="ant" style="float: right;" href="#"><</a>-->
 </div>
 <br />
 <center><b>Venta con Forma de Pago en Lugar de Venta</b></center>
