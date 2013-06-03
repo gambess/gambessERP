@@ -12,6 +12,11 @@
         <parameter name="create_column" value="fecha_creacion_cuenta" />
         <parameter name="update_column" value="fecha_modificacion_cuenta" />
     </behavior>
+    <behavior name="aggregate_column">
+		<parameter name="name" value="valor_cuenta" />
+		<parameter name="foreign_table" value="gasto" />
+		<parameter name="expression" value="SUM(costo_gasto)" />
+	</behavior>
   </table>
   <table name="detalle_venta" phpName="DetalleVenta" idMethod="native">
     <column name="id_detalle" phpName="IdDetalle" type="INTEGER" size="20" primaryKey="true" autoIncrement="true" required="true"/>

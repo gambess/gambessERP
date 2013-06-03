@@ -641,6 +641,13 @@ abstract class BaseCuenta extends BaseObject implements Persistent
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
+                // aggregate_column behavior
+                if (null !== $this->collGastos) {
+                    $this->setValorCuenta($this->computeValorCuenta($con));
+                    if ($this->isModified()) {
+                        $this->save($con);
+                    }
+                }
                 CuentaPeer::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
@@ -1537,6 +1544,33 @@ abstract class BaseCuenta extends BaseObject implements Persistent
         $this->modifiedColumns[] = CuentaPeer::FECHA_MODIFICACION_CUENTA;
 
         return $this;
+    }
+
+    // aggregate_column behavior
+
+    /**
+     * Computes the value of the aggregate column valor_cuenta *
+     * @param PropelPDO $con A connection object
+     *
+     * @return mixed The scalar result from the aggregate query
+     */
+    public function computeValorCuenta(PropelPDO $con)
+    {
+        $stmt = $con->prepare('SELECT SUM(costo_gasto) FROM `gasto` WHERE gasto.fk_cuenta = :p1');
+        $stmt->bindValue(':p1', $this->getIdCuenta());
+        $stmt->execute();
+
+        return $stmt->fetchColumn();
+    }
+
+    /**
+     * Updates the aggregate column valor_cuenta *
+     * @param PropelPDO $con A connection object
+     */
+    public function updateValorCuenta(PropelPDO $con)
+    {
+        $this->setValorCuenta($this->computeValorCuenta($con));
+        $this->save($con);
     }
 
 }

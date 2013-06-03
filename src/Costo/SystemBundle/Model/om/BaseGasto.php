@@ -128,6 +128,9 @@ abstract class BaseGasto extends BaseObject implements Persistent
      */
     protected $alreadyInClearAllReferencesDeep = false;
 
+    // aggregate_column_relation behavior
+    protected $oldCuenta;
+
     /**
      * Applies default values to this object.
      * This method should be called from the object's constructor (or
@@ -778,6 +781,8 @@ abstract class BaseGasto extends BaseObject implements Persistent
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
+                // aggregate_column_relation behavior
+                $this->updateRelatedCuenta($con);
                 GastoPeer::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
@@ -1390,6 +1395,10 @@ abstract class BaseGasto extends BaseObject implements Persistent
      */
     public function setCuenta(Cuenta $v = null)
     {
+        // aggregate_column_relation behavior
+        if (null !== $this->aCuenta && $v !== $this->aCuenta) {
+            $this->oldCuenta = $this->aCuenta;
+        }
         if ($v === null) {
             $this->setFkCuenta(0);
         } else {
@@ -1512,6 +1521,26 @@ abstract class BaseGasto extends BaseObject implements Persistent
         $this->modifiedColumns[] = GastoPeer::FECHA_MODIFICACION_GASTO;
 
         return $this;
+    }
+
+    // aggregate_column_relation behavior
+
+    /**
+     * Update the aggregate column in the related Cuenta object
+     *
+     * @param PropelPDO $con A connection object
+     */
+    protected function updateRelatedCuenta(PropelPDO $con)
+    {
+        if ($cuenta = $this->getCuenta()) {
+            if (!$cuenta->isAlreadyInSave()) {
+                $cuenta->updateValorCuenta($con);
+            }
+        }
+        if ($this->oldCuenta) {
+            $this->oldCuenta->updateValorCuenta($con);
+            $this->oldCuenta = null;
+        }
     }
 
 }

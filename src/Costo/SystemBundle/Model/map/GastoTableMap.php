@@ -76,6 +76,10 @@ class GastoTableMap extends TableMap
   'update_column' => 'fecha_modificacion_gasto',
   'disable_updated_at' => 'false',
 ),
+            'aggregate_column_relation' =>  array (
+  'foreign_table' => 'cuenta',
+  'update_method' => 'updateValorCuenta',
+),
         );
     } // getBehaviors()
 

@@ -74,6 +74,13 @@ class CuentaTableMap extends TableMap
   'update_column' => 'fecha_modificacion_cuenta',
   'disable_updated_at' => 'false',
 ),
+            'aggregate_column' =>  array (
+  'name' => 'valor_cuenta',
+  'expression' => 'SUM(costo_gasto)',
+  'condition' => NULL,
+  'foreign_table' => 'gasto',
+  'foreign_schema' => NULL,
+),
         );
     } // getBehaviors()
 

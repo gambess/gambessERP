@@ -1,5 +1,13 @@
 {% extends 'CostoSystemBundle::layout.html.twig' %}
 {% block content_header %}
+{% javascripts
+            '@CostoSystemBundle/Resources/public/js/jquery-1.7.2.min.js'
+            '@CostoSystemBundle/Resources/public/js/jquery-ui-1.8.21.custom.min.js'
+            '@CostoSystemBundle/Resources/public/js/ui/i18n/jquery.ui.datepicker-es.js'
+            output='js/compiled/showgasto.js'
+         %}
+        <script type="text/javascript" src="{{ asset( asset_url) }}"></script>
+        {% endjavascripts %}
 <script type="text/javascript">
     $(document).ready(function() {
                     $('#deletion_gasto').dialog({
