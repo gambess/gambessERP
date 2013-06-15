@@ -288,15 +288,15 @@ class VentaController extends Controller {
                         }
                         $data[$payform] = $dat;
                 }
-                $t1 = $t2 = $t3 = $t4 = $t5 = 0;
+                $t1 = $t2 = $t3 = $t4 = $t5 = $t6 = 0;
                 foreach($data as $key => $arr){
                     if($key == 'LugarVenta' and $key == 'TotalVenta')
                                 continue;
-                    if($key == 'EFECTIVO' or $key == 'CHEQUE' or $key == 'TRANSBANK' or $key == 'CREDITO')
+                    if($key == 'EFECTIVO' or $key == 'CHEQUE' or $key == 'TRANSBANK' or $key == 'CREDITO' or $key == 'COBRANZA')
                         $total_payform[$key] = array_sum ($arr);
                     foreach($arr as $k => $tot){
                         if($k == '1') $t1 += $tot; if($k == '2') $t2 += $tot; if($k == '3') $t3 += $tot;
-                        if($k == '4') $t4 += $tot; if($k == '5') $t5 += $tot;
+                        if($k == '4') $t4 += $tot; if($k == '5') $t5 += $tot; if($k == '6') $t6 += $tot;
 
                     }
                 }
