@@ -33,6 +33,7 @@
                                 return false;
                             }
                             if(data.exists == 0){
+                                $('input[name$="][fecha_venta]"]').val($('#venta_fecha').val());
                                 return true;
                             }
 
@@ -90,6 +91,9 @@
         <p align="right">
             <button class="b ui-button ui-widget ui-state-default ui-button-text-icon-secondary" type="submit"><span class="ui-button-text">Grabar</span><span class="ui-button-icon-secondary ui-icon ui-icon-disk"></span></button>
         </p>
+   <div id="tdocs">
+       {% include 'CostoSystemBundle:Venta:newdocs.html.twig' %}
+   </div>
    <div id="totales"> 
     <p>
     <div style="clear: both"></div>
