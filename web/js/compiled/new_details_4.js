@@ -1,6 +1,6 @@
 //Las funcionalidades se ejecutan una vez que el documento DOM isReady
 var indice = 0;
-var doc = ['1','2','4'];
+var doc = ['BOLETA', 'FACTURA', 'GUIA DESPACHO'];
 
 //Agrega el div detalle al body
 function addDivForm(collectionHolder, $newLinkp) {
@@ -30,7 +30,6 @@ function addDetailFormDeleteDiv($divForm) {
         e.preventDefault();
         // remove the li for the tag form
         $divForm.remove();
-        $('.detalle').data('index', ($('.detalle').data('index'))-1);
     });
 }
 
@@ -61,7 +60,7 @@ function update(){
     var total_real = 0;
     
     $('input[name$="total_venta]"]').each(function() {
-        if ($.inArray($(this).prev().attr('idvf'), doc) > -1) {
+        if ($.inArray($(this).prev().find('option:selected').text(), doc) > -1) {
             total_doc += parseFloat(Number($(this).val()));
         }
         if ($(this).prev().find('option:selected').text() === "NO DOC.") {
@@ -97,7 +96,7 @@ $(document).ready(function() {
     }
     //Collection Handler
     $('div.detalle').append($newLinkp);
-    $('div.detalle').data('index', $('.new_detalle').length + $('.detalle_doc').length);
+    $('div.detalle').data('index', $('.new_detalle').length);
     $addDetailLink.on('click', function(e) {
         // prevent the link from creating a "#" on the URL
         e.preventDefault();
@@ -121,6 +120,8 @@ $(document).ready(function() {
             $(this).val("");
     });
 });
+
+
 // forceNumeric() plug-in implementation
 jQuery.fn.forceNumeric = function () {
 
@@ -150,23 +151,8 @@ jQuery.fn.forceNumeric = function () {
     });
 }
 
-$('body').on('click', 'select[name$="][lugarVenta]"]', function(){
-    if($('option:contains("TODOS")').length){
-//        $('option:contains("TODOS")').hide();
-        $('option:contains("TODOS")').css("display", "none"); 
-    }
-});
-$('body').on('click', 'select[name$="][formaPago]"]', function(){
- if($('option:contains("TODAS")').length){
-//        $('option:contains("TODAS")').hide();
-        $('option:contains("TODAS")').css("display", "none"); 
-    }
-});
 var back_value = 0;
 $('body').on('click', 'input[name$="][total_venta]"]', function(){
-   if($('#venta_fecha').val() == ""){
-       alert('Primero se debe seleccionar la fecha de Venta');
-   }
    if($(this).val() != ""){
        back_value = $(this).val();
    }
@@ -179,29 +165,9 @@ $('body').on('focusout', 'input[name$="][total_venta]"]', function(){
     return false;
 });
 //Se recalculan los valores en el evento change
-$('body').on('change', 'input[name$="total_venta]"]', function(){   
-    var parent = $(this).parent('div').attr("class");
-    if(parent == 'new_detalle'){
-            var indix = $(this).parent('div').attr("id").replace('new_detalle_', '');
-    }
-    if(parent == 'detalle_doc'){
-            var indix = $(this).parent('div').attr("id").replace('detalle_', '');
-
-    }
-    var iva = parseFloat(Number(($(this).val()) / 1.19)* .19);
-    var neto = parseFloat(Number($(this).val()) / 1.19);
-        //Input ocultos
-    $('input[id$="' + indix + '_total_iva_venta"]').val(iva.toFixed(0));
-    $('input[id$="' + indix + '_total_neto_venta"]').val(neto.toFixed(0));
-    
-    //Suma los netos cada vez que cambian
-    update();
-});
-
-$('body').on('change', 'select[name$="][formaPago]"]', function(){
+$('body').on('change', 'input[name$="total_venta]"], select[name$="][ventaForma]"]', function(){
     var id = $(this).parent().attr("id");
     var indix = id.replace('new_detalle_', '');
-    
     var iva = parseFloat(Number(($(this).val()) / 1.19)* .19);
     var neto = parseFloat(Number($(this).val()) / 1.19);
         //Input ocultos
@@ -210,70 +176,6 @@ $('body').on('change', 'select[name$="][formaPago]"]', function(){
     
     //Suma los netos cada vez que cambian
     update();
-});
-
-$('body').on('change', 'select[name$="][lugarVenta]"]', function(event){
-    event.preventDefault();
-    var cantidad = $(".new_detalle").length;
-    if(cantidad > 1){
-        var indice = $(this).parent().attr('id').replace('new_detalle_', '');
-        var comp = $(this).parent().children().filter('select').not('.formaventa');
-        var div_cambiado = $(this).parent();
-        var divs = $('.new_detalle').not(div_cambiado);
-        divs.each(function(index, element){
-            var place = $(element).not(div_cambiado).children().filter('select.detail_widget[name$="][lugarVenta]"]').find('option:selected[value="'+ $(comp[0]).val() +'"]').length;
-            var pay = $(element).not(div_cambiado).children().filter('select.detail_widget[name$="][formaPago]"]').find('option:selected[value="'+ $(comp[1]).val() +'"]').length;
-            if(place == 0 && pay == 1)
-            {
-                return true; 
-            }
-            if(place == 1 && pay == 0)
-            {
-                return true; 
-            }
-            if(place == 1 && pay == 1)
-            {
-                alert("La combinación Lugar de Venta - Forma de Pago ya se ha ingresado.");
-                $(comp[0]).val("");
-                return false;
-            }
-
-                
-        });
-    }
-    
-});
-
-$('body').on('change', 'select[name$="][formaPago]"]', function(event){
-    event.preventDefault();
-    var cantidad = $(".new_detalle").length;
-    if(cantidad > 1){
-        var indice = $(this).parent().attr('id').replace('new_detalle_', '');
-        var comp = $(this).parent().children().filter('select').not('.formaventa');
-        var div_cambiado = $(this).parent();
-        var divs = $('.new_detalle').not(div_cambiado);
-        divs.each(function(index, element){
-            var place = $(element).not(div_cambiado).children().filter('select.detail_widget[name$="][lugarVenta]"]').find('option:selected[value="'+ $(comp[0]).val() +'"]').length;
-            var pay = $(element).not(div_cambiado).children().filter('select.detail_widget[name$="][formaPago]"]').find('option:selected[value="'+ $(comp[1]).val() +'"]').length;
-            if(place == 0 && pay == 1)
-            {
-                return true; 
-            }
-            if(place == 1 && pay == 0)
-            {
-                return true; 
-            }
-            if(place == 1 && pay == 1)
-            {
-                alert("La combinación Lugar de Venta - Forma de Pago ya se ha ingresado.");
-                $(comp[1]).val("");
-                return false;
-            }
-
-                
-        });
-    }
-    
 });
 
 $('body').on('click', 'a.open_detail', function(event){
@@ -283,6 +185,8 @@ $('body').on('click', 'a.open_detail', function(event){
                 $('textarea#'+id).jqte({css:"jqte_green"});
     }
 });
+
+
 $('body').on('focus', '#venta_fecha', function(e){
     e.preventDefault();
     if($(this).attr('view') === 'showupdate'){
@@ -290,21 +194,4 @@ $('body').on('focus', '#venta_fecha', function(e){
         alert($(this).attr('title'));      
     }
 });
-
- $('body').on('click','#new_button, #update_button',function(event){
-     event.preventDefault();
-            $('input[name$="][fecha_venta]"]').each(function(){
-                if($(this).val()== ""){
-                    $(this).val($('#venta_fecha').val());
-                }
-            });
-            update();
-            if($(this).attr('id') == "new_button"){
-                $('#new_form').submit();
-            }
-            if($(this).attr('id') == "update_button"){
-                $('#update_form').submit();
-            }
-
-        });
 

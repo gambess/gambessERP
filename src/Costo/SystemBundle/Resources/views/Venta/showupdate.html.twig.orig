@@ -42,6 +42,7 @@
             else
             {
                 divToDel.remove();
+                $('.detalle').data('index', ($('.detalle').data('index'))-1);
                 update();
             }
         });
@@ -133,11 +134,15 @@
 <br />
 <div align="center">
         <a class="ui-button ui-widget ui-state-default ui-button-text-icon-secondary" href="{{ path('new_venta') }}">
-            <span class="ui-button-text">Crear Nueva Venta</span>
+            <span class="ui-button-text">Nueva Venta</span>
             <span class="ui-button-icon-secondary ui-icon ui-icon-newwin"></span>
         </a>
         <a class="ui-button ui-widget ui-state-default ui-button-text-icon-secondary" href="{{ path('index_venta') }}">
-            <span class="ui-button-text">Ir al Listado de Ventas</span>
+            <span class="ui-button-text">Volver al Listado</span>
+            <span class="ui-button-icon-secondary ui-icon ui-icon-clipboard"></span>
+        </a>
+        <a class="ui-button ui-widget ui-state-default ui-button-text-icon-secondary" href="{{ path('summary_venta', { 'id': form.vars.value.id }) }}">
+            <span class="ui-button-text">Ver Resumen</span>
             <span class="ui-button-icon-secondary ui-icon ui-icon-clipboard"></span>
         </a>
         <a id="link_search_venta" class="ui-button ui-widget ui-state-default ui-button-text-icon-secondary" href="">
@@ -177,33 +182,130 @@
    
         <div class="detalle" data-prototype="{{ form_widget(form.detalleVentas.vars.prototype.fecha_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.lugarVenta)|e}}{{ form_widget(form.detalleVentas.vars.prototype.ventaForma)|e }}{{ form_widget(form.detalleVentas.vars.prototype.total_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.total_neto_venta)|e}}{{ form_widget(form.detalleVentas.vars.prototype.total_iva_venta)|e }}{{ form_widget(form.detalleVentas.vars.prototype.formaPago)|e }}{% autoescape %}<a href='#modal_$$name$$' class='open_detail' data-id='venta_detalleVentas_$$name$$_descripcion_venta' rel='modal:open'>Añadir Detalle</a><div id='modal_$$name$$' class='modal'>{% endautoescape %}{{ form_widget (form.detalleVentas.vars.prototype.descripcion_venta)|e}}{% autoescape %}</div>{% endautoescape %}{{ form_widget (form.detalleVentas.vars.prototype.id_detalle)|e}}">
            {% for detail in form.detalleVentas %}
-                <div id="new_detalle_{{loop.index0}}" class="new_detalle">
-                    <span class="remove ui-icon ui-icon-closethick" dbid="{{ detail.vars.value.IdDetalle}}"></span>
-                    {{ form_widget(detail.fecha_venta) }}
-                    {{ form_widget(detail.lugarVenta) }}
-                    {{ form_widget(detail.ventaForma) }}
-                    {{ form_widget(detail.total_venta) }}
-                    {{ form_widget(detail.total_neto_venta) }}
-                    {{ form_widget(detail.total_iva_venta) }}
-                    {{ form_widget(detail.formaPago) }}
-                    <a class='open_detail' rel='modal:open' data-id='venta_detalleVentas_{{loop.index0}}_descripcion_venta' href='#modal_{{loop.index0}}'>
-                        {% if detail.vars.value.DescripcionVenta is null %}    
-                                Añadir Detalle
-                        {% else %}
-                                Ver ó Modificar Detalle
-                        {% endif%}
-                    </a>
-                        <div id='modal_{{loop.index0}}' class='modal'>
-                            {{ form_widget(detail.descripcion_venta) }}
-                        </div>
-                    {{ form_widget(detail.id_detalle) }}
-                </div>
-                {% endfor %} 
+<<<<<<< HEAD
+                {% if detail.vars.value.IdVentaForma == 5 %}
+=======
+                {% if detail.vars.value.ventaForma.IdVentaForma == 5 %}
+>>>>>>> development
+                    <div id="new_detalle_{{loop.index0}}" class="new_detalle">
+                        <span class="remove ui-icon ui-icon-closethick" dbid="{{ detail.vars.value.IdDetalle}}"></span>
+                        {{ form_widget(detail.fecha_venta) }}
+                        {{ form_widget(detail.lugarVenta) }}
+                        {{ form_widget(detail.ventaForma , { 'attr': { 'class': 'formaventa' } }) }}
+                        {{ form_widget(detail.total_venta) }}
+                        {{ form_widget(detail.total_neto_venta) }}
+                        {{ form_widget(detail.total_iva_venta) }}
+                        {{ form_widget(detail.formaPago) }}
+                        <a class='open_detail' rel='modal:open' data-id='venta_detalleVentas_{{loop.index0}}_descripcion_venta' href='#modal_{{loop.index0}}'>
+                            {% if detail.vars.value.DescripcionVenta is null %}    
+                                    Añadir Detalle
+                            {% else %}
+                                    Ver ó Modificar Detalle
+                            {% endif%}
+                        </a>
+                            <div id='modal_{{loop.index0}}' class='modal'>
+                                {{ form_widget(detail.descripcion_venta) }}
+                            </div>
+                        {{ form_widget(detail.id_detalle) }}
+                    </div>
+                {% endif %}                
+            {% endfor %} 
                      
         </div>
             <p align="right">
-                <button class="b ui-button ui-widget ui-state-default ui-button-text-icon-secondary" type="submit"><span class="ui-button-text">Modificar</span><span class="ui-button-icon-secondary ui-icon ui-icon-disk"></span></button>
+                <button id="update_button" class="b ui-button ui-widget ui-state-default ui-button-text-icon-secondary" type="submit"><span class="ui-button-text">Modificar</span><span class="ui-button-icon-secondary ui-icon ui-icon-disk"></span></button>
             </p>
+   <div id="tdocs">
+            {% for detail in form.detalleVentas %}
+<<<<<<< HEAD
+                {% if detail.vars.value.IdVentaForma == 1 %}
+                    <div id="new_detalle_{{loop.index0}}" class="detalle_doc">
+                        {{ form_widget(detail.fecha_venta) }}
+                        {{ form_widget(detail.lugarVenta , { 'attr': { 'class': 'formaventa' } }) }}
+                        {{ form_widget(detail.ventaForma , { 'attr': { 'class': 'formaventa' } }) }}
+                        <span  idvf ="{{detail.vars.value.IdVentaForma}}" class="dtls ui-button ui-widget ui-state-default ui-button-text-only">
+=======
+                {% if detail.vars.value.ventaForma.IdVentaForma == 1 %}
+                    <div id="detalle_{{loop.index0}}" class="detalle_doc">
+                        {{ form_widget(detail.fecha_venta) }}
+                        {{ form_widget(detail.lugarVenta , { 'attr': { 'class': 'formaventa' } }) }}
+                        {{ form_widget(detail.ventaForma , { 'attr': { 'class': 'formaventa' } }) }}
+                        <span  idvf ="{{detail.vars.value.ventaForma.IdVentaForma}}" class="dtls ui-button ui-widget ui-state-default ui-button-text-only">
+>>>>>>> development
+                           <span class="dtls ui-button-text">Boletas</span>
+                       </span>
+                        {{ form_widget(detail.total_venta) }}
+                        {{ form_widget(detail.total_neto_venta) }}
+                        {{ form_widget(detail.total_iva_venta) }}
+                        {{ form_widget(detail.formaPago, { 'attr': { 'class': 'formaventa' } }) }}
+                        <a class='open_detail' rel='modal:open' data-id='venta_detalleVentas_{{loop.index0}}_descripcion_venta' href='#modal_{{loop.index0}}'>
+                            {% if detail.vars.value.DescripcionVenta is null %}    
+                                    Añadir Detalle
+                            {% else %}
+                                    Ver ó Modificar Detalle
+                            {% endif%}
+                        </a>
+                            <div id='modal_{{loop.index0}}' class='modal'>
+                                {{ form_widget(detail.descripcion_venta) }}
+                            </div>
+                        {{ form_widget(detail.id_detalle) }}
+                    </div>
+                {% endif %}                
+<<<<<<< HEAD
+                {% if detail.vars.value.IdVentaForma == 2 %}
+                    <div id="new_detalle_{{loop.index0}}" class="detalle_doc">
+                        {{ form_widget(detail.fecha_venta) }}
+                        {{ form_widget(detail.lugarVenta , { 'attr': { 'class': 'formaventa' } }) }}
+                        {{ form_widget(detail.ventaForma , { 'attr': { 'class': 'formaventa' } }) }}
+                        <span  idvf ="{{detail.vars.value.IdVentaForma}}" class="dtls ui-button ui-widget ui-state-default ui-button-text-only">
+                           <span class="dtls ui-button-text">Facturas</span>
+                       </span>
+                        {{ form_widget(detail.total_venta) }}
+                        {{ form_widget(detail.total_neto_venta) }}
+                        {{ form_widget(detail.total_iva_venta) }}
+                        {{ form_widget(detail.formaPago, { 'attr': { 'class': 'formaventa' } }) }}
+                        <a class='open_detail' rel='modal:open' data-id='venta_detalleVentas_{{loop.index0}}_descripcion_venta' href='#modal_{{loop.index0}}'>
+                            {% if detail.vars.value.DescripcionVenta is null %}    
+                                    Añadir Detalle
+                            {% else %}
+                                    Ver ó Modificar Detalle
+                            {% endif%}
+                        </a>
+                            <div id='modal_{{loop.index0}}' class='modal'>
+                                {{ form_widget(detail.descripcion_venta) }}
+                            </div>
+                        {{ form_widget(detail.id_detalle) }}
+                    </div>
+                {% endif %}                
+                {% if detail.vars.value.IdVentaForma == 4 %}
+                    <div id="new_detalle_{{loop.index0}}" class="detalle_doc">
+                        {{ form_widget(detail.fecha_venta) }}
+                        {{ form_widget(detail.lugarVenta , { 'attr': { 'class': 'formaventa' } }) }}
+                        {{ form_widget(detail.ventaForma , { 'attr': { 'class': 'formaventa' } }) }}
+                        <span  idvf ="{{detail.vars.value.IdVentaForma}}" class="dtls ui-button ui-widget ui-state-default ui-button-text-only">
+                           <span class="dtls ui-button-text">Guías D.</span>
+                       </span>
+                        {{ form_widget(detail.total_venta) }}
+                        {{ form_widget(detail.total_neto_venta) }}
+                        {{ form_widget(detail.total_iva_venta) }}
+                        {{ form_widget(detail.formaPago, { 'attr': { 'class': 'formaventa' } }) }}
+                        <a class='open_detail' rel='modal:open' data-id='venta_detalleVentas_{{loop.index0}}_descripcion_venta' href='#modal_{{loop.index0}}'>
+                            {% if detail.vars.value.DescripcionVenta is null %}    
+                                    Añadir Detalle
+                            {% else %}
+                                    Ver ó Modificar Detalle
+                            {% endif%}
+                        </a>
+                            <div id='modal_{{loop.index0}}' class='modal'>
+                                {{ form_widget(detail.descripcion_venta) }}
+                            </div>
+                        {{ form_widget(detail.id_detalle) }}
+                    </div>
+                {% endif %}                
+=======
+>>>>>>> development
+            {% endfor %}
+   </div>
    <div id="totales"> 
     <p>
     <div style="clear: both"></div>

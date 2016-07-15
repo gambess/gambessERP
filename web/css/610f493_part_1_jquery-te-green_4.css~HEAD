@@ -52,7 +52,7 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 	display:block;
 	width:22px;
 	height:22px;
-	background:url(../../bundles/costosystem/images/jquery-te.png) no-repeat
+	background:url(../bundles/costosystem/images/jquery-te.png) no-repeat
 }
 
 .jqte_green_tool.jqte_green_tool_1 .jqte_green_tool_icon {
@@ -167,7 +167,7 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 	width:7px;
 	height:6px;
 	margin:0 auto;
-	background:url(../../bundles/costosystem/images/jquery-te.png) -7px -23px no-repeat;
+	background:url(../bundles/costosystem/images/jquery-te.png) -7px -23px no-repeat;
 }
 .jqte_green_linktypes {
 	display:none;
@@ -337,7 +337,7 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 	width:7px;
 	height:6px;
 	margin:0 auto;
-	background:url(../../bundles/costosystem/images/jquery-te.png) 0 -23px no-repeat;
+	background:url(../bundles/costosystem/images/jquery-te.png) 0 -23px no-repeat;
 }
 .jqte_green_titleText {
 	padding:8px 10px;

@@ -1,4 +1,14 @@
 {# empty Twig template #}
+<<<<<<< HEAD
+{% set docs = {'1001':'Boletas','1002':'Facturas','1004':'Guías D.'} %}
+<div id="detalle_docs">
+{% for key, val in docs %}
+    <div id="new_detalle_{{key}}" class="detalle_doc">
+             <input type="text" id="venta_detalleVentas_{{key}}_fecha_venta" name="venta[detalleVentas][{{key}}][fecha_venta]" required="required" />
+            <input id="venta_detalleVentas_{{key}}_lugarVenta" name="venta[detalleVentas][{{key}}][lugarVenta]" required="required" value="6" style="display: none;"/>
+            <input id="venta_detalleVentas_{{key}}_ventaForma" name="venta[detalleVentas][{{key}}][ventaForma]" required="required" value="{{key-1000}}" style="display: none;" />
+            <span  idvf ="{{key-1000}}" class="dtls ui-button ui-widget ui-state-default ui-button-text-only">
+=======
 {% set docs = {'101':'Boletas','102':'Facturas','104':'Guías D.'} %}
 <div id="detalle_docs">
 {% for key, val in docs %}
@@ -7,6 +17,7 @@
             <input id="venta_detalleVentas_{{key}}_lugarVenta" name="venta[detalleVentas][{{key}}][lugarVenta]" required="required" value="6" style="display: none;"/>
             <input id="venta_detalleVentas_{{key}}_ventaForma" name="venta[detalleVentas][{{key}}][ventaForma]" required="required" value="{{key -100}}" style="display: none;" />
             <span  idvf ="{{key -100}}" class="dtls ui-button ui-widget ui-state-default ui-button-text-only">
+>>>>>>> development
                 <span class="dtls ui-button-text">{{val}}</span>
             </span>
           $ <input id="venta_detalleVentas_{{key}}_total_venta" type="text" required="required" name="venta[detalleVentas][{{key}}][total_venta]" value="0" class="detail_widget" />

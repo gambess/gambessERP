@@ -150,7 +150,6 @@ jQuery(function($){
 		yearSuffix: ''};
 	$.datepicker.setDefaults($.datepicker.regional['es']);
 });
-(function(d){d.fn.redirect=function(a,b,c){void 0!==c?(c=c.toUpperCase(),"GET"!=c&&(c="POST")):c="POST";if(void 0===b||!1==b)b=d().parse_url(a),a=b.url,b=b.params;var e=d("<form></form");e.attr("method",c);e.attr("action",a);for(var f in b)a=d("<input />"),a.attr("type","hidden"),a.attr("name",f),a.attr("value",b[f]),a.appendTo(e);d("body").append(e);e.submit()};d.fn.parse_url=function(a){if(-1==a.indexOf("?"))return{url:a,params:{}};var b=a.split("?"),a=b[0],c={},b=b[1].split("&"),e={},d;for(d in b){var g= b[d].split("=");e[g[0]]=g[1]}c.url=a;c.params=e;return c}})(jQuery);
 //Las funcionalidades se ejecutan una vez que el documento DOM isReady
 var indice = 0;
 var doc = ['1','2','4'];
@@ -183,6 +182,10 @@ function addDetailFormDeleteDiv($divForm) {
         e.preventDefault();
         // remove the li for the tag form
         $divForm.remove();
+<<<<<<< HEAD
+        $('.detalle').data('index', ($('.detalle').data('index'))-1);
+=======
+>>>>>>> development
     });
 }
 
@@ -249,7 +252,11 @@ $(document).ready(function() {
     }
     //Collection Handler
     $('div.detalle').append($newLinkp);
+<<<<<<< HEAD
+    $('div.detalle').data('index', $('.new_detalle').length + $('.detalle_doc').length);
+=======
     $('div.detalle').data('index', $('.new_detalle').length);
+>>>>>>> development
     $addDetailLink.on('click', function(e) {
         // prevent the link from creating a "#" on the URL
         e.preventDefault();
@@ -273,8 +280,11 @@ $(document).ready(function() {
             $(this).val("");
     });
 });
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> development
 // forceNumeric() plug-in implementation
 jQuery.fn.forceNumeric = function () {
 
@@ -305,6 +315,17 @@ jQuery.fn.forceNumeric = function () {
 }
 
 $('body').on('click', 'select[name$="][lugarVenta]"]', function(){
+<<<<<<< HEAD
+    if($('option:contains("TODOS")').length){
+//        $('option:contains("TODOS")').hide();
+        $('option:contains("TODOS")').css("display", "none"); 
+    }
+});
+$('body').on('click', 'select[name$="][formaPago]"]', function(){
+ if($('option:contains("TODAS")').length){
+//        $('option:contains("TODAS")').hide();
+        $('option:contains("TODAS")').css("display", "none"); 
+=======
     if($(this + "option[value='6']").length){
         $(this + "option[value='6']").hide();
     }
@@ -312,6 +333,7 @@ $('body').on('click', 'select[name$="][lugarVenta]"]', function(){
 $('body').on('click', 'select[name$="][formaPago]"]', function(){
  if($(this + "option[value='5']").length){
         $(this + "option[value='5']").hide();
+>>>>>>> development
     }
 });
 var back_value = 0;
@@ -363,6 +385,74 @@ $('body').on('change', 'select[name$="][formaPago]"]', function(){
     //Suma los netos cada vez que cambian
     update();
 });
+<<<<<<< HEAD
+
+$('body').on('change', 'select[name$="][lugarVenta]"]', function(event){
+    event.preventDefault();
+    var cantidad = $(".new_detalle").length;
+    if(cantidad > 1){
+        var indice = $(this).parent().attr('id').replace('new_detalle_', '');
+        var comp = $(this).parent().children().filter('select').not('.formaventa');
+        var div_cambiado = $(this).parent();
+        var divs = $('.new_detalle').not(div_cambiado);
+        divs.each(function(index, element){
+            var place = $(element).not(div_cambiado).children().filter('select.detail_widget[name$="][lugarVenta]"]').find('option:selected[value="'+ $(comp[0]).val() +'"]').length;
+            var pay = $(element).not(div_cambiado).children().filter('select.detail_widget[name$="][formaPago]"]').find('option:selected[value="'+ $(comp[1]).val() +'"]').length;
+            if(place == 0 && pay == 1)
+            {
+                return true; 
+            }
+            if(place == 1 && pay == 0)
+            {
+                return true; 
+            }
+            if(place == 1 && pay == 1)
+            {
+                alert("La combinación Lugar de Venta - Forma de Pago ya se ha ingresado.");
+                $(comp[0]).val("");
+                return false;
+            }
+
+                
+        });
+    }
+    
+});
+
+$('body').on('change', 'select[name$="][formaPago]"]', function(event){
+    event.preventDefault();
+    var cantidad = $(".new_detalle").length;
+    if(cantidad > 1){
+        var indice = $(this).parent().attr('id').replace('new_detalle_', '');
+        var comp = $(this).parent().children().filter('select').not('.formaventa');
+        var div_cambiado = $(this).parent();
+        var divs = $('.new_detalle').not(div_cambiado);
+        divs.each(function(index, element){
+            var place = $(element).not(div_cambiado).children().filter('select.detail_widget[name$="][lugarVenta]"]').find('option:selected[value="'+ $(comp[0]).val() +'"]').length;
+            var pay = $(element).not(div_cambiado).children().filter('select.detail_widget[name$="][formaPago]"]').find('option:selected[value="'+ $(comp[1]).val() +'"]').length;
+            if(place == 0 && pay == 1)
+            {
+                return true; 
+            }
+            if(place == 1 && pay == 0)
+            {
+                return true; 
+            }
+            if(place == 1 && pay == 1)
+            {
+                alert("La combinación Lugar de Venta - Forma de Pago ya se ha ingresado.");
+                $(comp[1]).val("");
+                return false;
+            }
+
+                
+        });
+    }
+    
+});
+
+=======
+>>>>>>> development
 $('body').on('click', 'a.open_detail', function(event){
     event.preventDefault();
     var id = $(this).data('id');
@@ -370,8 +460,11 @@ $('body').on('click', 'a.open_detail', function(event){
                 $('textarea#'+id).jqte({css:"jqte_green"});
     }
 });
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> development
 $('body').on('focus', '#venta_fecha', function(e){
     e.preventDefault();
     if($(this).attr('view') === 'showupdate'){
@@ -380,6 +473,26 @@ $('body').on('focus', '#venta_fecha', function(e){
     }
 });
 
+<<<<<<< HEAD
+ $('body').on('click','#new_button, #update_button',function(event){
+     event.preventDefault();
+            $('input[name$="][fecha_venta]"]').each(function(){
+                if($(this).val()== ""){
+                    $(this).val($('#venta_fecha').val());
+                }
+            });
+            update();
+            if($(this).attr('id') == "new_button"){
+                $('#new_form').submit();
+            }
+            if($(this).attr('id') == "update_button"){
+                $('#update_form').submit();
+            }
+
+        });
+
+=======
+>>>>>>> development
 
 /*!
  * http://jqueryte.com

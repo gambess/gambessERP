@@ -151,15 +151,13 @@ jQuery.fn.forceNumeric = function () {
 }
 
 $('body').on('click', 'select[name$="][lugarVenta]"]', function(){
-    if($('option:contains("TODOS")').length){
-//        $('option:contains("TODOS")').hide();
-        $('option:contains("TODOS")').css("display", "none"); 
+    if($(this + "option[value='6']").length){
+        $(this + "option[value='6']").hide();
     }
 });
 $('body').on('click', 'select[name$="][formaPago]"]', function(){
- if($('option:contains("TODAS")').length){
-//        $('option:contains("TODAS")').hide();
-        $('option:contains("TODAS")').css("display", "none"); 
+ if($(this + "option[value='5']").length){
+        $(this + "option[value='5']").hide();
     }
 });
 var back_value = 0;
@@ -211,71 +209,6 @@ $('body').on('change', 'select[name$="][formaPago]"]', function(){
     //Suma los netos cada vez que cambian
     update();
 });
-
-$('body').on('change', 'select[name$="][lugarVenta]"]', function(event){
-    event.preventDefault();
-    var cantidad = $(".new_detalle").length;
-    if(cantidad > 1){
-        var indice = $(this).parent().attr('id').replace('new_detalle_', '');
-        var comp = $(this).parent().children().filter('select').not('.formaventa');
-        var div_cambiado = $(this).parent();
-        var divs = $('.new_detalle').not(div_cambiado);
-        divs.each(function(index, element){
-            var place = $(element).not(div_cambiado).children().filter('select.detail_widget[name$="][lugarVenta]"]').find('option:selected[value="'+ $(comp[0]).val() +'"]').length;
-            var pay = $(element).not(div_cambiado).children().filter('select.detail_widget[name$="][formaPago]"]').find('option:selected[value="'+ $(comp[1]).val() +'"]').length;
-            if(place == 0 && pay == 1)
-            {
-                return true; 
-            }
-            if(place == 1 && pay == 0)
-            {
-                return true; 
-            }
-            if(place == 1 && pay == 1)
-            {
-                alert("La combinación Lugar de Venta - Forma de Pago ya se ha ingresado.");
-                $(comp[0]).val("");
-                return false;
-            }
-
-                
-        });
-    }
-    
-});
-
-$('body').on('change', 'select[name$="][formaPago]"]', function(event){
-    event.preventDefault();
-    var cantidad = $(".new_detalle").length;
-    if(cantidad > 1){
-        var indice = $(this).parent().attr('id').replace('new_detalle_', '');
-        var comp = $(this).parent().children().filter('select').not('.formaventa');
-        var div_cambiado = $(this).parent();
-        var divs = $('.new_detalle').not(div_cambiado);
-        divs.each(function(index, element){
-            var place = $(element).not(div_cambiado).children().filter('select.detail_widget[name$="][lugarVenta]"]').find('option:selected[value="'+ $(comp[0]).val() +'"]').length;
-            var pay = $(element).not(div_cambiado).children().filter('select.detail_widget[name$="][formaPago]"]').find('option:selected[value="'+ $(comp[1]).val() +'"]').length;
-            if(place == 0 && pay == 1)
-            {
-                return true; 
-            }
-            if(place == 1 && pay == 0)
-            {
-                return true; 
-            }
-            if(place == 1 && pay == 1)
-            {
-                alert("La combinación Lugar de Venta - Forma de Pago ya se ha ingresado.");
-                $(comp[1]).val("");
-                return false;
-            }
-
-                
-        });
-    }
-    
-});
-
 $('body').on('click', 'a.open_detail', function(event){
     event.preventDefault();
     var id = $(this).data('id');
@@ -283,6 +216,8 @@ $('body').on('click', 'a.open_detail', function(event){
                 $('textarea#'+id).jqte({css:"jqte_green"});
     }
 });
+
+
 $('body').on('focus', '#venta_fecha', function(e){
     e.preventDefault();
     if($(this).attr('view') === 'showupdate'){
@@ -290,21 +225,4 @@ $('body').on('focus', '#venta_fecha', function(e){
         alert($(this).attr('title'));      
     }
 });
-
- $('body').on('click','#new_button, #update_button',function(event){
-     event.preventDefault();
-            $('input[name$="][fecha_venta]"]').each(function(){
-                if($(this).val()== ""){
-                    $(this).val($('#venta_fecha').val());
-                }
-            });
-            update();
-            if($(this).attr('id') == "new_button"){
-                $('#new_form').submit();
-            }
-            if($(this).attr('id') == "update_button"){
-                $('#update_form').submit();
-            }
-
-        });
 
