@@ -183,6 +183,7 @@ function addDetailFormDeleteDiv($divForm) {
         e.preventDefault();
         // remove the li for the tag form
         $divForm.remove();
+        $('.detalle').data('index', ($('.detalle').data('index'))-1);
     });
 }
 
@@ -249,7 +250,7 @@ $(document).ready(function() {
     }
     //Collection Handler
     $('div.detalle').append($newLinkp);
-    $('div.detalle').data('index', $('.new_detalle').length);
+    $('div.detalle').data('index', $('.new_detalle').length + $('.detalle_doc').length);
     $addDetailLink.on('click', function(e) {
         // prevent the link from creating a "#" on the URL
         e.preventDefault();
@@ -273,8 +274,6 @@ $(document).ready(function() {
             $(this).val("");
     });
 });
-
-
 // forceNumeric() plug-in implementation
 jQuery.fn.forceNumeric = function () {
 
